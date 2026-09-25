@@ -1,0 +1,168 @@
+/* x_component_SysSetting —— 系统设置样式
+ * 命名统一 ss- 前缀，避免污染 O2OA 桌面其它组件。
+ * 视觉基线：浅色后台表单（参照企业邮箱 SMTP 配置页）。 */
+
+.ss-wrap {
+	display: flex;
+	height: 100%;
+	min-height: 520px;
+	background: #f5f6f8;
+	color: #1f2329;
+	font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+	position: relative;
+	box-sizing: border-box;
+}
+.ss-wrap * { box-sizing: border-box; }
+
+/* ---------- 左侧导航 ---------- */
+.ss-side {
+	width: 190px; flex: none; background: #fff;
+	border-right: 1px solid #e8eaed; display: flex; flex-direction: column;
+}
+.ss-brand {
+	height: 58px; display: flex; align-items: center; gap: 9px;
+	padding: 0 18px; font-size: 16px; font-weight: 600;
+	border-bottom: 1px solid #f0f1f3; flex: none;
+}
+.ss-brand-ico { color: #2f7cf6; font-size: 18px; }
+.ss-nav { padding: 10px 8px; flex: 1; overflow: auto; }
+.ss-nav-item {
+	padding: 9px 12px; border-radius: 6px; color: #4e5969;
+	cursor: pointer; margin-bottom: 2px; font-size: 14px; transition: background .15s;
+}
+.ss-nav-item:hover { background: #f2f3f5; }
+.ss-nav-item.active { background: #eaf2ff; color: #1a6ef5; font-weight: 600; }
+.ss-side-foot {
+	padding: 11px 16px; border-top: 1px solid #f0f1f3; color: #86909c;
+	font-size: 12px; display: flex; align-items: center; gap: 6px; flex: none;
+}
+.ss-dot { width: 8px; height: 8px; border-radius: 50%; background: #c9cdd4; display: inline-block; flex: none; }
+.ss-dot.ok { background: #00b42a; }
+.ss-dot.bad { background: #f53f3f; }
+
+/* ---------- 右侧内容 ---------- */
+.ss-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ss-scroll { flex: 1; overflow: auto; padding: 22px 26px 42px; }
+
+.ss-head { margin-bottom: 16px; }
+.ss-head-t { font-size: 18px; font-weight: 600; }
+.ss-head-d { color: #86909c; font-size: 13px; margin-top: 4px; }
+
+.ss-card {
+	background: #fff; border: 1px solid #e8eaed; border-radius: 8px;
+	padding: 4px 20px; margin-bottom: 14px;
+}
+.ss-sub-t { font-weight: 600; font-size: 14px; padding: 13px 0 2px; }
+
+.ss-row { display: flex; padding: 12px 0; border-bottom: 1px dashed #f0f1f3; align-items: flex-start; }
+.ss-row:last-child { border-bottom: 0; }
+.ss-label { width: 132px; flex: none; color: #4e5969; padding-top: 8px; font-size: 13px; }
+.ss-field { flex: 1; min-width: 0; }
+.ss-field-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ss-hint { color: #86909c; font-size: 12px; margin-top: 5px; line-height: 1.5; }
+.ss-hint-block { margin: 8px 0 10px; }
+
+.ss-inp {
+	border: 1px solid #d9dde3; border-radius: 6px; padding: 7px 10px;
+	font-size: 13px; outline: none; color: #1f2329; background: #fff;
+	transition: border-color .15s, box-shadow .15s; font-family: inherit;
+}
+.ss-inp:focus { border-color: #2f7cf6; box-shadow: 0 0 0 2px rgba(47,124,246,.12); }
+.ss-inp-lg { width: 320px; }
+.ss-inp-xs { width: 88px; }
+.ss-inp-full { width: 100%; }
+.ss-mini { color: #86909c; font-size: 12px; }
+.ss-ta {
+	width: 100%; border: 1px solid #d9dde3; border-radius: 6px; padding: 9px 10px;
+	font: 13px/1.7 ui-monospace, Consolas, "Microsoft YaHei", monospace;
+	resize: vertical; outline: none; color: #1f2329;
+}
+.ss-ta:focus { border-color: #2f7cf6; }
+
+/* ---------- 开关 ---------- */
+.ss-switch {
+	width: 42px; height: 22px; border-radius: 11px; background: #c9cdd4;
+	position: relative; cursor: pointer; transition: background .18s; flex: none;
+}
+.ss-switch i {
+	position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+	border-radius: 50%; background: #fff; transition: left .18s;
+	box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.ss-switch.on { background: #2f7cf6; }
+.ss-switch.on i { left: 22px; }
+
+/* ---------- 按钮 ---------- */
+.ss-btn {
+	border: 1px solid #d9dde3; background: #fff; color: #1f2329;
+	border-radius: 6px; padding: 7px 16px; font-size: 13px; cursor: pointer;
+	font-family: inherit; transition: all .15s;
+}
+.ss-btn:hover { border-color: #2f7cf6; color: #2f7cf6; }
+.ss-btn-primary { background: #2f7cf6; border-color: #2f7cf6; color: #fff; }
+.ss-btn-primary:hover { background: #1a6ef5; border-color: #1a6ef5; color: #fff; }
+.ss-btn-ghost { border-color: transparent; color: #2f7cf6; padding: 6px 6px; }
+.ss-btn-ghost:hover { background: #eaf2ff; }
+.ss-btn-inline { padding: 6px 10px; }
+.ss-actions { display: flex; gap: 10px; padding: 8px 0 12px; align-items: center; }
+.ss-actions-main { padding: 2px 0 18px; }
+
+/* ---------- 折叠面板 ---------- */
+.ss-fold { background: #fff; border: 1px solid #e8eaed; border-radius: 8px; margin-bottom: 14px; overflow: hidden; }
+.ss-fold-head {
+	cursor: pointer; padding: 12px 18px; font-weight: 600; font-size: 14px;
+	user-select: none; display: flex; align-items: center; gap: 8px;
+}
+.ss-fold-head:hover { background: #fafbfc; }
+.ss-fold-body { padding: 0 18px 14px; }
+.ss-caret { color: #86909c; font-size: 12px; display: inline-block; width: 12px; text-align: center; }
+.ss-subfold { border-top: 1px solid #f0f1f3; }
+.ss-subfold-head {
+	cursor: pointer; padding: 10px 2px; font-size: 13px; color: #1f2329;
+	user-select: none; display: flex; align-items: center; gap: 8px;
+}
+.ss-subfold-head:hover { color: #2f7cf6; }
+.ss-subfold-body { padding: 4px 2px 10px; }
+.ss-subrow { margin-bottom: 10px; }
+.ss-sublabel { color: #4e5969; font-size: 12px; margin-bottom: 5px; }
+
+/* ---------- 键值 / 标签 / 表格 ---------- */
+.ss-kv { display: flex; padding: 11px 0; border-bottom: 1px dashed #f0f1f3; font-size: 13px; }
+.ss-kv:last-child { border-bottom: 0; }
+.ss-k { width: 152px; flex: none; color: #4e5969; }
+.ss-v { flex: 1; color: #1f2329; word-break: break-all; }
+
+.ss-tag { display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: 12px; line-height: 1.6; }
+.ss-tag-ok { background: #e8ffea; color: #00a02b; }
+.ss-tag-bad { background: #ffece8; color: #f53f3f; }
+
+.ss-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+.ss-table th {
+	text-align: left; color: #86909c; font-weight: 500; padding: 8px 6px;
+	border-bottom: 1px solid #f0f1f3; font-size: 12px;
+}
+.ss-table td { padding: 9px 6px; border-bottom: 1px solid #f7f8fa; }
+.ss-table code {
+	background: #f2f3f5; padding: 2px 7px; border-radius: 4px;
+	font-size: 13px; letter-spacing: 1px; color: #1a6ef5;
+}
+.ss-empty { color: #c9cdd4; padding: 18px 0; text-align: center; font-size: 13px; }
+
+.ss-start-hint {
+	margin: 6px 0 14px; padding: 10px 12px; background: #fff7e8;
+	border: 1px solid #ffe4ba; border-radius: 6px; color: #7d5b1b; font-size: 12px;
+}
+.ss-start-hint code {
+	background: #fff; border: 1px solid #ffe4ba; border-radius: 4px; padding: 1px 6px;
+}
+
+/* ---------- toast ---------- */
+.ss-toast {
+	position: absolute; left: 50%; bottom: 26px; transform: translate(-50%, 12px);
+	background: rgba(31,35,41,.92); color: #fff; padding: 9px 18px;
+	border-radius: 6px; font-size: 13px; opacity: 0; pointer-events: none;
+	transition: all .22s; max-width: 72%; text-align: center; z-index: 99;
+}
+.ss-toast.show { opacity: 1; transform: translate(-50%, 0); }
+.ss-toast.ok { background: rgba(0,150,50,.95); }
+.ss-toast.err { background: rgba(220,50,50,.95); }

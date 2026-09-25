@@ -1,0 +1,2434 @@
+{
+  "jaxrs": [
+    {
+      "name": "CacheAction",
+      "className": "com.x.base.core.project.jaxrs.cache.CacheAction",
+      "description": "缓存操作接口",
+      "methods": [
+        {
+          "name": "commonScriptFlush",
+          "className": "com.x.base.core.project.jaxrs.cache.ActionCommonScriptFlush",
+          "description": "接收刷新CommonScript指令.",
+          "type": "GET",
+          "path": "jaxrs/cache/commonscript/flush",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        },
+        {
+          "name": "configFlush",
+          "className": "com.x.base.core.project.jaxrs.cache.ActionConfigFlush",
+          "description": "接收刷新Config配置文件指令.",
+          "type": "GET",
+          "path": "jaxrs/cache/config/flush",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        },
+        {
+          "name": "detail",
+          "className": "com.x.base.core.project.jaxrs.cache.ActionDetail",
+          "description": "显示缓存状态.",
+          "type": "GET",
+          "path": "jaxrs/cache/detail",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "value",
+              "type": "String",
+              "isCollection": false,
+              "description": "字符串值."
+            }
+          ]
+        },
+        {
+          "name": "receive",
+          "className": "com.x.base.core.project.jaxrs.cache.ActionReceive",
+          "description": "接收缓存刷新指令.",
+          "type": "POST",
+          "path": "jaxrs/cache",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "nodeName",
+              "type": "String",
+              "isCollection": false,
+              "description": "节点名.",
+              "isBaseType": true
+            },
+            {
+              "name": "className",
+              "type": "String",
+              "isCollection": false,
+              "description": "类名.",
+              "isBaseType": true
+            },
+            {
+              "name": "keys",
+              "type": "List\u003cObject\u003e",
+              "isCollection": true,
+              "description": "关键字.",
+              "isBaseType": false
+            }
+          ],
+          "outs": [
+            {
+              "name": "value",
+              "type": "String",
+              "isCollection": false,
+              "description": "字符串值."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ChatAction",
+      "className": "com.x.ai.assemble.control.jaxrs.chat.ChatAction",
+      "description": "AI智能服务",
+      "methods": [
+        {
+          "name": "completion",
+          "className": "com.x.ai.assemble.control.jaxrs.chat.ActionChat",
+          "description": "连接ai",
+          "type": "POST",
+          "path": "jaxrs/chat/completion",
+          "contentType": "application/json",
+          "resultContentType": "text/event-stream",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "input",
+              "type": "String",
+              "isCollection": false,
+              "description": "输入内容.",
+              "isBaseType": true
+            },
+            {
+              "name": "clueId",
+              "type": "String",
+              "isCollection": false,
+              "description": "线索标识.",
+              "isBaseType": true
+            },
+            {
+              "name": "generateType",
+              "type": "String",
+              "isCollection": false,
+              "description": "ai模式：chat|rag|mcp.",
+              "isBaseType": true
+            },
+            {
+              "name": "referenceIdList",
+              "type": "List\u003cString\u003e",
+              "isCollection": true,
+              "description": "附件标识列表.",
+              "isBaseType": true
+            },
+            {
+              "name": "endpointName",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型名称.",
+              "isBaseType": true
+            }
+          ],
+          "outs": []
+        },
+        {
+          "name": "delete",
+          "className": "com.x.ai.assemble.control.jaxrs.chat.ActionDelete",
+          "description": "删除线索.",
+          "type": "GET",
+          "path": "jaxrs/chat/delete/{clueId}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "clueId",
+              "type": "String",
+              "description": "线索标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        },
+        {
+          "name": "listCompletionPaging",
+          "className": "com.x.ai.assemble.control.jaxrs.chat.ActionListCompletionPaging",
+          "description": "根据线索分页查找对话.",
+          "type": "GET",
+          "path": "jaxrs/chat/list/completion/{clueId}/paging/{page}/size/{size}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "clueId",
+              "type": "String",
+              "description": "线索ID"
+            },
+            {
+              "name": "page",
+              "type": "Integer",
+              "description": "分页"
+            },
+            {
+              "name": "size",
+              "type": "Integer",
+              "description": "每页数量"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "数据库主键,自动生成."
+            },
+            {
+              "name": "person",
+              "type": "String",
+              "isCollection": false,
+              "description": "所属用户."
+            },
+            {
+              "name": "clueId",
+              "type": "String",
+              "isCollection": false,
+              "description": "线索ID"
+            },
+            {
+              "name": "generateType",
+              "type": "String",
+              "isCollection": false,
+              "description": "生成类型"
+            },
+            {
+              "name": "input",
+              "type": "String",
+              "isCollection": false,
+              "description": "输入内容."
+            },
+            {
+              "name": "content",
+              "type": "String",
+              "isCollection": false,
+              "description": "输出内容."
+            },
+            {
+              "name": "createTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间,自动生成,索引创建在约束中."
+            },
+            {
+              "name": "updateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间,自动生成,索引创建在约束中."
+            }
+          ]
+        },
+        {
+          "name": "listPaging",
+          "className": "com.x.ai.assemble.control.jaxrs.chat.ActionListPaging",
+          "description": "分页查找线索.",
+          "type": "GET",
+          "path": "jaxrs/chat/list/paging/{page}/size/{size}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "page",
+              "type": "Integer",
+              "description": "分页"
+            },
+            {
+              "name": "size",
+              "type": "Integer",
+              "description": "每页数量"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "数据库主键,自动生成."
+            },
+            {
+              "name": "person",
+              "type": "String",
+              "isCollection": false,
+              "description": "所属用户."
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "isCollection": false,
+              "description": "标题."
+            },
+            {
+              "name": "createTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间,自动生成,索引创建在约束中."
+            },
+            {
+              "name": "updateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间,自动生成,索引创建在约束中."
+            }
+          ]
+        },
+        {
+          "name": "writeCompletionExtra",
+          "className": "com.x.ai.assemble.control.jaxrs.chat.ActionWriteCompletion",
+          "description": "写入对话扩展数据",
+          "type": "POST",
+          "path": "jaxrs/chat/write/completion/extra",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "对话ID.",
+              "isBaseType": true
+            },
+            {
+              "name": "extra",
+              "type": "Map\u003cString,Object\u003e",
+              "isCollection": false,
+              "description": "对话扩展参数，json对象.",
+              "isBaseType": false
+            }
+          ],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ConfigAction",
+      "className": "com.x.ai.assemble.control.jaxrs.config.ConfigAction",
+      "description": "参数配置",
+      "methods": [
+        {
+          "name": "createMcpConfig",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionCreateMcp",
+          "description": "创建MCP配置",
+          "type": "POST",
+          "path": "jaxrs/config/create/mcp",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "名称.",
+              "isBaseType": true
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "isCollection": false,
+              "description": "显示名称.",
+              "isBaseType": true
+            },
+            {
+              "name": "category",
+              "type": "String",
+              "isCollection": false,
+              "description": "分组.",
+              "isBaseType": true
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "说明.",
+              "isBaseType": true
+            },
+            {
+              "name": "enable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用.",
+              "isBaseType": true
+            },
+            {
+              "name": "httpOption",
+              "type": "HttpOption",
+              "isCollection": false,
+              "description": "http选项：{\n    \"url\": \"https://xxx/x_program_center/jaxrs/invoke/createMeeting/execute\",\n    \"method\": \"post\",\n    \"headerMap\": {\n      \"Content-Type\": \"application/json\"\n    },\n    \"bodyMap\": {\n      \"subject\": \"${subject}\",\n    }.",
+              "isBaseType": false
+            },
+            {
+              "name": "mcpParameterList",
+              "type": "List\u003cMcpParameter\u003e",
+              "isCollection": true,
+              "description": "mcp参数列表：[\n    {\n      \"name\": \"subject\",\n      \"desc\": \"会议主题,描述会议主要议题或内容.\",\n      \"type\": \"string\",\n      \"required\": true\n    },\n  ].",
+              "isBaseType": false
+            },
+            {
+              "name": "extra",
+              "type": "Map\u003cString,Object\u003e",
+              "isCollection": false,
+              "description": "扩展参数，json对象.",
+              "isBaseType": false
+            }
+          ],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        },
+        {
+          "name": "createModel",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionCreateModel",
+          "description": "创建模型配置",
+          "type": "POST",
+          "path": "jaxrs/config/create/model",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型名称.",
+              "isBaseType": true
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务商：ali(阿里云)|deepSeek|openAi(本地模型).",
+              "isBaseType": true
+            },
+            {
+              "name": "model",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型版本.",
+              "isBaseType": true
+            },
+            {
+              "name": "completionUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务地址.",
+              "isBaseType": true
+            },
+            {
+              "name": "apiKey",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型秘钥.",
+              "isBaseType": true
+            },
+            {
+              "name": "enable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用.",
+              "isBaseType": true
+            },
+            {
+              "name": "asDefault",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否为默认服务模型.",
+              "isBaseType": true
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型描述.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyEnable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用代理.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyHost",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理主机.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyPort",
+              "type": "Integer",
+              "isCollection": false,
+              "description": "代理端口.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyUser",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理认证用户.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyPass",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理认证密码.",
+              "isBaseType": true
+            },
+            {
+              "name": "createDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间.",
+              "isBaseType": true
+            },
+            {
+              "name": "updateDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间.",
+              "isBaseType": true
+            }
+          ],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        },
+        {
+          "name": "deleteMcpConfig",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionDeleteMcp",
+          "description": "删除指定的MCP配置",
+          "type": "GET",
+          "path": "jaxrs/config/delete/mcp/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        },
+        {
+          "name": "deleteModel",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionDeleteModel",
+          "description": "删除指定的模型配置",
+          "type": "GET",
+          "path": "jaxrs/config/delete/model/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        },
+        {
+          "name": "getBaseConfig",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionGetBaseConfig",
+          "description": "获取基础配置信息",
+          "type": "GET",
+          "path": "jaxrs/config/base/config",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "appName",
+              "type": "String",
+              "isCollection": false,
+              "description": "应用名称."
+            },
+            {
+              "name": "appIconUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "应用图标地址."
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "isCollection": false,
+              "description": "欢迎主题."
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "主题功能描述."
+            },
+            {
+              "name": "o2AiEnable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用o2智能体."
+            }
+          ]
+        },
+        {
+          "name": "getConfig",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionGetConfig",
+          "description": "获取配置信息",
+          "type": "GET",
+          "path": "jaxrs/config/get",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "appName",
+              "type": "String",
+              "isCollection": false,
+              "description": "应用名称."
+            },
+            {
+              "name": "appIconUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "应用图标地址."
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "isCollection": false,
+              "description": "欢迎主题."
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "主题功能描述."
+            },
+            {
+              "name": "knowledgeIndexAppList",
+              "type": "List\u003cString\u003e",
+              "isCollection": true,
+              "description": "知识库索引应用列表."
+            },
+            {
+              "name": "questionsIndexAppList",
+              "type": "List\u003cString\u003e",
+              "isCollection": true,
+              "description": "问答库库索引应用列表."
+            },
+            {
+              "name": "o2AiFileList",
+              "type": "List\u003cString\u003e",
+              "isCollection": true,
+              "description": "o2智能体附件解析支持的文件类型."
+            },
+            {
+              "name": "o2AiBaseUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "o2智能体服务地址."
+            },
+            {
+              "name": "o2AiToken",
+              "type": "String",
+              "isCollection": false,
+              "description": "o2智能体服务认证秘钥."
+            },
+            {
+              "name": "o2AiEnable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用o2智能体."
+            },
+            {
+              "name": "deepSeekApiUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "deepSeek服务地址."
+            },
+            {
+              "name": "aliApiUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "deepSeek服务地址."
+            }
+          ]
+        },
+        {
+          "name": "getMcpConfig",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionGetMcp",
+          "description": "获取MCP配置",
+          "type": "GET",
+          "path": "jaxrs/config/get/mcp/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "名称."
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "isCollection": false,
+              "description": "显示名称."
+            },
+            {
+              "name": "category",
+              "type": "String",
+              "isCollection": false,
+              "description": "分组."
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "说明."
+            },
+            {
+              "name": "enable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用."
+            },
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id."
+            },
+            {
+              "name": "httpOption",
+              "type": "HttpOption",
+              "isCollection": false,
+              "description": "http选项：{\n    \"url\": \"https://xxx/x_program_center/jaxrs/invoke/createMeeting/execute\",\n    \"method\": \"post\",\n    \"headerMap\": {\n      \"Content-Type\": \"application/json\"\n    },\n    \"bodyMap\": {\n      \"subject\": \"${subject}\",\n    }."
+            },
+            {
+              "name": "mcpParameterList",
+              "type": "List\u003cMcpParameter\u003e",
+              "isCollection": true,
+              "description": "mcp参数列表：[\n    {\n      \"name\": \"subject\",\n      \"desc\": \"会议主题,描述会议主要议题或内容.\",\n      \"type\": \"string\",\n      \"required\": true\n    },\n  ]."
+            },
+            {
+              "name": "createDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间."
+            },
+            {
+              "name": "updateDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间."
+            },
+            {
+              "name": "extra",
+              "type": "Map\u003cString,Object\u003e",
+              "isCollection": false,
+              "description": "扩展参数，json对象."
+            }
+          ]
+        },
+        {
+          "name": "getMcpExt",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionGetMcpExt",
+          "description": "获取MCP扩展配置",
+          "type": "GET",
+          "path": "jaxrs/config/get/mcp/ext/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "名称."
+            },
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id."
+            },
+            {
+              "name": "extra",
+              "type": "Map\u003cString,Object\u003e",
+              "isCollection": false,
+              "description": "扩展参数，json对象."
+            }
+          ]
+        },
+        {
+          "name": "getModel",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionGetModel",
+          "description": "获取模型配置",
+          "type": "GET",
+          "path": "jaxrs/config/get/model/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "数据库主键,自动生成."
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型名称."
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务商：ali(阿里云)|deepSeek|openAi(本地模型)."
+            },
+            {
+              "name": "model",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型版本."
+            },
+            {
+              "name": "completionUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务地址."
+            },
+            {
+              "name": "apiKey",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型秘钥."
+            },
+            {
+              "name": "enable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用."
+            },
+            {
+              "name": "asDefault",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否为默认服务模型."
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型描述."
+            },
+            {
+              "name": "proxyEnable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用代理."
+            },
+            {
+              "name": "proxyHost",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理主机."
+            },
+            {
+              "name": "proxyPort",
+              "type": "Integer",
+              "isCollection": false,
+              "description": "代理端口."
+            },
+            {
+              "name": "proxyUser",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理认证用户."
+            },
+            {
+              "name": "proxyPass",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理认证密码."
+            },
+            {
+              "name": "createDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间."
+            },
+            {
+              "name": "updateDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间."
+            },
+            {
+              "name": "createTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间,自动生成,索引创建在约束中."
+            },
+            {
+              "name": "updateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间,自动生成,索引创建在约束中."
+            }
+          ]
+        },
+        {
+          "name": "listEnableModel",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionListEnableModel",
+          "description": "获取启用的模型列表",
+          "type": "GET",
+          "path": "jaxrs/config/list/enable/model",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型名称."
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务商：ali(阿里云)|deepSeek|openAi(本地模型)."
+            },
+            {
+              "name": "asDefault",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否为默认服务模型."
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型描述."
+            }
+          ]
+        },
+        {
+          "name": "listMcpConfigPaging",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionListMcpPaging",
+          "description": "分页列示mcp配置.",
+          "type": "GET",
+          "path": "jaxrs/config/list/mcp/paging/{page}/size/{size}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "page",
+              "type": "Integer",
+              "description": "分页"
+            },
+            {
+              "name": "size",
+              "type": "Integer",
+              "description": "每页数量"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "名称."
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "isCollection": false,
+              "description": "显示名称."
+            },
+            {
+              "name": "category",
+              "type": "String",
+              "isCollection": false,
+              "description": "分组."
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "说明."
+            },
+            {
+              "name": "enable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用."
+            },
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id."
+            },
+            {
+              "name": "httpOption",
+              "type": "HttpOption",
+              "isCollection": false,
+              "description": "http选项：{\n    \"url\": \"https://xxx/x_program_center/jaxrs/invoke/createMeeting/execute\",\n    \"method\": \"post\",\n    \"headerMap\": {\n      \"Content-Type\": \"application/json\"\n    },\n    \"bodyMap\": {\n      \"subject\": \"${subject}\",\n    }."
+            },
+            {
+              "name": "mcpParameterList",
+              "type": "List\u003cMcpParameter\u003e",
+              "isCollection": true,
+              "description": "mcp参数列表：[\n    {\n      \"name\": \"subject\",\n      \"desc\": \"会议主题,描述会议主要议题或内容.\",\n      \"type\": \"string\",\n      \"required\": true\n    },\n  ]."
+            },
+            {
+              "name": "createDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间."
+            },
+            {
+              "name": "updateDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间."
+            },
+            {
+              "name": "extra",
+              "type": "Map\u003cString,Object\u003e",
+              "isCollection": false,
+              "description": "扩展参数，json对象."
+            }
+          ]
+        },
+        {
+          "name": "listModelPaging",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionListModelPaging",
+          "description": "分页列示大模型.",
+          "type": "GET",
+          "path": "jaxrs/config/list/model/paging/{page}/size/{size}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "page",
+              "type": "Integer",
+              "description": "分页"
+            },
+            {
+              "name": "size",
+              "type": "Integer",
+              "description": "每页数量"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "数据库主键,自动生成."
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型名称."
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务商：ali(阿里云)|deepSeek|openAi(本地模型)."
+            },
+            {
+              "name": "model",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型版本."
+            },
+            {
+              "name": "completionUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务地址."
+            },
+            {
+              "name": "enable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用."
+            },
+            {
+              "name": "asDefault",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否为默认服务模型."
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型描述."
+            },
+            {
+              "name": "proxyEnable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用代理."
+            },
+            {
+              "name": "proxyHost",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理主机."
+            },
+            {
+              "name": "proxyPort",
+              "type": "Integer",
+              "isCollection": false,
+              "description": "代理端口."
+            },
+            {
+              "name": "proxyUser",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理认证用户."
+            },
+            {
+              "name": "proxyPass",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理认证密码."
+            },
+            {
+              "name": "createTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间,自动生成,索引创建在约束中."
+            },
+            {
+              "name": "updateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间,自动生成,索引创建在约束中."
+            }
+          ]
+        },
+        {
+          "name": "saveConfig",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionUpdateConfig",
+          "description": "保存配置数据",
+          "type": "POST",
+          "path": "jaxrs/config/save",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "appName",
+              "type": "String",
+              "isCollection": false,
+              "description": "应用名称.",
+              "isBaseType": true
+            },
+            {
+              "name": "appIconUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "应用图标地址.",
+              "isBaseType": true
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "isCollection": false,
+              "description": "欢迎主题.",
+              "isBaseType": true
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "主题功能描述.",
+              "isBaseType": true
+            },
+            {
+              "name": "knowledgeIndexAppList",
+              "type": "List\u003cString\u003e",
+              "isCollection": true,
+              "description": "知识库索引应用列表.",
+              "isBaseType": true
+            },
+            {
+              "name": "questionsIndexAppList",
+              "type": "List\u003cString\u003e",
+              "isCollection": true,
+              "description": "问答库库索引应用列表.",
+              "isBaseType": true
+            },
+            {
+              "name": "o2AiBaseUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "o2智能体服务地址.",
+              "isBaseType": true
+            },
+            {
+              "name": "o2AiToken",
+              "type": "String",
+              "isCollection": false,
+              "description": "o2智能体服务认证秘钥.",
+              "isBaseType": true
+            },
+            {
+              "name": "o2AiEnable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用o2智能体.",
+              "isBaseType": true
+            },
+            {
+              "name": "deepSeekApiUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "deepSeek服务地址.",
+              "isBaseType": true
+            },
+            {
+              "name": "aliApiUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "deepSeek服务地址.",
+              "isBaseType": true
+            }
+          ],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        },
+        {
+          "name": "updateMcpConfig",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionUpdateMcp",
+          "description": "更新MCP配置",
+          "type": "POST",
+          "path": "jaxrs/config/update/mcp/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "名称.",
+              "isBaseType": true
+            },
+            {
+              "name": "displayName",
+              "type": "String",
+              "isCollection": false,
+              "description": "显示名称.",
+              "isBaseType": true
+            },
+            {
+              "name": "category",
+              "type": "String",
+              "isCollection": false,
+              "description": "分组.",
+              "isBaseType": true
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "说明.",
+              "isBaseType": true
+            },
+            {
+              "name": "enable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用.",
+              "isBaseType": true
+            },
+            {
+              "name": "httpOption",
+              "type": "HttpOption",
+              "isCollection": false,
+              "description": "http选项：{\n    \"url\": \"https://xxx/x_program_center/jaxrs/invoke/createMeeting/execute\",\n    \"method\": \"post\",\n    \"headerMap\": {\n      \"Content-Type\": \"application/json\"\n    },\n    \"bodyMap\": {\n      \"subject\": \"${subject}\",\n    }.",
+              "isBaseType": false
+            },
+            {
+              "name": "mcpParameterList",
+              "type": "List\u003cMcpParameter\u003e",
+              "isCollection": true,
+              "description": "mcp参数列表：[\n    {\n      \"name\": \"subject\",\n      \"desc\": \"会议主题,描述会议主要议题或内容.\",\n      \"type\": \"string\",\n      \"required\": true\n    },\n  ].",
+              "isBaseType": false
+            },
+            {
+              "name": "extra",
+              "type": "Map\u003cString,Object\u003e",
+              "isCollection": false,
+              "description": "扩展参数，json对象.",
+              "isBaseType": false
+            }
+          ],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        },
+        {
+          "name": "updateModel",
+          "className": "com.x.ai.assemble.control.jaxrs.config.ActionUpdateModel",
+          "description": "更新模型配置",
+          "type": "POST",
+          "path": "jaxrs/config/update/model/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型名称.",
+              "isBaseType": true
+            },
+            {
+              "name": "type",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务商：ali(阿里云)|deepSeek|openAi(本地模型).",
+              "isBaseType": true
+            },
+            {
+              "name": "model",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型版本.",
+              "isBaseType": true
+            },
+            {
+              "name": "completionUrl",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型服务地址.",
+              "isBaseType": true
+            },
+            {
+              "name": "apiKey",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型秘钥.",
+              "isBaseType": true
+            },
+            {
+              "name": "enable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用.",
+              "isBaseType": true
+            },
+            {
+              "name": "asDefault",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否为默认服务模型.",
+              "isBaseType": true
+            },
+            {
+              "name": "desc",
+              "type": "String",
+              "isCollection": false,
+              "description": "模型描述.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyEnable",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否启用代理.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyHost",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理主机.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyPort",
+              "type": "Integer",
+              "isCollection": false,
+              "description": "代理端口.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyUser",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理认证用户.",
+              "isBaseType": true
+            },
+            {
+              "name": "proxyPass",
+              "type": "String",
+              "isCollection": false,
+              "description": "代理认证密码.",
+              "isBaseType": true
+            },
+            {
+              "name": "createDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间.",
+              "isBaseType": true
+            },
+            {
+              "name": "updateDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间.",
+              "isBaseType": true
+            }
+          ],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EchoAction",
+      "className": "com.x.base.core.project.jaxrs.echo.EchoAction",
+      "description": "应用响应接口.",
+      "methods": [
+        {
+          "name": "get",
+          "className": "com.x.base.core.project.jaxrs.echo.ActionGet",
+          "description": "获取应答.",
+          "type": "GET",
+          "path": "jaxrs/echo",
+          "contentType": "application/json",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "servletContextName",
+              "type": "String",
+              "isCollection": false,
+              "description": "上下文根."
+            },
+            {
+              "name": "serverTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "服务器时间."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FileAction",
+      "className": "com.x.ai.assemble.control.jaxrs.file.FileAction",
+      "description": "chat附件",
+      "methods": [
+        {
+          "name": "copyFile",
+          "className": "com.x.ai.assemble.control.jaxrs.file.ActionCopyFile",
+          "description": "拷贝网盘、内容管理或者流程平台的附件并上传.",
+          "type": "POST",
+          "path": "jaxrs/file/copy/file",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "附件标识.",
+              "isBaseType": true
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "附件名称.",
+              "isBaseType": true
+            },
+            {
+              "name": "copyFrom",
+              "type": "String",
+              "isCollection": false,
+              "description": "附件来源(cms|内容管理附件、processPlatform|流程平台附件、x_pan_assemble_control|企业网盘附件).",
+              "isBaseType": true
+            }
+          ],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        },
+        {
+          "name": "delete",
+          "className": "com.x.ai.assemble.control.jaxrs.file.ActionDelete",
+          "description": "删除文件.",
+          "type": "GET",
+          "path": "jaxrs/file/delete/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "文件标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        },
+        {
+          "name": "download",
+          "className": "com.x.ai.assemble.control.jaxrs.file.ActionDownload",
+          "description": "下载文件.",
+          "type": "GET",
+          "path": "jaxrs/file/{id}/download",
+          "contentType": "application/json",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "id",
+              "type": "String",
+              "description": "文件标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [
+            {
+              "name": "stream",
+              "type": "Boolean",
+              "description": "是否以流模式下载"
+            }
+          ],
+          "ins": [],
+          "outs": [
+            {
+              "name": "contentDisposition",
+              "type": "String",
+              "isCollection": false,
+              "description": "说明"
+            },
+            {
+              "name": "contentType",
+              "type": "String",
+              "isCollection": false,
+              "description": "类型"
+            },
+            {
+              "name": "bytes",
+              "type": "byte[]",
+              "isCollection": false,
+              "description": "字节内容."
+            },
+            {
+              "name": "streamingOutput",
+              "type": "StreamingOutput",
+              "isCollection": false,
+              "description": "附件流."
+            },
+            {
+              "name": "contentLength",
+              "type": "Long",
+              "isCollection": false,
+              "description": "附件大小."
+            }
+          ]
+        },
+        {
+          "name": "downloadScale",
+          "className": "com.x.ai.assemble.control.jaxrs.file.ActionDownloadScale",
+          "description": "压缩后下载文件.",
+          "type": "GET",
+          "path": "jaxrs/file/{id}/download/scale",
+          "contentType": "application/json",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "id",
+              "type": "String",
+              "description": "文件标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [
+            {
+              "name": "stream",
+              "type": "Boolean",
+              "description": "是否以流模式下载"
+            }
+          ],
+          "ins": [],
+          "outs": [
+            {
+              "name": "contentDisposition",
+              "type": "String",
+              "isCollection": false,
+              "description": "说明"
+            },
+            {
+              "name": "contentType",
+              "type": "String",
+              "isCollection": false,
+              "description": "类型"
+            },
+            {
+              "name": "bytes",
+              "type": "byte[]",
+              "isCollection": false,
+              "description": "字节内容."
+            },
+            {
+              "name": "streamingOutput",
+              "type": "StreamingOutput",
+              "isCollection": false,
+              "description": "附件流."
+            },
+            {
+              "name": "contentLength",
+              "type": "Long",
+              "isCollection": false,
+              "description": "附件大小."
+            }
+          ]
+        },
+        {
+          "name": "get",
+          "className": "com.x.ai.assemble.control.jaxrs.file.ActionGet",
+          "description": "获取指定File.",
+          "type": "GET",
+          "path": "jaxrs/file/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "数据库主键,自动生成."
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "名称."
+            },
+            {
+              "name": "creator",
+              "type": "String",
+              "isCollection": false,
+              "description": "创建者."
+            },
+            {
+              "name": "fileId",
+              "type": "String",
+              "isCollection": false,
+              "description": "关联文件ID."
+            },
+            {
+              "name": "extension",
+              "type": "String",
+              "isCollection": false,
+              "description": "扩展名,必须要有扩展名的文件才允许上传."
+            },
+            {
+              "name": "storage",
+              "type": "String",
+              "isCollection": false,
+              "description": "存储器的名称,也就是多个存放节点的名字."
+            },
+            {
+              "name": "length",
+              "type": "Long",
+              "isCollection": false,
+              "description": "文件大小."
+            },
+            {
+              "name": "lastUpdateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "最后更新时间"
+            },
+            {
+              "name": "deepPath",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否使用更深的路径."
+            },
+            {
+              "name": "encryptKey",
+              "type": "String",
+              "isCollection": false,
+              "description": "文件密钥."
+            },
+            {
+              "name": "createTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间,自动生成,索引创建在约束中."
+            },
+            {
+              "name": "updateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间,自动生成,索引创建在约束中."
+            }
+          ]
+        },
+        {
+          "name": "listPaging",
+          "className": "com.x.ai.assemble.control.jaxrs.file.ActionListPaging",
+          "description": "分页查找文件.",
+          "type": "POST",
+          "path": "jaxrs/file/list/paging/{page}/size/{size}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "page",
+              "type": "Integer",
+              "description": "分页"
+            },
+            {
+              "name": "size",
+              "type": "Integer",
+              "description": "每页数量"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "fileId",
+              "type": "String",
+              "isCollection": false,
+              "description": "关联文件ID",
+              "isBaseType": true
+            },
+            {
+              "name": "fileName",
+              "type": "String",
+              "isCollection": false,
+              "description": "附件名称",
+              "isBaseType": true
+            }
+          ],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "数据库主键,自动生成."
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "名称."
+            },
+            {
+              "name": "creator",
+              "type": "String",
+              "isCollection": false,
+              "description": "创建者."
+            },
+            {
+              "name": "fileId",
+              "type": "String",
+              "isCollection": false,
+              "description": "关联文件ID."
+            },
+            {
+              "name": "extension",
+              "type": "String",
+              "isCollection": false,
+              "description": "扩展名,必须要有扩展名的文件才允许上传."
+            },
+            {
+              "name": "storage",
+              "type": "String",
+              "isCollection": false,
+              "description": "存储器的名称,也就是多个存放节点的名字."
+            },
+            {
+              "name": "length",
+              "type": "Long",
+              "isCollection": false,
+              "description": "文件大小."
+            },
+            {
+              "name": "lastUpdateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "最后更新时间"
+            },
+            {
+              "name": "deepPath",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否使用更深的路径."
+            },
+            {
+              "name": "encryptKey",
+              "type": "String",
+              "isCollection": false,
+              "description": "文件密钥."
+            },
+            {
+              "name": "createTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间,自动生成,索引创建在约束中."
+            },
+            {
+              "name": "updateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间,自动生成,索引创建在约束中."
+            }
+          ]
+        },
+        {
+          "name": "listWithIds",
+          "className": "com.x.ai.assemble.control.jaxrs.file.ActionListWithIds",
+          "description": "根据id列表查找文件.",
+          "type": "POST",
+          "path": "jaxrs/file/list",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "idList",
+              "type": "List\u003cString\u003e",
+              "isCollection": true,
+              "description": "文件id列表",
+              "isBaseType": true
+            }
+          ],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "数据库主键,自动生成."
+            },
+            {
+              "name": "name",
+              "type": "String",
+              "isCollection": false,
+              "description": "名称."
+            },
+            {
+              "name": "creator",
+              "type": "String",
+              "isCollection": false,
+              "description": "创建者."
+            },
+            {
+              "name": "fileId",
+              "type": "String",
+              "isCollection": false,
+              "description": "关联文件ID."
+            },
+            {
+              "name": "extension",
+              "type": "String",
+              "isCollection": false,
+              "description": "扩展名,必须要有扩展名的文件才允许上传."
+            },
+            {
+              "name": "storage",
+              "type": "String",
+              "isCollection": false,
+              "description": "存储器的名称,也就是多个存放节点的名字."
+            },
+            {
+              "name": "length",
+              "type": "Long",
+              "isCollection": false,
+              "description": "文件大小."
+            },
+            {
+              "name": "lastUpdateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "最后更新时间"
+            },
+            {
+              "name": "deepPath",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "是否使用更深的路径."
+            },
+            {
+              "name": "encryptKey",
+              "type": "String",
+              "isCollection": false,
+              "description": "文件密钥."
+            },
+            {
+              "name": "createTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "创建时间,自动生成,索引创建在约束中."
+            },
+            {
+              "name": "updateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "修改时间,自动生成,索引创建在约束中."
+            }
+          ]
+        },
+        {
+          "name": "upload",
+          "className": "com.x.ai.assemble.control.jaxrs.file.ActionUpload",
+          "description": "上传图片或文件.",
+          "type": "POST",
+          "path": "jaxrs/file/upload",
+          "contentType": "multipart/form-data",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": true,
+          "pathParameters": [],
+          "formParameters": [
+            {
+              "name": "file",
+              "type": "File",
+              "description": "上传图片或文件"
+            }
+          ],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FireScheduleAction",
+      "className": "com.x.base.core.project.jaxrs.fireschedule.FireScheduleAction",
+      "description": "触发定时任务接口.",
+      "methods": [
+        {
+          "name": "execute",
+          "className": "com.x.base.core.project.jaxrs.fireschedule.ActionExecute",
+          "description": "接受x_program_center发送过来的运行定时任务指令.",
+          "type": "GET",
+          "path": "jaxrs/fireschedule/classname/{className}",
+          "contentType": "application/json",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "className",
+              "type": "String",
+              "description": "运行类"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IndexAction",
+      "className": "com.x.ai.assemble.control.jaxrs.index.IndexAction",
+      "description": "大模型知识库文件索引——内容管理",
+      "methods": [
+        {
+          "name": "cmsDocIndex",
+          "className": "com.x.ai.assemble.control.jaxrs.index.ActionCmsDocIndex",
+          "description": "内容管理文档索引.",
+          "type": "GET",
+          "path": "jaxrs/index/cms/doc/{docId}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "docId",
+              "type": "String",
+              "description": "内容管理文档ID"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        },
+        {
+          "name": "cmsDocIndexWithApp",
+          "className": "com.x.ai.assemble.control.jaxrs.index.ActionCmsDocIndexWithApp",
+          "description": "内容管理文档索引.",
+          "type": "GET",
+          "path": "jaxrs/index/cms/doc/with/app/{appId}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "appId",
+              "type": "String",
+              "description": "内容管理应用ID"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        },
+        {
+          "name": "deleteDocIndex",
+          "className": "com.x.ai.assemble.control.jaxrs.index.ActionDeleteDocIndex",
+          "description": "删除索引文档",
+          "type": "GET",
+          "path": "jaxrs/index/delete/{flag}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "flag",
+              "type": "String",
+              "description": "标识"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "id"
+            }
+          ]
+        },
+        {
+          "name": "listIndexPaging",
+          "className": "com.x.ai.assemble.control.jaxrs.index.ActionListPaging",
+          "description": "分页列示索引文档.",
+          "type": "POST",
+          "path": "jaxrs/index/list/paging/{page}/size/{size}",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [
+            {
+              "name": "page",
+              "type": "Integer",
+              "description": "分页"
+            },
+            {
+              "name": "size",
+              "type": "Integer",
+              "description": "每页数量"
+            }
+          ],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [
+            {
+              "name": "search",
+              "type": "String",
+              "isCollection": false,
+              "description": "搜索关键字.",
+              "isBaseType": true
+            }
+          ],
+          "outs": [
+            {
+              "name": "processName",
+              "type": "String",
+              "isCollection": false,
+              "description": "应用名称."
+            },
+            {
+              "name": "id",
+              "type": "String",
+              "isCollection": false,
+              "description": "关联文档ID."
+            },
+            {
+              "name": "serial",
+              "type": "String",
+              "isCollection": false,
+              "description": "文号."
+            },
+            {
+              "name": "creatorPerson",
+              "type": "String",
+              "isCollection": false,
+              "description": "文档创建者."
+            },
+            {
+              "name": "createDateTime",
+              "type": "Date",
+              "isCollection": false,
+              "description": "文档创建时间."
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "isCollection": false,
+              "description": "标题."
+            },
+            {
+              "name": "category",
+              "type": "String",
+              "isCollection": false,
+              "description": "分类."
+            }
+          ]
+        },
+        {
+          "name": "syncToKnowledge",
+          "className": "com.x.ai.assemble.control.jaxrs.index.ActionSync",
+          "description": "同步到知识库.",
+          "type": "GET",
+          "path": "jaxrs/index/sync/to/knowledge",
+          "contentType": "application/json",
+          "resultContentType": "application/json; charset\u003dUTF-8",
+          "useJsonElementParameter": false,
+          "useStringParameter": false,
+          "pathParameters": [],
+          "formParameters": [],
+          "queryParameters": [],
+          "ins": [],
+          "outs": [
+            {
+              "name": "value",
+              "type": "Boolean",
+              "isCollection": false,
+              "description": "布尔值."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

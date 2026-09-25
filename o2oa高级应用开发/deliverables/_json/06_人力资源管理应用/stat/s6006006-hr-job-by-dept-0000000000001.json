@@ -1,0 +1,28 @@
+{
+  "id": "s6006006-hr-job-by-dept-0000000000001",
+  "name": "按部门统计招聘岗位数",
+  "alias": "按部门统计招聘岗位数",
+  "description": "各部门发布的竞聘岗位数量",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006007-hr-job-pool-view-000000000000001",
+  "categoryPath": "recruit_dept",
+  "valuePath": "count",
+  "categoryTitle": "招聘部门",
+  "valueTitle": "岗位数",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ],
+    "defaultChartType": "column"
+  }
+}

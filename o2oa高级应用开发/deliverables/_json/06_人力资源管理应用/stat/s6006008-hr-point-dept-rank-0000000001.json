@@ -1,0 +1,29 @@
+{
+  "id": "s6006008-hr-point-dept-rank-0000000001",
+  "name": "部门月度人均积分排名",
+  "alias": "部门月度人均积分排名",
+  "description": "官方列顺序：部门|人均积分|月排名",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006010-hr-point-rank-view-000000000001",
+  "categoryPath": "dept",
+  "valuePath": "dept_avg_point",
+  "categoryTitle": "部门",
+  "valueTitle": "人均积分",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "bar",
+      "column"
+    ],
+    "defaultChartType": "bar",
+    "showLegend": true,
+    "showLabel": true,
+    "moreLink": "v6006010-hr-point-rank-view-000000000001"
+  }
+}

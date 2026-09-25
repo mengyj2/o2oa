@@ -1,0 +1,190 @@
+<div class="teamset">
+	<div class="group-header-content">
+		<div class="group-label" >
+			<div class="icon" data-o2-element="teamIconNode" data-o2-events="click:setIcon"
+				 style="background-image: url(../m_app/cloudDocument/img/team/{{$.data.icon}}.png);"></div>
+		</div>
+		<div class="group-header-box">
+			<div class="title">{{$.data.name}}</div>
+			<h2>9人</h2>
+			<button type="button" class="ant-btn ant-btn-ghost">
+				<span>团队文档</span>
+			</button>
+		</div>
+	</div>
+	<div class="ant-tabs ant-tabs-top ant-tabs-line">
+		<div class="ant-tabs-bar ant-tabs-top-bar" >
+			<div class="ant-tabs-nav-container">
+				<div class="ant-tabs-nav-wrap">
+					<div class="ant-tabs-nav-scroll">
+						<div class="ant-tabs-nav ant-tabs-nav-animated">
+							<div>
+								<div class="ant-tabs-tab-active ant-tabs-tab">
+									<span><i class="iconfont icon_profile"></i> 团队资料</span>
+								</div>
+								<div class=" ant-tabs-tab">
+									<span><i class="iconfont icon_group"></i> 团队成员</span>
+								</div>
+								<div class=" ant-tabs-tab">
+									<span><i class="iconfont icon_setting"></i> 团队设置</span>
+								</div>
+							</div>
+							<div class="ant-tabs-ink-bar ant-tabs-ink-bar-animated" style="display: block; transform: translate3d(0px, 0px, 0px); width: 110px;">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ant-tabs-content ant-tabs-content-animated ant-tabs-top-content" style="margin-left: 0%;">
+			<div class="ant-tabs-tabpane ant-tabs-tabpane-active">
+				<div style="display: flex;width: 100%;height: 100%;">
+					<div class="ant-descriptions">
+						<div class="ant-descriptions-view">
+							<table>
+								<tbody>
+								<tr class="ant-descriptions-row">
+									<td class="ant-descriptions-item">
+										<span class="ant-descriptions-item-label ant-descriptions-item-colon">
+											<span class="td_title">团队名称</span>
+										</span>
+									</td>
+									<td class="ant-descriptions-item">
+										<span class="ant-descriptions-item-label ant-descriptions-item-colon">
+											<span class="td_title">创建日期</span>
+										</span>
+									</td>
+								</tr>
+								<tr class="ant-descriptions-row">
+									<td class="ant-descriptions-item">
+										<div class="name-wrapper">
+											<span class="ant-descriptions-item-content">
+												<span class="team-name" data-o2-element="teamEditNameNode" >{{$.data.name}}</span>
+												<i class="iconfont icon_edit" data-o2-element="node" data-o2-events="click:setName"> </i>
+											</span>
+										</div>
+									</td>
+									<td class="ant-descriptions-item">
+										<span class="ant-descriptions-item-content">{{$.data.createTime}}</span>
+									</td>
+								</tr>
+								<tr class="ant-descriptions-row">
+									<td class="ant-descriptions-item">
+										<span class="ant-descriptions-item-label ant-descriptions-item-colon">
+											<span class="td_title">空间大小</span>
+										</span>
+									</td>
+									<td class="ant-descriptions-item">
+										<span class="ant-descriptions-item-label ant-descriptions-item-colon">
+											<span class="td_title">
+												所属部门空间
+												<span style="margin-left: 5px; color: rgb(170, 170, 170);">
+													<i class="iconfont icon_info"> </i>
+												</span>
+											</span>
+										</span>
+									</td>
+								</tr>
+								<tr class="ant-descriptions-row">
+									<td class="ant-descriptions-item">
+										<div>
+											<span class="ant-descriptions-item-content">
+												<span>2.00 GB</span>
+												<span>已用：37.62 MB</span>
+												<span class="">(1.83%)</span>
+											</span>
+										</div>
+									</td>
+									<td class="ant-descriptions-item">
+										<div>
+											<span class="ant-descriptions-item-content">
+												<span>10.00 GB</span>
+												<span>已用：72.61 MB</span>
+												<span class="">(0.7%)</span>
+											</span>
+										</div>
+									</td>
+								</tr>
+								<tr class="ant-descriptions-row">
+									<td colspan="2" class="ant-descriptions-item">
+										<span class="ant-descriptions-item-label ant-descriptions-item-colon">
+											<span class="td_title">团队公告</span>
+										</span>
+									</td>
+								</tr>
+								<tr class="ant-descriptions-row">
+									<td colspan="2" class="ant-descriptions-item">
+										<span class="ant-descriptions-item-content">
+											<span data-o2-element="teamDescNode">{{$.data.desc}}</span>
+											<i class="iconfont icon_edit" data-o2-element="teamEditNode" data-o2-events="click:setDesc"> </i>
+										</span>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div  class="ant-tabs-tabpane ant-tabs-tabpane-inactive">
+				<div class="teamset_wrap">
+					<div class="operator">
+						<button type="button" class="ant-btn action-button" data-o2-element="addPersonNode" data-o2-events="click:addPerson;">
+							<i class="iconfont icon_plus"></i>
+							<span>添加成员</span>
+						</button>
+<!--						<span class="ant-input-search member-search-input ant-input-affix-wrapper">-->
+<!--							<input maxlength="30" placeholder="搜索" class="ant-input" type="text" value="">-->
+<!--							<span class="ant-input-suffix">-->
+<!--								<i class="iconfont icon_search2"> </i>-->
+<!--							</span>-->
+<!--						</span>-->
+					</div>
+					<div class="ant-table-wrapper">
+						<div class="ant-spin-nested-loading">
+							<div class="ant-spin-container">
+								<div class="ant-table ant-table-small ant-table-without-column-header ant-table-fixed-header ant-table-scroll-position-left ant-table-layout-fixed">
+									<div class="ant-table-content">
+										<div class="ant-table-scroll">
+											<div  class="ant-table-body" style="max-height: 380px; overflow-y: scroll;">
+												<table class="">
+													<colgroup>
+														<col>
+														<col style="width: 96px; min-width: 96px;">
+													</colgroup>
+													<tbody class="ant-table-tbody" data-o2-element="teamPersonListNode">
+
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ant-tabs-tabpane ant-tabs-tabpane-inactive">
+				<div>
+					<div class="history_set">
+						<label class="col-6" style="text-align: left; width: auto; margin-right: 5px;">历史版本保存数量<span>
+							<i class="iconfont icon_info"></i></span>
+							<span class="history-limit" data-o2-element="teamVersionNode" >{{$.data.version}}</span>
+							<i class="iconfont icon_edit" data-o2-element="teamVersionSetNode" data-o2-events="click:versionSet"></i>
+						</label>
+					</div>
+					<div class="team_remove">
+						<button type="button" class="ant-btn ant-btn-danger" data-o2-element="removeTeamNode" data-o2-events="click:removeTeam;">
+							<span>删除团队</span>
+						</button>
+						<p class="setting_tips">
+							删除团队后，团队的所有文档、成员、资料信息都将被彻底删除，无法恢复，请谨慎操作。
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

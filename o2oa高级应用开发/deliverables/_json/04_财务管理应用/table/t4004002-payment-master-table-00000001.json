@@ -1,0 +1,15 @@
+{
+  "id": "t4004002-payment-master-table-00000001",
+  "name": "t4004002_payment_master_table",
+  "alias": "付款主表",
+  "description": "付款主数据，支持预算执行与成本归集",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"payment_no\", \"description\": \"付款单号\", \"type\": \"string\"}, {\"name\": \"payment_title\", \"description\": \"付款事项\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"budget_no\", \"description\": \"关联预算编号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"关联合同编号\", \"type\": \"string\"}, {\"name\": \"pay_type\", \"description\": \"付款类型\", \"type\": \"string\"}, {\"name\": \"payee_name\", \"description\": \"收款单位\", \"type\": \"string\"}, {\"name\": \"payment_amount\", \"description\": \"付款金额\", \"type\": \"double\"}, {\"name\": \"plan_pay_date\", \"description\": \"计划付款日\", \"type\": \"date\"}, {\"name\": \"actual_pay_date\", \"description\": \"实际付款日\", \"type\": \"date\"}, {\"name\": \"voucher_no\", \"description\": \"会计凭证号\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"payment_no\", \"description\": \"付款单号\", \"type\": \"string\"}, {\"name\": \"payment_title\", \"description\": \"付款事项\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"budget_no\", \"description\": \"关联预算编号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"关联合同编号\", \"type\": \"string\"}, {\"name\": \"pay_type\", \"description\": \"付款类型\", \"type\": \"string\"}, {\"name\": \"payee_name\", \"description\": \"收款单位\", \"type\": \"string\"}, {\"name\": \"payment_amount\", \"description\": \"付款金额\", \"type\": \"double\"}, {\"name\": \"plan_pay_date\", \"description\": \"计划付款日\", \"type\": \"date\"}, {\"name\": \"actual_pay_date\", \"description\": \"实际付款日\", \"type\": \"date\"}, {\"name\": \"voucher_no\", \"description\": \"会计凭证号\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

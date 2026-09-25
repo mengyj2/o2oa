@@ -1,0 +1,15 @@
+{
+  "id": "t6006011-hr-travel-table-0000000000001",
+  "name": "t6006011_hr_travel_table",
+  "alias": "出差记录表",
+  "description": "员工出差记录，project_no 与项目管理/预算应用联动",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"travel_no\", \"description\": \"出差单号\", \"type\": \"string\"}, {\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"travel_type\", \"description\": \"出差类型\", \"type\": \"string\"}, {\"name\": \"destination\", \"description\": \"出差地点\", \"type\": \"string\"}, {\"name\": \"start_date\", \"description\": \"出发日期\", \"type\": \"date\"}, {\"name\": \"end_date\", \"description\": \"返回日期\", \"type\": \"date\"}, {\"name\": \"travel_days\", \"description\": \"出差天数\", \"type\": \"double\"}, {\"name\": \"budget_amount\", \"description\": \"预估费用\", \"type\": \"double\"}, {\"name\": \"actual_amount\", \"description\": \"实际费用\", \"type\": \"double\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"travel_reason\", \"description\": \"出差事由\", \"type\": \"stringLob\"}, {\"name\": \"travel_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"travel_no\", \"description\": \"出差单号\", \"type\": \"string\"}, {\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"travel_type\", \"description\": \"出差类型\", \"type\": \"string\"}, {\"name\": \"destination\", \"description\": \"出差地点\", \"type\": \"string\"}, {\"name\": \"start_date\", \"description\": \"出发日期\", \"type\": \"date\"}, {\"name\": \"end_date\", \"description\": \"返回日期\", \"type\": \"date\"}, {\"name\": \"travel_days\", \"description\": \"出差天数\", \"type\": \"double\"}, {\"name\": \"budget_amount\", \"description\": \"预估费用\", \"type\": \"double\"}, {\"name\": \"actual_amount\", \"description\": \"实际费用\", \"type\": \"double\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"travel_reason\", \"description\": \"出差事由\", \"type\": \"stringLob\"}, {\"name\": \"travel_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

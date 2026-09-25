@@ -1,0 +1,20 @@
+{
+  "id": "q2002003-receive-plan-join-0000000001",
+  "name": "收款计划关联合同",
+  "alias": "收款计划关联合同",
+  "description": "收款计划明细带合同信息",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT r.id AS id, r.plan_no AS plan_no, r.contract_no AS contract_no, r.period_index AS period_index, r.period_name AS period_name, r.plan_ratio AS plan_ratio, r.plan_amount AS plan_amount, r.plan_date AS plan_date, r.received_amount AS received_amount, r.plan_status AS plan_status, c.contract_name AS contract_name, c.sign_unit AS sign_unit, c.contract_status AS contract_status, c.project_no AS project_no FROM contract_receive_plan r LEFT JOIN contract_main c ON c.contract_no = r.contract_no",
+  "sql": "SELECT r.id AS id, r.plan_no AS plan_no, r.contract_no AS contract_no, r.period_index AS period_index, r.period_name AS period_name, r.plan_ratio AS plan_ratio, r.plan_amount AS plan_amount, r.plan_date AS plan_date, r.received_amount AS received_amount, r.plan_status AS plan_status, c.contract_name AS contract_name, c.sign_unit AS sign_unit, c.contract_status AS contract_status, c.project_no AS project_no FROM contract_receive_plan r LEFT JOIN contract_main c ON c.contract_no = r.contract_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

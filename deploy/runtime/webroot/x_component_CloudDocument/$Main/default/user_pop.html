@@ -1,0 +1,27 @@
+<div class="ant-popover ant-popover-placement-bottomRight"
+     style="left:initial;right: 10px; top: 44px; transform-origin: 179px -4px;z-index: 999 !important;">
+    <div class="ant-popover-content">
+        <div class="ant-popover-arrow"></div>
+        <div class="ant-popover-inner" role="tooltip">
+            <div class="ant-popover-title">
+                <div style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
+                    <img src="data:image/png;base64,{{$.user.icon}}"
+                         style="border-radius: 50%; width: 60px; height: 60px; margin-bottom: 4px;">
+                    <div>
+                        <span>{{$.user.userName}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ant-popover-inner-content" style="padding: 5px 0 !important">
+                <div>
+                    <li class="user_panel_content_item" data-o2-element="userPanel" data-o2-events="click:userDetail">
+                        <a class="user_panel_content_btn">个人详情</a>
+                    </li>
+                    <li class="user_panel_content_item" data-o2-element="userPanel" data-o2-events="click:logout">
+                        <a class="user_panel_content_btn">注销</a>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

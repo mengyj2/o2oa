@@ -1,0 +1,15 @@
+{
+  "id": "t2002005-contract-pay-table-0000000000001",
+  "name": "t2002005_contract_pay_table",
+  "alias": "合同付款表",
+  "description": "合同付款登记，三方挂靠 project_no + budget_no + expense_no",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"pay_no\", \"description\": \"付款单号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"contract_name\", \"description\": \"合同名称\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"budget_no\", \"description\": \"关联预算编号\", \"type\": \"string\"}, {\"name\": \"pay_plan_no\", \"description\": \"关联付款计划编号\", \"type\": \"string\"}, {\"name\": \"pay_type\", \"description\": \"付款类型\", \"type\": \"string\"}, {\"name\": \"pay_amount\", \"description\": \"付款金额\", \"type\": \"double\"}, {\"name\": \"pay_date\", \"description\": \"付款日期\", \"type\": \"date\"}, {\"name\": \"payee_name\", \"description\": \"收款方名称\", \"type\": \"string\"}, {\"name\": \"bank_account\", \"description\": \"付款账号\", \"type\": \"string\"}, {\"name\": \"voucher_no\", \"description\": \"凭证号\", \"type\": \"string\"}, {\"name\": \"pay_status\", \"description\": \"付款状态\", \"type\": \"string\"}, {\"name\": \"expense_no\", \"description\": \"关联财务凭证号\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"pay_no\", \"description\": \"付款单号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"contract_name\", \"description\": \"合同名称\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"budget_no\", \"description\": \"关联预算编号\", \"type\": \"string\"}, {\"name\": \"pay_plan_no\", \"description\": \"关联付款计划编号\", \"type\": \"string\"}, {\"name\": \"pay_type\", \"description\": \"付款类型\", \"type\": \"string\"}, {\"name\": \"pay_amount\", \"description\": \"付款金额\", \"type\": \"double\"}, {\"name\": \"pay_date\", \"description\": \"付款日期\", \"type\": \"date\"}, {\"name\": \"payee_name\", \"description\": \"收款方名称\", \"type\": \"string\"}, {\"name\": \"bank_account\", \"description\": \"付款账号\", \"type\": \"string\"}, {\"name\": \"voucher_no\", \"description\": \"凭证号\", \"type\": \"string\"}, {\"name\": \"pay_status\", \"description\": \"付款状态\", \"type\": \"string\"}, {\"name\": \"expense_no\", \"description\": \"关联财务凭证号\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

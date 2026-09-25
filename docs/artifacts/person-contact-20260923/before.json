@@ -1,0 +1,1688 @@
+[
+ {
+  "name": "孟弋洁",
+  "unique": "mengyijie",
+  "new_mobile": "18516833076",
+  "new_mail": "mengyijie@ccia.xin",
+  "http": 200,
+  "id": "d7169e66-459d-4316-8497-60a6647c2d50",
+  "dn": "孟弋洁@mengyijie@P",
+  "cur_name": "孟弋洁",
+  "cur_unique": "mengyijie",
+  "cur_mobile": "18516833076",
+  "cur_mail": "meng_2000@163.com",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": null,
+  "employee": "",
+  "status": "0",
+  "orderNumber": 275130036,
+  "createTime": "2026-09-20 09:00:37",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [
+      {
+       "woUnit": {
+        "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "name": "中国复合材料工业协会",
+        "unique": "51100000500009247D",
+        "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+        "typeList": [
+         "行业组织"
+        ],
+        "pinyin": "zhongguofuhecailiaogongyexiehui",
+        "pinyinInitial": "zgfhclgyxh",
+        "description": "为复合材料行业提供服务",
+        "shortName": "中国复材",
+        "level": 1,
+        "levelName": "中国复合材料工业协会",
+        "levelOrderNumber": "0275050209",
+        "superior": "",
+        "orderNumber": 275050209,
+        "controllerList": [
+         "d7169e66-459d-4316-8497-60a6647c2d50",
+         "500efc6b-2376-4948-bee5-0dc011cd9196"
+        ],
+        "createTime": "2026-09-19 10:50:09",
+        "updateTime": "2026-09-21 11:18:50"
+       },
+       "id": "d600fa24-5708-4e1d-bec7-ed68b4506d38",
+       "pinyin": "mishuchang",
+       "pinyinInitial": "msc",
+       "name": "秘书长",
+       "unique": "d600fa24-5708-4e1d-bec7-ed68b4506d38",
+       "distinguishedName": "秘书长@d600fa24-5708-4e1d-bec7-ed68b4506d38@UD",
+       "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+       "orderNumber": 275130078,
+       "identityList": [
+        "15624b12-1c5e-43e5-ade4-2e8852bd746c"
+       ],
+       "createTime": "2026-09-20 09:01:18",
+       "updateTime": "2026-09-20 09:01:18"
+      }
+     ],
+     "id": "15624b12-1c5e-43e5-ade4-2e8852bd746c",
+     "pinyin": "mengyijie",
+     "pinyinInitial": "myj",
+     "name": "孟弋洁",
+     "unique": "51100000500009247D_mengyijie",
+     "distinguishedName": "孟弋洁@51100000500009247D_mengyijie@I",
+     "person": "d7169e66-459d-4316-8497-60a6647c2d50",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275130037,
+     "major": false,
+     "createTime": "2026-09-20 09:00:38",
+     "updateTime": "2026-09-20 09:04:12"
+    },
+    {
+     "woUnit": {
+      "id": "73fc25cd-7864-43c3-96d3-dd4e321b85d8",
+      "name": "行业研究部",
+      "unique": "yjyb",
+      "distinguishedName": "行业研究部@yjyb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "xingyeyanjiubu",
+      "pinyinInitial": "xyyjb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/行业研究部",
+      "levelOrderNumber": "0275050209/0000000002",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 2,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [
+      {
+       "woUnit": {
+        "id": "73fc25cd-7864-43c3-96d3-dd4e321b85d8",
+        "name": "行业研究部",
+        "unique": "yjyb",
+        "distinguishedName": "行业研究部@yjyb@U",
+        "typeList": [
+         "部门"
+        ],
+        "pinyin": "xingyeyanjiubu",
+        "pinyinInitial": "xyyjb",
+        "level": 2,
+        "levelName": "中国复合材料工业协会/行业研究部",
+        "levelOrderNumber": "0275050209/0000000002",
+        "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "orderNumber": 2,
+        "controllerList": [],
+        "createTime": "2026-09-20 09:04:09",
+        "updateTime": "2026-09-20 09:04:09"
+       },
+       "id": "5386268f-35f9-460d-9142-7b14c3caf02f",
+       "pinyin": "bumenfuzeren",
+       "pinyinInitial": "bmfzr",
+       "name": "部门负责人",
+       "unique": "5386268f-35f9-460d-9142-7b14c3caf02f",
+       "distinguishedName": "部门负责人@5386268f-35f9-460d-9142-7b14c3caf02f@UD",
+       "unit": "73fc25cd-7864-43c3-96d3-dd4e321b85d8",
+       "orderNumber": 275130255,
+       "identityList": [
+        "a42ea71d-7e61-47ff-9ed5-fd9fb0eb1a43"
+       ],
+       "createTime": "2026-09-20 09:04:16",
+       "updateTime": "2026-09-20 09:04:16"
+      }
+     ],
+     "id": "a42ea71d-7e61-47ff-9ed5-fd9fb0eb1a43",
+     "pinyin": "mengyijie",
+     "pinyinInitial": "myj",
+     "name": "孟弋洁",
+     "unique": "yjyb_mengyijie",
+     "distinguishedName": "孟弋洁@yjyb_mengyijie@I",
+     "person": "d7169e66-459d-4316-8497-60a6647c2d50",
+     "unit": "73fc25cd-7864-43c3-96d3-dd4e321b85d8",
+     "unitName": "行业研究部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/行业研究部",
+     "orderNumber": 275130252,
+     "major": false,
+     "createTime": "2026-09-20 09:04:13",
+     "updateTime": "2026-09-20 09:04:13"
+    },
+    {
+     "woUnit": {
+      "id": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+      "name": "综合管理部",
+      "unique": "zhb",
+      "distinguishedName": "综合管理部@zhb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "zongheguanlibu",
+      "pinyinInitial": "zhglb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/综合管理部",
+      "levelOrderNumber": "0275050209/0000000001",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 1,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [
+      {
+       "woUnit": {
+        "id": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+        "name": "综合管理部",
+        "unique": "zhb",
+        "distinguishedName": "综合管理部@zhb@U",
+        "typeList": [
+         "部门"
+        ],
+        "pinyin": "zongheguanlibu",
+        "pinyinInitial": "zhglb",
+        "level": 2,
+        "levelName": "中国复合材料工业协会/综合管理部",
+        "levelOrderNumber": "0275050209/0000000001",
+        "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "orderNumber": 1,
+        "controllerList": [],
+        "createTime": "2026-09-20 09:04:09",
+        "updateTime": "2026-09-20 09:04:09"
+       },
+       "id": "b2ab4370-75bf-4ce9-b395-44da28eb7290",
+       "pinyin": "bumenfuzeren",
+       "pinyinInitial": "bmfzr",
+       "name": "部门负责人",
+       "unique": "b2ab4370-75bf-4ce9-b395-44da28eb7290",
+       "distinguishedName": "部门负责人@b2ab4370-75bf-4ce9-b395-44da28eb7290@UD",
+       "unit": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+       "orderNumber": 275130255,
+       "identityList": [
+        "ee6429c7-6ced-4036-8323-183eeca6ca1b"
+       ],
+       "createTime": "2026-09-20 09:04:15",
+       "updateTime": "2026-09-20 09:04:15"
+      }
+     ],
+     "id": "ee6429c7-6ced-4036-8323-183eeca6ca1b",
+     "pinyin": "mengyijie",
+     "pinyinInitial": "myj",
+     "name": "孟弋洁",
+     "unique": "zhb_mengyijie",
+     "distinguishedName": "孟弋洁@zhb_mengyijie@I",
+     "person": "d7169e66-459d-4316-8497-60a6647c2d50",
+     "unit": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+     "unitName": "综合管理部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/综合管理部",
+     "orderNumber": 275130252,
+     "major": true,
+     "createTime": "2026-09-20 09:04:12",
+     "updateTime": "2026-09-20 09:04:12"
+    }
+   ],
+   "woRoleList": [
+    {
+     "id": "794455a8-3b6a-4573-8e46-047ff21cd7e0",
+     "pinyin": "manager",
+     "pinyinInitial": "manager",
+     "description": "系统管理员(系统角色)，拥有所有角色的权限，可以管理所有内容。",
+     "name": "Manager",
+     "unique": "ManagerSystemRole",
+     "distinguishedName": "Manager@ManagerSystemRole@R",
+     "orderNumber": 275012464,
+     "personList": [
+      "fefda0df-1eeb-465d-9d71-b0edb48cabae",
+      "d7169e66-459d-4316-8497-60a6647c2d50"
+     ],
+     "groupList": [],
+     "createTime": "2026-09-19 00:21:04",
+     "updateTime": "2026-09-23 09:48:44"
+    }
+   ],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "d7169e66-459d-4316-8497-60a6647c2d50",
+   "genderType": "m",
+   "pinyin": "mengyijie",
+   "pinyinInitial": "myj",
+   "description": "",
+   "name": "孟弋洁",
+   "employee": "",
+   "unique": "mengyijie",
+   "distinguishedName": "孟弋洁@mengyijie@P",
+   "orderNumber": 275130036,
+   "controllerList": [],
+   "changePasswordTime": "2026-09-20",
+   "lastLoginTime": "2026-09-23 14:57:25",
+   "lastLoginAddress": "172.22.0.1",
+   "lastLoginClient": "",
+   "ipAddress": "",
+   "mail": "meng_2000@163.com",
+   "weixin": "",
+   "qq": "",
+   "mobile": "18516833076",
+   "officePhone": "",
+   "boardDate": "2020-09-01",
+   "birthday": "1976-03-02",
+   "age": 50,
+   "failureTime": "2026-09-21 13:17:36",
+   "failureCount": 1,
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "subjectSecurityClearance": 200,
+   "status": "0",
+   "statusDes": "",
+   "createTime": "2026-09-20 09:00:37",
+   "updateTime": "2026-09-23 14:57:25"
+  }
+ },
+ {
+  "name": "卢宏萍",
+  "unique": "luhongping",
+  "new_mobile": "13911168091",
+  "new_mail": "luhongping@ccia.xin",
+  "http": 200,
+  "id": "500efc6b-2376-4948-bee5-0dc011cd9196",
+  "dn": "卢宏萍@luhongping@P",
+  "cur_name": "卢宏萍",
+  "cur_unique": "luhongping",
+  "cur_mobile": "13911168091",
+  "cur_mail": "luhongping@ccia.xin",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": "d7169e66-459d-4316-8497-60a6647c2d50",
+  "employee": "",
+  "status": "0",
+  "orderNumber": 275130250,
+  "createTime": "2026-09-20 09:04:11",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [
+      {
+       "woUnit": {
+        "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "name": "中国复合材料工业协会",
+        "unique": "51100000500009247D",
+        "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+        "typeList": [
+         "行业组织"
+        ],
+        "pinyin": "zhongguofuhecailiaogongyexiehui",
+        "pinyinInitial": "zgfhclgyxh",
+        "description": "为复合材料行业提供服务",
+        "shortName": "中国复材",
+        "level": 1,
+        "levelName": "中国复合材料工业协会",
+        "levelOrderNumber": "0275050209",
+        "superior": "",
+        "orderNumber": 275050209,
+        "controllerList": [
+         "d7169e66-459d-4316-8497-60a6647c2d50",
+         "500efc6b-2376-4948-bee5-0dc011cd9196"
+        ],
+        "createTime": "2026-09-19 10:50:09",
+        "updateTime": "2026-09-21 11:18:50"
+       },
+       "id": "639f1074-936d-4260-b97d-b5acf809ffde",
+       "pinyin": "fumishuchang",
+       "pinyinInitial": "fmsc",
+       "name": "副秘书长",
+       "unique": "639f1074-936d-4260-b97d-b5acf809ffde",
+       "distinguishedName": "副秘书长@639f1074-936d-4260-b97d-b5acf809ffde@UD",
+       "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+       "orderNumber": 275130255,
+       "identityList": [
+        "e56c501a-a15f-490e-857b-bf0914a7cafb"
+       ],
+       "createTime": "2026-09-20 09:04:15",
+       "updateTime": "2026-09-20 09:04:15"
+      }
+     ],
+     "id": "e56c501a-a15f-490e-857b-bf0914a7cafb",
+     "pinyin": "luhongping",
+     "pinyinInitial": "lhp",
+     "name": "卢宏萍",
+     "unique": "51100000500009247D_luhongping",
+     "distinguishedName": "卢宏萍@51100000500009247D_luhongping@I",
+     "person": "500efc6b-2376-4948-bee5-0dc011cd9196",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275130252,
+     "major": false,
+     "createTime": "2026-09-20 09:04:13",
+     "updateTime": "2026-09-20 09:04:13"
+    },
+    {
+     "woUnit": {
+      "id": "5d0a3dbb-569a-4005-a950-87cb83651699",
+      "name": "会员服务部",
+      "unique": "hyfwb",
+      "distinguishedName": "会员服务部@hyfwb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "huiyuanfuwubu",
+      "pinyinInitial": "hyfwb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/会员服务部",
+      "levelOrderNumber": "0275050209/0000000003",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 3,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [
+      {
+       "woUnit": {
+        "id": "5d0a3dbb-569a-4005-a950-87cb83651699",
+        "name": "会员服务部",
+        "unique": "hyfwb",
+        "distinguishedName": "会员服务部@hyfwb@U",
+        "typeList": [
+         "部门"
+        ],
+        "pinyin": "huiyuanfuwubu",
+        "pinyinInitial": "hyfwb",
+        "level": 2,
+        "levelName": "中国复合材料工业协会/会员服务部",
+        "levelOrderNumber": "0275050209/0000000003",
+        "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "orderNumber": 3,
+        "controllerList": [],
+        "createTime": "2026-09-20 09:04:09",
+        "updateTime": "2026-09-20 09:04:09"
+       },
+       "id": "287c4558-b086-48c2-8c3f-224c2132422c",
+       "pinyin": "bumenfuzeren",
+       "pinyinInitial": "bmfzr",
+       "name": "部门负责人",
+       "unique": "287c4558-b086-48c2-8c3f-224c2132422c",
+       "distinguishedName": "部门负责人@287c4558-b086-48c2-8c3f-224c2132422c@UD",
+       "unit": "5d0a3dbb-569a-4005-a950-87cb83651699",
+       "orderNumber": 275130255,
+       "identityList": [
+        "f0926b20-39b0-4608-b6b8-3b9c85bd2990"
+       ],
+       "createTime": "2026-09-20 09:04:16",
+       "updateTime": "2026-09-20 09:04:16"
+      }
+     ],
+     "id": "f0926b20-39b0-4608-b6b8-3b9c85bd2990",
+     "pinyin": "luhongping",
+     "pinyinInitial": "lhp",
+     "name": "卢宏萍",
+     "unique": "hyfwb_luhongping",
+     "distinguishedName": "卢宏萍@hyfwb_luhongping@I",
+     "person": "500efc6b-2376-4948-bee5-0dc011cd9196",
+     "unit": "5d0a3dbb-569a-4005-a950-87cb83651699",
+     "unitName": "会员服务部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/会员服务部",
+     "orderNumber": 275130253,
+     "major": true,
+     "createTime": "2026-09-20 09:04:13",
+     "updateTime": "2026-09-20 09:04:13"
+    },
+    {
+     "woUnit": {
+      "id": "0484120e-d883-41bc-9c88-3eeb08c33325",
+      "name": "国际业务部",
+      "unique": "gjywb",
+      "distinguishedName": "国际业务部@gjywb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "guojiyewubu",
+      "pinyinInitial": "gjywb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/国际业务部",
+      "levelOrderNumber": "0275050209/0000000004",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 4,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [
+      {
+       "woUnit": {
+        "id": "0484120e-d883-41bc-9c88-3eeb08c33325",
+        "name": "国际业务部",
+        "unique": "gjywb",
+        "distinguishedName": "国际业务部@gjywb@U",
+        "typeList": [
+         "部门"
+        ],
+        "pinyin": "guojiyewubu",
+        "pinyinInitial": "gjywb",
+        "level": 2,
+        "levelName": "中国复合材料工业协会/国际业务部",
+        "levelOrderNumber": "0275050209/0000000004",
+        "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "orderNumber": 4,
+        "controllerList": [],
+        "createTime": "2026-09-20 09:04:09",
+        "updateTime": "2026-09-20 09:04:09"
+       },
+       "id": "f816b62d-578b-4f03-b6e9-3f23606f84c0",
+       "pinyin": "bumenfuzeren",
+       "pinyinInitial": "bmfzr",
+       "name": "部门负责人",
+       "unique": "f816b62d-578b-4f03-b6e9-3f23606f84c0",
+       "distinguishedName": "部门负责人@f816b62d-578b-4f03-b6e9-3f23606f84c0@UD",
+       "unit": "0484120e-d883-41bc-9c88-3eeb08c33325",
+       "orderNumber": 275130255,
+       "identityList": [
+        "f9eb42ee-a376-4cf7-88a6-864cbfa60747"
+       ],
+       "createTime": "2026-09-20 09:04:16",
+       "updateTime": "2026-09-20 09:04:16"
+      }
+     ],
+     "id": "f9eb42ee-a376-4cf7-88a6-864cbfa60747",
+     "pinyin": "luhongping",
+     "pinyinInitial": "lhp",
+     "name": "卢宏萍",
+     "unique": "gjywb_luhongping",
+     "distinguishedName": "卢宏萍@gjywb_luhongping@I",
+     "person": "500efc6b-2376-4948-bee5-0dc011cd9196",
+     "unit": "0484120e-d883-41bc-9c88-3eeb08c33325",
+     "unitName": "国际业务部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/国际业务部",
+     "orderNumber": 275130253,
+     "major": false,
+     "createTime": "2026-09-20 09:04:13",
+     "updateTime": "2026-09-20 09:04:13"
+    }
+   ],
+   "woRoleList": [],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "500efc6b-2376-4948-bee5-0dc011cd9196",
+   "genderType": "f",
+   "pinyin": "luhongping",
+   "pinyinInitial": "lhp",
+   "description": "",
+   "name": "卢宏萍",
+   "employee": "",
+   "unique": "luhongping",
+   "distinguishedName": "卢宏萍@luhongping@P",
+   "orderNumber": 275130250,
+   "controllerList": [],
+   "superior": "d7169e66-459d-4316-8497-60a6647c2d50",
+   "ipAddress": "",
+   "mail": "luhongping@ccia.xin",
+   "weixin": "",
+   "qq": "",
+   "mobile": "13911168091",
+   "officePhone": "",
+   "boardDate": "2021-08-18",
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "subjectSecurityClearance": 200,
+   "status": "0",
+   "createTime": "2026-09-20 09:04:11",
+   "updateTime": "2026-09-20 13:57:14"
+  }
+ },
+ {
+  "name": "李静",
+  "unique": "lijing",
+  "new_mobile": "13371637052",
+  "new_mail": "lijing@ccia.xin",
+  "http": 200,
+  "id": "edec8377-d6a2-4b00-a8b6-2128db8e42cb",
+  "dn": "李静@lijing@P",
+  "cur_name": "李静",
+  "cur_unique": "lijing",
+  "cur_mobile": "13700000006",
+  "cur_mail": "lijing@cfia.local",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": "500efc6b-2376-4948-bee5-0dc011cd9196",
+  "employee": null,
+  "status": "0",
+  "orderNumber": 275130251,
+  "createTime": "2026-09-20 09:04:12",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "5d0a3dbb-569a-4005-a950-87cb83651699",
+      "name": "会员服务部",
+      "unique": "hyfwb",
+      "distinguishedName": "会员服务部@hyfwb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "huiyuanfuwubu",
+      "pinyinInitial": "hyfwb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/会员服务部",
+      "levelOrderNumber": "0275050209/0000000003",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 3,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [],
+     "id": "c63e834f-a476-4526-8ba3-56cb5341d415",
+     "pinyin": "lijing",
+     "pinyinInitial": "lj",
+     "name": "李静",
+     "unique": "hyfwb_lijing",
+     "distinguishedName": "李静@hyfwb_lijing@I",
+     "person": "edec8377-d6a2-4b00-a8b6-2128db8e42cb",
+     "unit": "5d0a3dbb-569a-4005-a950-87cb83651699",
+     "unitName": "会员服务部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/会员服务部",
+     "orderNumber": 275130254,
+     "major": true,
+     "createTime": "2026-09-20 09:04:14",
+     "updateTime": "2026-09-20 09:04:14"
+    },
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [],
+     "id": "278d5912-eadd-4f5e-919e-0f1e0212cfe2",
+     "pinyin": "lijing",
+     "pinyinInitial": "lj",
+     "description": "",
+     "name": "李静",
+     "unique": "51100000500009247D_lijing",
+     "distinguishedName": "李静@51100000500009247D_lijing@I",
+     "person": "edec8377-d6a2-4b00-a8b6-2128db8e42cb",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275147874,
+     "createTime": "2026-09-20 13:57:54",
+     "updateTime": "2026-09-20 13:57:54"
+    }
+   ],
+   "woRoleList": [],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "edec8377-d6a2-4b00-a8b6-2128db8e42cb",
+   "pinyin": "lijing",
+   "pinyinInitial": "lj",
+   "name": "李静",
+   "unique": "lijing",
+   "distinguishedName": "李静@lijing@P",
+   "orderNumber": 275130251,
+   "controllerList": [],
+   "superior": "500efc6b-2376-4948-bee5-0dc011cd9196",
+   "mail": "lijing@cfia.local",
+   "mobile": "13700000006",
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "status": "0",
+   "createTime": "2026-09-20 09:04:12",
+   "updateTime": "2026-09-20 13:57:54"
+  }
+ },
+ {
+  "name": "奚莎莎",
+  "unique": "xishasha",
+  "new_mobile": "13371692937",
+  "new_mail": "xishasha@ccia.xin",
+  "http": 200,
+  "id": "fe973b18-443f-4196-9f0f-21e508a16931",
+  "dn": "奚莎莎@xishasha@P",
+  "cur_name": "奚莎莎",
+  "cur_unique": "xishasha",
+  "cur_mobile": "13700000007",
+  "cur_mail": "xishasha@cfia.local",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": "500efc6b-2376-4948-bee5-0dc011cd9196",
+  "employee": null,
+  "status": "0",
+  "orderNumber": 275130251,
+  "createTime": "2026-09-20 09:04:12",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "5d0a3dbb-569a-4005-a950-87cb83651699",
+      "name": "会员服务部",
+      "unique": "hyfwb",
+      "distinguishedName": "会员服务部@hyfwb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "huiyuanfuwubu",
+      "pinyinInitial": "hyfwb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/会员服务部",
+      "levelOrderNumber": "0275050209/0000000003",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 3,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [],
+     "id": "6407b5be-8d03-42de-9d9e-7481bd494613",
+     "pinyin": "xisuosuo",
+     "pinyinInitial": "xss",
+     "name": "奚莎莎",
+     "unique": "hyfwb_xishasha",
+     "distinguishedName": "奚莎莎@hyfwb_xishasha@I",
+     "person": "fe973b18-443f-4196-9f0f-21e508a16931",
+     "unit": "5d0a3dbb-569a-4005-a950-87cb83651699",
+     "unitName": "会员服务部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/会员服务部",
+     "orderNumber": 275130254,
+     "major": true,
+     "createTime": "2026-09-20 09:04:14",
+     "updateTime": "2026-09-20 09:04:14"
+    },
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [],
+     "id": "76585484-584c-4476-baa2-9fe0866dc905",
+     "pinyin": "xisuosuo",
+     "pinyinInitial": "xss",
+     "description": "",
+     "name": "奚莎莎",
+     "unique": "51100000500009247D_xishasha",
+     "distinguishedName": "奚莎莎@51100000500009247D_xishasha@I",
+     "person": "fe973b18-443f-4196-9f0f-21e508a16931",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275147882,
+     "createTime": "2026-09-20 13:58:02",
+     "updateTime": "2026-09-20 13:58:02"
+    }
+   ],
+   "woRoleList": [],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "fe973b18-443f-4196-9f0f-21e508a16931",
+   "pinyin": "xisuosuo",
+   "pinyinInitial": "xss",
+   "name": "奚莎莎",
+   "unique": "xishasha",
+   "distinguishedName": "奚莎莎@xishasha@P",
+   "orderNumber": 275130251,
+   "controllerList": [],
+   "superior": "500efc6b-2376-4948-bee5-0dc011cd9196",
+   "mail": "xishasha@cfia.local",
+   "mobile": "13700000007",
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "status": "0",
+   "createTime": "2026-09-20 09:04:12",
+   "updateTime": "2026-09-20 13:58:02"
+  }
+ },
+ {
+  "name": "赵旭东",
+  "unique": "zhaoxudong",
+  "new_mobile": "13381314580",
+  "new_mail": "zhaoxudong@ccia.xin",
+  "http": 200,
+  "id": "ef48caf9-2a82-4181-8b34-1ade8f05dd29",
+  "dn": "赵旭东@zhaoxudong@P",
+  "cur_name": "赵旭东",
+  "cur_unique": "zhaoxudong",
+  "cur_mobile": "13700000008",
+  "cur_mail": "zhaoxudong@cfia.local",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": "500efc6b-2376-4948-bee5-0dc011cd9196",
+  "employee": null,
+  "status": "0",
+  "orderNumber": 275130252,
+  "createTime": "2026-09-20 09:04:12",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "5d0a3dbb-569a-4005-a950-87cb83651699",
+      "name": "会员服务部",
+      "unique": "hyfwb",
+      "distinguishedName": "会员服务部@hyfwb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "huiyuanfuwubu",
+      "pinyinInitial": "hyfwb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/会员服务部",
+      "levelOrderNumber": "0275050209/0000000003",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 3,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [],
+     "id": "83772b8f-697c-4d21-b61e-355b00216a3e",
+     "pinyin": "zhaoxudong",
+     "pinyinInitial": "zxd",
+     "name": "赵旭东",
+     "unique": "hyfwb_zhaoxudong",
+     "distinguishedName": "赵旭东@hyfwb_zhaoxudong@I",
+     "person": "ef48caf9-2a82-4181-8b34-1ade8f05dd29",
+     "unit": "5d0a3dbb-569a-4005-a950-87cb83651699",
+     "unitName": "会员服务部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/会员服务部",
+     "orderNumber": 275130254,
+     "major": true,
+     "createTime": "2026-09-20 09:04:15",
+     "updateTime": "2026-09-20 09:04:15"
+    },
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [],
+     "id": "450939b9-89f8-4927-8b67-3e52a9b857fb",
+     "pinyin": "zhaoxudong",
+     "pinyinInitial": "zxd",
+     "description": "",
+     "name": "赵旭东",
+     "unique": "51100000500009247D_zhaoxudong",
+     "distinguishedName": "赵旭东@51100000500009247D_zhaoxudong@I",
+     "person": "ef48caf9-2a82-4181-8b34-1ade8f05dd29",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275147886,
+     "createTime": "2026-09-20 13:58:06",
+     "updateTime": "2026-09-20 13:58:06"
+    }
+   ],
+   "woRoleList": [],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "ef48caf9-2a82-4181-8b34-1ade8f05dd29",
+   "pinyin": "zhaoxudong",
+   "pinyinInitial": "zxd",
+   "name": "赵旭东",
+   "unique": "zhaoxudong",
+   "distinguishedName": "赵旭东@zhaoxudong@P",
+   "orderNumber": 275130252,
+   "controllerList": [],
+   "superior": "500efc6b-2376-4948-bee5-0dc011cd9196",
+   "mail": "zhaoxudong@cfia.local",
+   "mobile": "13700000008",
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "status": "0",
+   "createTime": "2026-09-20 09:04:12",
+   "updateTime": "2026-09-20 13:58:06"
+  }
+ },
+ {
+  "name": "罗舒涵",
+  "unique": "luoshuhan",
+  "new_mobile": "13371637051;13371677253",
+  "new_mail": "luoshuhan@ccia.xin",
+  "http": 200,
+  "id": "ea518e36-1c3b-45ab-b647-1701451b2db4",
+  "dn": "罗舒涵@luoshuhan@P",
+  "cur_name": "罗舒涵",
+  "cur_unique": "luoshuhan",
+  "cur_mobile": "13700000009",
+  "cur_mail": "luoshuhan@cfia.local",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": "500efc6b-2376-4948-bee5-0dc011cd9196",
+  "employee": null,
+  "status": "0",
+  "orderNumber": 275130252,
+  "createTime": "2026-09-20 09:04:12",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "0484120e-d883-41bc-9c88-3eeb08c33325",
+      "name": "国际业务部",
+      "unique": "gjywb",
+      "distinguishedName": "国际业务部@gjywb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "guojiyewubu",
+      "pinyinInitial": "gjywb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/国际业务部",
+      "levelOrderNumber": "0275050209/0000000004",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 4,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [],
+     "id": "49713d5d-e145-45aa-96da-ea5491f0d347",
+     "pinyin": "luoshuhan",
+     "pinyinInitial": "lsh",
+     "name": "罗舒涵",
+     "unique": "gjywb_luoshuhan",
+     "distinguishedName": "罗舒涵@gjywb_luoshuhan@I",
+     "person": "ea518e36-1c3b-45ab-b647-1701451b2db4",
+     "unit": "0484120e-d883-41bc-9c88-3eeb08c33325",
+     "unitName": "国际业务部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/国际业务部",
+     "orderNumber": 275130254,
+     "major": true,
+     "createTime": "2026-09-20 09:04:15",
+     "updateTime": "2026-09-20 09:04:15"
+    },
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [],
+     "id": "285f683c-7825-4984-a0ab-6cc4abc1b010",
+     "pinyin": "luoshuhan",
+     "pinyinInitial": "lsh",
+     "description": "",
+     "name": "罗舒涵",
+     "unique": "51100000500009247D_luoshuhan",
+     "distinguishedName": "罗舒涵@51100000500009247D_luoshuhan@I",
+     "person": "ea518e36-1c3b-45ab-b647-1701451b2db4",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275147902,
+     "createTime": "2026-09-20 13:58:23",
+     "updateTime": "2026-09-20 13:58:23"
+    }
+   ],
+   "woRoleList": [],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "ea518e36-1c3b-45ab-b647-1701451b2db4",
+   "pinyin": "luoshuhan",
+   "pinyinInitial": "lsh",
+   "name": "罗舒涵",
+   "unique": "luoshuhan",
+   "distinguishedName": "罗舒涵@luoshuhan@P",
+   "orderNumber": 275130252,
+   "controllerList": [],
+   "superior": "500efc6b-2376-4948-bee5-0dc011cd9196",
+   "mail": "luoshuhan@cfia.local",
+   "mobile": "13700000009",
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "status": "0",
+   "createTime": "2026-09-20 09:04:12",
+   "updateTime": "2026-09-20 13:58:23"
+  }
+ },
+ {
+  "name": "时晓明",
+  "unique": "shixiaoming",
+  "new_mobile": "13381201425",
+  "new_mail": "shixiaoming@ccia.xin",
+  "http": 200,
+  "id": "bb1d46de-b3f5-4a24-9938-c1e348bee045",
+  "dn": "时晓明@shixiaoming@P",
+  "cur_name": "时晓明",
+  "cur_unique": "shixiaoming",
+  "cur_mobile": "13700000004",
+  "cur_mail": "shixiaoming@cfia.local",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": "d7169e66-459d-4316-8497-60a6647c2d50",
+  "employee": null,
+  "status": "0",
+  "orderNumber": 275130251,
+  "createTime": "2026-09-20 09:04:11",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "73fc25cd-7864-43c3-96d3-dd4e321b85d8",
+      "name": "行业研究部",
+      "unique": "yjyb",
+      "distinguishedName": "行业研究部@yjyb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "xingyeyanjiubu",
+      "pinyinInitial": "xyyjb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/行业研究部",
+      "levelOrderNumber": "0275050209/0000000002",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 2,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [],
+     "id": "5f9dfbb9-eef9-4482-a783-3f8148d053c3",
+     "pinyin": "shixiaoming",
+     "pinyinInitial": "sxm",
+     "name": "时晓明",
+     "unique": "yjyb_shixiaoming",
+     "distinguishedName": "时晓明@yjyb_shixiaoming@I",
+     "person": "bb1d46de-b3f5-4a24-9938-c1e348bee045",
+     "unit": "73fc25cd-7864-43c3-96d3-dd4e321b85d8",
+     "unitName": "行业研究部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/行业研究部",
+     "orderNumber": 275130253,
+     "major": true,
+     "createTime": "2026-09-20 09:04:14",
+     "updateTime": "2026-09-20 09:04:14"
+    },
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [],
+     "id": "215d0442-ef8d-4785-a1a8-a2bca1b45fc1",
+     "pinyin": "shixiaoming",
+     "pinyinInitial": "sxm",
+     "description": "",
+     "name": "时晓明",
+     "unique": "51100000500009247D_shixiaoming",
+     "distinguishedName": "时晓明@51100000500009247D_shixiaoming@I",
+     "person": "bb1d46de-b3f5-4a24-9938-c1e348bee045",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275147878,
+     "createTime": "2026-09-20 13:57:59",
+     "updateTime": "2026-09-20 13:57:59"
+    }
+   ],
+   "woRoleList": [],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "bb1d46de-b3f5-4a24-9938-c1e348bee045",
+   "pinyin": "shixiaoming",
+   "pinyinInitial": "sxm",
+   "name": "时晓明",
+   "unique": "shixiaoming",
+   "distinguishedName": "时晓明@shixiaoming@P",
+   "orderNumber": 275130251,
+   "controllerList": [],
+   "superior": "d7169e66-459d-4316-8497-60a6647c2d50",
+   "mail": "shixiaoming@cfia.local",
+   "mobile": "13700000004",
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "status": "0",
+   "createTime": "2026-09-20 09:04:11",
+   "updateTime": "2026-09-20 13:57:59"
+  }
+ },
+ {
+  "name": "杜阳",
+  "unique": "duyang",
+  "new_mobile": "13371633027",
+  "new_mail": "duyang@ccia.xin",
+  "http": 200,
+  "id": "664b9867-4f5b-4a36-9cbf-35a31e196180",
+  "dn": "杜阳@duyang@P",
+  "cur_name": "杜阳",
+  "cur_unique": "duyang",
+  "cur_mobile": "13700000005",
+  "cur_mail": "duyang@cfia.local",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": "d7169e66-459d-4316-8497-60a6647c2d50",
+  "employee": null,
+  "status": "0",
+  "orderNumber": 275130251,
+  "createTime": "2026-09-20 09:04:11",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "73fc25cd-7864-43c3-96d3-dd4e321b85d8",
+      "name": "行业研究部",
+      "unique": "yjyb",
+      "distinguishedName": "行业研究部@yjyb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "xingyeyanjiubu",
+      "pinyinInitial": "xyyjb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/行业研究部",
+      "levelOrderNumber": "0275050209/0000000002",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 2,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [],
+     "id": "68b949dc-170a-444f-9da3-657c0782bb4a",
+     "pinyin": "duyang",
+     "pinyinInitial": "dy",
+     "name": "杜阳",
+     "unique": "yjyb_duyang",
+     "distinguishedName": "杜阳@yjyb_duyang@I",
+     "person": "664b9867-4f5b-4a36-9cbf-35a31e196180",
+     "unit": "73fc25cd-7864-43c3-96d3-dd4e321b85d8",
+     "unitName": "行业研究部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/行业研究部",
+     "orderNumber": 275130254,
+     "major": true,
+     "createTime": "2026-09-20 09:04:14",
+     "updateTime": "2026-09-20 09:04:14"
+    },
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [],
+     "id": "dddcd3de-6b85-4d20-a4fc-f36840f9b2f7",
+     "pinyin": "duyang",
+     "pinyinInitial": "dy",
+     "description": "",
+     "name": "杜阳",
+     "unique": "51100000500009247D_duyang",
+     "distinguishedName": "杜阳@51100000500009247D_duyang@I",
+     "person": "664b9867-4f5b-4a36-9cbf-35a31e196180",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275147902,
+     "createTime": "2026-09-20 13:58:22",
+     "updateTime": "2026-09-20 13:58:22"
+    }
+   ],
+   "woRoleList": [],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "664b9867-4f5b-4a36-9cbf-35a31e196180",
+   "pinyin": "duyang",
+   "pinyinInitial": "dy",
+   "name": "杜阳",
+   "unique": "duyang",
+   "distinguishedName": "杜阳@duyang@P",
+   "orderNumber": 275130251,
+   "controllerList": [],
+   "superior": "d7169e66-459d-4316-8497-60a6647c2d50",
+   "mail": "duyang@cfia.local",
+   "mobile": "13700000005",
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "status": "0",
+   "createTime": "2026-09-20 09:04:11",
+   "updateTime": "2026-09-20 13:58:23"
+  }
+ },
+ {
+  "name": "李芳",
+  "unique": "lifang",
+  "new_mobile": "13381158343",
+  "new_mail": "lifang@ccia.xin",
+  "http": 200,
+  "id": "0de7051b-cb98-4154-9921-758ea0d4290f",
+  "dn": "李芳@lifang@P",
+  "cur_name": "李芳",
+  "cur_unique": "lifang",
+  "cur_mobile": "13381158343",
+  "cur_mail": "lifang@ccia.xin",
+  "mobileValid": null,
+  "mailValid": null,
+  "locked": null,
+  "banned": null,
+  "topUnitList": [
+   "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+  ],
+  "controllerList": [],
+  "superior": "d7169e66-459d-4316-8497-60a6647c2d50",
+  "employee": "",
+  "status": "0",
+  "orderNumber": 275130250,
+  "createTime": "2026-09-20 09:04:11",
+  "_full": {
+   "woIdentityList": [
+    {
+     "woUnit": {
+      "id": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+      "name": "综合管理部",
+      "unique": "zhb",
+      "distinguishedName": "综合管理部@zhb@U",
+      "typeList": [
+       "部门"
+      ],
+      "pinyin": "zongheguanlibu",
+      "pinyinInitial": "zhglb",
+      "level": 2,
+      "levelName": "中国复合材料工业协会/综合管理部",
+      "levelOrderNumber": "0275050209/0000000001",
+      "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "orderNumber": 1,
+      "controllerList": [],
+      "createTime": "2026-09-20 09:04:09",
+      "updateTime": "2026-09-20 09:04:09"
+     },
+     "woUnitDutyList": [
+      {
+       "woUnit": {
+        "id": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+        "name": "综合管理部",
+        "unique": "zhb",
+        "distinguishedName": "综合管理部@zhb@U",
+        "typeList": [
+         "部门"
+        ],
+        "pinyin": "zongheguanlibu",
+        "pinyinInitial": "zhglb",
+        "level": 2,
+        "levelName": "中国复合材料工业协会/综合管理部",
+        "levelOrderNumber": "0275050209/0000000001",
+        "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "orderNumber": 1,
+        "controllerList": [],
+        "createTime": "2026-09-20 09:04:09",
+        "updateTime": "2026-09-20 09:04:09"
+       },
+       "id": "41b60f08-1016-44f3-9f5b-c8eab1df132b",
+       "pinyin": "caiwuzhuanyuan",
+       "pinyinInitial": "cwzy",
+       "name": "财务专员",
+       "unique": "41b60f08-1016-44f3-9f5b-c8eab1df132b",
+       "distinguishedName": "财务专员@41b60f08-1016-44f3-9f5b-c8eab1df132b@UD",
+       "unit": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+       "orderNumber": 275130255,
+       "identityList": [
+        "67dada5a-0e17-415c-9104-a85663677002"
+       ],
+       "createTime": "2026-09-20 09:04:15",
+       "updateTime": "2026-09-20 09:04:15"
+      },
+      {
+       "woUnit": {
+        "id": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+        "name": "综合管理部",
+        "unique": "zhb",
+        "distinguishedName": "综合管理部@zhb@U",
+        "typeList": [
+         "部门"
+        ],
+        "pinyin": "zongheguanlibu",
+        "pinyinInitial": "zhglb",
+        "level": 2,
+        "levelName": "中国复合材料工业协会/综合管理部",
+        "levelOrderNumber": "0275050209/0000000001",
+        "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "orderNumber": 1,
+        "controllerList": [],
+        "createTime": "2026-09-20 09:04:09",
+        "updateTime": "2026-09-20 09:04:09"
+       },
+       "id": "82629bd0-2874-4ae0-b0e6-fb78d0f1f523",
+       "pinyin": "danganguanliyuan",
+       "pinyinInitial": "dagly",
+       "name": "档案管理员",
+       "unique": "82629bd0-2874-4ae0-b0e6-fb78d0f1f523",
+       "distinguishedName": "档案管理员@82629bd0-2874-4ae0-b0e6-fb78d0f1f523@UD",
+       "unit": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+       "orderNumber": 275130255,
+       "identityList": [
+        "67dada5a-0e17-415c-9104-a85663677002"
+       ],
+       "createTime": "2026-09-20 09:04:15",
+       "updateTime": "2026-09-20 09:04:15"
+      },
+      {
+       "woUnit": {
+        "id": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+        "name": "综合管理部",
+        "unique": "zhb",
+        "distinguishedName": "综合管理部@zhb@U",
+        "typeList": [
+         "部门"
+        ],
+        "pinyin": "zongheguanlibu",
+        "pinyinInitial": "zhglb",
+        "level": 2,
+        "levelName": "中国复合材料工业协会/综合管理部",
+        "levelOrderNumber": "0275050209/0000000001",
+        "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "orderNumber": 1,
+        "controllerList": [],
+        "createTime": "2026-09-20 09:04:09",
+        "updateTime": "2026-09-20 09:04:09"
+       },
+       "id": "79d58c3c-b9bb-4389-b1e2-421334d43395",
+       "pinyin": "hetongguanliyuan",
+       "pinyinInitial": "htgly",
+       "name": "合同管理员",
+       "unique": "79d58c3c-b9bb-4389-b1e2-421334d43395",
+       "distinguishedName": "合同管理员@79d58c3c-b9bb-4389-b1e2-421334d43395@UD",
+       "unit": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+       "orderNumber": 275130255,
+       "identityList": [
+        "67dada5a-0e17-415c-9104-a85663677002"
+       ],
+       "createTime": "2026-09-20 09:04:15",
+       "updateTime": "2026-09-20 09:04:15"
+      },
+      {
+       "woUnit": {
+        "id": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+        "name": "综合管理部",
+        "unique": "zhb",
+        "distinguishedName": "综合管理部@zhb@U",
+        "typeList": [
+         "部门"
+        ],
+        "pinyin": "zongheguanlibu",
+        "pinyinInitial": "zhglb",
+        "level": 2,
+        "levelName": "中国复合材料工业协会/综合管理部",
+        "levelOrderNumber": "0275050209/0000000001",
+        "superior": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+        "orderNumber": 1,
+        "controllerList": [],
+        "createTime": "2026-09-20 09:04:09",
+        "updateTime": "2026-09-20 09:04:09"
+       },
+       "id": "b1af1e5a-403b-4161-9788-f1a7a1502281",
+       "pinyin": "renshizhuanyuan",
+       "pinyinInitial": "rszy",
+       "name": "人事专员",
+       "unique": "b1af1e5a-403b-4161-9788-f1a7a1502281",
+       "distinguishedName": "人事专员@b1af1e5a-403b-4161-9788-f1a7a1502281@UD",
+       "unit": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+       "orderNumber": 275130255,
+       "identityList": [
+        "67dada5a-0e17-415c-9104-a85663677002"
+       ],
+       "createTime": "2026-09-20 09:04:15",
+       "updateTime": "2026-09-20 09:04:15"
+      }
+     ],
+     "id": "67dada5a-0e17-415c-9104-a85663677002",
+     "pinyin": "lifang",
+     "pinyinInitial": "lf",
+     "name": "李芳",
+     "unique": "zhb_lifang",
+     "distinguishedName": "李芳@zhb_lifang@I",
+     "person": "0de7051b-cb98-4154-9921-758ea0d4290f",
+     "unit": "d3e58ea3-d80a-4a12-922e-d8fee71d0171",
+     "unitName": "综合管理部",
+     "unitLevel": 2,
+     "unitLevelName": "中国复合材料工业协会/综合管理部",
+     "orderNumber": 275130253,
+     "major": true,
+     "createTime": "2026-09-20 09:04:14",
+     "updateTime": "2026-09-20 09:04:14"
+    },
+    {
+     "woUnit": {
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+       "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0275050209",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [
+       "d7169e66-459d-4316-8497-60a6647c2d50",
+       "500efc6b-2376-4948-bee5-0dc011cd9196"
+      ],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-21 11:18:50"
+     },
+     "woUnitDutyList": [],
+     "id": "1874566a-44fb-4a88-a78a-bb7473859a54",
+     "pinyin": "lifang",
+     "pinyinInitial": "lf",
+     "description": "",
+     "name": "李芳",
+     "unique": "51100000500009247D_lifang",
+     "distinguishedName": "李芳@51100000500009247D_lifang@I",
+     "person": "0de7051b-cb98-4154-9921-758ea0d4290f",
+     "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+     "unitName": "中国复合材料工业协会",
+     "unitLevel": 1,
+     "unitLevelName": "中国复合材料工业协会",
+     "orderNumber": 275147866,
+     "createTime": "2026-09-20 13:57:46",
+     "updateTime": "2026-09-20 13:57:46"
+    }
+   ],
+   "woRoleList": [],
+   "woGroupList": [],
+   "woPersonAttributeList": [],
+   "control": {
+    "allowEdit": true,
+    "allowDelete": true
+   },
+   "id": "0de7051b-cb98-4154-9921-758ea0d4290f",
+   "genderType": "f",
+   "pinyin": "lifang",
+   "pinyinInitial": "lf",
+   "description": "",
+   "name": "李芳",
+   "employee": "",
+   "unique": "lifang",
+   "distinguishedName": "李芳@lifang@P",
+   "orderNumber": 275130250,
+   "controllerList": [],
+   "superior": "d7169e66-459d-4316-8497-60a6647c2d50",
+   "lastLoginTime": "2026-09-23 10:03:13",
+   "lastLoginAddress": "172.22.0.1",
+   "lastLoginClient": "",
+   "ipAddress": "",
+   "mail": "lifang@ccia.xin",
+   "weixin": "",
+   "qq": "",
+   "mobile": "13381158343",
+   "officePhone": "",
+   "boardDate": "2021-09-22",
+   "failureTime": "2026-09-20 15:58:57",
+   "failureCount": 5,
+   "topUnitList": [
+    "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+   ],
+   "status": "0",
+   "statusDes": "",
+   "createTime": "2026-09-20 09:04:11",
+   "updateTime": "2026-09-23 10:03:13"
+  }
+ }
+]

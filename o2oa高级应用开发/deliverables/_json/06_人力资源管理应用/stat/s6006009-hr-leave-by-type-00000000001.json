@@ -1,0 +1,28 @@
+{
+  "id": "s6006009-hr-leave-by-type-00000000001",
+  "name": "按假期类型统计请假天数",
+  "alias": "按假期类型统计请假天数",
+  "description": "事假/病假/年假/调休等假期天数分布",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006013-hr-leave-record-view-0000000001",
+  "categoryPath": "leave_type",
+  "valuePath": "leave_days",
+  "categoryTitle": "假期类型",
+  "valueTitle": "请假天数",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ],
+    "defaultChartType": "pie"
+  }
+}

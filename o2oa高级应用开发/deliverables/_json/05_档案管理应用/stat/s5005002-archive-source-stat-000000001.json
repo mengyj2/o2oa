@@ -1,0 +1,27 @@
+{
+  "id": "s5005002-archive-source-stat-000000001",
+  "name": "来源应用归档统计",
+  "alias": "来源应用归档统计",
+  "description": "按来源应用统计归档数量",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v5005001-archive-list-view-000000000001",
+  "categoryPath": "source_app",
+  "valuePath": "archive_no",
+  "categoryTitle": "来源应用",
+  "valueTitle": "归档数量",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

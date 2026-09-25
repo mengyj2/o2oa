@@ -1,0 +1,20 @@
+{
+  "id": "q5005001-archive-business-link-0000000001",
+  "name": "档案业务关联查询",
+  "alias": "档案业务关联查询",
+  "description": "通过关联表反查档案对应的业务单据",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT a.archive_no, a.archive_name, a.archive_type, a.source_app, l.biz_type, l.biz_no, l.project_no FROM 档案主表 a LEFT JOIN 档案关联关系表 l ON a.archive_no = l.archive_no",
+  "sql": "SELECT a.archive_no, a.archive_name, a.archive_type, a.source_app, l.biz_type, l.biz_no, l.project_no FROM 档案主表 a LEFT JOIN 档案关联关系表 l ON a.archive_no = l.archive_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

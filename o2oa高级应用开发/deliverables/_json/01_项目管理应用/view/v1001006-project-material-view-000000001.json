@@ -1,0 +1,170 @@
+{
+  "id": "v1001006-project-material-view-000000001",
+  "name": "物资台账",
+  "alias": "物资台账",
+  "description": "项目物资采购与领用记录",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"项目编号\", \"path\": \"project_no\", \"id\": \"v1001006-project-material-view-000000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"申请类型\", \"path\": \"material_type\", \"id\": \"v1001006-project-material-view-000000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"申请人\", \"path\": \"applicant\", \"id\": \"v1001006-project-material-view-000000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"申请日期\", \"path\": \"apply_date\", \"id\": \"v1001006-project-material-view-000000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"领用人\", \"path\": \"receiver\", \"id\": \"v1001006-project-material-view-000000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_5\", \"displayName\": \"领用日期\", \"path\": \"receive_date\", \"id\": \"v1001006-project-material-view-000000001_col5\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "process",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [
+    "p1001004-project-material-000000000001"
+  ],
+  "cmsCategoryList": [],
+  "tableList": [],
+  "filterScript": "",
+  "orderBy": "",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "申请类型",
+      "path": "material_type",
+      "name": "material_type",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "申请人",
+      "path": "applicant",
+      "name": "applicant",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "申请日期",
+      "path": "apply_date",
+      "name": "apply_date",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "领用人",
+      "path": "receiver",
+      "name": "receiver",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "领用日期",
+      "path": "receive_date",
+      "name": "receive_date",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "申请类型",
+      "path": "material_type",
+      "name": "material_type",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "申请人",
+      "path": "applicant",
+      "name": "applicant",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "申请日期",
+      "path": "apply_date",
+      "name": "apply_date",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "领用人",
+      "path": "receiver",
+      "name": "receiver",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "领用日期",
+      "path": "receive_date",
+      "name": "receive_date",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showOperateBar": true,
+    "operateBarWidth": "120px"
+  }
+}

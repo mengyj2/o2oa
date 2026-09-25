@@ -1,0 +1,27 @@
+{
+  "id": "s4004001-expense-type-stat-00000000001",
+  "name": "报销类型分布统计",
+  "alias": "报销类型分布统计",
+  "description": "按报销类型统计金额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v4004001-expense-list-view-000000000001",
+  "categoryPath": "expense_type",
+  "valuePath": "total_amount",
+  "categoryTitle": "报销类型",
+  "valueTitle": "报销金额",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

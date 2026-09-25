@@ -1,0 +1,15 @@
+{
+  "id": "t4004003-cost-summary-table-000000001",
+  "name": "t4004003_cost_summary_table",
+  "alias": "项目成本汇总表",
+  "description": "项目成本归集汇总，供项目应用成本核算使用",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"project_name\", \"description\": \"项目名称\", \"type\": \"string\"}, {\"name\": \"budget_total\", \"description\": \"预算总额\", \"type\": \"double\"}, {\"name\": \"expense_total\", \"description\": \"报销合计\", \"type\": \"double\"}, {\"name\": \"payment_total\", \"description\": \"付款合计\", \"type\": \"double\"}, {\"name\": \"actual_cost\", \"description\": \"实际成本\", \"type\": \"double\"}, {\"name\": \"variance\", \"description\": \"偏差\", \"type\": \"double\"}, {\"name\": \"variance_rate\", \"description\": \"偏差率\", \"type\": \"double\"}, {\"name\": \"update_time\", \"description\": \"更新时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"project_name\", \"description\": \"项目名称\", \"type\": \"string\"}, {\"name\": \"budget_total\", \"description\": \"预算总额\", \"type\": \"double\"}, {\"name\": \"expense_total\", \"description\": \"报销合计\", \"type\": \"double\"}, {\"name\": \"payment_total\", \"description\": \"付款合计\", \"type\": \"double\"}, {\"name\": \"actual_cost\", \"description\": \"实际成本\", \"type\": \"double\"}, {\"name\": \"variance\", \"description\": \"偏差\", \"type\": \"double\"}, {\"name\": \"variance_rate\", \"description\": \"偏差率\", \"type\": \"double\"}, {\"name\": \"update_time\", \"description\": \"更新时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

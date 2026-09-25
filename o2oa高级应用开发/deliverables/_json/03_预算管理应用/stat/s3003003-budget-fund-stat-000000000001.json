@@ -1,0 +1,27 @@
+{
+  "id": "s3003003-budget-fund-stat-000000000001",
+  "name": "资金来源统计",
+  "alias": "资金来源统计",
+  "description": "按资金来源统计预算总额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v3003001-budget-list-view-00000000000001",
+  "categoryPath": "fund_source",
+  "valuePath": "total_amount",
+  "categoryTitle": "资金来源",
+  "valueTitle": "预算总额",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

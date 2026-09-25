@@ -1,0 +1,6 @@
+{
+  "enable": true,
+  "service": "本地邮件验证码服务（x_sms_assemble_control 平替）",
+  "provider": "mailservice/o2oa_mail_service.py",
+  "endpoint": "http://host.docker.internal:8095/x_sms_assemble_control"
+}

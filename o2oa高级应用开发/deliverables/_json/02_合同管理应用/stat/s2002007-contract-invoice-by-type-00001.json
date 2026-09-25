@@ -1,0 +1,28 @@
+{
+  "id": "s2002007-contract-invoice-by-type-00001",
+  "name": "发票类型分布",
+  "alias": "发票类型分布",
+  "description": "增值税专票/普票/电子发票等类型开票金额分布",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v2002004-contract-invoice-view-0000000001",
+  "categoryPath": "invoice_type",
+  "valuePath": "invoice_amount",
+  "categoryTitle": "发票类型",
+  "valueTitle": "开票金额（元）",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ],
+    "defaultChartType": "pie"
+  }
+}

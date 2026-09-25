@@ -1,0 +1,192 @@
+{
+  "id": "v4004003-loan-list-view-0000000000001",
+  "name": "借款台账视图",
+  "alias": "借款台账视图",
+  "description": "备用金借款与归还记录",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"借款单号\", \"path\": \"loan_no\", \"id\": \"v4004003-loan-list-view-0000000000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"借款人\", \"path\": \"borrower\", \"id\": \"v4004003-loan-list-view-0000000000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"关联项目编号\", \"path\": \"project_no\", \"id\": \"v4004003-loan-list-view-0000000000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"借款类型\", \"path\": \"loan_type\", \"id\": \"v4004003-loan-list-view-0000000000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"借款金额\", \"path\": \"loan_amount\", \"id\": \"v4004003-loan-list-view-0000000000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_5\", \"displayName\": \"计划归还日\", \"path\": \"plan_return_date\", \"id\": \"v4004003-loan-list-view-0000000000001_col5\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_6\", \"displayName\": \"借款状态\", \"path\": \"loan_status\", \"id\": \"v4004003-loan-list-view-0000000000001_col6\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "process",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [
+    "p4004002-finance-loan-00000000000001"
+  ],
+  "cmsCategoryList": [],
+  "tableList": [],
+  "filterScript": "",
+  "orderBy": "",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "借款单号",
+      "path": "loan_no",
+      "name": "loan_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "借款人",
+      "path": "borrower",
+      "name": "borrower",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "关联项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "借款类型",
+      "path": "loan_type",
+      "name": "loan_type",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "借款金额",
+      "path": "loan_amount",
+      "name": "loan_amount",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "计划归还日",
+      "path": "plan_return_date",
+      "name": "plan_return_date",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "借款状态",
+      "path": "loan_status",
+      "name": "loan_status",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "借款单号",
+      "path": "loan_no",
+      "name": "loan_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "借款人",
+      "path": "borrower",
+      "name": "borrower",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "关联项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "借款类型",
+      "path": "loan_type",
+      "name": "loan_type",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "借款金额",
+      "path": "loan_amount",
+      "name": "loan_amount",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "计划归还日",
+      "path": "plan_return_date",
+      "name": "plan_return_date",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "借款状态",
+      "path": "loan_status",
+      "name": "loan_status",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showOperateBar": true,
+    "operateBarWidth": "120px"
+  }
+}

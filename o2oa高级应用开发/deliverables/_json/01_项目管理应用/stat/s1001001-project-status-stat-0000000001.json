@@ -1,0 +1,27 @@
+{
+  "id": "s1001001-project-status-stat-0000000001",
+  "name": "项目状态分布统计",
+  "alias": "项目状态分布统计",
+  "description": "按项目状态统计项目数量",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v1001001-project-list-view-00000000001",
+  "categoryPath": "project_status",
+  "valuePath": "project_no",
+  "categoryTitle": "项目状态",
+  "valueTitle": "项目数",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

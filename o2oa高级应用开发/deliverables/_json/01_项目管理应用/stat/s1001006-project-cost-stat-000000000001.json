@@ -1,0 +1,27 @@
+{
+  "id": "s1001006-project-cost-stat-000000000001",
+  "name": "项目成本偏差统计",
+  "alias": "项目成本偏差统计",
+  "description": "按项目统计成本偏差",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v1001005-project-cost-view-0000000000001",
+  "categoryPath": "project_name",
+  "valuePath": "variance",
+  "categoryTitle": "项目名称",
+  "valueTitle": "成本偏差",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

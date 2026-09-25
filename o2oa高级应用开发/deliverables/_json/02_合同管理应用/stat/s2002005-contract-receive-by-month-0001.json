@@ -1,0 +1,27 @@
+{
+  "id": "s2002005-contract-receive-by-month-0001",
+  "name": "合同收款趋势",
+  "alias": "合同收款趋势",
+  "description": "按收款日期统计回款金额，输出趋势折线",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v2002003-contract-receive-view-0000000001",
+  "categoryPath": "receive_date",
+  "valuePath": "receive_amount",
+  "categoryTitle": "收款日期",
+  "valueTitle": "收款金额（元）",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "line",
+      "column",
+      "bar"
+    ],
+    "defaultChartType": "line"
+  }
+}

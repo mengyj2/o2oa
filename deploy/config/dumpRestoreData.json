@@ -1,0 +1,21 @@
+{
+  "includes": [],
+  "excludes": [],
+  "mode": "lite",
+  "exceptionInvalidStorage": false,
+  "attachStorage": true,
+  "redistributeStorage": false,
+  "parallel": false,
+  "restoreOverride": "clean",
+  "itemCategory": "",
+  "###includes": "导出导入包含对象,可以使用通配符*,如仅导出待办数据:com.x.processplatform.core.entity.content.Task.###",
+  "###excludes": "导出导入排除对象,可以使用通配符*,如不导出流程实例数据com.x.processplatform.core.entity.content.*###",
+  "###mode": "导出数据模式,lite|full,默认使用lite###",
+  "###exceptionInvalidStorage": "无法获取storage是否升起错误.###",
+  "###attachStorage": "是否同时导入导出storage中存储的文件.###",
+  "###redistributeStorage": "是否进行重新分布.###",
+  "###parallel": "使用并行导出,默认true###",
+  "###restoreOverride": "数据导入方式,clean:清空重新导入,skipExisted:如果有相同id的数据跳过.默认方式为clean.###",
+  "###itemCategory": "对于com.x.query.core.entity.Item的itemCategory进行单独过滤,可选值pp, cms, bbs, pp_dict.###",
+  "###extension": "扩展设置.###"
+}

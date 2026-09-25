@@ -1,0 +1,31 @@
+{
+  "id": "s6006001-hr-emp-by-dept-000000000000001",
+  "name": "按部门统计员工人数",
+  "alias": "按部门统计员工人数",
+  "description": "各部门在职员工数量分布",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006001-hr-employee-all-view-0000000001",
+  "categoryPath": "dept",
+  "valuePath": "count",
+  "categoryTitle": "部门",
+  "valueTitle": "员工人数",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "column",
+      "pie",
+      "bar"
+    ],
+    "defaultChartType": "column",
+    "showLegend": true,
+    "showLabel": true,
+    "isRowColumnConvert": true,
+    "moreLink": "v6006001-hr-employee-all-view-0000000001"
+  }
+}

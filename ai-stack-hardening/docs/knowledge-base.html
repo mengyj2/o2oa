@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>O2OA AI 栈「看门狗弹窗 / 9090 卡死」根因与看门狗持续化硬化手册</title>
+<style>
+  body{font-family:-apple-system,"Microsoft YaHei",Segoe UI,sans-serif;line-height:1.7;max-width:960px;margin:24px auto;padding:0 20px;color:#1f2329;}
+  h1{font-size:24px;border-bottom:3px solid #2b6cb0;padding-bottom:8px;}
+  h2{font-size:19px;margin-top:28px;color:#2b6cb0;border-left:4px solid #2b6cb0;padding-left:10px;}
+  h3{font-size:16px;color:#333;margin-top:18px;}
+  code,.code{background:#f4f5f7;padding:2px 6px;border-radius:4px;font-family:Consolas,Menlo,monospace;font-size:13px;}
+  pre{background:#1e1e2e;color:#e6e6e6;padding:14px 16px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5;}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid #d0d7de;padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:#eef2f7;}
+  blockquote{background:#fff8e6;border-left:4px solid #ffc53d;margin:12px 0;padding:10px 14px;color:#614700;}
+  .tag{display:inline-block;background:#2b6cb0;color:#fff;border-radius:4px;padding:1px 7px;font-size:12px;margin-right:4px;}
+</style>
+</head>
+<body>
+<h1>O2OA AI 栈「看门狗弹窗 / 9090 卡死」根因与看门狗持续化硬化手册</h1>
+<p><span class="tag">来源</span> 2026-09-22~09-23 多轮排障对话完整沉淀 · <span class="tag">适用</span> 本地 Docker 自托管 O2OA 10.0.2 + 本地 AI 网关栈</p>
+
+<h2>0. 一句话结论</h2>
+<ul>
+  <li><b>9090 卡死 ≠ 服务挂了</b>：实测 <code>curl http://localhost:9090/ → 200 / 4~7ms</code>，容器首页是官方标准跳转页。</li>
+  <li><b>powershell / python 不停弹窗</b>：真凶是 <code>gateway/watchdog_ai_stack.py</code> 陷入「误判 DOWN → 杀健康服务 → 重启」死循环，每轮拉起一个新 <code>python.exe</code> 进程 = 一个窗口。</li>
+  <li><b>误判根因</b>：<code>healthy()</code> 用 <code>urllib.request.urlopen</code> <b>默认走系统代理</b>；代理（52068 假 502）劫持了 <code>127.0.0.1</code> 探活 → 失败 → 误判 DOWN。</li>
+  <li><b>持久化方案</b>：把看门狗设为唯一锚点——启动清代理 env、无窗拉子进程、按 pid 杀旧进程、纯 TCP 探活不误杀；restart bat 与开机 VBS 全部经看门狗（即「看门狗持续化」）。</li>
+</ul>
+
+<h2>1. 现象时间线复盘</h2>
+<table>
+<tr><th>时间</th><th>现象</th><th>当时误判</th><th>真因</th></tr>
+<tr><td>运行 deploy 脚本</td><td>9090 卡死、powershell 弹窗</td><td>以为首页分流死循环</td><td>脚本只改本地（webServer 未挂卷无效）；弹窗来自另一处</td></tr>
+<tr><td>看截图</td><td>弹窗是 workbuddy venv python</td><td>WorkBuddy 自带弹窗</td><td>看门狗拉起的 AI 栈子进程</td></tr>
+<tr><td>10:33~10:53</td><td>每 40s 一轮 DOWN→重启</td><td>服务真崩</td><td>healthy() 代理误判，服务全程 200</td></tr>
+<tr><td>11:10 重启后仍弹 2 窗</td><td>以为修复没生效</td><td>新看门狗未生效</td><td>旧看门狗(24100) 持有单例锁顶掉新看门狗</td></tr>
+</table>
+
+<h2>2. 根因分层</h2>
+<h3>2.1 部署脚本隐患（已修，非主因）</h3>
+<p><code>deploy_home_entry_local.ps1</code> 旧版用 <code>Get-ChildItem -Recurse</code> 全盘递归搜索 <code>index.html</code>，大容量盘上疯狂刷 IO（IO 风暴把 QEMU 容器拖到短暂无响应，被误认为卡死）。修复后改「盘根一层受控列举」+ 分流版 <code>docker cp</code> 进容器（compose 未挂 webServer 卷，只写本地对运行中的容器无效）。隐藏真相：此前门户首页"分流"从未真正生效。</p>
+
+<h3>2.2 看门狗「误判 DOWN」死循环（主因）</h3>
+<p><code>watchdog.log</code> 铁证：gateway(18790)/ocr(8091) 每隔约 40s 被 <code>taskkill /F</code> 杀掉再拉起，循环 20+ 轮；而 <code>gateway.log</code> 同期 <code>GET /gateway/health → 200</code> 全程连续。<b>服务没死，是看门狗在误杀健康服务。</b></p>
+
+<h3>2.3 误判根因：探活走代理</h3>
+<p><code>healthy(url, token)</code> 用 <code>urllib.request.urlopen(req)</code>，而 <code>urllib</code> <b>默认读取系统代理环境变量</b>。一旦开了代理（本机 52068 假 502），探活 <code>127.0.0.1:18790</code> 被转发到代理 → 失败 → 误判 DOWN。同源铁律：本地探测一律 <code>curl --noproxy "*"</code>。</p>
+
+<h3>2.4 弹窗帮凶：子进程可见窗口 + GBK 解码崩溃</h3>
+<p>看门狗 <code>subprocess.run(["powershell"/"netstat"/"taskkill"])</code> 没加 <code>CREATE_NO_WINDOW</code> → 每个子进程新分配可见控制台窗口。且把 <code>netstat</code> 的 GBK 输出按 UTF-8 解码 → <code>UnicodeDecodeError: byte 0xbb</code>，该异常被当成「服务 DOWN」参与误判（见 <code>watchdog_stdout.log</code>）。</p>
+
+<h3>2.5 子进程弹窗：venv 启动器丢失无窗标志</h3>
+<p>看门狗用 <code>DETACHED_PROCESS(0x8)</code> 拉子进程（"无控制台"），但 venv 的 <code>Scripts\python.exe</code> 是<b>启动器</b>，会再 spawn 基础解释器；父进程没有控制台可继承 → 孙进程被 Windows 新分配<b>可见</b>控制台。修复：创建标志改 <code>CREATE_NO_WINDOW</code>（隐藏控制台可被孙进程继承，整树无窗）。</p>
+
+<h3>2.6 9090 浏览器"卡死"真相</h3>
+<p>服务端实测 <code>200 / 6ms</code>，首页是标准跳转页。浏览器卡死 = <b>系统代理把 localhost:9090 也劫持了</b>。解决：把 <code>localhost;127.0.0.1</code> 加入代理「绕过」，或临时关代理刷新即秒开。</p>
+
+<h3>2.7 容器 unhealthy 是误报</h3>
+<p><code>o2oa-server</code> 状态 unhealthy 但 <code>curl 9090 → 200</code>。健康检查用了 <code>docker exec</code>，ARM+QEMU 下 exec 的 setns 失败（<code>OCI runtime exec failed ... setns process</code>）→ 误报 unhealthy。<b>服务实际正常。</b></p>
+
+<h2>3. 代码级修复清单（已全部落盘）</h2>
+<table>
+<tr><th>文件</th><th>修改</th><th>作用</th></tr>
+<tr><td>gateway/start_ai_stack_detached.py</td><td>healthy() 改纯 TCP + ProxyHandler({})；DETACHED 改 CREATE_NO_WINDOW</td><td>代理不再误判；孙进程不弹窗</td></tr>
+<tr><td>gateway/watchdog_ai_stack.py</td><td>subprocess 全部 CREATE_NO_WINDOW + errors="replace"；启动清代理 env；导入 healthy/DETACHED</td><td>不弹窗；不 GBK 崩溃；探活走 TCP</td></tr>
+<tr><td>gateway/restart_ai_gateway.bat</td><td>按 pid 文件精准杀旧 + 隐藏拉起</td><td>不被旧进程单例锁顶掉</td></tr>
+<tr><td>开机 O2OA_AI_stack_autostart.vbs</td><td>按 6 个 pid 文件清杀全部组件再启动；纯 ASCII+CRLF</td><td>根治旧看门狗占锁顶替</td></tr>
+<tr><td>deploy_home_entry_local.ps1</td><td>docker cp 进容器；去 Read-Host 挂窗；补 UTF-8 BOM</td><td>门户化生效；不挂等待窗；治 GBK 误报语法错</td></tr>
+</table>
+<pre>def healthy(host, port, timeout=3):
+    import socket
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except OSError:
+        return False
+
+CREATE_NO_WINDOW = 0x08000000
+_RUN_KW = dict(encoding="utf-8", errors="replace", creationflags=CREATE_NO_WINDOW)
+for _k in ("HTTP_PROXY","HTTPS_PROXY","http_proxy","https_proxy","ALL_PROXY","all_proxy"):
+    os.environ.pop(_k, None)</pre>
+
+<h2>4. 看门狗持续化设计（核心）</h2>
+<p>「看门狗持续化」= <b>看门狗是唯一持久化/自愈入口</b>，而非散落脚本：</p>
+<ol>
+  <li><b>单一来源</b>：所有 AI 栈子进程只由看门狗拉起；restart bat 与开机 VBS 只做「按 pid 杀干净 → 隐藏拉起看门狗」。</li>
+  <li><b>启动自检即持久化</b>：每次启动清代理 env、用 CREATE_NO_WINDOW 无窗拉子进程、按 pid+端口兜底杀残留、纯 TCP 探活不误杀。</li>
+  <li><b>可打包为分支</b>：<code>ai-stack-hardening/</code> 即运行态代码快照（gateway/ + deploy/ + startup/ + install.ps1），git 提交到分支 <code>ai-stack-hardening</code>，可 bundle/archive 分发复现。</li>
+</ol>
+
+<h2>5. 可复用经验 / 技巧</h2>
+<ol>
+  <li><b>本地探活必绕代理</b>：curl <code>--noproxy "*"</code>；urllib 装 <code>ProxyHandler({})</code>；httpx 设 <code>trust_env=False</code>。</li>
+  <li><b>venv 启动器无窗</b>：子进程创建标志用 CREATE_NO_WINDOW，勿用 DETACHED_PROCESS（孙进程会丢标志弹窗）。</li>
+  <li><b>代理会假 502 劫持 localhost</b>：本机服务探活一律绕代理；浏览器卡 localhost 先查代理 bypass。</li>
+  <li><b>别用 -Recurse 全盘递归搜索</b>：大容量盘 IO 风暴，改受控列举。</li>
+  <li><b>控制台子进程加 CREATE_NO_WINDOW</b>；GBK 输出用 errors="replace"，否则 0xbb 异常参与误判。</li>
+  <li><b>容器 unhealthy 但 9090=200</b> → 多半是 docker exec 健康探针在 QEMU/ARM 下 setns 失败误报，服务正常。</li>
+  <li><b>PowerShell .ps1 中文要用 UTF-8 BOM</b>，否则中文 Windows 按 GBK 误报语法错。</li>
+  <li><b>按 pid 文件精准杀</b>比按命令行匹配可靠（VBS 隐藏启动的 32 位 python 常查不到 CommandLine）。</li>
+</ol>
+
+<h2>6. 操作命令（止血 + 生效）</h2>
+<pre># 真实主机 PowerShell 执行（沙箱隔离主机进程）
+$ids = @(); 'watchdog','gateway','ocr','embed','chat','rerank' | ForEach-Object {
+  $pf = "D:\O2OA\gateway\$_.pid"
+  if (Test-Path $pf) { $id=[int](Get-Content $pf -Raw); if($id){$ids+=$id}; Remove-Item $pf -Force }
+}
+$ids | Sort -Unique | %{ Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }
+Get-CimInstance Win32_Process | ?{
+  $_.CommandLine -like '*watchdog_ai_stack.py*' -or
+  $_.CommandLine -like '*o2_agent_gateway.py*' -or
+  $_.CommandLine -like '*ocr_service.py*'
+} | %{ Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+Start-Sleep 3
+$env:HTTP_PROXY='';$env:HTTPS_PROXY='';$env:http_proxy='';$env:https_proxy='';$env:ALL_PROXY='';$env:all_proxy=''
+Start-Process -FilePath "C:\Users\meng_\.workbuddy\binaries\python\envs\default\Scripts\python.exe" `
+  -ArgumentList "D:\O2OA\gateway\watchdog_ai_stack.py" -WindowStyle Hidden -WorkingDirectory "D:\O2OA\gateway"</pre>
+<p>9090 浏览器卡死：代理里把 <code>localhost;127.0.0.1</code> 加入「绕过」，或临时关代理刷新。</p>
+
+<h2>7. 验证清单</h2>
+<ul>
+  <li>watchdog.log 不再出现 DOWN→重新拉起 循环</li>
+  <li>桌面不再弹出任何 python/powershell 窗口</li>
+  <li>curl 18790/gateway/health 持续 200（无论代理开关）</li>
+  <li>curl 9090 返回 200（浏览器侧需把 localhost 加代理 bypass）</li>
+  <li>重启双击 restart_ai_gateway.bat 无窗口；开机由 VBS 自动无窗自愈</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"type":"success","data":[{"clueId":"e2e-b68788ab-11da-4c94-aae4-a1358c4886d3","ts":"2026-09-21 12:23:31","steps":[{"tool":"get_current_time","ok":true},{"tool":"web_fetch","ok":true},{"tool":"feedback","ok":true}]},{"clueId":"e2e-a0b90f48-88bf-48ca-9c81-06a3df5e1c96","ts":"2026-09-21 12:23:49","steps":[{"tool":"web_search","ok":true},{"tool":"web_fetch","ok":true}]}],"count":2}

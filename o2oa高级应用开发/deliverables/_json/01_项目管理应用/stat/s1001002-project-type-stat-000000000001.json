@@ -1,0 +1,27 @@
+{
+  "id": "s1001002-project-type-stat-000000000001",
+  "name": "项目类别分布统计",
+  "alias": "项目类别分布统计",
+  "description": "按项目类别统计总预算",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v1001001-project-list-view-00000000001",
+  "categoryPath": "project_type",
+  "valuePath": "total_budget",
+  "categoryTitle": "项目类别",
+  "valueTitle": "总预算",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

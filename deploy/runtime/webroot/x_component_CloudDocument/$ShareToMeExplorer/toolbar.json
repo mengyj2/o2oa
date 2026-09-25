@@ -1,0 +1,31 @@
+{
+  "headToolBar" : [
+    {
+      "title": "新建",
+      "action": "new",
+      "style" : "margin-right: 10px;"
+    },
+    {
+      "title": "上传",
+      "action": "upload",
+      "style" : ""
+    }
+  ],
+  "selectToolBar": [
+    {
+      "title": "移动",
+      "action": "moveMulti",
+      "style" : ""
+    },
+    {
+      "title": "复制到",
+      "action": "copyMulti",
+      "style" : ""
+    },
+    {
+      "title": "删除",
+      "action": "removeMulti",
+      "style" : "color:red"
+    }
+  ]
+}

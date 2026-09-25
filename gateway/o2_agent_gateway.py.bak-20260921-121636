@@ -1,0 +1,2638 @@
+# -*- coding: utf-8 -*-
+"""
+o2-agent-gateway - O2OA 智能体协议本地适配网关
+把 O2OA 私有协议 (/ai-gateway-*, /idx-gateway-*) 翻译到本地 Bionic/LM Studio (OpenAI 兼容)。
+
+协议契约逆向自 x_ai_assemble_control 源码（详见 D:/O2OA/docs/智能体本地化研究报告.md）：
+- generate: 首帧 event=status {"generateType":..,"clueId":..}，之后 message 帧为 OpenAI chunk，终止 [DONE]
+- DocIndex / McpConfig(http 型 MCP) / AiModel 结构见各 bean 源码
+"""
+import json
+import math
+import os
+import re
+import sqlite3
+import struct
+import time
+import uuid
+from pathlib import Path
+
+import httpx
+from fastapi import FastAPI, Request, UploadFile, File
+from fastapi.responses import StreamingResponse, JSONResponse
+
+# 标准 MCP client（stdio + HTTP JSON-RPC）—— 把外部 MCP 生态接入工具循环
+from mcp_client import load_external_mcp, call_external_tool
+
+BASE_DIR = Path(r"D:\O2OA\gateway")
+SKILLS_DIR = BASE_DIR / "skills"
+DB_PATH = BASE_DIR / "data.db"
+LOG_PATH = BASE_DIR / "gateway.log"
+CFG_PATH = BASE_DIR / "config.json"
+
+DEFAULT_CFG = {
+    "listen_host": "0.0.0.0",
+    "listen_port": 18790,
+    "token": "local-o2-agent-2026",
+    "bionic_base": "http://127.0.0.1:1234",
+    "embed_base": "http://127.0.0.1:1234",
+    "bionic_key": "lm-studio",
+    "chat_model": "glm-4.7-flash",
+    "embed_models": ["text-embedding-bge-m3", "text-embedding-qwen3-embedding-0.6b",
+                     "text-embedding-nomic-embed-text-v1.5"],
+    "rag_top_k": 6,
+    "chunk_size": 500,
+    "chunk_overlap": 60,
+    "max_turns": 5,
+    # ---- RAG 精排 / 查询改写（18790 方案：bge-reranker / qwen3-reranker 提升精度）----
+    "rerank_enable": False,
+    "rerank_base": "",
+    "rerank_model": "text-embedding-bge-reranker-v2-m3",
+    "rag_rerank_candidate": 24,
+    "rewrite_enable": False,
+    "o2oa_user": "xadmin",
+    "o2oa_pwd": "o2oaadmin2026",
+    # 服务号：真实 person 实体，其会话 token 全模块 REST 可达
+    # （xadmin 是虚拟初始管理员，不落库，业务模块受限；实测 REST 路径必须以
+    #   /o2_core/o2/xAction/services/*.json 服务描述为准，路径错即 Jetty 404 HTML）
+    "o2oa_svc_user": "网关服务号",
+    "o2oa_svc_pwd": "Gw#svc2026",
+    # ---- 第三批：角色人设 + 行动能力（写回）----
+    # 人设判定：以 user token 调 GET /x_organization_assemble_authentication/jaxrs/authentication
+    # 取 roleList，按 @ 前段归一化后匹配。无 token / 未命中 = user（向导）。
+    "persona_enable": True,
+    "persona_manager_roles": ["manager", "systemManager", "securityManager", "auditManager"],
+    "persona_analyst_roles": ["分析师", "aiAnalyst", "analyst"],
+    # persona -> 可见内置工具白名单；None = 不限（管理员全量）
+    "persona_tools": {
+        "user": ["kb_search", "get_current_time", "calc", "search_org", "list_my_todo",
+                 "web_fetch", "web_search",
+                 "skills_list", "skills_get", "skills_run", "feedback"],
+        "analyst": ["kb_search", "get_current_time", "calc", "search_org", "list_my_todo",
+                    "web_fetch", "web_search",
+                    "query_data", "write_data", "skills_list", "skills_get", "skills_run",
+                    "kb_save", "feedback"],
+        "manager": None,
+    },
+    # 写回（行动能力）：默认仅 manager/analyst 可发起；表白名单 + 会话内二次确认 + 审计
+    "write_enable": True,
+    "write_personas": ["manager", "analyst"],
+    "write_tables": ["aiDemoOrders"],
+    "write_confirm_ttl": 600,
+}
+
+CFG = dict(DEFAULT_CFG)
+if CFG_PATH.exists():
+    try:
+        CFG.update(json.loads(CFG_PATH.read_text(encoding="utf-8")))
+    except Exception as e:
+        log(f"config load fail: {e}")
+else:
+    BASE_DIR.mkdir(parents=True, exist_ok=True)
+    CFG_PATH.write_text(json.dumps(DEFAULT_CFG, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def log(msg: str):
+    line = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {msg}"
+    try:
+        with open(LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+    except Exception:
+        pass
+
+
+# ---------------------------------------------------------------- SQLite
+def db() -> sqlite3.Connection:
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute("PRAGMA journal_mode=WAL")
+    return conn
+
+
+def init_db():
+    with db() as c:
+        c.executescript("""
+        CREATE TABLE IF NOT EXISTS docs(
+          id TEXT PRIMARY KEY, title TEXT, category TEXT, content TEXT,
+          creator_person TEXT, creator_unit TEXT, question_enable INTEGER DEFAULT 0,
+          permission TEXT, meta TEXT, updated REAL);
+        CREATE TABLE IF NOT EXISTS chunks(
+          rowid_ INTEGER PRIMARY KEY AUTOINCREMENT, doc_id TEXT, seq INTEGER,
+          text TEXT, embedding BLOB);
+        CREATE INDEX IF NOT EXISTS idx_chunks_doc ON chunks(doc_id);
+        CREATE TABLE IF NOT EXISTS kv(k TEXT PRIMARY KEY, v TEXT);
+        CREATE TABLE IF NOT EXISTS feedbacks(
+          id TEXT PRIMARY KEY, person TEXT, kind TEXT, content TEXT,
+          created_at TEXT, status TEXT DEFAULT 'open');
+        CREATE TABLE IF NOT EXISTS audit_log(
+          id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT, person TEXT, clue_id TEXT,
+          tool TEXT, payload TEXT, status TEXT, detail TEXT);
+        """)
+
+
+init_db()
+
+# ---------------------------------------------------------------- Bionic
+_client = httpx.Client(timeout=300, trust_env=False)
+
+
+def emb_model() -> str:
+    cached = kv_get("embed_model")
+    if cached:
+        return cached
+    for m in CFG["embed_models"]:
+        try:
+            r = _client.post(f"{CFG.get('embed_base') or CFG['bionic_base']}/v1/embeddings",
+                             headers=auth_hdr(),
+                             json={"model": m, "input": "ping"})
+            if r.status_code == 200:
+                kv_set("embed_model", m)
+                log(f"embed model selected: {m}")
+                return m
+            log(f"embed probe {m} -> {r.status_code}")
+        except Exception as e:
+            log(f"embed probe {m} err: {e}")
+    return CFG["embed_models"][0]
+
+
+def auth_hdr():
+    return {"Authorization": f"Bearer {CFG['bionic_key']}"}
+
+
+def kv_get(k):
+    with db() as c:
+        row = c.execute("SELECT v FROM kv WHERE k=?", (k,)).fetchone()
+        return row[0] if row else None
+
+
+def kv_set(k, v):
+    with db() as c:
+        c.execute("INSERT INTO kv(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v", (k, v))
+
+
+def embed(texts):
+    """list[str] -> list[list[float]]，失败返回 []"""
+    try:
+        r = _client.post(f"{CFG.get('embed_base') or CFG['bionic_base']}/v1/embeddings", headers=auth_hdr(),
+                         json={"model": emb_model(), "input": texts})
+        r.raise_for_status()
+        data = sorted(r.json()["data"], key=lambda d: d["index"])
+        return [d["embedding"] for d in data]
+    except Exception as e:
+        log(f"embed error: {e}")
+        return []
+
+
+def pack_vec(v):
+    return struct.pack(f"{len(v)}f", *v)
+
+
+def unpack_vec(b):
+    n = len(b) // 4
+    return list(struct.unpack(f"{n}f", b))
+
+
+def cosine(a, b):
+    dot = sum(x * y for x, y in zip(a, b))
+    na = math.sqrt(sum(x * x for x in a)) or 1e-9
+    nb = math.sqrt(sum(y * y for y in b)) or 1e-9
+    return dot / (na * nb)
+
+
+def chunk_text(text, size, overlap):
+    text = (text or "").strip()
+    if not text:
+        return []
+    if len(text) <= size:
+        return [text]
+    paras = [p.strip() for p in re.split(r"\n\s*\n|\n", text) if p.strip()]
+    out, buf = [], ""
+    for p in paras:
+        if len(buf) + len(p) + 1 <= size:
+            buf = (buf + "\n" + p).strip()
+        else:
+            if buf:
+                out.append(buf)
+            while len(p) > size:
+                out.append(p[:size])
+                p = p[size - overlap:]
+            buf = p
+    if buf:
+        out.append(buf)
+    return out
+
+
+def reindex_doc(doc_id):
+    with db() as c:
+        row = c.execute("SELECT content FROM docs WHERE id=?", (doc_id,)).fetchone()
+    if not row:
+        return
+    with db() as c:
+        c.execute("DELETE FROM chunks WHERE doc_id=?", (doc_id,))
+    parts = chunk_text(row[0], CFG["chunk_size"], CFG["chunk_overlap"])
+    if not parts:
+        return
+    vecs = embed(parts)
+    if not vecs:
+        log(f"reindex {doc_id}: embed fail, {len(parts)} chunks skipped")
+        return
+    with db() as c:
+        for i, (t, v) in enumerate(zip(parts, vecs)):
+            c.execute("INSERT INTO chunks(doc_id,seq,text,embedding) VALUES(?,?,?,?)",
+                      (doc_id, i, t, pack_vec(v)))
+    log(f"reindex {doc_id}: {len(parts)} chunks")
+
+
+def search_chunks(query, top_k, doc_ids=None):
+    qv = embed([query])
+    if not qv:
+        return []
+    qv = qv[0]
+    with db() as c:
+        if doc_ids:
+            marks = ",".join("?" * len(doc_ids))
+            rows = c.execute(f"SELECT doc_id,text,embedding FROM chunks WHERE doc_id IN ({marks})",
+                             doc_ids).fetchall()
+        else:
+            rows = c.execute("SELECT doc_id,text,embedding FROM chunks").fetchall()
+    scored = []
+    for doc_id, text, emb in rows:
+        try:
+            scored.append((cosine(qv, unpack_vec(emb)), doc_id, text))
+        except Exception:
+            continue
+    scored.sort(reverse=True, key=lambda x: x[0])
+    return scored[:top_k]
+
+
+# ---------------------------------------------------------------- Rerank / Rewrite / 检索增强
+def chat_complete(messages, model=None, **kw):
+    """同步非流式 chat 补全，复用 bionic_base + bionic_key。供查询改写等内部调用。"""
+    payload = {"model": model or CFG["chat_model"], "messages": messages,
+               "stream": False, "reasoning_effort": "none"}
+    payload.update(kw)
+    try:
+        r = _client.post(f"{CFG['bionic_base']}/v1/chat/completions",
+                         headers=auth_hdr(), json=payload, timeout=120)
+        r.raise_for_status()
+        return r.json()["choices"][0]["message"]["content"]
+    except Exception as e:
+        log(f"chat_complete err: {e}")
+        return ""
+
+
+def rerank(query, docs):
+    """调用 rerank 服务（llama.cpp /v1/rerank，Jina 兼容格式）。
+    返回 [(score, original_index), ...] 按分数降序；失败返回 []。"""
+    base = CFG.get("rerank_base")
+    model = CFG.get("rerank_model") or "text-embedding-bge-reranker-v2-m3"
+    if not base or not docs:
+        return []
+    try:
+        r = _client.post(f"{base}/v1/rerank", headers=auth_hdr(),
+                         json={"model": model, "query": query, "documents": docs,
+                               "top_n": len(docs), "return_documents": False},
+                         timeout=60)
+        r.raise_for_status()
+        res = r.json().get("results", [])
+        out = []
+        for it in res:
+            idx = it.get("index")
+            if idx is None:
+                continue
+            out.append((it.get("relevance_score", 0.0), idx))
+        out.sort(reverse=True, key=lambda x: x[0])
+        return out
+    except Exception as e:
+        log(f"rerank call err: {e}")
+        return []
+
+
+def rewrite_query(q):
+    """RAG 查询改写：用 chat 模型扩展同义词/实体，提升召回。失败回退原句。"""
+    if not CFG.get("rewrite_enable"):
+        return q
+    sys = ("你是一个检索增强(RAG)系统的查询改写器。请把用户问题改写成更适合向量检索的查询，"
+           "补全关键实体与同义词，输出一行改写后的查询，不要任何解释或多余文字。")
+    try:
+        out = chat_complete([{"role": "system", "content": sys},
+                             {"role": "user", "content": q}], max_tokens=64, temperature=0.0)
+        return out.strip() or q
+    except Exception as e:
+        log(f"rewrite fail: {e}")
+        return q
+
+
+def rag_retrieve(query, doc_ids=None):
+    """RAG 检索：向量召回候选池 → reranker 精排 → 加权融合排序返回 top_k。
+
+    采用 向量分(0.6) + rerank分(0.4) 归一化加权融合（而非用 rerank 直接替换向量序）。
+    原因：实测 bge-reranker 在否定/意图反转句上会被字面重叠误导（如把"牢记默认密码"
+    排在"禁止使用默认密码"之前）。融合既借 reranker 提升信号/噪声分离，又避免其单点
+    误判把顶部正确结果翻盘。rerank 不可用时自动回退纯向量 top_k。"""
+    want_rerank = bool(CFG.get("rerank_enable") and CFG.get("rerank_base"))
+    k = CFG.get("rag_top_k", 6)
+    pool = CFG.get("rag_rerank_candidate", 0) or 0
+    fetch_k = max(k, pool) if want_rerank else k
+    cands = search_chunks(query, fetch_k, doc_ids=doc_ids)
+    if not cands:
+        return []
+    if want_rerank:
+        try:
+            ranked = rerank(query, [t for _, _, t in cands])
+            if ranked:
+                vscores = [s for s, _, _ in cands]
+                rscores = {idx: sc for sc, idx in ranked}
+                vmin, vmax = min(vscores), max(vscores)
+                rvals = [rscores.get(i, 0.0) for i in range(len(cands))]
+                rmin, rmax = min(rvals), max(rvals)
+                out = []
+                for i, (vs, did, t) in enumerate(cands):
+                    nv = (vs - vmin) / (vmax - vmin) if vmax > vmin else 1.0
+                    nr = (rvals[i] - rmin) / (rmax - rmin) if rmax > rmin else 1.0
+                    out.append(((0.6 * nv + 0.4 * nr), did, t))
+                out.sort(reverse=True, key=lambda x: x[0])
+                return out[:k]
+        except Exception as e:
+            log(f"rerank failed, fallback vector top_k: {e}")
+    return cands[:k]
+
+
+def visible_docs(permission_list):
+    """返回允许访问的 doc_id 集合。permission_list 为空 = 管理员视角全部可见。"""
+    if not permission_list:
+        with db() as c:
+            return {r[0] for r in c.execute("SELECT id FROM docs")}
+    allow = set()
+    with db() as c:
+        for doc_id, perm in c.execute("SELECT id, permission FROM docs"):
+            try:
+                dperm = json.loads(perm) if perm else []
+            except Exception:
+                dperm = []
+            if not dperm or set(dperm) & set(permission_list):
+                allow.add(doc_id)
+    return allow
+
+
+# ---------------------------------------------------------------- 附件下载（多模态链路）
+# O2OA 的 referenceIdList 给的是【附件 ID】（x_ai_core File 实体），不是图片字节。
+# 网关需自己调 O2OA REST 把内容取回来，再决定走视觉（image_url）还是文本提取。
+# 接口：GET /x_ai_assemble_control/jaxrs/file/{id}/download
+#   —— ActionDownload 里：effectivePerson.isNotManager() 时要求 creator 匹配，
+#      故用 manager 身份（xadmin cipher token）可下载任意附件。
+
+IMAGE_EXT = {"png", "jpg", "jpeg", "bmp", "gif", "webp"}
+IMAGE_MIME = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg",
+              "bmp": "image/bmp", "gif": "image/gif", "webp": "image/webp"}
+
+
+def o2oa_file_info(file_id):
+    """取附件元数据（名称/扩展名）。失败返回 (None, None)。"""
+    base = CFG.get("o2oa_base") or "http://127.0.0.1:9090"
+    tok = CFG.get("o2oa_admin_token") or ""
+    try:
+        _o2_http.cookies.clear()
+        r = _o2_http.get(f"{base}/x_ai_assemble_control/jaxrs/file/{file_id}",
+                         headers={"x-token": tok}, timeout=30)
+        if r.status_code != 200:
+            return None, None
+        d = r.json()
+        data = d.get("data") or {}
+        return data.get("name"), (data.get("extension") or "").lower()
+    except Exception as e:
+        log(f"o2oa_file_info {file_id} err: {e}")
+        return None, None
+
+
+def o2oa_file_bytes(file_id):
+    """下载附件原始字节。失败返回 None。"""
+    base = CFG.get("o2oa_base") or "http://127.0.0.1:9090"
+    tok = CFG.get("o2oa_admin_token") or ""
+    try:
+        _o2_http.cookies.clear()
+        r = _o2_http.get(f"{base}/x_ai_assemble_control/jaxrs/file/{file_id}/download",
+                         headers={"x-token": tok}, timeout=120)
+        if r.status_code != 200:
+            log(f"o2oa_file_bytes {file_id} -> HTTP {r.status_code}")
+            return None
+        return r.content
+    except Exception as e:
+        log(f"o2oa_file_bytes {file_id} err: {e}")
+        return None
+
+
+# ---------------------------------------------------------------- O2OA 实时数据快照（报表自然语言查询支撑）
+def o2oa_token(force=False):
+    """以网关服务号身份换取 O2OA 会话令牌。15 分钟 TTL 自动续期（会话 token 会过期），
+    force=True 强制重新登录（调用方在 401/404 时触发）。
+    服务号是真实 person 实体，业务模块 REST 全可达；未配置时回落 xadmin。"""
+    TTL = 15 * 60
+    if not force:
+        cached = kv_get("o2oa_token")
+        ts = kv_get("o2oa_token_ts")
+        try:
+            if cached and ts and time.time() - float(ts) < TTL:
+                return cached
+        except Exception:
+            pass
+    try:
+        cred = (CFG.get("o2oa_svc_user") or CFG.get("o2oa_user", "xadmin")).strip()
+        pwd = (CFG.get("o2oa_svc_pwd") or CFG.get("o2oa_pwd", "")).strip()
+        _o2_http.cookies.clear()
+        r = _o2_http.post(f"{CFG.get('o2oa_base','http://127.0.0.1:9090')}"
+                          "/x_organization_assemble_authentication/jaxrs/authentication",
+                          json={"credential": cred, "password": pwd}, timeout=30)
+        j = r.json()
+        d = j.get("data")
+        t = d.get("token") if isinstance(d, dict) else None
+        if t:
+            kv_set("o2oa_token", t)
+            kv_set("o2oa_token_ts", str(time.time()))
+            return t
+    except Exception as e:
+        log(f"o2oa login err: {e}")
+    return ""
+
+
+def _o2oa_get(path, token):
+    _o2_http.cookies.clear()
+    r = _o2_http.get(f"{CFG.get('o2oa_base','http://127.0.0.1:9090')}{path}",
+                     headers={"x-token": token}, timeout=30)
+    r.raise_for_status()
+    return r.json()
+
+
+def _extract_list(obj, key):
+    """兼容 O2OA 多种返回：直接 [...]、{data:[...]}、{data:{xxxList:[...]}}。"""
+    if isinstance(obj, list):
+        return obj
+    if isinstance(obj, dict):
+        d = obj.get("data")
+        if isinstance(d, list):
+            return d
+        if isinstance(d, dict):
+            for k in (key + "List", key, "list"):
+                if k in d and isinstance(d[k], list):
+                    return d[k]
+        if key in obj and isinstance(obj[key], list):
+            return obj[key]
+    return []
+
+
+def o2oa_snapshot():
+    """拉取本组织 O2OA 实时目录（应用/门户等业务模块），供报表自然语言查询使用。"""
+    tok = o2oa_token()
+    if not tok:
+        return "（无法登录 O2OA，报表数据不可用）"
+    try:
+        apps = _extract_list(_o2oa_get("/x_processplatform_assemble_designer/jaxrs/application/list", tok), "application")
+        portals = _extract_list(_o2oa_get("/x_portal_assemble_designer/jaxrs/portal/list", tok), "portal")
+        lines = ["# O2OA 实时数据快照",
+                 f"- 应用(业务模块)数量: {len(apps)}",
+                 f"- 门户数量: {len(portals)}", "", "## 应用清单"]
+        for a in apps:
+            nm = a.get("name") if isinstance(a, dict) else str(a)
+            al = a.get("alias", "") if isinstance(a, dict) else ""
+            lines.append(f"- {nm}（{al}）")
+        lines.append(""); lines.append("## 门户清单")
+        for p in portals[:50]:
+            nm = p.get("name") if isinstance(p, dict) else str(p)
+            lines.append(f"- {nm}")
+        return "\n".join(lines)
+    except Exception as e:
+        return f"（获取 O2OA 数据失败: {e}）"
+
+
+def build_ref_content(refs):
+    """把 referenceIdList 转成 OpenAI 多模态 content 数组。
+    返回 (content_parts, used_vision, note)：
+      content_parts —— 形如 [{"type":"text",...}, {"type":"image_url",...}]
+    """
+    import base64
+    parts, used_vision, notes = [], False, []
+    for fid in (refs or []):
+        name, ext = o2oa_file_info(fid)
+        if name is None:
+            notes.append(f"（附件 {fid[:8]}… 读取失败）")
+            continue
+        data = o2oa_file_bytes(fid)
+        if data is None:
+            notes.append(f"（附件 {name} 下载失败）")
+            continue
+        if ext in IMAGE_EXT:
+            b64 = base64.b64encode(data).decode("ascii")
+            mime = IMAGE_MIME.get(ext, "image/png")
+            parts.append({"type": "image_url",
+                          "image_url": {"url": f"data:{mime};base64,{b64}"}})
+            used_vision = True
+            notes.append(f"（已附加图片 {name}）")
+        else:
+            # 非图片：先尝试直接文本提取；扫描件/PDF 交给 OCR（若已配置）
+            text = extract_text(data, ext, name)
+            if text:
+                parts.append({"type": "text", "text": f"【附件 {name}】\n{text}"})
+                notes.append(f"（已提取文本 {name}，{len(text)} 字）")
+            else:
+                notes.append(f"（附件 {name} 无法提取文本，建议启用 OCR）")
+    return parts, used_vision, "".join(notes)
+
+
+def extract_text(data, ext, name):
+    """尽力而为的文本提取。
+
+    优先级：
+      1. 纯文本类扩展名        -> 直接解码（多编码兜底）
+      2. docx / xlsx          -> python-docx / openpyxl 结构化提取
+      3. pdf / 图片           -> 交 OCR 服务（:8091，RapidOCR 纯 CPU）
+                                 PDF 由服务侧判断文本层：有则直抽（ms 级），
+                                 无则渲染 + OCR（扫描件），并把表格还原成 Markdown。
+    """
+    try:
+        if ext in ("txt", "md", "csv", "json", "xml", "log"):
+            for enc in ("utf-8", "gbk", "latin-1"):
+                try:
+                    return data.decode(enc)
+                except Exception:
+                    continue
+            return None
+        if ext == "docx":
+            import io
+            from docx import Document
+            doc = Document(io.BytesIO(data))
+            return "\n".join(p.text for p in doc.paragraphs if p.text.strip()) or None
+        if ext == "xlsx":
+            import io
+            from openpyxl import load_workbook
+            wb = load_workbook(io.BytesIO(data), read_only=True)
+            rows = []
+            for ws in wb.worksheets:
+                rows.append(f"【工作表 {ws.title}】")
+                for row in ws.iter_rows(values_only=True):
+                    rows.append("\t".join("" if v is None else str(v) for v in row))
+            return "\n".join(rows) or None
+        # PDF / 图片 -> OCR 服务（若已配置）
+        ocr = CFG.get("ocr_base") or ""
+        if ocr and ext in ("pdf", "png", "jpg", "jpeg", "bmp", "webp",
+                           "gif", "tif", "tiff"):
+            import base64
+            r = _client.post(f"{ocr}/ocr", timeout=300,
+                             json={"file_b64": base64.b64encode(data).decode("ascii"),
+                                   "filename": name})
+            if r.status_code != 200:
+                log(f"ocr {name} -> HTTP {r.status_code}: {r.text[:200]}")
+                return None
+            j = r.json() or {}
+            if not j.get("ok"):
+                log(f"ocr {name} -> fail: {j.get('error')}")
+                return None
+            text = (j.get("text") or "").strip()
+            # 表格结构还原成 Markdown，比纯文本行更能保留语义
+            tbls = j.get("tables") or []
+            if tbls:
+                try:
+                    import sys as _sys
+                    if str(BASE_DIR) not in _sys.path:
+                        _sys.path.insert(0, str(BASE_DIR))
+                    from ocr_service import table_to_markdown
+                except Exception:
+                    table_to_markdown = None
+                md = []
+                for t in tbls:
+                    if table_to_markdown:
+                        s = table_to_markdown(t)
+                        if s:
+                            md.append(s)
+                if md:
+                    text = (text + "\n\n【识别到的表格】\n" + "\n\n".join(md)).strip()
+            cap = int(CFG.get("ocr_max_chars") or 20000)
+            if len(text) > cap:
+                text = text[:cap] + f"\n……（已截断，全文 {len(text)} 字）"
+            log(f"ocr {name} engine={j.get('engine')} pages={j.get('pages')} "
+                f"chars={len(text)} tables={len(tbls)} ms={j.get('ms')}")
+            return text or None
+        return None
+    except Exception as e:
+        log(f"extract_text {name} err: {e}")
+        return None
+
+
+# ---------------------------------------------------------------- 内置工具（本地原生）
+# 这些工具不依赖 O2OA 的 McpConfig 配置，网关自带、开箱即用。
+# 依据：后端 llama-server 原生支持 tool calling（supports_tool_calls=true）。
+# 设计原则：只放"模型自身做不到或做不可靠"的能力（时间/计算/私有数据检索）。
+
+BUILTIN_TOOLS = [
+    {
+        "name": "kb_search",
+        "description": "检索本地知识库。当问题涉及公司内部资料、制度、文档时优先调用，"
+                       "不要凭记忆回答。返回最相关的若干片段。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "检索关键词或问题"},
+                "top_k": {"type": "integer", "description": "返回条数，默认 5"},
+            },
+            "required": ["query"],
+        },
+    },
+    {
+        "name": "get_current_time",
+        "description": "获取当前日期与时间。任何涉及'今天/现在/本周'的问题都必须先调用，不要依赖你的内部时钟。",
+        "parameters": {"type": "object", "properties": {}, "required": []},
+    },
+    {
+        "name": "calc",
+        "description": "计算数学表达式，支持 + - * / // % ** 与括号、abs/round/min/max/sum。"
+                       "任何算术都必须用它，你的心算不可靠。",
+        "parameters": {
+            "type": "object",
+            "properties": {"expr": {"type": "string", "description": "如 (1+2)*3/4"}},
+            "required": ["expr"],
+        },
+    },
+    {
+        "name": "search_org",
+        "description": "在 O2OA 组织架构中按姓名/部门关键词搜索人员与单位，返回名称和标识。",
+        "parameters": {
+            "type": "object",
+            "properties": {"keyword": {"type": "string", "description": "姓名或部门关键词"}},
+            "required": ["keyword"],
+        },
+    },
+    {
+        "name": "list_my_todo",
+        "description": "列出当前用户的待办工作（流程待办），用于'我有什么要处理的'这类问题。",
+        "parameters": {
+            "type": "object",
+            "properties": {"limit": {"type": "integer", "description": "最多返回条数，默认 10"}},
+            "required": [],
+        },
+    },
+    # ---- 外部信息获取（第四批）：补齐"模型无工具可调只能拒答"的缺口 ----
+    # 截图实证：问"今天北京天气"→ 模型答"我无法访问外部数据"。根因不是模型不行，
+    # 而是没给它检索类工具，它只能硬答。故补 web_fetch / web_search。
+    {
+        "name": "web_fetch",
+        "description": "抓取指定 URL 的网页正文（自动去标签、截断）。用于获取公开网页、"
+                       "API JSON、公告、天气接口等外部信息。需要联网。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "url": {"type": "string", "description": "完整 URL，如 https://www.weather.com.cn/..."},
+                "max_chars": {"type": "integer", "description": "最多返回字符数，默认 4000"},
+            },
+            "required": ["url"],
+        },
+    },
+    {
+        "name": "web_search",
+        "description": "联网搜索关键词，返回若干条标题+摘要+链接。当问题涉及实时信息"
+                       "（天气、新闻、股价、政策、外部资料）而本地知识库没有时使用。"
+                       "若无结果，可改用 web_fetch 直接抓取已知站点。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "搜索关键词"},
+                "limit": {"type": "integer", "description": "返回条数，默认 5"},
+            },
+            "required": ["query"],
+        },
+    },
+    {
+        "name": "query_data",
+        "description": "查询 O2OA 数据中心的自定义数据表。需要提供表名与可选过滤条件。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "table": {"type": "string", "description": "数据表名或标识"},
+                "filter": {"type": "string", "description": "过滤条件（可选）"},
+                "limit": {"type": "integer", "description": "最多返回条数，默认 10"},
+            },
+            "required": ["table"],
+        },
+    },
+    # ---- 自主技能（skills）：让模型能发现/读取/创建/执行技能 ----
+    {
+        "name": "skills_list",
+        "description": "列出当前可用的自主技能（skills）清单，含名称与一句话用途。当用户需要知道自己能复用哪些预设流程、或想了解有哪些现成技能时使用。",
+        "parameters": {"type": "object", "properties": {}, "required": []},
+    },
+    {
+        "name": "skills_get",
+        "description": "读取某个技能的完整内容（含指引正文），用于了解该技能的具体步骤与写法。",
+        "parameters": {
+            "type": "object",
+            "properties": {"name": {"type": "string", "description": "技能名称"}},
+            "required": ["name"],
+        },
+    },
+    {
+        "name": "skills_create",
+        "description": "创建一个新的自主技能：把一套可复用的工作指引固化成文件，供以后 skills_list/skills_run 复用。当用户希望你记住某种流程、或总结出最佳实践时使用。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string", "description": "技能标识（英文/数字/下划线）"},
+                "description": {"type": "string", "description": "一句话说明这个技能做什么"},
+                "content": {"type": "string", "description": "技能的具体指引正文（markdown）"},
+            },
+            "required": ["name", "description", "content"],
+        },
+    },
+    {
+        "name": "skills_run",
+        "description": "执行（应用）某个已存在的技能：返回该技能的指引，请按其步骤完成任务。当用户说'按某某技能做'或直接要求执行某流程时使用。",
+        "parameters": {
+            "type": "object",
+            "properties": {"name": {"type": "string", "description": "技能名称"}},
+            "required": ["name"],
+        },
+    },
+    # ---- 知识沉淀 / 反馈闭环（第一批改进）----
+    {
+        "name": "kb_save",
+        "description": "把有价值的信息沉淀进本地知识库（自动分块向量化，之后所有用户可用 kb_search 检索到）。"
+                       "当用户说'记住这个/保存到知识库/沉淀成文档'，或对话中出现值得长期保留的制度、经验、决议、结论时使用。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string", "description": "文档标题（简明概括内容）"},
+                "content": {"type": "string", "description": "文档正文（完整内容，不要省略）"},
+                "category": {"type": "string", "description": "分类标签，默认'智能助手沉淀'"},
+                "public": {"type": "boolean", "description": "是否公共可见，默认 true；false 则仅本人与管理员可见"},
+            },
+            "required": ["title", "content"],
+        },
+    },
+    {
+        "name": "feedback",
+        "description": "记录用户对智能助手/系统的反馈（点赞、不满、改进建议），供管理员在后台查看并闭环。"
+                       "当用户表达'好用/不好用/希望改进/提个意见'等情绪或建议时主动使用，并如实保留用户原话。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "content": {"type": "string", "description": "反馈内容"},
+                "kind": {"type": "string", "description": "类型：like（好评）/ dislike（不满）/ suggestion（建议），默认 suggestion"},
+            },
+            "required": ["content"],
+        },
+    },
+    # ---- 行动能力 / 写回（第三批）：白名单 + 会话内二次确认 + 审计 ----
+    {
+        "name": "write_data",
+        "description": "向 O2OA 数据中心的数据表写入或更新一行数据（写回操作，受表白名单与二次确认保护）。"
+                       "★ 必须两步执行：第一步调用本工具（不带 confirm）让系统生成写回预案；"
+                       "第二步把系统返回的预案转述给用户，用户明确同意后再调用（confirm=true、参数不变）执行。"
+                       "严禁跳过第一步、严禁自行编造预案文本（未经系统生成的预案在 confirm 时会被拒绝并要求重来）。"
+                       "用户拒绝或要求修改时，不得执行。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "table": {"type": "string", "description": "数据表标识（须在写回白名单内，建议用 alias 英文标识）"},
+                "data": {"type": "object", "description": "要写入的行数据。键必须是表的英文字段名（如 productName、amount），"
+                                                          "不要用中文描述词当键；不清楚字段时可先用较小数据试探，错误信息会返回字段字典"},
+                "action": {"type": "string", "description": "create=新增一行（默认）；update=更新一行（须提供 row_id）"},
+                "row_id": {"type": "string", "description": "update 时的目标行 id"},
+                "confirm": {"type": "boolean", "description": "第二步：用户已在对话中明确同意预案后置 true"},
+            },
+            "required": ["table", "data"],
+        },
+    },
+]
+
+_BUILTIN_SPEC = {t["name"]: t for t in BUILTIN_TOOLS}
+
+# O2OA REST 专用 HTTP 客户端（隔离全局 _client 的 cookie jar，防 x-token 串身份；
+# _o2_rest/_call 每次请求前 clear，见 _o2_rest 文档）
+_o2_http = httpx.Client(timeout=60, trust_env=False)
+
+
+def _o2_rest(path, method="GET", body=None, timeout=30, user_token=""):
+    """调用 O2OA 自身 REST（网关照会 O2OA 的容器/宿主地址）。
+    user_token 非空时以该用户身份调用（服务端按其权限强制过滤，权限闭环）；
+    为空则以服务号身份（o2oa_token() 自动登录续期），401/404 时刷新 token 重试一次。
+    ★ 2026-09-19 认知更正：O2OA 正确 REST 路径以 /o2_core/o2/xAction/services/*.json
+    服务描述为准（如 task/list/my/paging/{p}/size/{s}）；此前"业务模块 404"实为
+    路径写错（list/paging/{p}/{s} 不存在 → Jetty 404 HTML），并非身份门控。
+    ★ 2026-09-19 cookie 污染修复：O2OA 会对带 x-token 的响应回写 Set-Cookie，全局
+    httpx Client 的 cookie jar 会残留"上一个用户"的 x-token，且 O2OA 端 Cookie 优先
+    于 Header → 后续请求身份被悄悄换成别人（第三批 write_data 以服务号执行却报
+    "测试用户A 权限不足" 即此根因）。故 O2OA REST 使用专用 Client 并每请求清 jar。"""
+    base = CFG.get("o2oa_base") or "http://127.0.0.1:9090"
+
+    def _call(tok):
+        headers = {"Content-Type": "application/json"}
+        if tok:
+            headers["x-token"] = tok
+        url = f"{base}{path}"
+        try:
+            _o2_http.cookies.clear()
+            if method.upper() == "GET":
+                r = _o2_http.get(url, headers=headers, timeout=timeout)
+            elif method.upper() == "PUT":
+                r = _o2_http.put(url, headers=headers, json=body or {}, timeout=timeout)
+            else:
+                r = _o2_http.post(url, headers=headers, json=body or {}, timeout=timeout)
+            return r.status_code, r.text
+        except Exception as e:
+            return 0, f"O2_REST_ERROR: {e}"
+
+    if user_token:
+        return _call(user_token)
+    tok = o2oa_token()
+    code, text = _call(tok)
+    if code in (401, 404) and tok:
+        # token 失效（cipher/会话 token 过期、O2OA 重启）→ 强制重新登录重试一次
+        tok2 = o2oa_token(force=True)
+        if tok2 and tok2 != tok:
+            code, text = _call(tok2)
+    return code, text
+
+
+def _safe_eval(expr):
+    """极简安全求值：只放行数字与白名单运算符/函数，不用 eval 的裸用法。"""
+    import ast
+    allowed_ops = {
+        ast.Add: lambda a, b: a + b, ast.Sub: lambda a, b: a - b,
+        ast.Mult: lambda a, b: a * b, ast.Div: lambda a, b: a / b,
+        ast.FloorDiv: lambda a, b: a // b, ast.Mod: lambda a, b: a % b,
+        ast.Pow: lambda a, b: a ** b, ast.USub: lambda a: -a, ast.UAdd: lambda a: +a,
+    }
+    allowed_fns = {
+        "abs": abs, "round": round, "min": min, "max": max, "sum": sum,
+    }
+
+    def _ev(node):
+        if isinstance(node, ast.Expression):
+            return _ev(node.body)
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            return node.value
+        if isinstance(node, ast.BinOp) and type(node.op) in allowed_ops:
+            return allowed_ops[type(node.op)](_ev(node.left), _ev(node.right))
+        if isinstance(node, ast.UnaryOp) and type(node.op) in allowed_ops:
+            return allowed_ops[type(node.op)](_ev(node.operand))
+        if isinstance(node, ast.Call):
+            fn = getattr(node.func, "id", None)
+            if fn in allowed_fns and not node.keywords:
+                return allowed_fns[fn](*[_ev(a) for a in node.args])
+        if isinstance(node, (ast.List, ast.Tuple)):
+            return [_ev(e) for e in node.elts]
+        raise ValueError("expression not allowed")
+
+    return _ev(ast.parse(expr, mode="eval"))
+
+
+# ---------------------------------------------------------------- 自主技能（skills）仓库
+def _skill_path(name):
+    """技能文件名：只允许安全字符，避免路径穿越。"""
+    safe = re.sub(r"[^A-Za-z0-9_\u4e00-\u9fff-]", "_", str(name))[:60]
+    return SKILLS_DIR / (safe + ".md")
+
+
+def _parse_skill(text):
+    m = re.match(r"^---\s*\n(.*?)\n---\s*\n(.*)$", text, re.S)
+    if not m:
+        return {"name": "", "description": "", "body": text}
+    fm = {}
+    for line in m.group(1).split("\n"):
+        if ":" in line:
+            k, v = line.split(":", 1)
+            fm[k.strip()] = v.strip()
+    return {"name": fm.get("name", ""), "description": fm.get("description", ""), "body": m.group(2)}
+
+
+def _list_skills():
+    SKILLS_DIR.mkdir(parents=True, exist_ok=True)
+    out = []
+    for fn in sorted(os.listdir(SKILLS_DIR)):
+        if fn.endswith(".md"):
+            try:
+                meta = _parse_skill((SKILLS_DIR / fn).read_text(encoding="utf-8"))
+                out.append({"name": meta["name"] or fn[:-3], "description": meta["description"]})
+            except Exception:
+                pass
+    return out
+
+
+def _get_skill(name):
+    p = _skill_path(name)
+    if not p.exists():
+        return None
+    return p.read_text(encoding="utf-8")
+
+
+def _create_skill(name, description, content):
+    SKILLS_DIR.mkdir(parents=True, exist_ok=True)
+    p = _skill_path(name)
+    body = content or ""
+    text = f"---\nname: {name}\ndescription: {description}\n---\n\n{body}\n"
+    p.write_text(text, encoding="utf-8")
+    return p
+
+
+def _run_skill(name):
+    full = _get_skill(name)
+    if not full:
+        return f"ERROR: 技能 '{name}' 不存在。可先用 skills_list 查看，或用 skills_create 创建。"
+    meta = _parse_skill(full)
+    return ("【技能指引｜%s】\n%s\n\n请严格按照上述指引完成任务；如需调用其他工具请自行决定。"
+            % (meta["name"] or name, meta["body"]))
+
+
+def _o2_rest_user_or_manager(path, method="POST", body=None, user_token="", timeout=30):
+    """user token 优先（服务端按其权限强制过滤）。返回 (code, text, data)：
+    data 非 None = 已以用户/本人身份取到（无需再过滤）；
+    data 为 None = 回落服务号（o2oa_token()）原始结果，调用方需注意其语义。"""
+    if user_token:
+        code, text = _o2_rest(path, method=method, body=body, timeout=timeout, user_token=user_token)
+        try:
+            data = json.loads(text).get("data")
+        except Exception:
+            data = None
+        if code == 200 and data is not None:
+            return code, text, data if isinstance(data, list) else [data]
+        log(f"o2 user_token fallback HTTP {code} {path[:60]}")
+    code, text = _o2_rest(path, method=method, body=body, timeout=timeout)
+    return code, text, None
+
+
+# ---------------------------------------------------------------- 第三批：角色人设
+# 三段人设（对照设计逻辑评估报告 P2）：向导=普通用户 / 分析师=数据岗 / 参谋=管理员
+PERSONAS = {
+    "user": ("向导",
+             "语气亲切友好，回答简洁、多用步骤化指引；聚焦帮用户完成日常事务"
+             "（查待办、找同事、搜资料），不主动谈及系统管理、数据表与配置细节。"),
+    "analyst": ("分析师",
+                "回答以数据与事实为依据，主动说明数据口径与局限；涉及数量/统计问题时"
+                "优先用 query_data 等工具取证后再回答，不做无依据的估计；可协助录入数据"
+                "（write_data，务必走二次确认）。"),
+    "manager": ("参谋",
+                "面向系统管理员：专业严谨、考虑周全，可从组织、流程、数据全局视角给出建议；"
+                "涉及敏感操作时主动提示风险与影响面。"),
+}
+
+
+def o2_user_info(user_token):
+    """一次调用取当前用户的角色/人员 DN/姓名。
+    ★ 人员 DN 是会话归属的关键：O2OA AI 模块查会话列表时按 personList=[人员DN] 过滤，
+    因此 clue 记录必须带 DN，仅存姓名会导致历史记录永远匹配不到（实测踩坑）。
+    返回 (roles, dn, name)；失败返回 ([], "", "")。"""
+    if not user_token:
+        return [], "", ""
+    try:
+        code, text = _o2_rest("/x_organization_assemble_authentication/jaxrs/authentication",
+                              method="GET", user_token=user_token)
+        d = json.loads(text).get("data") or {}
+        person = d.get("person") if isinstance(d.get("person"), dict) else {}
+        roles = [str(r).split("@")[0].strip().lower() for r in (d.get("roleList") or []) if r]
+        dn = (d.get("distinguishedName") or person.get("distinguishedName") or "").strip()
+        nm = (d.get("name") or person.get("name") or "").strip()
+        log(f"o2_user_info HTTP {code} roles={roles} dn={dn[:12]} name={nm}")
+        return roles, dn, nm
+    except Exception as e:
+        log(f"o2_user_info err: {e}")
+        return [], "", ""
+
+
+def persona_from_roles(roles):
+    """按角色集合判人设；roles=None（无 token/查询失败）→ ""（中性，不启用白名单）。"""
+    if not CFG.get("persona_enable") or roles is None:
+        return ""
+    rs = {str(r).lower() for r in roles}
+    if rs & {r.lower() for r in CFG.get("persona_manager_roles") or []}:
+        return "manager"
+    if rs & {r.lower() for r in CFG.get("persona_analyst_roles") or []}:
+        return "analyst"
+    return "user"
+
+
+def o2_user_roles(user_token):
+    """以 user token 调 GET /jaxrs/authentication 取当前用户 roleList
+    （实测该接口返回 roleList/identityList 等，role 形如 '分析师@aiAnalyst@R'）。"""
+    return o2_user_info(user_token)[0]
+
+
+def persona_of(user_token):
+    """第三批：按 O2OA 角色判定人设。user（默认）/ analyst / manager；
+    无 token（旧前端）返回 ""（中性，不启用人设与白名单，保持既有语义）。"""
+    if not CFG.get("persona_enable") or not user_token:
+        return ""
+    return persona_from_roles(o2_user_roles(user_token))
+
+
+def audit_log(person, clue_id, tool, payload, status, detail=""):
+    """第三批：写回/敏感动作审计（/gateway/audit 可查）。"""
+    try:
+        with db() as c:
+            c.execute("INSERT INTO audit_log(ts,person,clue_id,tool,payload,status,detail) "
+                      "VALUES(?,?,?,?,?,?,?)",
+                      (time.strftime("%Y-%m-%d %H:%M:%S"), person or "", clue_id or "",
+                       tool, json.dumps(payload, ensure_ascii=False)[:2000] if payload else "",
+                       status, str(detail)[:2000]))
+    except Exception as e:
+        log(f"audit_log err: {e}")
+
+
+def o2_table_schema(flag, force=False):
+    """取数据表 schema（name/alias/fieldList），供 write_data 白名单归一化与字段字典。
+    kv 缓存 10 分钟。失败返回 None。"""
+    key = f"table_schema:{flag}"
+    if not force:
+        cached = kv_get(key)
+        if cached:
+            try:
+                c = json.loads(cached)
+                if time.time() - float(c.get("ts") or 0) < 600:
+                    return c.get("schema")
+            except Exception:
+                pass
+    try:
+        code, text = _o2_rest(f"/x_query_assemble_designer/jaxrs/table/{flag}", method="GET")
+        d = (json.loads(text).get("data") or {})
+        if not d:
+            return None
+        draft = json.loads(d.get("draftData") or "{}")
+        schema = {"name": d.get("name") or "", "alias": d.get("alias") or "",
+                  "fields": [{"name": f.get("name"), "type": f.get("type"),
+                              "desc": f.get("description") or ""}
+                             for f in (draft.get("fieldList") or []) if f.get("name")]}
+        with db() as c:
+            c.execute("INSERT OR REPLACE INTO kv(k,v) VALUES(?,?)",
+                      (key, json.dumps({"ts": time.time(), "schema": schema},
+                                       ensure_ascii=False)))
+        return schema
+    except Exception as e:
+        log(f"o2_table_schema err: {e}")
+        return None
+
+
+def _schema_desc(sch):
+    if not sch:
+        return ""
+    fields = "、".join(
+        f"{f['name']}({f.get('type','')}" + (f",{f['desc']}" if f.get("desc") else "") + ")"
+        for f in sch.get("fields") or [])
+    nm, al = sch.get("name") or "", sch.get("alias") or ""
+    return f"「{nm}」(alias:{al}) 字段：{fields}"
+
+
+def exec_builtin(name, args, person="", perms=None, user_token="", persona="", clue_id=""):
+    """执行内置工具；返回字符串结果（供模型阅读）。
+    person=当前登录用户、perms=前端 permissionList、user_token=O2OA 会话 token
+    （第二批：由 O2OA 服务端实填转发，REST 层按用户身份强制鉴权）。
+    第三批：persona=角色人设（write_data 权限判定）、clue_id=会话标识（二次确认 pending）。"""
+    args = args or {}
+    try:
+        if name == "kb_search":
+            q = str(args.get("query") or "").strip()
+            if not q:
+                return "ERROR: query 不能为空"
+            k = int(args.get("top_k") or 5)
+            hits = search_chunks(q, k)
+            # P0：知识库工具链路与 RAG 主链路同权——按前端 permissionList 过滤
+            # （perms 为空 = 管理员/旧前端视角，保持全部可见的既有语义）
+            allow = visible_docs(perms or [])
+            hits = [h for h in hits if h[1] in allow]
+            if not hits:
+                return "知识库中没有检索到相关内容。"
+            with db() as c:
+                titles = dict(c.execute("SELECT id,title FROM docs").fetchall())
+            lines = []
+            for i, (score, doc_id, text) in enumerate(hits):
+                lines.append(f"[{i+1}] 《{titles.get(doc_id,'')}》 相关度{score:.3f}\n{text[:600]}")
+            return "\n\n".join(lines)
+
+        if name == "get_current_time":
+            import datetime
+            now = datetime.datetime.now()
+            wd = "一二三四五六日"[now.weekday()]
+            return now.strftime(f"%Y-%m-%d %H:%M:%S 星期{wd}")
+
+        if name == "calc":
+            expr = str(args.get("expr") or "").strip()
+            if not expr:
+                return "ERROR: expr 不能为空"
+            val = _safe_eval(expr)
+            return f"{expr} = {val}"
+
+        if name == "search_org":
+            kw = str(args.get("keyword") or "").strip()
+            if not kw:
+                return "ERROR: keyword 不能为空"
+            # 正确路径（服务描述 listPersonByKey）：PUT /jaxrs/person/list/like
+            code, text, data = _o2_rest_user_or_manager(
+                "/x_organization_assemble_control/jaxrs/person/list/like",
+                method="PUT", body={"key": kw}, user_token=user_token)
+            if isinstance(data, list) and data:
+                lines = []
+                for i, p in enumerate(data[:10]):
+                    if not isinstance(p, dict):
+                        continue
+                    lines.append(f"- {p.get('name') or '(未命名)'}"
+                                 f"｜DN:{p.get('distinguishedName') or p.get('id')}"
+                                 + (f"｜手机:{p.get('mobile')}" if p.get("mobile") else "")
+                                 + (f"｜邮箱:{p.get('mail')}" if p.get("mail") else ""))
+                return (f"组织架构中匹配“{kw}”的人员 {len(data)} 人：\n" + "\n".join(lines)
+                        if lines else f"HTTP {code}\n{text[:2000]}")
+            return f"HTTP {code}\n{text[:4000]}"
+
+        if name == "list_my_todo":
+            limit = int(args.get("limit") or 10)
+            # 正确路径（服务描述 listTaskMyPaging）：GET /jaxrs/task/list/my/paging/{p}/size/{s}
+            # "my" 以 x-token 对应用户为准：user token = 真实本人；服务号 = 服务号自己（无法代查他人）
+            path = f"/x_processplatform_assemble_surface/jaxrs/task/list/my/paging/1/size/{limit}"
+            code, text, data = _o2_rest_user_or_manager(path, method="GET", user_token=user_token)
+            if data is None:
+                # 回落 manager（服务号）原始结果：查到的是服务号自己的待办
+                try:
+                    data = json.loads(text).get("data") or []
+                    if isinstance(data, dict):
+                        data = [data]
+                except Exception:
+                    return f"HTTP {code}\n{text[:4000]}"
+                note = "（以网关服务号身份查询；如需查询您的个人待办，请从前端对话入口发起）"
+            else:
+                note = "（以本人身份查询）"
+            if not data:
+                return "当前没有待办任务。"
+            lines = []
+            for i, t in enumerate(data[:limit]):
+                lines.append(f"- [{i+1}] {t.get('title') or t.get('workTitle') or '(无标题)'}"
+                             f"｜流程:{t.get('processName') or '-'}"
+                             f"｜到达:{str(t.get('startTime') or '')[:16]}")
+            return (f"当前用户 {person or '本人'} 的待办共 {len(data)} 条{note}：\n"
+                    + "\n".join(lines))
+
+        if name == "web_fetch":
+            # ★ 外网抓取必须走系统代理（_client 是 trust_env=False，只用于本地端点）；
+            #   故此处新建一个 trust_env=True 的短超时客户端。
+            url = str(args.get("url") or "").strip()
+            if not url:
+                return "ERROR: url 不能为空"
+            if not re.match(r"^https?://", url, re.I):
+                url = "https://" + url
+            max_chars = int(args.get("max_chars") or 4000)
+            try:
+                with httpx.Client(timeout=20, trust_env=True, follow_redirects=True,
+                                  headers={"User-Agent": "Mozilla/5.0 (O2OA-AI-Gateway)"}) as wc:
+                    r = wc.get(url)
+                    body = r.text or ""
+            except Exception as e:
+                return (f"抓取失败: {e}。\n提示：若是内网地址或未配置代理，可直接告知用户"
+                        "当前环境无法访问该地址。")
+            ctype = (r.headers.get("content-type") or "").lower()
+            if "json" in ctype:
+                text = body
+            else:
+                text = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", body)
+                text = re.sub(r"(?s)<[^>]+>", " ", text)
+                text = re.sub(r"&nbsp;?", " ", text)
+                text = re.sub(r"\s{2,}", " ", text).strip()
+            return f"HTTP {r.status_code} {url}\n" + text[:max_chars]
+
+        if name == "web_search":
+            q = str(args.get("query") or "").strip()
+            if not q:
+                return "ERROR: query 不能为空"
+            limit = int(args.get("limit") or 5)
+            # 优先用配置的搜索 MCP（search_mcp）；未配置时回落 HTML 搜索端点。
+            # ★ 引擎选择实测（2026-09-21，本机网络）：cn.bing.com=200 可用；
+            #   html.duckduckgo.com / lite.duckduckgo.com=000 不可达（国内网络），
+            #   故默认引擎改 Bing，DuckDuckGo 仅作兜底。
+            spec = CFG.get("search_mcp")
+            if spec:
+                try:
+                    defs, disp = load_external_mcp([spec])
+                    if disp:
+                        full = next(iter(disp))
+                        return call_external_tool(full, disp, {"query": q, "q": q,
+                                                              "keyword": q, "limit": limit})[:4000]
+                except Exception as e:
+                    log(f"search_mcp failed: {e}")
+            ua = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"}
+            engines = [
+                ("https://cn.bing.com/search",
+                 r'<li class="b_algo".*?<h2[^>]*>\s*<a[^>]+href="([^"]+)"[^>]*>(.*?)</a>.*?'
+                 r'(?:<p[^>]*>(.*?)</p>)?',
+                 'bing'),
+            ]
+            last_err = ""
+            for url, pat, tag in engines:
+                try:
+                    with httpx.Client(timeout=20, trust_env=True, follow_redirects=True,
+                                      headers=ua) as wc:
+                        r = wc.get(url, params={"q": q})
+                        html = r.text or ""
+                except Exception as e:
+                    last_err = f"{tag}: {e}"
+                    continue
+                items = re.findall(pat, html, re.S)
+                if not items:
+                    # 宽松回落：仅抓 <h2><a href>
+                    loose = re.findall(r'<h2[^>]*>\s*<a[^>]+href="(http[^"]+)"[^>]*>(.*?)</a>',
+                                       html, re.S)
+                    items = [(h, t, "") for h, t in loose]
+                if not items:
+                    last_err = f"{tag}: 解析不到结果"
+                    continue
+                lines = []
+                for i, tup in enumerate(items[:limit]):
+                    href, title = tup[0], tup[1]
+                    snip = tup[2] if len(tup) > 2 else ""
+                    t = re.sub(r"<[^>]+>", "", title).strip()
+                    sn = re.sub(r"<[^>]+>", "", snip).strip()
+                    lines.append(f"[{i+1}] {t}\n    {sn[:200]}\n    {href}")
+                return f"搜索“{q}”结果（{tag}）：\n" + "\n".join(lines)
+            return (f"联网搜索未返回结果（{last_err}）。可改用 web_fetch 直接抓取已知站点"
+                    "（如 https://www.weather.com.cn/weather/101010100.shtml 查北京天气），"
+                    "或如实告知用户当前无法联网检索。")
+
+        if name == "query_data":
+            table = str(args.get("table") or "").strip()
+            if not table:
+                return "ERROR: table 不能为空"
+            limit = int(args.get("limit") or 10)
+            flt = str(args.get("filter") or "").strip()
+            # 行读写统一走 designer 模块（第三批实测：surface 模块对新建表动态实体类
+            # 加载滞后会 ClassNotFoundException，designer reload/dynamic 后立即可用）
+            if flt:
+                import urllib.parse
+                where = urllib.parse.quote(flt, safe="")
+                path = f"/x_query_assemble_designer/jaxrs/table/list/{table}/row/select/where/{where}"
+            else:
+                path = f"/x_query_assemble_designer/jaxrs/table/list/{table}/row/(0)/next/{limit}"
+            code, text, _data = _o2_rest_user_or_manager(path, method="GET", user_token=user_token)
+            return f"HTTP {code}\n{text[:4000]}"
+
+        if name == "write_data":
+            # 第三批行动能力：白名单角色 + 表白名单 + 会话内二次确认 + 审计。
+            # 写回固定走服务号 manager 通道（服务号已被授权为演示应用 controller），
+            # 不用普通 user token（普通用户通常无表权限，且写回本身就是管理动作）。
+            if persona not in (CFG.get("write_personas") or ["manager"]):
+                audit_log(person, clue_id, "write_data", {"table": args.get("table")},
+                          "refused", f"persona={persona} 无写回权限")
+                return ("ERROR: 当前角色没有数据写回权限。您可以先向管理员申请，"
+                        "或让我查询数据（query_data）后口头汇总。")
+            if not CFG.get("write_enable"):
+                audit_log(person, clue_id, "write_data", {"table": args.get("table")},
+                          "refused", "write_enable=false")
+                return "ERROR: 写回功能未开启（write_enable=false），请联系管理员。"
+            table = str(args.get("table") or "").strip()
+            data = args.get("data")
+            if not table or not isinstance(data, dict) or not data:
+                return "ERROR: table 与 data（对象）不能为空"
+            action = str(args.get("action") or "create").strip().lower()
+            row_id = str(args.get("row_id") or "").strip()
+            if action not in ("create", "update"):
+                return "ERROR: action 仅支持 create / update"
+            if action == "update" and not row_id:
+                return "ERROR: update 操作需要提供 row_id"
+            wl = CFG.get("write_tables") or []
+            # 白名单归一化：模型可能用表名/别名任一写法，按 O2OA schema 归一到白名单条目
+            hit = None
+            if table in wl:
+                hit = table
+            else:
+                sch = o2_table_schema(table)
+                if sch and (sch.get("alias") in wl or sch.get("name") in wl):
+                    hit = sch.get("alias") if sch.get("alias") in wl else sch.get("name")
+            if not hit:
+                audit_log(person, clue_id, "write_data", {"table": table}, "refused",
+                          f"表不在白名单 {wl}")
+                avail = "\n".join(f"- {_schema_desc(o2_table_schema(t)) or t}" for t in wl) or "-（白名单为空）"
+                return ("ERROR: 数据表 '" + table + "' 不在写回白名单中。可写的表及字段：\n" + avail +
+                        "\n请改用上列 alias 作为 table 参数、以字段 name（英文）作为 data 的键重试"
+                        "（不要用中文描述词做键）。")
+            confirm = bool(args.get("confirm"))
+            payload = {"table": hit, "data": data, "action": action, "row_id": row_id}
+            canon = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+            pkey = f"pending_write:{clue_id or 'anon'}"
+            ttl = int(CFG.get("write_confirm_ttl") or 600)
+            if not confirm:
+                with db() as c:
+                    c.execute("INSERT OR REPLACE INTO kv(k,v) VALUES(?,?)",
+                              (pkey, json.dumps({"payload": payload, "ts": time.time()},
+                                                ensure_ascii=False)))
+                audit_log(person, clue_id, "write_data", payload, "pending",
+                          "已生成写回预案，等待用户确认")
+                act = f"更新行 {row_id}" if action == "update" else "新增一行"
+                return ("CONFIRM_REQUIRED：已生成写回预案（尚未执行）。请向用户完整复述以下内容并请求确认：\n"
+                        f"- 目标表：{hit}\n- 操作：{act}\n- 数据：{json.dumps(data, ensure_ascii=False)}\n"
+                        "用户明确同意后，再次调用 write_data 并把 confirm 置为 true"
+                        "（其余参数保持不变）；预案 10 分钟内有效。")
+            # confirm=true：校验预案存在、未超时、参数一致
+            raw = kv_get(pkey)
+            if not raw:
+                # 模型跳过第一步直接 confirm → 不硬报错死锁，按当前参数补建预案再要一次确认
+                with db() as c:
+                    c.execute("INSERT OR REPLACE INTO kv(k,v) VALUES(?,?)",
+                              (pkey, json.dumps({"payload": payload, "ts": time.time()},
+                                                ensure_ascii=False)))
+                audit_log(person, clue_id, "write_data", payload, "pending",
+                          "confirm 时无有效预案，已补建预案待二次确认")
+                act = f"更新行 {row_id}" if action == "update" else "新增一行"
+                return ("CONFIRM_REQUIRED：此前的写回预案不存在或已失效（预案必须由 write_data 工具生成，"
+                        "不可自行编造）。已按以下参数重新生成预案（尚未执行）：\n"
+                        f"- 目标表：{hit}\n- 操作：{act}\n- 数据：{json.dumps(data, ensure_ascii=False)}\n"
+                        "请把该预案完整转述给用户并请求确认；用户明确同意后，再次调用 write_data"
+                        "（confirm=true、参数不变）即可执行。")
+            try:
+                pend = json.loads(raw)
+            except Exception:
+                return "ERROR: 写回预案数据损坏，请重新发起。"
+            if time.time() - float(pend.get("ts") or 0) > ttl:
+                with db() as c:
+                    c.execute("DELETE FROM kv WHERE k=?", (pkey,))
+                audit_log(person, clue_id, "write_data", payload, "refused", "确认超时")
+                return "ERROR: 写回预案已超时（10 分钟），请重新发起确认流程。"
+            pp = pend.get("payload") or {}
+            pcanon = json.dumps({k: pp.get(k) for k in ("table", "data", "action", "row_id")},
+                                sort_keys=True, ensure_ascii=False)
+            if canon != pcanon:
+                audit_log(person, clue_id, "write_data", payload, "refused",
+                          "确认后参数与预案不一致")
+                return ("ERROR: 本次调用参数与用户已确认的预案不一致，已拒绝执行。"
+                        "请保持参数不变重试，或重新发起确认流程。")
+            # 执行写回（designer 模块 row 接口；动态实体类在该模块已热加载）
+            if action == "create":
+                path = f"/x_query_assemble_designer/jaxrs/table/{hit}/row"
+                code, text = _o2_rest(path, method="POST", body=data)
+            else:
+                path = f"/x_query_assemble_designer/jaxrs/table/{hit}/row/{row_id}"
+                code, text = _o2_rest(path, method="PUT", body=data)
+            okflag = code in (200, 201, 204)
+            audit_log(person, clue_id, "write_data", payload,
+                      "executed" if okflag else "failed", f"HTTP {code} {text[:300]}")
+            with db() as c:
+                c.execute("DELETE FROM kv WHERE k=?", (pkey,))
+            if okflag:
+                act = f"更新行 {row_id}" if action == "update" else "新增一行"
+                return (f"✅ 写回成功（HTTP {code}）：已向表 '{table}' {act}。"
+                        f"数据：{json.dumps(data, ensure_ascii=False)}。"
+                        "请向用户确认完成，并提示该操作已记录审计日志。")
+            return f"ERROR: 写回失败（HTTP {code}）：{text[:600]}"
+
+        if name == "skills_list":
+            items = _list_skills()
+            if not items:
+                return "当前没有已注册的技能。可用 skills_create 创建一个可复用的流程。"
+            return "\n".join(f"- {i['name']}：{i['description']}" for i in items)
+
+        if name == "skills_get":
+            n = str(args.get("name") or "").strip()
+            if not n:
+                return "ERROR: name 不能为空"
+            full = _get_skill(n)
+            return full or f"ERROR: 技能 '{n}' 不存在"
+
+        if name == "skills_create":
+            n = str(args.get("name") or "").strip()
+            d = str(args.get("description") or "").strip()
+            c = str(args.get("content") or "").strip()
+            if not n:
+                return "ERROR: name 不能为空"
+            p = _create_skill(n, d, c)
+            return f"已创建技能 '{n}' -> {p.name}"
+
+        if name == "skills_run":
+            n = str(args.get("name") or "").strip()
+            if not n:
+                return "ERROR: name 不能为空"
+            return _run_skill(n)
+
+        if name == "kb_save":
+            title = str(args.get("title") or "").strip()
+            content = str(args.get("content") or "").strip()
+            if not title or not content:
+                return "ERROR: title 与 content 不能为空"
+            category = str(args.get("category") or "智能助手沉淀").strip()[:50]
+            public = True if args.get("public") is None else bool(args.get("public"))
+            doc_id = uuid.uuid4().hex
+            if public:
+                perm = "[]"  # 空 permission 列表 = 所有用户可见
+            else:
+                perm = json.dumps([person or "（匿名）"], ensure_ascii=False)
+            with db() as c:
+                c.execute("INSERT INTO docs(id,title,category,content,creator_person,"
+                          "creator_unit,question_enable,permission,meta,updated) "
+                          "VALUES(?,?,?,?,?,?,0,?,?,?)",
+                          (doc_id, title[:200], category, content, person or "", "",
+                           perm, json.dumps({"source": "kb_save", "tags": args.get("tags") or []},
+                                            ensure_ascii=False), time.time()))
+            reindex_doc(doc_id)
+            scope = "全体用户可见" if public else f"仅 {person or '本人'} 及管理员可见"
+            return (f"已保存到知识库：《{title[:60]}》（{len(content)} 字，{scope}），文档ID {doc_id}，"
+                    f"已自动分块向量化。之后用 kb_search 即可检索到。")
+
+        if name == "feedback":
+            content = str(args.get("content") or "").strip()
+            if not content:
+                return "ERROR: content 不能为空"
+            kind = str(args.get("kind") or "suggestion").strip().lower()
+            if kind not in ("like", "dislike", "suggestion"):
+                kind = "suggestion"
+            fid = uuid.uuid4().hex[:12]
+            with db() as c:
+                c.execute("INSERT INTO feedbacks(id,person,kind,content,created_at,status) "
+                          "VALUES(?,?,?,?,?,'open')",
+                          (fid, person or "（未识别）", kind, content[:2000],
+                           time.strftime("%Y-%m-%d %H:%M:%S")))
+            return (f"已记录反馈（编号 {fid}，类型 {kind}），管理员可在后台查看并跟进。"
+                    "请向用户表达感谢。")
+
+    except Exception as e:
+        return f"BUILTIN_TOOL_ERROR: {e}"
+    return None
+
+
+def builtin_tool_defs():
+    """转成 OpenAI tools 格式（与 MCP 工具同构，便于合并）。"""
+    out = []
+    for t in BUILTIN_TOOLS:
+        out.append({"type": "function", "function": {
+            "name": t["name"],
+            "description": t["description"],
+            "parameters": t["parameters"],
+        }})
+    return out
+
+
+# ---------------------------------------------------------------- 工具执行（HTTP 型 MCP）
+def exec_tool(mcp, args):
+    ho = (mcp.get("httpOption") or {})
+    url = ho.get("url") or ""
+    for k, v in (args or {}).items():
+        url = url.replace("${" + k + "}", str(v))
+    method = (ho.get("method") or "GET").upper()
+    headers = {}
+    for h in (ho.get("headers") or []):
+        name = h.get("name") or h.get("key")
+        if not name:
+            continue
+        val = str(h.get("value") or h.get("val") or "")
+        for k, v in (args or {}).items():
+            val = val.replace("${" + k + "}", str(v))
+        headers[name] = val
+    body = ho.get("body") or ho.get("requestBody")
+    if isinstance(body, str):
+        for k, v in (args or {}).items():
+            body = body.replace("${" + k + "}", json.dumps(v, ensure_ascii=False) if isinstance(v, str) else str(v))
+    try:
+        r = _client.request(method, url, headers=headers,
+                            content=body if isinstance(body, str) else None,
+                            json=body if isinstance(body, dict) else None,
+                            timeout=60)
+        text = r.text
+        return text[:8000] if len(text) > 8000 else text
+    except Exception as e:
+        return f"TOOL_EXEC_ERROR: {e}"
+
+
+def safe_name(name):
+    return re.sub(r"[^A-Za-z0-9_.-]", "_", name or "tool")[:40]
+
+
+# ---------------------------------------------------------------- O2OA 响应包裹
+def ok(data=None, count=None):
+    w = {"type": "success"}
+    if data is not None:
+        w["data"] = data
+    if count is not None:
+        w["count"] = count
+    return w
+
+
+def check_token(request: Request) -> bool:
+    auth = request.headers.get("authorization") or ""
+    return auth.endswith(CFG["token"])
+
+
+# ---------------------------------------------------------------- FastAPI
+app = FastAPI(title="o2-agent-gateway", docs_url=None, redoc_url=None)
+
+
+@app.middleware("http")
+async def _log_middleware(request, call_next):
+    t0 = time.time()
+    resp = await call_next(request)
+    log(f"{request.method} {request.url.path} -> {resp.status_code} ({time.time()-t0:.2f}s)")
+    return resp
+
+
+@app.get("/infra-auth/who")
+async def who():
+    return {"code": 200, "success": True, "data": {"user": "o2-agent-gateway", "service": "local"}}
+
+
+@app.get("/app/api/infra-auth/who")
+async def who2():
+    return await who()
+
+
+# ---------- generate（对话核心，SSE） ----------
+def sse_frame(name: str, data: str) -> str:
+    if name == "message":
+        return f"data: {data}\n\n"
+    return f"event: {name}\ndata: {data}\n\n"
+
+
+def stream_openai(messages, extra=None):
+    """转发 Bionic 流式，产出 (data_str|None, done bool)"""
+    payload = {"model": CFG["chat_model"], "stream": True, "messages": messages,
+               "reasoning_effort": "none"}
+    payload.update(extra or {})
+    with _client.stream("POST", f"{CFG['bionic_base']}/v1/chat/completions",
+                        headers=auth_hdr(), json=payload) as r:
+        for line in r.iter_lines():
+            if not line or not line.startswith("data:"):
+                continue
+            d = line[5:].strip()
+            if d == "[DONE]":
+                yield None, True
+                return
+            yield d, False
+
+
+def build_history(clue_id):
+    msgs = []
+    if clue_id:
+        with db() as c:
+            rows = c.execute(
+                "SELECT v FROM kv WHERE k LIKE ?", (f"hist:{clue_id}:%",)).fetchall()
+        items = [json.loads(r[0]) for r in rows]
+        items.sort(key=lambda x: x.get("t", 0))
+        for it in items[-10:]:
+            msgs.append({"role": "user", "content": it.get("input", "")})
+            msgs.append({"role": "assistant", "content": it.get("content", "")})
+    return msgs
+
+
+@app.post("/ai-gateway-completion/generate")
+async def generate(request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    wi = await request.json()
+    gtype = (wi.get("generateType") or "auto").lower()
+    clue_id = wi.get("clueId") or ""
+    # ★ 关键兜底：前端 sessionId 初始为空时首帧带空 clueId，
+    #   若不加兜底，clue_touch/save_history/completion_add 全部 if not clue_id: return，
+    #   导致历史记录永远存不下来（鸡生蛋死循环：前端靠回传 clueId 回填 sessionId，
+    #   但回传的正是其传来的空串 → 永远空）。由网关在首帧生成稳定会话 id 打破死循环。
+    if not clue_id:
+        clue_id = "chat-" + str(uuid.uuid4())
+    inp = wi.get("input") or ""
+    perms = wi.get("permissionList") or []
+    person = (wi.get("person") or "").strip()  # 服务端 ActionChat 实填（effectivePerson），前端不可伪造
+    usertoken = (wi.get("token") or "").strip()  # 服务端实填的用户会话 token，REST 层按其鉴权
+    refs = wi.get("referenceIdList") or []
+    # ★ 前端悬浮窗只发 auto（默认）与 searchKnowledgeBase（知识库模式），mcp/chat 选项已注释。
+    #   auto → 工具循环（模型自主决定是否调用工具）；
+    #   searchKnowledgeBase → RAG 知识库问答（按服务端计算的 permissionList 过滤）。
+    if gtype == "auto":
+        gtype = "mcp"
+    elif gtype in ("searchknowledgebase", "search_knowledge_base"):
+        gtype = "rag"
+    # 场景上下文：前端在 input 前缀注入 [场景:...]（ActionChat 协议无场景字段），
+    # 网关剥离后并入 system，不污染用户提问。
+    scene = ""
+    m_scene = re.match(r"^\s*[【\[]\s*场景\s*[:：](.+?)[】\]]\s*", inp)
+    if m_scene:
+        scene = m_scene.group(1).strip()
+        inp = inp[m_scene.end():]
+
+    # 第三批：角色人设判定 + 当前人员 DN（会话归属）；一次 REST 同时取回
+    roles, udn, uname = o2_user_info(usertoken)
+    persona = persona_from_roles(roles) if usertoken else ""
+    if persona:
+        log(f"persona={persona} user={person or uname or '-'}")
+
+    # 会话落库：保证 clue 列表里立刻出现该会话（标题取首问；带 DN 供模块按人员过滤）
+    clue_touch(clue_id, person or uname, _title_of(inp) if inp else None, person_dn=udn)
+
+    async def gen():
+        yield sse_frame("extend.status", json.dumps({"generateType": gtype, "clueId": clue_id, "id": clue_id},
+                                                   ensure_ascii=False))
+        content_parts = []
+        # 注意：Qwen3.5 等模型的 chat template 强制要求 system 必须位于最前且至多一条，
+        # 因此 RAG 上下文一律【合并进首条 system】，绝不新增第二条 system 消息。
+        sys_content = "你是 O2OA 智能助手，用简体中文回答，条理清晰。"
+        if person:
+            sys_content += (f"\n当前登录用户：{person}。涉及'我的待办/我提交的/我的'类请求时，"
+                            "一律按该用户身份处理，不得涉及其他用户的私人数据。")
+        if scene:
+            sys_content += (f"\n用户当前页面场景：{scene}。可据此理解问题所指的对象；"
+                            "不要在回答中复述该场景标记本身。")
+        if persona and persona in PERSONAS:
+            _pn, _pt = PERSONAS[persona]
+            sys_content += (f"\n\n【角色人设】你的当前工作人设是“{_pn}”。{_pt}"
+                            "请在回答的语气、详略与建议视角上始终贴合该人设。")
+
+        # 附件 / RAG 检索
+        want_rag = gtype == "rag" or refs
+        if want_rag and inp:
+            allow = visible_docs(perms)
+            scope = [d for d in refs if d in allow] if refs else list(allow)
+            rq = rewrite_query(inp) if CFG.get("rewrite_enable") else inp
+            hits = rag_retrieve(rq, scope or None)
+            if hits:
+                with db() as c:
+                    titles = dict(c.execute("SELECT id,title FROM docs").fetchall())
+                ctx = "\n\n".join(
+                    f"【资料{i+1}｜{titles.get(d,'')}】\n{t}" for i, (_, d, t) in enumerate(hits))
+                sys_content += ("\n\n以下是知识库检索到的资料，回答时优先依据这些资料；"
+                                "若资料与问题无关可忽略并如实说明：\n\n" + ctx)
+            elif refs:
+                yield sse_frame("message", json.dumps(
+                    {"choices": [{"delta": {"content": "（未在指定附件中检索到相关内容，以下为模型直接回答）\n"}}]},
+                    ensure_ascii=False))
+
+        messages = [{"role": "system", "content": sys_content}]
+        messages += build_history(clue_id)
+
+        answered = False
+        if gtype == "mcp":
+            answered = from_mcp_loop(messages, inp, perms, person, usertoken,
+                                     persona=persona, clue_id=clue_id)
+
+        # ---- 用户消息：有附件则组装成多模态 content 数组 ----
+        # ★ 图片只能进 user 消息（Qwen3.5 模板对 system 含图会 raise_exception）
+        ref_parts, used_vision, ref_note = ([], False, "")
+        if refs:
+            ref_parts, used_vision, ref_note = build_ref_content(refs)
+            if ref_note:
+                log(f"refs assembled: vision={used_vision} {ref_note}")
+
+        if ref_parts:
+            if ref_note:
+                yield sse_frame("message", json.dumps(
+                    {"choices": [{"delta": {"content": ref_note + "\n"}}]}, ensure_ascii=False))
+            user_content = [{"type": "text", "text": inp}] + ref_parts
+            messages.append({"role": "user", "content": user_content})
+        else:
+            messages.append({"role": "user", "content": inp})
+
+        try:
+            extra = {"tools": []} if gtype == "mcp" else None
+            if gtype == "mcp":
+                # mcp 模式：先缓冲完整回答，检测 <tool_call> 文本泄漏后再下发
+                # （下发给 O2OA 前端后无法撤回，必须先净场）
+                if answered:
+                    # 模型一轮内未调工具 → 最后一条 assistant 即最终回答，省一次重复生成
+                    full = next((m.get("content") or "" for m in reversed(messages)
+                                 if m.get("role") == "assistant"), "")
+                    if not full or _leaked_tool_xml(full):
+                        full = await _final_answer_mcp(messages, extra)
+                else:
+                    full = await _final_answer_mcp(messages, extra)
+                content_parts.append(full)
+                if full:
+                    yield sse_frame("message", json.dumps(
+                        {"choices": [{"delta": {"content": full}}]}, ensure_ascii=False))
+            else:
+                async for data, done in stream_sync_gen(messages, extra):
+                    if done:
+                        break
+                    content_parts.append(pic_content(data))
+                    yield sse_frame("message", data)
+        except Exception as e:
+            log(f"generate stream error: {e}")
+        yield "data: [DONE]\n\n"
+        final_text = "".join(content_parts)
+        save_history(clue_id, inp, final_text)          # 内部上下文（build_history 用）
+        completion_add(clue_id, person or uname, inp, final_text,  # 前端历史记录（按会话读取）
+                       "chat", refs, person_dn=udn)
+
+    return StreamingResponse(gen(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+async def stream_sync_gen(messages, extra=None):
+    """httpx 同步流在 async 里的简单桥（低并发场景够用）"""
+    import anyio
+    it = stream_openai(messages, extra)
+    while True:
+        try:
+            item = await anyio.to_thread.run_sync(lambda: next_gen(it))
+        except StopIteration:
+            return
+        if item is None:
+            return
+        yield item
+
+
+def next_gen(it):
+    try:
+        return next(it)
+    except StopIteration:
+        return None
+
+
+def pic_content(data_str):
+    try:
+        j = json.loads(data_str)
+        ch = (j.get("choices") or [{}])[0]
+        return (((ch.get("delta") or {}).get("content")) or "")
+    except Exception:
+        return ""
+
+
+def _strip_tool_xml(text):
+    """剥离模型泄漏的 <tool_call>/<function=...> 工具调用文本块。"""
+    text = re.sub(r"<tool_call>[\s\S]*?</tool_call>", "", text)
+    text = re.sub(r"<tool_call>[\s\S]*$", "", text)   # 未闭合
+    text = re.sub(r"<function=[\s\S]*$", "", text)    # 未闭合的 function 块
+    return text.replace("</tool_call>", "").replace("<tool_call>", "").strip()
+
+
+def _leaked_tool_xml(s):
+    return ("<tool_call" in s) or ("<function=" in s)
+
+
+async def _final_answer_mcp(messages, extra):
+    """mcp 模式最终回答：
+    1. 先缓冲整段（不逐帧转发 O2OA，避免泄漏后无法撤回）；
+    2. 检出 <tool_call> 文本泄漏 → 追加强指令重试一次；
+    3. 仍泄漏 → 剥离 XML；剥完为空 → 回退为最后一个工具结果摘要。"""
+    import anyio
+
+    async def collect(msgs):
+        buf = []
+        last_err = None
+        for attempt, wait in enumerate((0, 3, 15)):   # 后端瞬时 400/断流 → 退避重试
+            if wait:
+                await anyio.sleep(wait)
+            try:
+                buf = []
+                async for data, done in stream_sync_gen(msgs, extra):
+                    if done:
+                        break
+                    buf.append(pic_content(data))
+                last_err = None
+                break
+            except Exception as e:
+                last_err = e
+        if last_err is not None:
+            raise last_err
+        return "".join(buf)
+
+    full = await collect(messages)
+    if _leaked_tool_xml(full):
+        log("final answer leaked tool-call XML, retry once with strict instruction")
+        retry = messages + [{"role": "user", "content":
+            "请直接输出最终中文回答本身（不要再调用工具，不要输出任何 XML 或工具调用语法）。"}]
+        try:
+            full = await collect(retry)
+        except Exception as e:
+            log(f"final retry error: {e}")
+            full = ""
+    if _leaked_tool_xml(full):
+        full = _strip_tool_xml(full)
+    if not full.strip():
+        last_tool = next((m.get("content") for m in reversed(messages)
+                          if m.get("role") == "tool"), "")
+        full = ("（工具调用已完成。工具返回摘要：\n" + str(last_tool)[:600] +
+                "\n）如需更完整的说明请继续提问。")
+    return full
+
+
+def from_mcp_loop(messages, inp, perms, person="", user_token="", persona="", clue_id=""):
+    """mcp 模式：函数调用循环（内部非流式），结束后把上下文留在 messages 里供最终流式回答。
+    返回 True 表示模型一轮内未调工具、最后一条 assistant 已是完整最终回答（可跳过二次生成）。
+
+    ★ 工具来源有三类，合并后一起给模型：
+       1. 内置本地工具（BUILTIN_TOOLS，含 skills_* 自主技能）—— 网关自带，开箱可用
+       2. O2OA 配置的 HTTP 型 MCP 工具（kv 表 mcp:*）—— 用户在前端配的
+       3. 标准 MCP 生态工具（config.mcp_servers，stdio/HTTP JSON-RPC）—— 名字加前缀
+    ★ 第三批：persona 非空时按 persona_tools 白名单过滤工具可见性（管理员不限）。"""
+    with db() as c:
+        rows = c.execute("SELECT v FROM kv WHERE k LIKE 'mcp:%'").fetchall()
+    tools_cfg = [json.loads(r[0]) for r in rows if json.loads(r[0]).get("enable", True)]
+
+    # 内置工具（始终提供）
+    tools = builtin_tool_defs()
+    builtin_names = set(_BUILTIN_SPEC)
+
+    # O2OA 的 HTTP 型 MCP 工具（名字与内置冲突时以内置优先）
+    for m in tools_cfg:
+        nm = safe_name(m.get("name"))
+        if nm in builtin_names:
+            log(f"mcp tool '{nm}' 与内置工具同名，跳过")
+            continue
+        props, req = {}, []
+        for p in (m.get("mcpParameterList") or []):
+            props[p.get("name")] = {"type": p.get("type") or "string",
+                                    "description": p.get("desc") or ""}
+            if p.get("required"):
+                req.append(p.get("name"))
+        tools.append({"type": "function", "function": {
+            "name": nm, "description": m.get("desc") or m.get("displayName") or "",
+            "parameters": {"type": "object", "properties": props, "required": req}}})
+
+    # 标准 MCP 生态工具（stdio/HTTP JSON-RPC），名字前缀 {server}__{tool} 天然避冲突
+    ext_defs, ext_dispatch = load_external_mcp(CFG.get("mcp_servers") or [])
+    tools += ext_defs
+
+    # 第三批：persona 工具白名单（对内置与外部工具统一过滤；manager=None 不限）
+    wl = (CFG.get("persona_tools") or {}).get(persona)
+    if wl is not None:
+        allowed = set(wl)
+        before = len(tools)
+        tools = [t for t in tools if t["function"]["name"] in allowed]
+        if before != len(tools):
+            log(f"persona '{persona or '-'}' tool whitelist: {before} -> {len(tools)}")
+
+    if not tools:
+        messages.append({"role": "system", "content": "（当前没有可用工具，请直接回答）"})
+        return
+
+    tool_names = ", ".join(t["function"]["name"] for t in tools)
+    sys_msg = ("你可以调用工具完成用户任务。可用工具：" + tool_names +
+               "。涉及当前时间、算术、内部资料时必须调用工具，不要凭记忆回答。")
+    if person:
+        sys_msg += (f"\n【身份与权限边界】当前用户：{person}。待办等查询类工具已按该身份过滤；"
+                    "你只能代表该用户查询与操作，不得冒用、查询或替他人处理数据；"
+                    "知识库写入默认以该用户署名。")
+    # 第三批：具备写回权限的角色，主动注入白名单表字典（模型不必猜表名/字段名）
+    if persona in (CFG.get("write_personas") or ["manager"]) and CFG.get("write_enable"):
+        tbls = []
+        for t in (CFG.get("write_tables") or []):
+            sch = o2_table_schema(t)
+            if sch:
+                tbls.append("- " + _schema_desc(sch))
+        if tbls:
+            sys_msg += ("\n\n【数据写回能力】你可以帮用户向以下数据表写入数据（write_data 工具；"
+                        "必须先不带 confirm 生成预案，经用户明确确认后再 confirm=true 执行）：\n"
+                        + "\n".join(tbls)
+                        + "\n注意：data 的键必须用字段的英文 name（如 productName），不要用中文描述词。"
+                        "★ 写回流程必须通过 write_data 工具两步完成，严禁跳过工具调用、直接向用户"
+                        "输出自编的'预案'文本——那不是真的预案，confirm 时会被系统拒绝。")
+    # ★ 不新增第二条 system（Qwen3.5 模板限制），改写首条 system 追加说明
+    if messages and messages[0].get("role") == "system":
+        base_sys = messages[0].get("content") or ""
+        msg_with_tools = [{"role": "system", "content": base_sys + "\n\n" + sys_msg}] + messages[1:]
+    else:
+        msg_with_tools = [{"role": "system", "content": sys_msg}] + messages
+    msg_with_tools.append({"role": "user", "content": inp})
+
+    max_turns = int(CFG.get("mcp_max_turns") or 8)
+    deadline = time.time() + float(CFG.get("mcp_timeout") or 180)
+    answered = False  # 模型一轮内未调任何工具 → 该回答即最终回答
+    for turn in range(max_turns):
+        if time.time() > deadline:
+            log(f"mcp loop timeout at turn {turn}")
+            break
+        # 后端偶发 400（模型换载/繁忙窗口，实测 qwen3.8-27b@LM Studio）→ 重试而非放弃
+        m = None
+        for attempt in range(3):
+            try:
+                r = _client.post(f"{CFG['bionic_base']}/v1/chat/completions",
+                                 headers=auth_hdr(),
+                                 json={"model": CFG["chat_model"], "messages": msg_with_tools,
+                                       "tools": tools})
+                if r.status_code != 200:
+                    log(f"mcp loop http {r.status_code} (attempt {attempt+1}): {r.text[:300]}")
+                    r.raise_for_status()
+                m = r.json()["choices"][0]["message"]
+                break
+            except Exception as e:
+                if attempt < 2:
+                    time.sleep(2 + attempt * 2)
+        if m is None:
+            log("mcp loop error: model call failed after retries")
+            break
+        calls = m.get("tool_calls") or []
+        if not calls:
+            msg_with_tools.append({"role": "assistant", "content": m.get("content") or ""})
+            answered = True
+            break
+        msg_with_tools.append({"role": "assistant", "content": m.get("content") or "",
+                               "tool_calls": calls})
+        for call in calls:
+            fname = call["function"]["name"]
+            try:
+                fargs = json.loads(call["function"].get("arguments") or "{}")
+            except Exception:
+                fargs = {}
+            # 先查内置，再查标准 MCP，最后查 O2OA HTTP 型 MCP
+            if fname in _BUILTIN_SPEC:
+                result = exec_builtin(fname, fargs, person=person, perms=perms,
+                                      user_token=user_token, persona=persona, clue_id=clue_id)
+            elif fname in ext_dispatch:
+                result = call_external_tool(fname, ext_dispatch, fargs)
+            else:
+                target = next((t for t in tools_cfg if safe_name(t.get("name")) == fname), None)
+                result = exec_tool(target, fargs) if target else f"unknown tool {fname}"
+            result = "" if result is None else str(result)
+            log(f"tool {fname} user={person or 'anonymous'} args={fargs} -> {result[:120]}")
+            msg_with_tools.append({"role": "tool", "tool_call_id": call.get("id") or fname,
+                                   "content": result[:8000]})
+    # ★ 工具循环结束后，必须明确告诉模型"停止调用工具、直接作答"。
+    #   否则最终流式请求未带 tools 参数时，模型会把 tool_call 语法当成纯文本吐出来。
+    if not answered:
+        if msg_with_tools and msg_with_tools[0].get("role") == "system":
+            msg_with_tools[0]["content"] = (msg_with_tools[0].get("content") or "") + (
+                "\n\n【系统指令】工具调用已结束。现在请直接根据上面工具返回的结果，"
+                "用自然语言完整回答用户的问题。不要输出任何 XML/JSON 格式的工具调用文本，"
+                "不要再请求调用工具。")
+        # 双保险：以"最后一条 user 指令"再压一次（部分模型对 system 后缀不敏感，
+        # 但会严格服从最近的 user 指令；Qwen3.8-27B 实测会复发 <tool_call> 文本泄漏）
+        msg_with_tools.append({"role": "user", "content":
+            "（系统提示）所有工具调用均已完成并返回结果。请立即基于以上结果直接输出面向用户的"
+            "最终中文回答；严禁再输出 <tool_call>、<function= 等任何工具调用语法。"})
+    messages.clear()
+    messages.extend(msg_with_tools)
+    return answered
+
+
+
+def save_history(clue_id, inp, content):
+    if not clue_id:
+        return
+    with db() as c:
+        k = f"hist:{clue_id}:{int(time.time() * 1000)}"
+        c.execute("INSERT INTO kv(k,v) VALUES(?,?)",
+                  (k, json.dumps({"t": time.time(), "input": inp, "content": content},
+                                 ensure_ascii=False)))
+
+
+# ---------- 知识库索引 ----------
+@app.post("/idx-gateway-doc/update")
+async def idx_update(request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    d = await request.json()
+    doc_id = d.get("id") or str(uuid.uuid4())
+    with db() as c:
+        c.execute("""INSERT INTO docs(id,title,category,content,creator_person,creator_unit,
+                     question_enable,permission,meta,updated)
+                     VALUES(?,?,?,?,?,?,?,?,?,?)
+                     ON CONFLICT(id) DO UPDATE SET title=excluded.title, category=excluded.category,
+                     content=excluded.content, creator_person=excluded.creator_person,
+                     creator_unit=excluded.creator_unit, question_enable=excluded.question_enable,
+                     permission=excluded.permission, meta=excluded.meta, updated=excluded.updated""",
+                  (doc_id, d.get("title") or "", d.get("category") or "", d.get("content") or "",
+                   d.get("creatorPerson") or "", d.get("creatorUnit") or "",
+                   1 if d.get("questionEnable") else 0,
+                   json.dumps(d.get("permissionList") or [], ensure_ascii=False),
+                   json.dumps({k: str(v) for k, v in d.items() if k not in
+                               ("permissionList", "content")}, ensure_ascii=False),
+                   time.time()))
+    reindex_doc(doc_id)
+    return ok(d)
+
+
+@app.post("/idx-gateway-doc/list/paging/{page}/size/{size}")
+async def idx_list(page: int, size: int, request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    body = await request.json() if request.headers.get("content-length", "0") not in ("", "0") else {}
+    search = (body or {}).get("search") or ""
+    with db() as c:
+        if search:
+            rows = c.execute(
+                "SELECT meta FROM docs WHERE title LIKE ? OR category LIKE ? OR content LIKE ? "
+                "ORDER BY updated DESC LIMIT ? OFFSET ?",
+                (f"%{search}%", f"%{search}%", f"%{search}%", size, (page - 1) * size)).fetchall()
+            total = c.execute("SELECT COUNT(*) FROM docs WHERE title LIKE ? OR category LIKE ? "
+                              "OR content LIKE ?",
+                              (f"%{search}%", f"%{search}%", f"%{search}%")).fetchone()[0]
+        else:
+            rows = c.execute("SELECT meta FROM docs ORDER BY updated DESC LIMIT ? OFFSET ?",
+                             (size, (page - 1) * size)).fetchall()
+            total = c.execute("SELECT COUNT(*) FROM docs").fetchone()[0]
+    data = []
+    for (meta,) in rows:
+        try:
+            d = json.loads(meta)
+        except Exception:
+            continue
+        d.pop("permissionList", None)
+        data.append(d)
+    return ok(data, total)
+
+
+@app.post("/idx-gateway-doc/delete")
+async def idx_delete(request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    body = await request.json() if request.headers.get("content-length", "0") not in ("", "0") else {}
+    flag = (body or {}).get("id") or (body or {}).get("flag") or ""
+    with db() as c:
+        c.execute("DELETE FROM docs WHERE id=?", (flag,))
+        c.execute("DELETE FROM chunks WHERE doc_id=?", (flag,))
+    return ok(True)
+
+
+@app.post("/gateway-doc/upload/{doc_id}/mode/{mode}")
+async def doc_upload(doc_id: str, mode: str, request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    ctype = request.headers.get("content-type", "")
+    if "multipart/form-data" not in ctype:
+        return JSONResponse({"type": "error", "message": "expect multipart"}, status_code=400)
+    from fastapi import Form  # noqa
+    boundary = ctype.split("boundary=")[-1].encode()
+    raw = await request.body()
+
+    def parse_multipart(raw_body, bnd):
+        parts = []
+        for seg in raw_body.split(b"--" + bnd):
+            seg = seg.strip(b"\r\n")
+            if not seg or seg == b"--":
+                continue
+            if b"\r\n\r\n" not in seg:
+                continue
+            head, _, content = seg.partition(b"\r\n\r\n")
+            content = content.rsplit(b"\r\n", 1)[0]
+            fname = ""
+            for hl in head.split(b"\r\n"):
+                if hl.lower().startswith(b"content-disposition"):
+                    m = re.search(rb'filename="([^"]*)"', hl)
+                    if m:
+                        fname = m.group(1).decode("utf-8", "ignore")
+            parts.append((fname, content))
+        return parts
+
+    texts = []
+    for fname, content in parse_multipart(raw, boundary):
+        ext = os.path.splitext(fname)[1].lower()
+        texts.append((fname, extract_text_index(ext, content)))
+    merged = "\n\n".join(f"【附件：{fn}】\n{tx}" for fn, tx in texts if tx)
+    with db() as c:
+        row = c.execute("SELECT id FROM docs WHERE id=?", (doc_id,)).fetchone()
+        if row:
+            c.execute("UPDATE docs SET content=COALESCE(content,'')||?, updated=? WHERE id=?",
+                      ("\n\n" + merged, time.time(), doc_id))
+        else:
+            c.execute("""INSERT INTO docs(id,title,category,content,permission,meta,updated)
+                         VALUES(?,?,?,?,?,?,?)""",
+                      (doc_id, f"附件集{doc_id[:8]}", "attachment", merged, "[]", "{}", time.time()))
+    reindex_doc(doc_id)
+    return ok({"id": doc_id, "files": [fn for fn, _ in texts]})
+
+
+def extract_text_index(ext, raw: bytes) -> str:
+    """文档索引（/idx-gateway-*）侧的附件文本提取。
+
+    命名说明：不要叫 extract_text —— 上面已有一个同名的 3 参数版本
+    （对话附件用），Python 后定义者会覆盖前者，曾因此踩坑报
+    "extract_text() takes 2 positional arguments but 3 were given"。
+
+    与对话侧的 extract_text(data, ext, name) 区别：这里必须返回文本（"" 表示空），
+    因为索引流水线会把它入库分块。导入的附件常常是扫描件 PDF / 截图，
+    所以 PDF 走"文本层优先，空则 OCR"；图片一律走 OCR。
+    """
+    try:
+        if ext in (".txt", ".md", ".csv", ".json", ""):
+            return raw.decode("utf-8", "ignore")
+        if ext == ".docx":
+            import io
+            from docx import Document
+            doc = Document(io.BytesIO(raw))
+            return "\n".join(p.text for p in doc.paragraphs if p.text.strip())
+        if ext == ".xlsx":
+            import io
+            from openpyxl import load_workbook
+            wb = load_workbook(io.BytesIO(raw), read_only=True)
+            out = []
+            for ws in wb.worksheets:
+                for row in ws.iter_rows(values_only=True):
+                    out.append("\t".join("" if v is None else str(v) for v in row))
+            return "\n".join(out)
+        if ext == ".pdf":
+            import io
+            from pypdf import PdfReader
+            reader = PdfReader(io.BytesIO(raw))
+            text = "\n".join((pg.extract_text() or "") for pg in reader.pages).strip()
+            # 文本层够用就直接返回（扫描件 PDF 这里会几乎为空）
+            if len(text) >= max(30, len(reader.pages) * 30):
+                return text
+            # 文本层稀薄 -> 交给 OCR 服务做渲染识别
+            ocr = CFG.get("ocr_base") or ""
+            if ocr:
+                import base64
+                try:
+                    r = _client.post(f"{ocr}/ocr", timeout=600,
+                                     json={"file_b64": base64.b64encode(raw).decode("ascii"),
+                                           "filename": "index.pdf"})
+                    if r.status_code == 200:
+                        j = r.json() or {}
+                        ocr_txt = (j.get("text") or "").strip()
+                        if ocr_txt:
+                            log(f"idx pdf OCR fallback: {len(ocr_txt)} chars "
+                                f"(text-layer only {len(text)})")
+                            return ocr_txt
+                    else:
+                        log(f"idx ocr pdf -> HTTP {r.status_code}")
+                except Exception as e:
+                    log(f"idx ocr pdf err: {e}")
+            return text
+        # 图片：走 OCR
+        if ext in (".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp", ".tif", ".tiff"):
+            ocr = CFG.get("ocr_base") or ""
+            if ocr:
+                import base64
+                r = _client.post(f"{ocr}/ocr", timeout=300,
+                                 json={"file_b64": base64.b64encode(raw).decode("ascii"),
+                                       "filename": f"index{ext}"})
+                if r.status_code == 200:
+                    return ((r.json() or {}).get("text") or "").strip()
+                log(f"idx ocr image -> HTTP {r.status_code}")
+            return ""
+        return raw.decode("utf-8", "ignore")
+    except Exception as e:
+        log(f"extract {ext} error: {e}")
+        return ""
+
+
+# ---------- 通用 CRUD：endpoint / mcp / completion / clue ----------
+# 说明：clue / completion 的【列表】与【删除】需要按会话聚合、级联清理，
+# 故单独实现（list_routes=False / delete_routes=False 时跳过通用版注册）。
+def crud_routes(prefix, store_key, list_routes=True, delete_routes=True):
+    async def create(request: Request):
+        if not check_token(request):
+            return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+        d = await request.json()
+        d.setdefault("id", str(uuid.uuid4()))
+        d.setdefault("createDateTime", time.strftime("%Y-%m-%d %H:%M:%S"))
+        with db() as c:
+            c.execute("INSERT INTO kv(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v",
+                      (f"{store_key}:{d['id']}", json.dumps(d, ensure_ascii=False)))
+        return ok(d)
+
+    async def update(flag: str, request: Request):
+        if not check_token(request):
+            return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+        d = await request.json()
+        d["id"] = flag
+        d.setdefault("updateDateTime", time.strftime("%Y-%m-%d %H:%M:%S"))
+        with db() as c:
+            c.execute("INSERT INTO kv(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v",
+                      (f"{store_key}:{flag}", json.dumps(d, ensure_ascii=False)))
+        return ok(d)
+
+    async def get_one(flag: str):
+        with db() as c:
+            row = c.execute("SELECT v FROM kv WHERE k=?", (f"{store_key}:{flag}",)).fetchone()
+        return ok(json.loads(row[0]) if row else None)
+
+    async def delete_one(flag: str):
+        with db() as c:
+            c.execute("DELETE FROM kv WHERE k=?", (f"{store_key}:{flag}",))
+        return ok(True)
+
+    async def list_paging(page: int, size: int, request: Request):
+        if not check_token(request):
+            return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+        with db() as c:
+            rows = c.execute("SELECT v FROM kv WHERE k LIKE ? ORDER BY k LIMIT ? OFFSET ?",
+                             (f"{store_key}:%", size, (max(page, 1) - 1) * size)).fetchall()
+            total = c.execute("SELECT COUNT(*) FROM kv WHERE k LIKE ?",
+                              (f"{store_key}:%",)).fetchone()[0]
+        data = []
+        for (v,) in rows:
+            try:
+                data.append(json.loads(v))
+            except Exception:
+                pass
+        return ok(data, total)
+
+    app.post(f"/ai-gateway-{prefix}/create")(create)
+    app.post(f"/ai-gateway-{prefix}/update")(update)
+    app.post(f"/ai-gateway-{prefix}/get/{{flag}}")(get_one)
+    app.get(f"/ai-gateway-{prefix}/get/{{flag}}")(get_one)
+    if delete_routes:
+        app.post(f"/ai-gateway-{prefix}/delete")(delete_one)
+        app.get(f"/ai-gateway-{prefix}/delete/{{flag}}")(delete_one)
+    if list_routes:
+        app.post(f"/ai-gateway-{prefix}/list/paging/{{page}}/size/{{size}}")(list_paging)
+        app.get(f"/ai-gateway-{prefix}/list/paging/{{page}}/size/{{size}}")(list_paging)
+
+
+crud_routes("endpoint", "endpoint")
+crud_routes("mcp", "mcp")
+# clue 的列表/删除走下方按会话聚合的专用实现（含级联清理 completion/hist）
+crud_routes("clue", "clue", list_routes=False, delete_routes=False)
+
+
+# ---------- 会话（clue）与问答（completion）持久化 ----------
+# O2OA AI 模块在【网关模式】下把 clue/completion 的读写全部委托给本网关
+# （x_ai_assemble_control 的 ActionListPaging/ActionListCompletionPaging/
+#   ActionWriteCompletion/ActionDelete 分别请求 /ai-gateway-clue/* 与
+#   /ai-gateway-completion/*），因此网关必须自己落库，否则前端"历史记录"永远为空。
+def _o2_now():
+    return time.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def _kv_items(prefix):
+    """读取 kv 中某前缀的全部 JSON 记录（解析失败的条目跳过）。"""
+    with db() as c:
+        rows = c.execute("SELECT v FROM kv WHERE k LIKE ?", (f"{prefix}:%",)).fetchall()
+    out = []
+    for (v,) in rows:
+        try:
+            out.append(json.loads(v))
+        except Exception:
+            pass
+    return out
+
+
+def _kv_put(key, obj):
+    with db() as c:
+        c.execute("INSERT INTO kv(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v",
+                  (key, json.dumps(obj, ensure_ascii=False)))
+
+
+def _title_of(text, n=24):
+    t = re.sub(r"\s+", " ", (text or "").strip())
+    return t[:n] or "新对话"
+
+
+def clue_touch(clue_id, person, title=None, person_dn=""):
+    """会话记录：首轮创建（标题取首问），后续轮次只刷新时间，不覆盖已有标题。
+    personList 同时写入人员 DN 与姓名：模块按 DN 过滤，多存一份可兼容两种口径。"""
+    if not clue_id:
+        return
+    now = _o2_now()
+    ms = int(time.time() * 1000)
+    with db() as c:
+        row = c.execute("SELECT v FROM kv WHERE k=?", (f"clue:{clue_id}",)).fetchone()
+        d = {}
+        if row:
+            try:
+                d = json.loads(row[0])
+            except Exception:
+                d = {}
+        d.setdefault("id", clue_id)
+        d.setdefault("createDateTime", now)
+        d.setdefault("createTime", ms)
+        if person:
+            d["person"] = person
+        else:
+            d.setdefault("person", "")
+        if person_dn:
+            d["personDn"] = person_dn
+        plist = [x for x in (d.get("personList") or []) if x]
+        for x in (person_dn, person, d.get("person")):
+            if x and x not in plist:
+                plist.append(x)
+        d["personList"] = plist
+        cur = d.get("title") or ""
+        if title and (not cur or cur in ("新对话", "新会话", "未命名")):
+            d["title"] = title
+        d.setdefault("title", "新对话")
+        d["updateDateTime"] = now
+        d["updateTime"] = ms
+        c.execute("INSERT INTO kv(k,v) VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v",
+                  (f"clue:{clue_id}", json.dumps(d, ensure_ascii=False)))
+
+
+def completion_add(clue_id, person, inp, content, generate_type="chat", refs=None, person_dn=""):
+    """落一条问答记录（供前端按会话读取）。带 2 分钟内同内容去重，
+    避免与模块自身可能发起的回写重复。"""
+    if not clue_id:
+        return
+    content = content or ""
+    for it in _kv_items("completion"):
+        if (it.get("clueId") == clue_id and (it.get("input") or "") == (inp or "")
+                and (it.get("content") or "") == content):
+            try:
+                if time.time() - float(it.get("createTime", 0)) / 1000.0 < 120:
+                    return
+            except Exception:
+                pass
+    now = _o2_now()
+    ms = int(time.time() * 1000)
+    d = {"id": str(uuid.uuid4()), "clueId": clue_id, "person": person or "",
+         "personDn": person_dn or "",
+         "input": inp or "", "content": content, "generateType": generate_type,
+         "referenceIdList": refs or [],
+         "createDateTime": now, "updateDateTime": now, "createTime": ms, "updateTime": ms}
+    _kv_put(f"completion:{d['id']}", d)
+
+
+def clue_drop(clue_id):
+    """删除会话，并级联清理其问答与上下文历史。"""
+    if not clue_id:
+        return
+    # 先取待删的问答 id（避免在同一个 with db() 内嵌套开连接）
+    victims = [it["id"] for it in _kv_items("completion")
+               if it.get("clueId") == clue_id and it.get("id")]
+    with db() as c:
+        c.execute("DELETE FROM kv WHERE k=?", (f"clue:{clue_id}",))
+        c.execute("DELETE FROM kv WHERE k LIKE ?", (f"hist:{clue_id}:%",))
+        for cid in victims:
+            c.execute("DELETE FROM kv WHERE k=?", (f"completion:{cid}",))
+
+
+def _int_ids(body):
+    ids = []
+    for k in ("clueId", "id"):
+        v = body.get(k)
+        if isinstance(v, str) and v.strip():
+            ids.append(v.strip())
+    for k in ("idList", "clueIdList"):
+        v = body.get(k)
+        if isinstance(v, list):
+            ids += [x for x in v if isinstance(x, str) and x.strip()]
+    return list(dict.fromkeys(ids))
+
+
+async def _body(request):
+    try:
+        return await request.json()
+    except Exception:
+        return {}
+
+
+@app.post("/ai-gateway-clue/list/paging/{page}/size/{size}")
+async def clue_list(page: int, size: int, request: Request):
+    """会话列表：按人过滤（person/personList），按创建时间倒序。"""
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    body = await _body(request)
+    persons = []
+    if isinstance(body.get("personList"), list):
+        persons += [x for x in body["personList"] if isinstance(x, str) and x]
+    if isinstance(body.get("person"), str) and body["person"]:
+        persons.append(body["person"])
+    if isinstance(request.query_params.get("person"), str):
+        persons.append(request.query_params["person"])
+    log(f"clue_list body_keys={sorted(body.keys())} persons={persons}")
+    items = _kv_items("clue")
+    if persons:
+        # 模块按 personList=[人员DN] 过滤；记录里可能只有姓名（旧数据）→ 两种口径都匹配
+        keys = set()
+        for p in persons:
+            keys.add(p.strip().lower())
+            keys.add(p.split("@")[0].strip().lower())
+        keys.discard("")
+
+        def _own(x):
+            cand = [x.get("person"), x.get("personDn")] + list(x.get("personList") or [])
+            for v in cand:
+                if not v:
+                    continue
+                v = str(v).strip().lower()
+                if v in keys or v.split("@")[0] in keys:
+                    return True
+            return False
+
+        items = [x for x in items if _own(x)]
+    items.sort(key=lambda x: (x.get("createDateTime") or "", x.get("updateDateTime") or ""),
+               reverse=True)
+    total = len(items)
+    start = (max(page, 1) - 1) * max(size, 1)
+    return ok(items[start:start + max(size, 1)], total)
+
+
+@app.post("/ai-gateway-clue/delete")
+async def clue_delete(request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    body = await _body(request)
+    ids = _int_ids(body)
+    log(f"clue_delete ids={ids} body_keys={sorted(body.keys())}")
+    for cid in ids:
+        clue_drop(cid)
+    return ok(True)
+
+
+@app.get("/ai-gateway-clue/delete/{flag}")
+async def clue_delete_one(flag: str, request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    clue_drop(flag)
+    return ok(True)
+
+
+@app.post("/ai-gateway-completion/write/extra")
+async def write_extra(request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    d = await request.json()
+    d.setdefault("id", str(uuid.uuid4()))
+    with db() as c:
+        c.execute("INSERT INTO kv(k,v) VALUES(?,?)", (f"completion:{d['id']}",
+                                                      json.dumps(d, ensure_ascii=False)))
+    return ok(d)
+
+
+@app.post("/ai-gateway-completion/list/paging/{page}/size/{size}")
+async def completion_list(page: int, size: int, request: Request):
+    """某会话的问答记录。clueId 可能出现在 body（clueId/clueIdList）或 query 上；
+    两者都没有则返回全部（由调用方自行过滤），保证前端至少能拿到数据。"""
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    body = await _body(request)
+    ids = _int_ids(body)
+    q = request.query_params.get("clueId")
+    if q:
+        ids.append(q)
+    log(f"completion_list body_keys={sorted(body.keys())} clue_ids={ids}")
+    items = _kv_items("completion")
+    if ids:
+        items = [x for x in items if x.get("clueId") in ids]
+    items.sort(key=lambda x: (x.get("createDateTime") or "", x.get("createTime") or 0))
+    total = len(items)
+    start = (max(page, 1) - 1) * max(size, 1)
+    return ok(items[start:start + max(size, 1)], total)
+
+
+@app.get("/ai-gateway-completion/list/paging/{page}/size/{size}")
+async def completion_list_get(page: int, size: int, request: Request):
+    return await completion_list(page, size, request)
+
+
+# ---------- 运维 ----------
+@app.get("/gateway/health")
+async def health():
+    return {"status": "ok", "embed_model": emb_model(), "chat_model": CFG["chat_model"]}
+
+
+@app.get("/gateway/capabilities")
+async def capabilities(request: Request):
+    """网关能力自检：后端 / 工具 / OCR / 多模态 一览。
+    方便升级后快速确认"哪一项没配起来"。"""
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+
+    def probe(url, headers=None, timeout=6):
+        try:
+            r = _client.get(url, headers=headers or {}, timeout=timeout)
+            return {"up": r.status_code == 200, "http": r.status_code,
+                    **(r.json() if r.status_code == 200 else {})}
+        except Exception as e:
+            return {"up": False, "error": str(e)[:120]}
+
+    chat = probe(f"{CFG['bionic_base']}/props")
+    caps = chat.get("chat_template_caps") or {}
+    mods = chat.get("modalities") or {}
+    ocr_base = CFG.get("ocr_base") or ""
+    return ok({
+        "chat_backend": {
+            "base": CFG["bionic_base"], "up": chat.get("up", False),
+            "model": CFG.get("chat_model"),
+            "tool_calls": caps.get("supports_tool_calls"),
+            "parallel_tool_calls": caps.get("supports_parallel_tool_calls"),
+            "vision": mods.get("vision"),
+            "video": mods.get("video"),
+        },
+        "embed_backend": {"base": CFG["embed_base"],
+                          "up": probe(f"{CFG['embed_base']}/health").get("up", False),
+                          "model": emb_model()},
+        "ocr": {**probe(f"{ocr_base}/health"), "base": ocr_base,
+                "enabled": bool(ocr_base)},
+        "builtin_tools": [t["name"] for t in BUILTIN_TOOLS],
+        "skills": [i["name"] for i in _list_skills()],
+        "external_mcp": [
+            {"name": s.get("name"), "transport": s.get("transport") or "stdio",
+             **({"command": s.get("command"), "args": s.get("args")}
+                if (s.get("transport") or "stdio") == "stdio" else {"url": s.get("url")})}
+            for s in (CFG.get("mcp_servers") or [])],
+        "o2oa": {**probe(f"{CFG.get('o2oa_base','')}/x_processplatform_assemble_designer/jaxrs/application/list",
+                         headers={"x-token": o2oa_token()}),
+                 "base": CFG.get("o2oa_base") or "",
+                 "admin_token_set": bool(o2oa_token())},
+        "config": {"mcp_max_turns": CFG.get("mcp_max_turns"),
+                   "mcp_timeout": CFG.get("mcp_timeout"),
+                   "rag_top_k": CFG.get("rag_top_k"),
+                   "rag_rerank_candidate": CFG.get("rag_rerank_candidate"),
+                   "rerank_enabled": bool(CFG.get("rerank_enable") and CFG.get("rerank_base")),
+                   "rerank_model": CFG.get("rerank_model"),
+                   "rewrite_enabled": bool(CFG.get("rewrite_enable")),
+                   "ocr_max_chars": CFG.get("ocr_max_chars"),
+                   "persona_enable": bool(CFG.get("persona_enable")),
+                   "write_enable": bool(CFG.get("write_enable")),
+                   "write_tables": CFG.get("write_tables")},
+    })
+
+
+@app.get("/gateway/feedbacks")
+async def feedbacks_list(request: Request, status: str = "", page: int = 1, size: int = 50):
+    """管理员查看用户反馈（feedback 工具落库），支持按状态过滤。"""
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    with db() as c:
+        if status:
+            rows = c.execute(
+                "SELECT id,person,kind,content,created_at,status FROM feedbacks "
+                "WHERE status=? ORDER BY created_at DESC LIMIT ? OFFSET ?",
+                (status, size, (page - 1) * size)).fetchall()
+            total = c.execute("SELECT COUNT(*) FROM feedbacks WHERE status=?",
+                              (status,)).fetchone()[0]
+        else:
+            rows = c.execute(
+                "SELECT id,person,kind,content,created_at,status FROM feedbacks "
+                "ORDER BY created_at DESC LIMIT ? OFFSET ?",
+                (size, (page - 1) * size)).fetchall()
+            total = c.execute("SELECT COUNT(*) FROM feedbacks").fetchone()[0]
+    return ok([{"id": r[0], "person": r[1], "kind": r[2], "content": r[3],
+                "createdAt": r[4], "status": r[5]} for r in rows], count=total)
+
+
+@app.post("/gateway/feedbacks/update")
+async def feedbacks_update(request: Request):
+    """管理员处理反馈：标记状态（如 open -> done，形成闭环）。"""
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    b = await request.json()
+    fid = (b.get("id") or "").strip()
+    st = (b.get("status") or "done").strip()
+    if not fid:
+        return JSONResponse({"type": "error", "message": "id required"}, status_code=400)
+    with db() as c:
+        cur = c.execute("UPDATE feedbacks SET status=? WHERE id=?", (st, fid))
+    return ok({"updated": cur.rowcount, "id": fid, "status": st})
+
+
+@app.get("/gateway/audit")
+async def audit_list(request: Request, limit: int = 100, status: str = "",
+                     person: str = "", tool: str = ""):
+    """第三批：管理员查看写回/敏感动作审计日志（write_data 的 pending/executed/failed/refused）。"""
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    limit = max(1, min(int(limit or 100), 500))
+    sql, args_ = "SELECT ts,person,clue_id,tool,payload,status,detail FROM audit_log", []
+    conds = []
+    if status:
+        conds.append("status=?"); args_.append(status)
+    if person:
+        conds.append("person LIKE ?"); args_.append(f"%{person}%")
+    if tool:
+        conds.append("tool=?"); args_.append(tool)
+    if conds:
+        sql += " WHERE " + " AND ".join(conds)
+    sql += " ORDER BY id DESC LIMIT ?"
+    args_.append(limit)
+    with db() as c:
+        rows = c.execute(sql, args_).fetchall()
+    return ok([{"ts": r[0], "person": r[1], "clueId": r[2], "tool": r[3],
+                "payload": r[4], "status": r[5], "detail": r[6]} for r in rows],
+              count=len(rows))
+
+
+@app.post("/ai-gateway/report-query")
+async def report_query(request: Request):
+    """报表自然语言查询：基于 O2OA 实时数据快照，用大模型回答用户的自然语言问题。"""
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    body = await request.json()
+    q = (body.get("input") or body.get("query") or "").strip()
+    if not q:
+        return ok({"answer": "请输入你想查询的问题，例如：当前有哪些业务应用？"}, snapshot_chars=0)
+    snap = o2oa_snapshot()
+    sys = ("你是 O2OA 企业系统的数据分析与报表助手。下面是本组织 O2OA 实例的实时数据快照"
+           "（应用/门户等业务模块目录）。请基于快照用简体中文回答用户问题；涉及多项数据时用 Markdown 表格；"
+           "若快照数据不足以回答，请如实说明并建议补充哪些数据源（如流程实例量、表单数据等）。")
+    answer = chat_complete([{"role": "system", "content": sys},
+                           {"role": "user", "content": f"数据快照:\n{snap}\n\n用户问题: {q}"}],
+                          max_tokens=1500, temperature=0.2)
+    return ok({"answer": answer, "snapshot_chars": len(snap)})
+
+
+@app.post("/gateway/ocr-test")
+async def ocr_test(request: Request):
+    """把网关的 extract_text 走一遍，用于验证附件链路是否打通。
+    body: {"file_b64": "...", "filename": "a.pdf"} 或 {"path": "D:\\x.png"}"""
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    import base64
+    body = await request.json()
+    if body.get("path"):
+        p = body["path"]
+        if not os.path.isfile(p):
+            return JSONResponse({"type": "error", "message": f"no such file {p}"},
+                                status_code=400)
+        data = Path(p).read_bytes()
+        name = os.path.basename(p)
+    else:
+        b64 = body.get("file_b64") or body.get("image_b64") or body.get("pdf_b64") or ""
+        if not b64:
+            return JSONResponse({"type": "error", "message": "need file_b64 or path"},
+                                status_code=400)
+        data = base64.b64decode(b64)
+        name = body.get("filename") or "inline.bin"
+    ext = os.path.splitext(name)[1].lower().lstrip(".")
+    t0 = time.time()
+    text = extract_text(data, ext, name)
+    return ok({"filename": name, "ext": ext, "chars": len(text or ""),
+               "ms": int((time.time() - t0) * 1000),
+               "text": (text or "")[:4000], "truncated": len(text or "") > 4000})
+
+
+@app.post("/gateway/reindex")
+async def reindex_all(request: Request):
+    if not check_token(request):
+        return JSONResponse({"type": "error", "message": "bad token"}, status_code=401)
+    with db() as c:
+        ids = [r[0] for r in c.execute("SELECT id FROM docs")]
+    for i in ids:
+        reindex_doc(i)
+    return ok({"reindexed": len(ids)})
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host=CFG["listen_host"], port=CFG["listen_port"], log_level="warning")

@@ -1,0 +1,28 @@
+{
+  "id": "s2002004-contract-amount-by-dept-000001",
+  "name": "按经办部门统计金额",
+  "alias": "按经办部门统计金额",
+  "description": "各经办部门承担的合同金额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v2002001-contract-list-view-0000000001",
+  "categoryPath": "handle_dept",
+  "valuePath": "contract_amount",
+  "categoryTitle": "经办部门",
+  "valueTitle": "合同金额（元）",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ],
+    "defaultChartType": "bar"
+  }
+}

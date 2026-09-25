@@ -1,0 +1,16 @@
+{
+  "headToolBar" : [
+  ],
+  "selectToolBar": [
+    {
+      "title": "恢复",
+      "action": "resumeMulti",
+      "style" : ""
+    },
+    {
+      "title": "彻底删除",
+      "action": "shiftRemoveMulti",
+      "style" : "color:red"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "q2002004-receive-full-join-000000001",
+  "name": "合同收款全量",
+  "alias": "合同收款全量",
+  "description": "收款单带合同与计划三表联查，expense_no 向财务推送",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT rv.id AS id, rv.receive_no AS receive_no, rv.contract_no AS contract_no, rv.receive_type AS receive_type, rv.receive_amount AS receive_amount, rv.receive_date AS receive_date, rv.payer_name AS payer_name, rv.voucher_no AS voucher_no, rv.receive_status AS receive_status, rv.expense_no AS expense_no, c.contract_name AS contract_name, c.project_no AS project_no, c.sign_unit AS sign_unit, c.handle_dept AS handle_dept, rp.plan_no AS plan_no, rp.period_name AS period_name, rp.plan_amount AS plan_amount FROM contract_receive rv LEFT JOIN contract_main c ON c.contract_no = rv.contract_no LEFT JOIN contract_receive_plan rp ON rp.plan_no = rv.plan_no",
+  "sql": "SELECT rv.id AS id, rv.receive_no AS receive_no, rv.contract_no AS contract_no, rv.receive_type AS receive_type, rv.receive_amount AS receive_amount, rv.receive_date AS receive_date, rv.payer_name AS payer_name, rv.voucher_no AS voucher_no, rv.receive_status AS receive_status, rv.expense_no AS expense_no, c.contract_name AS contract_name, c.project_no AS project_no, c.sign_unit AS sign_unit, c.handle_dept AS handle_dept, rp.plan_no AS plan_no, rp.period_name AS period_name, rp.plan_amount AS plan_amount FROM contract_receive rv LEFT JOIN contract_main c ON c.contract_no = rv.contract_no LEFT JOIN contract_receive_plan rp ON rp.plan_no = rv.plan_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

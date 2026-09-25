@@ -1,0 +1,11 @@
+[
+
+  {
+    "title": "恢复",
+    "action": "resume"
+  },
+  {
+    "title": "彻底删除",
+    "action": "shiftRemove"
+  }
+]

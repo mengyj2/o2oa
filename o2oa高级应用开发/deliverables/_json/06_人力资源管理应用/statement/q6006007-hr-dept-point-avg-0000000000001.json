@@ -1,0 +1,20 @@
+{
+  "id": "q6006007-hr-dept-point-avg-0000000000001",
+  "name": "部门月度人均积分排名",
+  "alias": "部门月度人均积分排名",
+  "description": "官方“部门月度人均积分排名：部门|人均积分|月排名”",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT e.dept AS dept, COUNT(DISTINCT e.employee_no) AS emp_count, SUM(p.total_point) AS dept_point, ROUND(SUM(p.total_point) / COUNT(DISTINCT e.employee_no), 2)   AS avg_point, MAX(p.dept_rank) AS dept_rank FROM hr_employee e LEFT JOIN hr_point p ON p.employee_no = e.employee_no GROUP BY e.dept ORDER BY avg_point DESC",
+  "sql": "SELECT e.dept AS dept, COUNT(DISTINCT e.employee_no) AS emp_count, SUM(p.total_point) AS dept_point, ROUND(SUM(p.total_point) / COUNT(DISTINCT e.employee_no), 2)   AS avg_point, MAX(p.dept_rank) AS dept_rank FROM hr_employee e LEFT JOIN hr_point p ON p.employee_no = e.employee_no GROUP BY e.dept ORDER BY avg_point DESC",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

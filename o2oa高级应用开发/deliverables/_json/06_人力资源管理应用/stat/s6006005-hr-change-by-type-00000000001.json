@@ -1,0 +1,29 @@
+{
+  "id": "s6006005-hr-change-by-type-00000000001",
+  "name": "按变动类型统计人次",
+  "alias": "按变动类型统计人次",
+  "description": "入职 / 转岗 / 转正 / 离职四类变动人次",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006006-hr-change-view-0000000000000001",
+  "categoryPath": "change_type",
+  "valuePath": "count",
+  "categoryTitle": "变动类型",
+  "valueTitle": "人次",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "column",
+      "pie"
+    ],
+    "defaultChartType": "column",
+    "showLegend": true,
+    "showLabel": true,
+    "moreLink": "v6006006-hr-change-view-0000000000000001"
+  }
+}

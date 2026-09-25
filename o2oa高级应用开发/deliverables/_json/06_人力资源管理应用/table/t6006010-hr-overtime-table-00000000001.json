@@ -1,0 +1,15 @@
+{
+  "id": "t6006010-hr-overtime-table-00000000001",
+  "name": "t6006010_hr_overtime_table",
+  "alias": "加班记录表",
+  "description": "员工加班记录，通过 project_no 关联项目管理应用",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"overtime_no\", \"description\": \"加班单号\", \"type\": \"string\"}, {\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"overtime_type\", \"description\": \"加班类型\", \"type\": \"string\"}, {\"name\": \"start_time\", \"description\": \"开始时间\", \"type\": \"dateTime\"}, {\"name\": \"end_time\", \"description\": \"结束时间\", \"type\": \"dateTime\"}, {\"name\": \"overtime_hours\", \"description\": \"加班时长\", \"type\": \"double\"}, {\"name\": \"overtime_reason\", \"description\": \"加班事由\", \"type\": \"stringLob\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"compensate_type\", \"description\": \"补偿方式\", \"type\": \"string\"}, {\"name\": \"overtime_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"overtime_no\", \"description\": \"加班单号\", \"type\": \"string\"}, {\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"overtime_type\", \"description\": \"加班类型\", \"type\": \"string\"}, {\"name\": \"start_time\", \"description\": \"开始时间\", \"type\": \"dateTime\"}, {\"name\": \"end_time\", \"description\": \"结束时间\", \"type\": \"dateTime\"}, {\"name\": \"overtime_hours\", \"description\": \"加班时长\", \"type\": \"double\"}, {\"name\": \"overtime_reason\", \"description\": \"加班事由\", \"type\": \"stringLob\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"compensate_type\", \"description\": \"补偿方式\", \"type\": \"string\"}, {\"name\": \"overtime_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

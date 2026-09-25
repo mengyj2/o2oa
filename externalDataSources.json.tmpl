@@ -1,0 +1,27 @@
+[
+  {
+    "enable": false,
+    "url": "jdbc:mysql://${O2OA_DB_HOST}:${O2OA_DB_PORT}/${O2OA_DB_NAME}?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8",
+    "username": "${O2OA_DB_USER}",
+    "password": "${O2OA_DB_PASSWORD}",
+    "driverClassName": "",
+    "dictionary": "",
+    "maxTotal": 100.0,
+    "maxIdle": 0.0,
+    "statEnable": true,
+    "statFilter": "mergeStat",
+    "includes": [],
+    "excludes": [],
+    "logLevel": "ERROR",
+    "transactionIsolation": "read-committed",
+    "testConnectionOnCheckin": false,
+    "testConnectionOnCheckout": false,
+    "maxIdleTime": 300.0,
+    "autoCommit": false,
+    "schema": "",
+    "logStatEnable": false,
+    "logStatInterval": 180.0,
+    "slowSqlEnable": true,
+    "slowSqlThreshold": 3000.0
+  }
+]

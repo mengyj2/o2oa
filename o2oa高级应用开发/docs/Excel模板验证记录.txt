@@ -1,0 +1,33 @@
+Excel Version = 12.0
+OK   01_项目管理_项目成员表.xlsx | sheets=2 | data='项目成员表' | hdr=[id|project_no] | sub='主键ID（string,64）' | rows=2 cols=8
+OK   01_项目管理_项目里程碑表.xlsx | sheets=2 | data='项目里程碑表' | hdr=[id|project_no] | sub='主键ID（string,64）' | rows=2 cols=7
+OK   01_项目管理_项目主表.xlsx | sheets=2 | data='项目主表' | hdr=[id|project_no] | sub='主键ID（string,64）' | rows=2 cols=18
+OK   02_合同管理_合同变更记录表.xlsx | sheets=2 | data='合同变更记录表' | hdr=[id|change_no] | sub='ID（string,64）' | rows=2 cols=16
+OK   02_合同管理_合同付款表.xlsx | sheets=2 | data='合同付款表' | hdr=[id|pay_no] | sub='ID（string,64）' | rows=2 cols=18
+OK   02_合同管理_合同收款表.xlsx | sheets=2 | data='合同收款表' | hdr=[id|receive_no] | sub='ID（string,64）' | rows=2 cols=17
+OK   02_合同管理_合同主表.xlsx | sheets=2 | data='合同主表' | hdr=[id|contract_no] | sub='ID（string,64）' | rows=2 cols=30
+OK   02_合同管理_开票申请表.xlsx | sheets=2 | data='开票申请表' | hdr=[id|invoice_apply_no] | sub='ID（string,64）' | rows=2 cols=18
+OK   02_合同管理_签约方档案表.xlsx | sheets=2 | data='签约方档案表' | hdr=[id|partner_no] | sub='ID（string,64）' | rows=2 cols=21
+OK   02_合同管理_收款计划表.xlsx | sheets=2 | data='收款计划表' | hdr=[id|plan_no] | sub='ID（string,64）' | rows=2 cols=14
+OK   02_合同管理_收票记录表.xlsx | sheets=2 | data='收票记录表' | hdr=[id|ticket_no] | sub='ID（string,64）' | rows=2 cols=17
+OK   03_预算管理_预算明细表.xlsx | sheets=2 | data='预算明细表' | hdr=[id|budget_no] | sub='主键ID（string,64）' | rows=2 cols=8
+OK   03_预算管理_预算主表.xlsx | sheets=2 | data='预算主表' | hdr=[id|budget_no] | sub='主键ID（string,64）' | rows=2 cols=15
+OK   04_财务管理_报销主表.xlsx | sheets=2 | data='报销主表' | hdr=[id|expense_no] | sub='主键ID（string,64）' | rows=2 cols=15
+OK   04_财务管理_付款主表.xlsx | sheets=2 | data='付款主表' | hdr=[id|payment_no] | sub='主键ID（string,64）' | rows=2 cols=13
+OK   04_财务管理_项目成本汇总表.xlsx | sheets=2 | data='项目成本汇总表' | hdr=[id|project_no] | sub='主键ID（string,64）' | rows=2 cols=10
+OK   05_档案管理_档案关联关系表.xlsx | sheets=2 | data='档案关联关系表' | hdr=[id|archive_no] | sub='主键ID（string,64）' | rows=2 cols=6
+OK   05_档案管理_档案借阅表.xlsx | sheets=2 | data='档案借阅表' | hdr=[id|borrow_no] | sub='主键ID（string,64）' | rows=2 cols=12
+OK   05_档案管理_档案主表.xlsx | sheets=2 | data='档案主表' | hdr=[id|archive_no] | sub='主键ID（string,64）' | rows=2 cols=21
+OK   06_人力资源管理_出差记录表.xlsx | sheets=2 | data='出差记录表' | hdr=[id|travel_no] | sub='ID（string,64）' | rows=2 cols=18
+OK   06_人力资源管理_岗位报名表.xlsx | sheets=2 | data='岗位报名表' | hdr=[id|apply_no] | sub='ID（string,64）' | rows=2 cols=22
+OK   06_人力资源管理_岗位池表.xlsx | sheets=2 | data='岗位池表' | hdr=[id|job_no] | sub='ID（string,64）' | rows=2 cols=24
+OK   06_人力资源管理_积分悬赏表.xlsx | sheets=2 | data='积分悬赏表' | hdr=[id|bounty_no] | sub='ID（string,64）' | rows=2 cols=18
+OK   06_人力资源管理_加班记录表.xlsx | sheets=2 | data='加班记录表' | hdr=[id|overtime_no] | sub='ID（string,64）' | rows=2 cols=16
+OK   06_人力资源管理_考勤记录表.xlsx | sheets=2 | data='考勤记录表' | hdr=[id|attend_no] | sub='ID（string,64）' | rows=2 cols=27
+OK   06_人力资源管理_请假记录表.xlsx | sheets=2 | data='请假记录表' | hdr=[id|leave_no] | sub='ID（string,64）' | rows=2 cols=15
+OK   06_人力资源管理_人事变动记录表.xlsx | sheets=2 | data='人事变动记录表' | hdr=[id|change_no] | sub='ID（string,64）' | rows=2 cols=23
+OK   06_人力资源管理_员工积分表.xlsx | sheets=2 | data='员工积分表' | hdr=[id|employee_no] | sub='ID（string,64）' | rows=2 cols=22
+OK   06_人力资源管理_员工履历明细表.xlsx | sheets=2 | data='员工履历明细表' | hdr=[id|employee_no] | sub='ID（string,64）' | rows=2 cols=19
+OK   06_人力资源管理_员工主表.xlsx | sheets=2 | data='员工主表' | hdr=[id|employee_no] | sub='ID（string,64）' | rows=2 cols=37
+OK   06_人力资源管理_员工自助申请表.xlsx | sheets=2 | data='员工自助申请表' | hdr=[id|self_no] | sub='ID（string,64）' | rows=2 cols=17
+===== 合计 31 个：成功 31，失败 0 =====

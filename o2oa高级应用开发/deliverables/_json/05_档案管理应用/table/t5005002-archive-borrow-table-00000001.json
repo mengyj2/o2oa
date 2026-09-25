@@ -1,0 +1,15 @@
+{
+  "id": "t5005002-archive-borrow-table-00000001",
+  "name": "t5005002_archive_borrow_table",
+  "alias": "档案借阅表",
+  "description": "档案借阅明细，支持借阅统计与逾期预警",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"borrow_no\", \"description\": \"借阅单号\", \"type\": \"string\"}, {\"name\": \"archive_no\", \"description\": \"档案编号\", \"type\": \"string\"}, {\"name\": \"borrower\", \"description\": \"借阅人\", \"type\": \"string\"}, {\"name\": \"borrow_dept\", \"description\": \"所在部门\", \"type\": \"string\"}, {\"name\": \"borrow_type\", \"description\": \"借阅方式\", \"type\": \"string\"}, {\"name\": \"borrow_reason\", \"description\": \"借阅事由\", \"type\": \"stringLob\"}, {\"name\": \"borrow_date\", \"description\": \"借阅日期\", \"type\": \"date\"}, {\"name\": \"plan_return_date\", \"description\": \"计划归还日\", \"type\": \"date\"}, {\"name\": \"actual_return_date\", \"description\": \"实际归还日\", \"type\": \"date\"}, {\"name\": \"borrow_status\", \"description\": \"借阅状态\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"borrow_no\", \"description\": \"借阅单号\", \"type\": \"string\"}, {\"name\": \"archive_no\", \"description\": \"档案编号\", \"type\": \"string\"}, {\"name\": \"borrower\", \"description\": \"借阅人\", \"type\": \"string\"}, {\"name\": \"borrow_dept\", \"description\": \"所在部门\", \"type\": \"string\"}, {\"name\": \"borrow_type\", \"description\": \"借阅方式\", \"type\": \"string\"}, {\"name\": \"borrow_reason\", \"description\": \"借阅事由\", \"type\": \"stringLob\"}, {\"name\": \"borrow_date\", \"description\": \"借阅日期\", \"type\": \"date\"}, {\"name\": \"plan_return_date\", \"description\": \"计划归还日\", \"type\": \"date\"}, {\"name\": \"actual_return_date\", \"description\": \"实际归还日\", \"type\": \"date\"}, {\"name\": \"borrow_status\", \"description\": \"借阅状态\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

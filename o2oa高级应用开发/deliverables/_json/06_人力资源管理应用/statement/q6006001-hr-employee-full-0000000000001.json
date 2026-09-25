@@ -1,0 +1,20 @@
+{
+  "id": "q6006001-hr-employee-full-0000000000001",
+  "name": "员工档案全量",
+  "alias": "员工档案全量",
+  "description": "员工档案台账全量，支撑全部档案与四类状态查询",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT e.id AS id, e.employee_no AS employee_no, e.employee_name AS employee_name, e.gender AS gender, e.employee_status AS employee_status, e.work_nature AS work_nature, e.id_card AS id_card, e.birth_date AS birth_date, e.nation AS nation, e.political_status AS political_status, e.marital_status AS marital_status, e.mobile AS mobile, e.email AS email, e.wechat AS wechat, e.qq AS qq, e.education AS education, e.degree AS degree, e.graduate_school AS graduate_school, e.major AS major, e.dept AS dept, e.position AS position, e.grade AS grade, e.join_date AS join_date, e.regular_date AS regular_date, e.leave_date AS leave_date, e.year_point AS year_point, e.total_point AS total_point, e.process_id AS process_id FROM hr_employee e",
+  "sql": "SELECT e.id AS id, e.employee_no AS employee_no, e.employee_name AS employee_name, e.gender AS gender, e.employee_status AS employee_status, e.work_nature AS work_nature, e.id_card AS id_card, e.birth_date AS birth_date, e.nation AS nation, e.political_status AS political_status, e.marital_status AS marital_status, e.mobile AS mobile, e.email AS email, e.wechat AS wechat, e.qq AS qq, e.education AS education, e.degree AS degree, e.graduate_school AS graduate_school, e.major AS major, e.dept AS dept, e.position AS position, e.grade AS grade, e.join_date AS join_date, e.regular_date AS regular_date, e.leave_date AS leave_date, e.year_point AS year_point, e.total_point AS total_point, e.process_id AS process_id FROM hr_employee e",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

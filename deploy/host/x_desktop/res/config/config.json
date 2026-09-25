@@ -1,0 +1,29 @@
+{
+  "footer": "OA系统",
+  "title": "中国复合材料工业协会内部管理系统",
+  "version": "10.0.2",
+  "appUrl": "https://app.o2oa.net/download/download.html",
+  "app_protocol": "auto",
+  "loginPage": {
+    "enable": false,
+    "portal": "",
+    "page": ""
+  },
+  "indexPage": {
+    "enable": false,
+    "portal": "",
+    "page": ""
+  },
+  "searchEnable": true,
+  "passwordRegex": "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$",
+  "passwordRegexHint": "8位以上,包含数字、字母和特殊字符.",
+  "language": "zh-CN",
+  "supportedLanguages": {
+    "en": "English",
+    "zh-CN": "简体中文"
+  },
+  "tokenName": "x-token",
+  "publicKey": "",
+  "enableSafeLogout": false,
+  "webSocketEnable": true
+}

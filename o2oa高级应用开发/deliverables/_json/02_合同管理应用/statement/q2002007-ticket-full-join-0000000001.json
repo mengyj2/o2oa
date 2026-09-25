@@ -1,0 +1,20 @@
+{
+  "id": "q2002007-ticket-full-join-0000000001",
+  "name": "收票记录全量",
+  "alias": "收票记录全量",
+  "description": "进项票据带合同与对应付款单",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT t.id AS id, t.ticket_no AS ticket_no, t.contract_no AS contract_no, t.invoice_no AS invoice_no, t.invoice_code AS invoice_code, t.ticket_type AS ticket_type, t.ticket_amount AS ticket_amount, t.tax_amount AS tax_amount, t.ticket_date AS ticket_date, t.supplier_name AS supplier_name, t.check_status AS check_status, t.pay_no AS pay_no, c.contract_name AS contract_name, c.project_no AS project_no, py.pay_amount AS pay_amount, py.pay_date AS pay_date FROM contract_ticket t LEFT JOIN contract_main c ON c.contract_no = t.contract_no LEFT JOIN contract_pay py ON py.pay_no = t.pay_no",
+  "sql": "SELECT t.id AS id, t.ticket_no AS ticket_no, t.contract_no AS contract_no, t.invoice_no AS invoice_no, t.invoice_code AS invoice_code, t.ticket_type AS ticket_type, t.ticket_amount AS ticket_amount, t.tax_amount AS tax_amount, t.ticket_date AS ticket_date, t.supplier_name AS supplier_name, t.check_status AS check_status, t.pay_no AS pay_no, c.contract_name AS contract_name, c.project_no AS project_no, py.pay_amount AS pay_amount, py.pay_date AS pay_date FROM contract_ticket t LEFT JOIN contract_main c ON c.contract_no = t.contract_no LEFT JOIN contract_pay py ON py.pay_no = t.pay_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

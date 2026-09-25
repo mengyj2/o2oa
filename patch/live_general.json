@@ -1,0 +1,92 @@
+{
+	"requestLogEnable": false,
+	"requestLogRetainDays": 7,
+	"requestLogBodyEnable": false,
+	"webSocketEnable": true,
+	"configApiEnable": true,
+	"deployWarEnable": true,
+	"deployResourceEnable": true,
+	"statEnable": false,
+	"statExclusions": "*.js,*.gif,*.jpg,*.png,*.css,*.ico",
+	"exposeJest": false,
+	"scriptingAllowedClasses": [
+		"java.util.List",
+		"java.util.Arrays",
+		"java.lang.String",
+		"java.util.ArrayList"
+	],
+	"refererHeadCheckRegular": "",
+	"accessControlAllowOrigin": "",
+	"contentSecurityPolicy": "",
+	"attachmentConfig": {
+		"fileSize": 2047,
+		"fileTypeIncludes": [
+			"doc",
+			"docx",
+			"xls",
+			"xlsx",
+			"ppt",
+			"pptx",
+			"pdf",
+			"xapp",
+			"text",
+			"zip",
+			"rar",
+			"mp3",
+			"mp4",
+			"png",
+			"jpg",
+			"gif"
+		],
+		"fileTypeExcludes": [],
+		"###fileSize": "附件大小限制（单位M，最大2048M）.###",
+		"###fileTypeIncludes": "只允许上传的文件后缀###",
+		"###fileTypeExcludes": "不允许上传的文件后缀###",
+		"###extension": "扩展设置.###"
+	},
+	"idFormatCheckRegular": "",
+	"httpWhiteList": [
+		"*"
+	],
+	"storageEncrypt": 0,
+	"webServerCacheControlMaxAge": 0,
+	"supportedLanguages": {
+		"en": "English",
+		"zh-CN": "简体中文"
+	},
+	"graalvmEvalAsPromise": true,
+	"accessDenyUris": [
+		"/jaxrs/application.wadl"
+	],
+	"disableExportEnable": false,
+	"tableRowSelectEnable": true,
+	"trustProxyIpList": [
+		"127.0.0.1"
+	],
+	"###requestLogEnable": "启用访问日志功能.###",
+	"###requestLogRetainDays": "访问日志记录天数,默认7天.###",
+	"###requestLogBodyEnable": "访问日志是否记录post或者put的body内容,只对content-type为application/json的请求有效.###",
+	"###webSocketEnable": "是否启用webSocket链接.###",
+	"###configApiEnable": "允许通过接口修改系统配置.###",
+	"###deployWarEnable": "是否允许部署war包.###",
+	"###deployResourceEnable": "是否允许部署静态资源.###",
+	"###statEnable": "启用统计,默认启用统计.###",
+	"###statExclusions": "统计忽略路径,默认忽略*.js,*.gif,*.jpg,*.png,*.css,*.ico###",
+	"###exposeJest": "暴露jest接口.###",
+	"###scriptingAllowedClasses": "脚本中可加载的类(默认已加载平台com.x.base和com.x.organization开头的类).###",
+	"###refererHeadCheckRegular": "http referer 校验正则表达式,可以对CSRF攻击进行防护校验,样例:(.+?)o2oa.net(.+?)###",
+	"###accessControlAllowOrigin": "跨源资源共享许可,设置http返回的Access-Control-Allow-Origin标识,可以用于CORS攻击防护,样例:https://www.o2oa.net###",
+	"###contentSecurityPolicy": "内容安全策略(CSP)###",
+	"###attachmentConfig": "附件上传限制大小或者类型.###",
+	"###idFormatCheckRegular": "对象id格式校验正则表达式.###",
+	"###httpWhiteList": "外部http接口服务地址白名单，*代表不限制.###",
+	"###storageEncrypt": "存储加密.1:AES,2:AES/GCM/NoPadding,空或者其他值不加密.###",
+	"###webServerCacheControlMaxAge": "web服务器Cache-Control max-age头设置,0表示不设置Cache-Control.###",
+	"###supportedLanguages": "多语言配置，默认支持中文和英文.###",
+	"###graalvmEvalAsPromise": "graalvm执行脚本包装为promise.###",
+	"###accessDenyUris": "限制访问的uri地址.###",
+	"###disableExportEnable": "限制访问的uri地址.###",
+	"###tableRowSelectEnable": "是否启用x_query_assemble_surface模块中listRowSelect,rowCountWhere接口###",
+	"###trustProxyIpList": "可信任的代理服务器ip列表，比如访问o2server通过nginx转发的填写nginx的ip.###",
+	"###extension": "扩展设置.###"
+}

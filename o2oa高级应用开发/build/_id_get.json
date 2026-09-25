@@ -1,0 +1,67 @@
+{
+  "type": "success",
+  "data": {
+    "woUnit": {
+      "subDirectUnitCount": 0,
+      "subDirectIdentityCount": 3,
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+        "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0000000000",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-19 10:50:09"
+    },
+    "woPerson": {
+      "id": "d7169e66-459d-4316-8497-60a6647c2d50",
+      "pinyin": "mengyijie",
+      "pinyinInitial": "myj",
+      "name": "孟弋洁",
+      "unique": "mengyijie",
+      "distinguishedName": "孟弋洁@mengyijie@P",
+      "orderNumber": 275130036,
+      "controllerList": [],
+      "mail": "myj@cfia.local",
+      "mobile": "13700000001",
+      "topUnitList": [
+        "9e8b0b36-dff7-4a2c-8964-11b360d7776e"
+      ],
+      "status": "0",
+      "createTime": "2026-09-20 09:00:37",
+      "updateTime": "2026-09-20 09:00:38"
+    },
+    "id": "15624b12-1c5e-43e5-ade4-2e8852bd746c",
+    "pinyin": "mengyijie",
+    "pinyinInitial": "myj",
+    "name": "孟弋洁",
+    "unique": "51100000500009247D_mengyijie",
+    "distinguishedName": "孟弋洁@51100000500009247D_mengyijie@I",
+    "person": "d7169e66-459d-4316-8497-60a6647c2d50",
+    "unit": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+    "unitName": "中国复合材料工业协会",
+    "unitLevel": 1,
+    "unitLevelName": "中国复合材料工业协会",
+    "orderNumber": 275130037,
+    "major": true,
+    "createTime": "2026-09-20 09:00:38",
+    "updateTime": "2026-09-20 09:00:38"
+  },
+  "message": "",
+  "date": "2026-09-20 09:01:16",
+  "spent": 135,
+  "size": -1,
+  "count": 0,
+  "position": 0
+}

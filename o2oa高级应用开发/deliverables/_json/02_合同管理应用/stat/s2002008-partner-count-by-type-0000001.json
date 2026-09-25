@@ -1,0 +1,28 @@
+{
+  "id": "s2002008-partner-count-by-type-0000001",
+  "name": "签约方类型分布",
+  "alias": "签约方类型分布",
+  "description": "供应商/客户/合作伙伴等类型的签约方数量",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v2002008-contract-partner-view-000000001",
+  "categoryPath": "partner_type",
+  "valuePath": "count",
+  "categoryTitle": "签约方类型",
+  "valueTitle": "数量",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ],
+    "defaultChartType": "pie"
+  }
+}

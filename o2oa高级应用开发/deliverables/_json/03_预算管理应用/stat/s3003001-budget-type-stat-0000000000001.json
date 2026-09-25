@@ -1,0 +1,27 @@
+{
+  "id": "s3003001-budget-type-stat-0000000000001",
+  "name": "预算类别分布统计",
+  "alias": "预算类别分布统计",
+  "description": "按预算类别统计预算总额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v3003001-budget-list-view-00000000000001",
+  "categoryPath": "budget_type",
+  "valuePath": "total_amount",
+  "categoryTitle": "预算类别",
+  "valueTitle": "预算总额",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

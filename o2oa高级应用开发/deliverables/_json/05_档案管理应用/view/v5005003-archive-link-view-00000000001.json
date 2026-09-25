@@ -1,0 +1,192 @@
+{
+  "id": "v5005003-archive-link-view-00000000001",
+  "name": "档案关联查询视图",
+  "alias": "档案关联查询视图",
+  "description": "按项目/合同反查关联档案",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"档案编号\", \"path\": \"archive_no\", \"id\": \"v5005003-archive-link-view-00000000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"档案名称\", \"path\": \"archive_name\", \"id\": \"v5005003-archive-link-view-00000000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"关联项目编号\", \"path\": \"project_no\", \"id\": \"v5005003-archive-link-view-00000000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"关联合同编号\", \"path\": \"contract_no\", \"id\": \"v5005003-archive-link-view-00000000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"关联预算编号\", \"path\": \"budget_no\", \"id\": \"v5005003-archive-link-view-00000000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_5\", \"displayName\": \"关联报销单号\", \"path\": \"expense_no\", \"id\": \"v5005003-archive-link-view-00000000001_col5\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_6\", \"displayName\": \"存放位置\", \"path\": \"storage_location\", \"id\": \"v5005003-archive-link-view-00000000001_col6\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "process",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [
+    "p5005001-archive-catalog-00000000000001"
+  ],
+  "cmsCategoryList": [],
+  "tableList": [],
+  "filterScript": "",
+  "orderBy": "",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "档案编号",
+      "path": "archive_no",
+      "name": "archive_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "档案名称",
+      "path": "archive_name",
+      "name": "archive_name",
+      "width": "220px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "关联项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "关联合同编号",
+      "path": "contract_no",
+      "name": "contract_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "关联预算编号",
+      "path": "budget_no",
+      "name": "budget_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "关联报销单号",
+      "path": "expense_no",
+      "name": "expense_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "存放位置",
+      "path": "storage_location",
+      "name": "storage_location",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "档案编号",
+      "path": "archive_no",
+      "name": "archive_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "档案名称",
+      "path": "archive_name",
+      "name": "archive_name",
+      "width": "220px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "关联项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "关联合同编号",
+      "path": "contract_no",
+      "name": "contract_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "关联预算编号",
+      "path": "budget_no",
+      "name": "budget_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "关联报销单号",
+      "path": "expense_no",
+      "name": "expense_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "存放位置",
+      "path": "storage_location",
+      "name": "storage_location",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showOperateBar": true,
+    "operateBarWidth": "120px"
+  }
+}

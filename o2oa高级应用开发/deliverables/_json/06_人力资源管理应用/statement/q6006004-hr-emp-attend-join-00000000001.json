@@ -1,0 +1,20 @@
+{
+  "id": "q6006004-hr-emp-attend-join-00000000001",
+  "name": "考勤记录全量",
+  "alias": "考勤记录全量",
+  "description": "考勤明细带员工部门与岗位",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT a.id AS id, a.attend_no AS attend_no, a.employee_no AS employee_no, a.employee_name AS employee_name, a.attend_period AS attend_period, a.attend_date AS attend_date, a.week_day AS week_day, a.on_time AS on_time, a.off_time AS off_time, a.attend_type AS attend_type, a.attend_result AS attend_result, a.should_days AS should_days, a.actual_days AS actual_days, a.late_count AS late_count, a.early_count AS early_count, a.absent_count AS absent_count, a.leave_days AS leave_days, a.overtime_hours AS overtime_hours, a.travel_days AS travel_days, a.attend_status AS attend_status, a.emp_confirm AS emp_confirm, e.dept AS dept, e.position AS position FROM hr_attend a LEFT JOIN hr_employee e ON e.employee_no = a.employee_no",
+  "sql": "SELECT a.id AS id, a.attend_no AS attend_no, a.employee_no AS employee_no, a.employee_name AS employee_name, a.attend_period AS attend_period, a.attend_date AS attend_date, a.week_day AS week_day, a.on_time AS on_time, a.off_time AS off_time, a.attend_type AS attend_type, a.attend_result AS attend_result, a.should_days AS should_days, a.actual_days AS actual_days, a.late_count AS late_count, a.early_count AS early_count, a.absent_count AS absent_count, a.leave_days AS leave_days, a.overtime_hours AS overtime_hours, a.travel_days AS travel_days, a.attend_status AS attend_status, a.emp_confirm AS emp_confirm, e.dept AS dept, e.position AS position FROM hr_attend a LEFT JOIN hr_employee e ON e.employee_no = a.employee_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

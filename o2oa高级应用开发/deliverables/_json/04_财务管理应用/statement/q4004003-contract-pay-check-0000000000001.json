@@ -1,0 +1,20 @@
+{
+  "id": "q4004003-contract-pay-check-0000000000001",
+  "name": "合同付款核查",
+  "alias": "合同付款核查",
+  "description": "核查合同已付金额，防止超合同付款",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT c.contract_no, c.contract_name, c.contract_amount, SUM(p.payment_amount) AS paid_total FROM 合同主表 c LEFT JOIN 付款主表 p ON c.contract_no = p.contract_no GROUP BY c.contract_no",
+  "sql": "SELECT c.contract_no, c.contract_name, c.contract_amount, SUM(p.payment_amount) AS paid_total FROM 合同主表 c LEFT JOIN 付款主表 p ON c.contract_no = p.contract_no GROUP BY c.contract_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

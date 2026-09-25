@@ -1,0 +1,20 @@
+{
+  "id": "q6006006-hr-point-rank-00000000000001",
+  "name": "个人年度积分排名",
+  "alias": "个人年度积分排名",
+  "description": "官方“个人年度排名：姓名|积分|排名”的数据源",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT e.employee_no AS employee_no, e.employee_name AS employee_name, e.dept AS dept, e.position AS position, SUM(p.total_point) AS total_point, SUM(p.year_point) AS year_point, COUNT(p.id) AS point_count, MAX(p.rank_no) AS rank_no FROM hr_employee e LEFT JOIN hr_point p ON p.employee_no = e.employee_no GROUP BY e.employee_no, e.employee_name, e.dept, e.position ORDER BY total_point DESC",
+  "sql": "SELECT e.employee_no AS employee_no, e.employee_name AS employee_name, e.dept AS dept, e.position AS position, SUM(p.total_point) AS total_point, SUM(p.year_point) AS year_point, COUNT(p.id) AS point_count, MAX(p.rank_no) AS rank_no FROM hr_employee e LEFT JOIN hr_point p ON p.employee_no = e.employee_no GROUP BY e.employee_no, e.employee_name, e.dept, e.position ORDER BY total_point DESC",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

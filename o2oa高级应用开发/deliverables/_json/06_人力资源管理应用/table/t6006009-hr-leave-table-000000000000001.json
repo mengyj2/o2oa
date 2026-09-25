@@ -1,0 +1,15 @@
+{
+  "id": "t6006009-hr-leave-table-000000000000001",
+  "name": "t6006009_hr_leave_table",
+  "alias": "请假记录表",
+  "description": "员工请假记录，汇入考勤统计",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"leave_no\", \"description\": \"请假单号\", \"type\": \"string\"}, {\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"leave_type\", \"description\": \"假期类型\", \"type\": \"string\"}, {\"name\": \"start_time\", \"description\": \"开始时间\", \"type\": \"dateTime\"}, {\"name\": \"end_time\", \"description\": \"结束时间\", \"type\": \"dateTime\"}, {\"name\": \"leave_days\", \"description\": \"请假天数\", \"type\": \"double\"}, {\"name\": \"leave_reason\", \"description\": \"请假事由\", \"type\": \"stringLob\"}, {\"name\": \"handover_person\", \"description\": \"工作交代人\", \"type\": \"string\"}, {\"name\": \"leave_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"leave_no\", \"description\": \"请假单号\", \"type\": \"string\"}, {\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"leave_type\", \"description\": \"假期类型\", \"type\": \"string\"}, {\"name\": \"start_time\", \"description\": \"开始时间\", \"type\": \"dateTime\"}, {\"name\": \"end_time\", \"description\": \"结束时间\", \"type\": \"dateTime\"}, {\"name\": \"leave_days\", \"description\": \"请假天数\", \"type\": \"double\"}, {\"name\": \"leave_reason\", \"description\": \"请假事由\", \"type\": \"stringLob\"}, {\"name\": \"handover_person\", \"description\": \"工作交代人\", \"type\": \"string\"}, {\"name\": \"leave_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

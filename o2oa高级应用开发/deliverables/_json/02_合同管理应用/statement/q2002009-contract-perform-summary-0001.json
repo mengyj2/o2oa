@@ -1,0 +1,20 @@
+{
+  "id": "q2002009-contract-perform-summary-0001",
+  "name": "合同履约汇总",
+  "alias": "合同履约汇总",
+  "description": "单个合同的计划/收款/开票全景汇总",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT c.contract_no AS contract_no, c.contract_name AS contract_name, c.project_no AS project_no, c.contract_amount AS contract_amount, c.contract_status AS contract_status, c.perform_rate AS perform_rate, c.receive_total AS receive_total, c.pay_total AS pay_total, c.invoice_total AS invoice_total, IFNULL(rp.plan_count, 0) AS plan_count, IFNULL(rp.plan_amount, 0) AS plan_amount, IFNULL(rc.receive_count, 0) AS receive_count, IFNULL(iv.invoice_count, 0) AS invoice_count FROM contract_main c LEFT JOIN (SELECT contract_no, COUNT(*) AS plan_count,            SUM(plan_amount) AS plan_amount            FROM contract_receive_plan GROUP BY contract_no) rp   ON rp.contract_no = c.contract_no LEFT JOIN (SELECT contract_no, COUNT(*) AS receive_count            FROM contract_receive GROUP BY contract_no) rc   ON rc.contract_no = c.contract_no LEFT JOIN (SELECT contract_no, COUNT(*) AS invoice_count            FROM contract_invoice GROUP BY contract_no) iv   ON iv.contract_no = c.contract_no",
+  "sql": "SELECT c.contract_no AS contract_no, c.contract_name AS contract_name, c.project_no AS project_no, c.contract_amount AS contract_amount, c.contract_status AS contract_status, c.perform_rate AS perform_rate, c.receive_total AS receive_total, c.pay_total AS pay_total, c.invoice_total AS invoice_total, IFNULL(rp.plan_count, 0) AS plan_count, IFNULL(rp.plan_amount, 0) AS plan_amount, IFNULL(rc.receive_count, 0) AS receive_count, IFNULL(iv.invoice_count, 0) AS invoice_count FROM contract_main c LEFT JOIN (SELECT contract_no, COUNT(*) AS plan_count,            SUM(plan_amount) AS plan_amount            FROM contract_receive_plan GROUP BY contract_no) rp   ON rp.contract_no = c.contract_no LEFT JOIN (SELECT contract_no, COUNT(*) AS receive_count            FROM contract_receive GROUP BY contract_no) rc   ON rc.contract_no = c.contract_no LEFT JOIN (SELECT contract_no, COUNT(*) AS invoice_count            FROM contract_invoice GROUP BY contract_no) iv   ON iv.contract_no = c.contract_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

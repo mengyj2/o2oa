@@ -1,0 +1,15 @@
+{
+  "id": "t6006012-hr-self-table-0000000000000001",
+  "name": "t6006012_hr_self_table",
+  "alias": "员工自助申请表",
+  "description": "员工自助综合申请台账，支撑官方“流程类型|标题|发起人|开始时间|当前步骤”列表",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"self_no\", \"description\": \"申请单号\", \"type\": \"string\"}, {\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"self_type\", \"description\": \"申请类型\", \"type\": \"string\"}, {\"name\": \"apply_title\", \"description\": \"申请标题\", \"type\": \"string\"}, {\"name\": \"start_time\", \"description\": \"开始时间\", \"type\": \"dateTime\"}, {\"name\": \"end_time\", \"description\": \"结束时间\", \"type\": \"dateTime\"}, {\"name\": \"current_step\", \"description\": \"当前步骤\", \"type\": \"string\"}, {\"name\": \"self_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"apply_content\", \"description\": \"申请内容\", \"type\": \"stringLob\"}, {\"name\": \"contact_phone\", \"description\": \"联系电话\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}, {\"name\": \"update_time\", \"description\": \"更新时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"self_no\", \"description\": \"申请单号\", \"type\": \"string\"}, {\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"self_type\", \"description\": \"申请类型\", \"type\": \"string\"}, {\"name\": \"apply_title\", \"description\": \"申请标题\", \"type\": \"string\"}, {\"name\": \"start_time\", \"description\": \"开始时间\", \"type\": \"dateTime\"}, {\"name\": \"end_time\", \"description\": \"结束时间\", \"type\": \"dateTime\"}, {\"name\": \"current_step\", \"description\": \"当前步骤\", \"type\": \"string\"}, {\"name\": \"self_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"apply_content\", \"description\": \"申请内容\", \"type\": \"stringLob\"}, {\"name\": \"contact_phone\", \"description\": \"联系电话\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}, {\"name\": \"update_time\", \"description\": \"更新时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

@@ -1,0 +1,30 @@
+{
+  "id": "s6006002-hr-emp-by-status-000000000001",
+  "name": "按员工状态统计人数",
+  "alias": "按员工状态统计人数",
+  "description": "正式员工 / 试用期员工 / 实习期员工 / 离职员工",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006001-hr-employee-all-view-0000000001",
+  "categoryPath": "employee_status",
+  "valuePath": "count",
+  "categoryTitle": "员工状态",
+  "valueTitle": "人数",
+  "chartType": "pie",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column"
+    ],
+    "defaultChartType": "pie",
+    "legendPosition": "bottom",
+    "showLegend": true,
+    "showLabel": true,
+    "moreLink": "v6006001-hr-employee-all-view-0000000001"
+  }
+}

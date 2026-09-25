@@ -1,0 +1,13 @@
+[Unit]
+Description=O2OA Script Sandbox Hardening Watchdog
+After=docker.service
+
+[Service]
+# 路径由 tools/o2_sandbox_harden_watchdog.py --install 在 Linux 主机上自动写入；
+# 这里是参考模板。ExecStart 指向仓库内的看门狗脚本。
+ExecStart=/usr/bin/python3 /opt/o2oa/tools/o2_sandbox_harden_watchdog.py --interval=300
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,88 @@
+<div class="userinfo">
+    <div class="header_content">
+        <div class="header_content_label">
+            <span class="ant-avatar ant-avatar-circle ant-avatar-image ant-avatar-icon">
+                <img src="data:image/png;base64,{{$.icon}}"/>
+            </span>
+        </div>
+        <div class="header_content_box">
+            <div class="user_name">
+                <div>
+                    <span>{{$.name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ant-divider ant-divider-horizontal"></div>
+    <div class="ant-descriptions" style="padding: 0px 12px;">
+        <div class="ant-descriptions-view">
+            <table>
+                <tbody>
+                <tr class="ant-descriptions-row">
+                    <td class="ant-descriptions-item">
+                            <span class="ant-descriptions-item-label ant-descriptions-item-colon">
+                                <span class="text">邮箱</span>
+                            </span>
+                    </td>
+                    <td class="ant-descriptions-item">
+                            <span class="ant-descriptions-item-label ant-descriptions-item-colon">
+                                <span class="text">手机</span>
+                            </span>
+                    </td>
+                </tr>
+                <tr class="ant-descriptions-row">
+                    <td class="ant-descriptions-item">
+                        <div class="info_wrapper">
+                            <div class="info-detail">
+                                    <span class="ant-descriptions-item-content">
+                                        <span>{{$.mail}}</span>
+                                    </span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="ant-descriptions-item">
+                        <div class="info_wrapper">
+                            <div class="info-detail">
+                                    <span class="ant-descriptions-item-content">
+                                        <span>{{$.mobile}}</span>
+                                    </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="ant-descriptions-row">
+                    <td class="ant-descriptions-item">
+                            <span class="ant-descriptions-item-label ant-descriptions-item-colon">
+                                <span class="text">上一次登录时间</span>
+                            </span>
+                    </td>
+                    <td class="ant-descriptions-item">
+                            <span class="ant-descriptions-item-label ant-descriptions-item-colon">
+                                <span class="text">已用容量</span>
+                            </span>
+                    </td>
+                </tr>
+                <tr class="ant-descriptions-row">
+                    <td class="ant-descriptions-item">
+                        <div>
+                                <span class="ant-descriptions-item-content">
+                                    <span>{{$.lastLoginTime}}</span>
+                                </span>
+                        </div>
+                    </td>
+                    <td class="ant-descriptions-item">
+                        <div>
+                                <span class="ant-descriptions-item-content">
+                                    <span>{{$.capacity}}</span>
+                                    <!--                                    <span style="margin-right: 10px;">{{$.doc.capacity}}</span>-->
+                                    <!--                                    <span>已用：{{$.doc.useCapacity}}</span>-->
+                                    <!--                                    <span class="">({{$.doc.percentage}})</span>-->
+                                </span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

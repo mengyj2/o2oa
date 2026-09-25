@@ -1,0 +1,27 @@
+[
+  {
+    "enable": true,
+    "url": "jdbc:mysql://mysql:3306/X?autoReconnect\u003dtrue\u0026allowPublicKeyRetrieval\u003dtrue\u0026useSSL\u003dfalse\u0026useUnicode\u003dtrue\u0026characterEncoding\u003dUTF-8\u0026useLegacyDatetimeCode\u003dfalse\u0026serverTimezone\u003dGMT%2B8",
+    "username": "o2oa",
+    "password": "o2oa_pwd",
+    "driverClassName": "com.mysql.cj.jdbc.Driver",
+    "dictionary": "",
+    "maxTotal": 100,
+    "maxIdle": 0,
+    "statEnable": true,
+    "statFilter": "mergeStat",
+    "includes": [],
+    "excludes": [],
+    "logLevel": "ERROR",
+    "transactionIsolation": "read-committed",
+    "testConnectionOnCheckin": false,
+    "testConnectionOnCheckout": false,
+    "maxIdleTime": 300,
+    "autoCommit": false,
+    "schema": "",
+    "logStatEnable": false,
+    "logStatInterval": 180,
+    "slowSqlEnable": true,
+    "slowSqlThreshold": 3000
+  }
+]

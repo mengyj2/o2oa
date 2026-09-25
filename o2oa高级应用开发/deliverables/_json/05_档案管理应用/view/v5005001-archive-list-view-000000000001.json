@@ -1,0 +1,258 @@
+{
+  "id": "v5005001-archive-list-view-000000000001",
+  "name": "档案台账视图",
+  "alias": "档案台账视图",
+  "description": "全量档案著录与归档信息",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"档案编号\", \"path\": \"archive_no\", \"id\": \"v5005001-archive-list-view-000000000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"档案名称\", \"path\": \"archive_name\", \"id\": \"v5005001-archive-list-view-000000000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"档案类别\", \"path\": \"archive_type\", \"id\": \"v5005001-archive-list-view-000000000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"保密等级\", \"path\": \"archive_level\", \"id\": \"v5005001-archive-list-view-000000000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"来源应用\", \"path\": \"source_app\", \"id\": \"v5005001-archive-list-view-000000000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_5\", \"displayName\": \"关联项目编号\", \"path\": \"project_no\", \"id\": \"v5005001-archive-list-view-000000000001_col5\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_6\", \"displayName\": \"关联合同编号\", \"path\": \"contract_no\", \"id\": \"v5005001-archive-list-view-000000000001_col6\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_7\", \"displayName\": \"保存期限\", \"path\": \"retention_period\", \"id\": \"v5005001-archive-list-view-000000000001_col7\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_8\", \"displayName\": \"归档日期\", \"path\": \"archive_date\", \"id\": \"v5005001-archive-list-view-000000000001_col8\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_9\", \"displayName\": \"档案状态\", \"path\": \"archive_state\", \"id\": \"v5005001-archive-list-view-000000000001_col9\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "process",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [
+    "p5005001-archive-catalog-00000000000001"
+  ],
+  "cmsCategoryList": [],
+  "tableList": [],
+  "filterScript": "",
+  "orderBy": "",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "档案编号",
+      "path": "archive_no",
+      "name": "archive_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "档案名称",
+      "path": "archive_name",
+      "name": "archive_name",
+      "width": "220px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "档案类别",
+      "path": "archive_type",
+      "name": "archive_type",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "保密等级",
+      "path": "archive_level",
+      "name": "archive_level",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "来源应用",
+      "path": "source_app",
+      "name": "source_app",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "关联项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "关联合同编号",
+      "path": "contract_no",
+      "name": "contract_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_7",
+      "title": "保存期限",
+      "path": "retention_period",
+      "name": "retention_period",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_8",
+      "title": "归档日期",
+      "path": "archive_date",
+      "name": "archive_date",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_9",
+      "title": "档案状态",
+      "path": "archive_state",
+      "name": "archive_state",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "档案编号",
+      "path": "archive_no",
+      "name": "archive_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "档案名称",
+      "path": "archive_name",
+      "name": "archive_name",
+      "width": "220px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "档案类别",
+      "path": "archive_type",
+      "name": "archive_type",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "保密等级",
+      "path": "archive_level",
+      "name": "archive_level",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "来源应用",
+      "path": "source_app",
+      "name": "source_app",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "关联项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "关联合同编号",
+      "path": "contract_no",
+      "name": "contract_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_7",
+      "title": "保存期限",
+      "path": "retention_period",
+      "name": "retention_period",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_8",
+      "title": "归档日期",
+      "path": "archive_date",
+      "name": "archive_date",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_9",
+      "title": "档案状态",
+      "path": "archive_state",
+      "name": "archive_state",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showOperateBar": true,
+    "operateBarWidth": "120px"
+  }
+}

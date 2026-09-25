@@ -1,0 +1,20 @@
+{
+  "id": "q1001002-project-contract-link-000000001",
+  "name": "项目合同关联查询",
+  "alias": "项目合同关联查询",
+  "description": "实现项目与合同的双向关联查询",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT p.project_no, p.project_name, c.contract_no, c.contract_name, c.contract_amount, c.contract_status FROM 项目主表 p LEFT JOIN 合同主表 c ON p.project_no = c.project_no",
+  "sql": "SELECT p.project_no, p.project_name, c.contract_no, c.contract_name, c.contract_amount, c.contract_status FROM 项目主表 p LEFT JOIN 合同主表 c ON p.project_no = c.project_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

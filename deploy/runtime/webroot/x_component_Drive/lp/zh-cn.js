@@ -1,0 +1,72 @@
+MWF.xApplication.Drive.LP = {
+	"title": "企业网盘",
+
+	"personal": "个人文件",
+	"shared": "企业文件",
+	"myshare": "我的分享",
+	"recycle": "回收站",
+	"admin": "后台管理",
+
+	"upload": "上传",
+	"mkdir": "新建文件夹",
+	"refresh": "刷新",
+	"download": "下载",
+	"preview": "预览",
+	"zip": "打包下载",
+	"rename": "重命名",
+	"delete": "删除",
+	"share": "共享到企业",
+	"unshare": "取消共享",
+	"saveToMy": "保存到我的网盘",
+	"resume": "还原",
+	"clear": "清空",
+
+	"inputFolderName": "请输入文件夹名称",
+	"inputName": "请输入名称",
+	"confirmDelete": "确定删除选中的项目吗？删除后可在回收站还原。",
+	"confirmClear": "确定清空回收站吗？此操作不可恢复。",
+	"confirmUnshare": "确定取消该共享吗？",
+
+	"backMain": "返回主菜单",
+	"back": "返回列表",
+	"browse": "浏览文件",
+	"newArea": "新建共享区",
+	"creator": "创建者",
+	"status": "状态",
+	"usedSize": "已用容量",
+	"updateTime": "更新时间",
+	"systemSetting": "系统设置",
+	"save": "保存",
+	"reset": "重置",
+
+	"ok": "确定",
+	"cancel": "取消",
+
+	"empty": "这里还没有内容",
+	"emptyFiles": "暂无文件",
+	"loading": "加载中…",
+
+	"name": "名称",
+	"size": "大小",
+	"time": "修改时间",
+	"owner": "分享者",
+	"scope": "共享范围",
+	"category": "分类",
+	"operation": "操作",
+
+	"capacity": "容量",
+	"used": "已使用",
+	"files": "文件",
+	"folders": "文件夹",
+
+	"scopeOrg": "全员",
+	"scopeUser": "指定人员",
+	"scopeGroup": "群组",
+
+	"uploadSuccess": "上传完成",
+	"uploadFailed": "上传失败",
+	"mkdirSuccess": "文件夹已创建",
+	"deleteSuccess": "已移入回收站",
+	"shareSuccess": "已共享到企业文件",
+	"dropUpload": "松开鼠标即可上传"
+};

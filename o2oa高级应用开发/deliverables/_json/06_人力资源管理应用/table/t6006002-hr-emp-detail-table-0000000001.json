@@ -1,0 +1,15 @@
+{
+  "id": "t6006002-hr-emp-detail-table-0000000001",
+  "name": "t6006002_hr_emp_detail_table",
+  "alias": "员工履历明细表",
+  "description": "本单位工作经历/工作经历/教育背景/专业技术资格/奖励情况五类明细统一存储",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"detail_type\", \"description\": \"履历类型\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"position\", \"description\": \"岗位\", \"type\": \"string\"}, {\"name\": \"company\", \"description\": \"公司\", \"type\": \"string\"}, {\"name\": \"school\", \"description\": \"学校名称\", \"type\": \"string\"}, {\"name\": \"major\", \"description\": \"专业\", \"type\": \"string\"}, {\"name\": \"education\", \"description\": \"学历\", \"type\": \"string\"}, {\"name\": \"degree\", \"description\": \"学位\", \"type\": \"string\"}, {\"name\": \"tech_name\", \"description\": \"专业技术资格名称\", \"type\": \"string\"}, {\"name\": \"award_name\", \"description\": \"获奖名称\", \"type\": \"string\"}, {\"name\": \"award_org\", \"description\": \"颁发单位\", \"type\": \"string\"}, {\"name\": \"start_date\", \"description\": \"开始日期\", \"type\": \"date\"}, {\"name\": \"end_date\", \"description\": \"结束日期\", \"type\": \"date\"}, {\"name\": \"work_desc\", \"description\": \"描述\", \"type\": \"stringLob\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"employee_no\", \"description\": \"员工编号\", \"type\": \"string\"}, {\"name\": \"employee_name\", \"description\": \"姓名\", \"type\": \"string\"}, {\"name\": \"detail_type\", \"description\": \"履历类型\", \"type\": \"string\"}, {\"name\": \"dept\", \"description\": \"部门\", \"type\": \"string\"}, {\"name\": \"position\", \"description\": \"岗位\", \"type\": \"string\"}, {\"name\": \"company\", \"description\": \"公司\", \"type\": \"string\"}, {\"name\": \"school\", \"description\": \"学校名称\", \"type\": \"string\"}, {\"name\": \"major\", \"description\": \"专业\", \"type\": \"string\"}, {\"name\": \"education\", \"description\": \"学历\", \"type\": \"string\"}, {\"name\": \"degree\", \"description\": \"学位\", \"type\": \"string\"}, {\"name\": \"tech_name\", \"description\": \"专业技术资格名称\", \"type\": \"string\"}, {\"name\": \"award_name\", \"description\": \"获奖名称\", \"type\": \"string\"}, {\"name\": \"award_org\", \"description\": \"颁发单位\", \"type\": \"string\"}, {\"name\": \"start_date\", \"description\": \"开始日期\", \"type\": \"date\"}, {\"name\": \"end_date\", \"description\": \"结束日期\", \"type\": \"date\"}, {\"name\": \"work_desc\", \"description\": \"描述\", \"type\": \"stringLob\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

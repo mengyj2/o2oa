@@ -1,0 +1,30 @@
+{
+  "id": "s6006010-hr-attend-by-result-000000001",
+  "name": "按结果统计考勤次数",
+  "alias": "按结果统计考勤次数",
+  "description": "正常/迟到/早退/旷工等考勤结果分布",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006011-hr-attend-view-0000000000000001",
+  "categoryPath": "attend_result",
+  "valuePath": "count",
+  "categoryTitle": "考勤结果",
+  "valueTitle": "次数",
+  "chartType": "pie",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column"
+    ],
+    "defaultChartType": "pie",
+    "legendPosition": "bottom",
+    "showLegend": true,
+    "showLabel": true,
+    "moreLink": "v6006011-hr-attend-view-0000000000000001"
+  }
+}

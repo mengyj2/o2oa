@@ -1,0 +1,26 @@
+Compiled from "Runtime.java"
+public class com.x.query.core.express.statement.Runtime extends com.x.base.core.project.gson.GsonPropertyObject {
+  private static final long serialVersionUID;
+  public static final java.lang.String PARAMETER_PERSON;
+  public static final java.lang.String PARAMETER_IDENTITYLIST;
+  public static final java.lang.String PARAMETER_UNITLIST;
+  public static final java.lang.String PARAMETER_UNITALLLIST;
+  public static final java.lang.String PARAMETER_GROUPLIST;
+  public static final java.lang.String PARAMETER_ROLELIST;
+  public static final java.util.List<java.lang.String> ALL_BUILT_IN_PARAMETER;
+  public static final java.lang.String filterList_FIELDNAME;
+  public java.util.List<com.x.query.core.express.plan.FilterEntry> filterList;
+  public static final java.lang.String parameter_FIELDNAME;
+  public java.util.Map<java.lang.String, java.lang.Object> parameter;
+  public java.lang.Integer page;
+  public java.lang.Integer size;
+  public com.x.query.core.express.statement.Runtime();
+  public java.util.Map<java.lang.String, java.lang.Object> getParameter();
+  public boolean hasParameter(java.lang.String);
+  public void setParameter(java.lang.String, java.lang.Object);
+  public java.lang.Object getParameter(java.lang.String);
+  public java.util.List<com.x.query.core.express.plan.FilterEntry> getFilterList();
+  public void setFilterList(java.util.List<com.x.query.core.express.plan.FilterEntry>);
+  public static com.x.query.core.express.statement.Runtime concrete(com.x.base.core.project.http.EffectivePerson, com.google.gson.JsonElement, com.x.organization.core.express.Organization, java.lang.Integer, java.lang.Integer) throws java.lang.Exception;
+  static {};
+}

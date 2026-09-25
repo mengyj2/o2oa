@@ -1,0 +1,129 @@
+
+.bg-small_word {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -290px -10px;
+}
+.bg-small_vedio {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -290px -56px;
+}
+.bg-small_txt {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -290px -102px;
+}
+.bg-small_rar {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -290px -148px;
+}
+.bg-small_ppt {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -290px -194px;
+}
+.bg-small_pdf {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -290px -240px;
+}
+.bg-small_other {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -10px -290px;
+}
+.bg-small_music {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -56px -290px;
+}
+.bg-small_js {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -102px -290px;
+}
+.bg-small_img {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -148px -290px;
+}
+.bg-small_html {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -194px -290px;
+}
+.bg-small_folder {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -240px -290px;
+}
+.bg-small_file {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -286px -290px;
+}
+.bg-small_exe {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -336px -10px;
+}
+.bg-small_excel {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -336px -56px;
+}
+.bg-small_css {
+    width: 26px; height: 26px;
+    background: url('../image/css_sprites.png') -336px -102px;
+}
+.bg-large_word {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -10px -10px;
+}
+.bg-large_vedio {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -80px -10px;
+}
+.bg-large_txt {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -10px -80px;
+}
+.bg-large_rar {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -80px -80px;
+}
+.bg-large_ppt {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -150px -10px;
+}
+.bg-large_pdf {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -150px -80px;
+}
+.bg-large_other {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -10px -150px;
+}
+.bg-large_music {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -80px -150px;
+}
+.bg-large_js {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -150px -150px;
+}
+.bg-large_img {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -220px -10px;
+}
+.bg-large_html {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -220px -80px;
+}
+.bg-large_folder {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -220px -150px;
+}
+.bg-large_file {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -10px -220px;
+}
+.bg-large_exe {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -80px -220px;
+}
+.bg-large_excel {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -150px -220px;
+}
+.bg-large_css {
+    width: 50px; height: 50px;
+    background: url('../image/css_sprites.png') -220px -220px;
+}

@@ -1,0 +1,20 @@
+{
+  "id": "q2002005-pay-full-join-0000000000001",
+  "name": "合同付款全量",
+  "alias": "合同付款全量",
+  "description": "付款单带合同与预算信息（project_no + budget_no + expense_no 三方挂靠）",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT py.id AS id, py.pay_no AS pay_no, py.contract_no AS contract_no, py.budget_no AS budget_no, py.pay_plan_no AS pay_plan_no, py.pay_type AS pay_type, py.pay_amount AS pay_amount, py.pay_date AS pay_date, py.payee_name AS payee_name, py.pay_status AS pay_status, py.expense_no AS expense_no, c.contract_name AS contract_name, c.project_no AS project_no, c.sign_unit AS sign_unit, c.contract_amount AS contract_amount, c.pay_total AS pay_total FROM contract_pay py LEFT JOIN contract_main c ON c.contract_no = py.contract_no",
+  "sql": "SELECT py.id AS id, py.pay_no AS pay_no, py.contract_no AS contract_no, py.budget_no AS budget_no, py.pay_plan_no AS pay_plan_no, py.pay_type AS pay_type, py.pay_amount AS pay_amount, py.pay_date AS pay_date, py.payee_name AS payee_name, py.pay_status AS pay_status, py.expense_no AS expense_no, c.contract_name AS contract_name, c.project_no AS project_no, c.sign_unit AS sign_unit, c.contract_amount AS contract_amount, c.pay_total AS pay_total FROM contract_pay py LEFT JOIN contract_main c ON c.contract_no = py.contract_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

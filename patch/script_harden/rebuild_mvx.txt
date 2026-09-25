@@ -1,0 +1,32 @@
+BASE bytes=1244308
+COMPILE_OK
+MATCH_EVAL desc=(Lorg/graalvm/polyglot/Source;Lcom/x/base/core/project/scripting/GraalvmScriptingFactory$Bindings;)Lcom/google/gson/JsonElement;
+MATCH_ALLOWCLASS
+PATCHED com/x/base/core/project/scripting/GraalvmScriptingFactory.class
+JAR_UPDATED /tmp/sh/x_base_core_project.work.jar
+=== eval 确认（必须出现 hardenedHostAccess，且不再有 getstatic HostAccess.ALL）===
+5:       4: invokestatic  #43                 // Method org/graalvm/polyglot/Context.newBuilder:([Ljava/lang/String;)Lorg/graalvm/polyglot/Context$Builder;
+10:      17: getstatic     #63                 // Field org/graalvm/polyglot/HostAccess.ALL:Lorg/graalvm/polyglot/HostAccess;
+11:      20: invokevirtual #69                 // Method org/graalvm/polyglot/Context$Builder.allowHostAccess:(Lorg/graalvm/polyglot/HostAccess;)Lorg/graalvm/polyglot/Context$Builder;
+13:      28: invokevirtual #77                 // Method org/graalvm/polyglot/Context$Builder.allowHostClassLookup:(Ljava/util/function/Predicate;)Lorg/graalvm/polyglot/Context$Builder;
+=== allowClass 确认 ===
+  private static boolean allowClass(java.lang.String);
+    Code:
+       0: aload_0
+       1: invokestatic  #832                // Method com/x/base/core/project/scripting/ScriptHostAccessPolicy.isDangerousClass:(Ljava/lang/String;)Z
+       4: ifeq          9
+       7: iconst_0
+       8: ireturn
+       9: getstatic     #296                // Field denyClassList:Ljava/util/List;
+      12: aload_0
+      13: invokeinterface #300,  2          // InterfaceMethod java/util/List.contains:(Ljava/lang/Object;)Z
+      18: ifeq          23
+      21: iconst_0
+      22: ireturn
+=== verify ===
+  [PASS] java.lang.ClassLoader 被拒
+  [PASS] Runtime.getRuntime().exec 被 HostAccess 拦截 : 已拦截 (PolyglotException)
+  [PASS] 反射链 Class.forName().getMethod().invoke() 被拦截 : 已拦截 (PolyglotException)
+  [PASS] new java.io.File().exists() 被 HostAccess 拦截 : 已拦截 (PolyglotException)
+  [PASS] new java.net.Socket() 被 HostAccess 拦截 : 已拦截 (PolyglotException)
+VERIFY_OK

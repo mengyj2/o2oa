@@ -1,0 +1,20 @@
+{
+  "id": "q4004001-project-cost-summary-0000000001",
+  "name": "项目成本汇总查询",
+  "alias": "项目成本汇总查询",
+  "description": "按项目汇总报销成本并计算偏差率",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT p.project_no, p.project_name, p.total_budget, SUM(e.total_amount) AS expense_total, SUM(e.total_amount) - p.total_budget AS variance, ROUND((SUM(e.total_amount) - p.total_budget) * 100.0 / p.total_budget, 2) AS variance_rate FROM 项目主表 p LEFT JOIN 报销主表 e ON p.project_no = e.project_no GROUP BY p.project_no",
+  "sql": "SELECT p.project_no, p.project_name, p.total_budget, SUM(e.total_amount) AS expense_total, SUM(e.total_amount) - p.total_budget AS variance, ROUND((SUM(e.total_amount) - p.total_budget) * 100.0 / p.total_budget, 2) AS variance_rate FROM 项目主表 p LEFT JOIN 报销主表 e ON p.project_no = e.project_no GROUP BY p.project_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

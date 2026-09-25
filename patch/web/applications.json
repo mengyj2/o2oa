@@ -1,0 +1,114 @@
+[
+ {
+  "title": "公文管理",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%223aed5fe9-1bde-42e0-b8ed-67bf4b5485f9%22%2C%20%22appId%22%3A%20%22process.Application3aed5fe9-1bde-42e0-b8ed-67bf4b5485f9%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "办公用品管理",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22fe6c1a72-eba6-4c3f-b8ad-a52153ed8eb1%22%2C%20%22appId%22%3A%20%22process.Applicationfe6c1a72-eba6-4c3f-b8ad-a52153ed8eb1%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "加班申请",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22ab822183-20a8-4886-9207-b0e0f83777ec%22%2C%20%22appId%22%3A%20%22process.Applicationab822183-20a8-4886-9207-b0e0f83777ec%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "固定资产管理",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22dcc4e700-d593-4b20-a054-74871031f263%22%2C%20%22appId%22%3A%20%22process.Applicationdcc4e700-d593-4b20-a054-74871031f263%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "培训申请",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%229174024a-a4ef-498d-9446-c9a1faa53def%22%2C%20%22appId%22%3A%20%22process.Application9174024a-a4ef-498d-9446-c9a1faa53def%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "用车管理",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%229bed0d41-a4e9-40bc-9e0e-21a33c03475c%22%2C%20%22appId%22%3A%20%22process.Application9bed0d41-a4e9-40bc-9e0e-21a33c03475c%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "考勤补卡申请",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22e56307fd-8010-4603-9c5e-b92c1ab90be9%22%2C%20%22appId%22%3A%20%22process.Applicatione56307fd-8010-4603-9c5e-b92c1ab90be9%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "请假管理",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22aca16606-b34f-4a95-a40d-e2af950c4354%22%2C%20%22appId%22%3A%20%22process.Applicationaca16606-b34f-4a95-a40d-e2af950c4354%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "报销申请",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%228e178f65-2516-415c-8b5b-76f2242e3768%22%2C%20%22appId%22%3A%20%22process.Application8e178f65-2516-415c-8b5b-76f2242e3768%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "出差申请",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%221d5f9c01-11e6-4e68-bb79-72d12f27ebee%22%2C%20%22appId%22%3A%20%22process.Application1d5f9c01-11e6-4e68-bb79-72d12f27ebee%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "会议管理",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22b3a0e81e-8104-4bf1-b530-681ac7b885f6%22%2C%20%22appId%22%3A%20%22process.Applicationb3a0e81e-8104-4bf1-b530-681ac7b885f6%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "绩效考核",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%221bd563e2-e9d3-4962-b58a-bb28deccf9af%22%2C%20%22appId%22%3A%20%22process.Application1bd563e2-e9d3-4962-b58a-bb28deccf9af%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "信息发布",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22c3b31a9e-8768-4b18-ac94-dc370f1e8b5b%22%2C%20%22appId%22%3A%20%22process.Applicationc3b31a9e-8768-4b18-ac94-dc370f1e8b5b%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "档案管理应用",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22a5005000-archive-app-00000000000000001%22%2C%20%22appId%22%3A%20%22process.Applicationa5005000-archive-app-00000000000000001%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "财务管理应用",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22a4004000-finance-app-00000000000000001%22%2C%20%22appId%22%3A%20%22process.Applicationa4004000-finance-app-00000000000000001%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ },
+ {
+  "title": "预算管理应用",
+  "path": "@url:http://localhost:9090/x_desktop/index.html?app=process.Application&option=%7B%22id%22%3A%20%22a3003000-budget-app-00000000000000001%22%2C%20%22appId%22%3A%20%22process.Applicationa3003000-budget-app-00000000000000001%22%7D",
+  "iconPath": "http://localhost:9090/x_component_process_ApplicationExplorer/$Main/default/icon/application.png",
+  "allowList": [],
+  "denyList": []
+ }
+]

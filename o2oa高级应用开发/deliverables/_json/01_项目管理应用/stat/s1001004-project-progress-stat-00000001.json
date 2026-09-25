@@ -1,0 +1,27 @@
+{
+  "id": "s1001004-project-progress-stat-00000001",
+  "name": "项目进度统计",
+  "alias": "项目进度统计",
+  "description": "按报告类型统计平均完成度",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v1001003-project-progress-view-000000001",
+  "categoryPath": "report_type",
+  "valuePath": "overall_progress",
+  "categoryTitle": "报告类型",
+  "valueTitle": "平均完成度",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

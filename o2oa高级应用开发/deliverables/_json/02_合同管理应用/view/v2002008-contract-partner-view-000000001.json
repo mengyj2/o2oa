@@ -1,0 +1,424 @@
+{
+  "id": "v2002008-contract-partner-view-000000001",
+  "name": "签约方档案",
+  "alias": "签约方档案",
+  "description": "签约对方档案列表",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"签约方名称\", \"path\": \"partner_name\", \"id\": \"v2002008-contract-partner-view-000000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"签约方编号\", \"path\": \"partner_no\", \"id\": \"v2002008-contract-partner-view-000000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"签约方类型\", \"path\": \"partner_type\", \"id\": \"v2002008-contract-partner-view-000000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"统一社会信用代码\", \"path\": \"credit_code\", \"id\": \"v2002008-contract-partner-view-000000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"法定代表人\", \"path\": \"legal_person\", \"id\": \"v2002008-contract-partner-view-000000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_5\", \"displayName\": \"联系人\", \"path\": \"contact_name\", \"id\": \"v2002008-contract-partner-view-000000001_col5\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_6\", \"displayName\": \"联系电话\", \"path\": \"contact_phone\", \"id\": \"v2002008-contract-partner-view-000000001_col6\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_7\", \"displayName\": \"信用等级\", \"path\": \"partner_level\", \"id\": \"v2002008-contract-partner-view-000000001_col7\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_8\", \"displayName\": \"档案状态\", \"path\": \"partner_status\", \"id\": \"v2002008-contract-partner-view-000000001_col8\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "process",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [
+    "p2002013-contract-partner-00000000001"
+  ],
+  "cmsCategoryList": [],
+  "tableList": [
+    "t2002007-contract-partner-table-0000000001"
+  ],
+  "filterScript": "",
+  "orderBy": "partner_no asc",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "签约方名称",
+      "path": "partner_name",
+      "name": "partner_name",
+      "width": "240px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "签约方编号",
+      "path": "partner_no",
+      "name": "partner_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "签约方类型",
+      "path": "partner_type",
+      "name": "partner_type",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "统一社会信用代码",
+      "path": "credit_code",
+      "name": "credit_code",
+      "width": "190px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "法定代表人",
+      "path": "legal_person",
+      "name": "legal_person",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "联系人",
+      "path": "contact_name",
+      "name": "contact_name",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "联系电话",
+      "path": "contact_phone",
+      "name": "contact_phone",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_7",
+      "title": "信用等级",
+      "path": "partner_level",
+      "name": "partner_level",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_8",
+      "title": "档案状态",
+      "path": "partner_status",
+      "name": "partner_status",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "签约方名称",
+      "path": "partner_name",
+      "name": "partner_name",
+      "width": "240px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "签约方编号",
+      "path": "partner_no",
+      "name": "partner_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "签约方类型",
+      "path": "partner_type",
+      "name": "partner_type",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "统一社会信用代码",
+      "path": "credit_code",
+      "name": "credit_code",
+      "width": "190px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "法定代表人",
+      "path": "legal_person",
+      "name": "legal_person",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "联系人",
+      "path": "contact_name",
+      "name": "contact_name",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "联系电话",
+      "path": "contact_phone",
+      "name": "contact_phone",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_7",
+      "title": "信用等级",
+      "path": "partner_level",
+      "name": "partner_level",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_8",
+      "title": "档案状态",
+      "path": "partner_status",
+      "name": "partner_status",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "searchPlaceholder": "输入关键字搜索视图",
+    "isAdvanceSearch": true,
+    "isSelectAll": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showPageBar": true,
+    "pageBarButtons": [
+      "第一页",
+      "上一页",
+      "下一页",
+      "最后一页"
+    ],
+    "showOperateBar": true,
+    "operateBarWidth": "150px",
+    "rowHeight": "36px",
+    "striped": true,
+    "bordered": true,
+    "hoverable": true,
+    "toolbarButtonList": [
+      {
+        "id": "btn_exportExcel",
+        "name": "导出Excel",
+        "title": "导出Excel",
+        "type": "toolbar",
+        "target": "",
+        "icon": "",
+        "order": 0,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_partner",
+        "name": "签约方档案登记",
+        "title": "签约方档案登记",
+        "type": "process",
+        "target": "p2002013-contract-partner-00000000001",
+        "icon": "",
+        "order": 1,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_edit",
+        "name": "编辑",
+        "title": "编辑",
+        "type": "edit",
+        "target": "",
+        "icon": "",
+        "order": 2,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_delete",
+        "name": "删除",
+        "title": "删除",
+        "type": "delete",
+        "target": "",
+        "icon": "",
+        "order": 3,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      }
+    ]
+  },
+  "toolbarButtonList": [
+    {
+      "id": "btn_exportExcel",
+      "name": "导出Excel",
+      "title": "导出Excel",
+      "type": "toolbar",
+      "target": "",
+      "icon": "",
+      "order": 0,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_partner",
+      "name": "签约方档案登记",
+      "title": "签约方档案登记",
+      "type": "process",
+      "target": "p2002013-contract-partner-00000000001",
+      "icon": "",
+      "order": 1,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_edit",
+      "name": "编辑",
+      "title": "编辑",
+      "type": "edit",
+      "target": "",
+      "icon": "",
+      "order": 2,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_delete",
+      "name": "删除",
+      "title": "删除",
+      "type": "delete",
+      "target": "",
+      "icon": "",
+      "order": 3,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    }
+  ]
+}

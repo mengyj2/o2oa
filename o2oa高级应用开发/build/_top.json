@@ -1,0 +1,38 @@
+{
+  "type": "success",
+  "data": [
+    {
+      "subDirectUnitCount": 0,
+      "subDirectIdentityCount": 2,
+      "control": {
+        "allowEdit": true,
+        "allowDelete": true
+      },
+      "id": "9e8b0b36-dff7-4a2c-8964-11b360d7776e",
+      "name": "中国复合材料工业协会",
+      "unique": "51100000500009247D",
+      "distinguishedName": "中国复合材料工业协会@51100000500009247D@U",
+      "typeList": [
+        "行业组织"
+      ],
+      "pinyin": "zhongguofuhecailiaogongyexiehui",
+      "pinyinInitial": "zgfhclgyxh",
+      "description": "为复合材料行业提供服务",
+      "shortName": "中国复材",
+      "level": 1,
+      "levelName": "中国复合材料工业协会",
+      "levelOrderNumber": "0000000000",
+      "superior": "",
+      "orderNumber": 275050209,
+      "controllerList": [],
+      "createTime": "2026-09-19 10:50:09",
+      "updateTime": "2026-09-19 10:50:09"
+    }
+  ],
+  "message": "",
+  "date": "2026-09-20 08:57:48",
+  "spent": 243,
+  "size": 1,
+  "count": 0,
+  "position": 0
+}

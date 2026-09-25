@@ -1,0 +1,12 @@
+{
+  "indexPage": {
+    "enable": false,
+    "portal": "",
+    "page": ""
+  },
+  "loginPage": {
+    "enable": false,
+    "portal": "",
+    "page": ""
+  }
+}

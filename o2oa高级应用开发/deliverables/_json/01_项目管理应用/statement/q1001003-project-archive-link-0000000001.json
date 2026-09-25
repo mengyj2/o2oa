@@ -1,0 +1,20 @@
+{
+  "id": "q1001003-project-archive-link-0000000001",
+  "name": "项目档案关联查询",
+  "alias": "项目档案关联查询",
+  "description": "实现项目与档案的关联查询",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT p.project_no, p.project_name, a.archive_no, a.archive_name, a.archive_type, a.archive_state FROM 项目主表 p LEFT JOIN 档案主表 a ON p.project_no = a.project_no",
+  "sql": "SELECT p.project_no, p.project_name, a.archive_no, a.archive_name, a.archive_type, a.archive_state FROM 项目主表 p LEFT JOIN 档案主表 a ON p.project_no = a.project_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

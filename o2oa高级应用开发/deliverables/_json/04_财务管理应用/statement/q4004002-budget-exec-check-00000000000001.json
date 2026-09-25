@@ -1,0 +1,20 @@
+{
+  "id": "q4004002-budget-exec-check-00000000000001",
+  "name": "预算执行核查",
+  "alias": "预算执行核查",
+  "description": "核查预算余额，防止超预算支出",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT b.budget_no, b.budget_name, b.total_amount AS budget_amount, SUM(e.total_amount) AS expense_amount, b.total_amount - SUM(e.total_amount) AS remain FROM 预算主表 b LEFT JOIN 报销主表 e ON b.budget_no = e.budget_no GROUP BY b.budget_no",
+  "sql": "SELECT b.budget_no, b.budget_name, b.total_amount AS budget_amount, SUM(e.total_amount) AS expense_amount, b.total_amount - SUM(e.total_amount) AS remain FROM 预算主表 b LEFT JOIN 报销主表 e ON b.budget_no = e.budget_no GROUP BY b.budget_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

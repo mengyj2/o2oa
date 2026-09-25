@@ -1,0 +1,20 @@
+{
+  "id": "q6006010-hr-leave-overtime-join-000000001",
+  "name": "请假加班出差合并",
+  "alias": "请假加班出差合并",
+  "description": "请假记录带员工档案（与加班/出差表结构对齐，供 UNION 合并）",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT l.id AS id, 'lv' AS biz_flag, l.leave_no AS biz_no, l.employee_no AS employee_no, l.employee_name AS employee_name, l.leave_type AS biz_type, l.leave_days AS biz_days, l.start_time AS start_time, l.end_time AS end_time, l.leave_status AS biz_status, l.process_id AS process_id, e.dept AS dept, e.position AS position FROM hr_leave l LEFT JOIN hr_employee e ON e.employee_no = l.employee_no",
+  "sql": "SELECT l.id AS id, 'lv' AS biz_flag, l.leave_no AS biz_no, l.employee_no AS employee_no, l.employee_name AS employee_name, l.leave_type AS biz_type, l.leave_days AS biz_days, l.start_time AS start_time, l.end_time AS end_time, l.leave_status AS biz_status, l.process_id AS process_id, e.dept AS dept, e.position AS position FROM hr_leave l LEFT JOIN hr_employee e ON e.employee_no = l.employee_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

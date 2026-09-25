@@ -1,0 +1,445 @@
+{
+  "id": "v2002005-contract-pay-plan-view-00000001",
+  "name": "付款计划",
+  "alias": "付款计划",
+  "description": "合同分期付款计划列表",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"计划编号\", \"path\": \"pay_plan_no\", \"id\": \"v2002005-contract-pay-plan-view-00000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"合同编号\", \"path\": \"contract_no\", \"id\": \"v2002005-contract-pay-plan-view-00000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"关联预算\", \"path\": \"budget_no\", \"id\": \"v2002005-contract-pay-plan-view-00000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"付款类型\", \"path\": \"pay_type\", \"id\": \"v2002005-contract-pay-plan-view-00000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"计划金额\", \"path\": \"plan_amount\", \"id\": \"v2002005-contract-pay-plan-view-00000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_5\", \"displayName\": \"计划付款日期\", \"path\": \"plan_date\", \"id\": \"v2002005-contract-pay-plan-view-00000001_col5\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_6\", \"displayName\": \"已付金额\", \"path\": \"paid_amount\", \"id\": \"v2002005-contract-pay-plan-view-00000001_col6\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_7\", \"displayName\": \"计划状态\", \"path\": \"plan_status\", \"id\": \"v2002005-contract-pay-plan-view-00000001_col7\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "process",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [
+    "p2002009-contract-pay-plan-0000000001",
+    "p2002010-contract-pay-change-00000001"
+  ],
+  "cmsCategoryList": [],
+  "tableList": [
+    "t2002005-contract-pay-table-0000000000001"
+  ],
+  "filterScript": "",
+  "orderBy": "plan_date asc",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "计划编号",
+      "path": "pay_plan_no",
+      "name": "pay_plan_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "合同编号",
+      "path": "contract_no",
+      "name": "contract_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "关联预算",
+      "path": "budget_no",
+      "name": "budget_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "付款类型",
+      "path": "pay_type",
+      "name": "pay_type",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "计划金额",
+      "path": "plan_amount",
+      "name": "plan_amount",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "计划付款日期",
+      "path": "plan_date",
+      "name": "plan_date",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "已付金额",
+      "path": "paid_amount",
+      "name": "paid_amount",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_7",
+      "title": "计划状态",
+      "path": "plan_status",
+      "name": "plan_status",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "计划编号",
+      "path": "pay_plan_no",
+      "name": "pay_plan_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "合同编号",
+      "path": "contract_no",
+      "name": "contract_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "关联预算",
+      "path": "budget_no",
+      "name": "budget_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "付款类型",
+      "path": "pay_type",
+      "name": "pay_type",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "计划金额",
+      "path": "plan_amount",
+      "name": "plan_amount",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "计划付款日期",
+      "path": "plan_date",
+      "name": "plan_date",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "已付金额",
+      "path": "paid_amount",
+      "name": "paid_amount",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_7",
+      "title": "计划状态",
+      "path": "plan_status",
+      "name": "plan_status",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "searchPlaceholder": "输入关键字搜索视图",
+    "isAdvanceSearch": true,
+    "isSelectAll": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showPageBar": true,
+    "pageBarButtons": [
+      "第一页",
+      "上一页",
+      "下一页",
+      "最后一页"
+    ],
+    "showOperateBar": true,
+    "operateBarWidth": "150px",
+    "rowHeight": "36px",
+    "striped": true,
+    "bordered": true,
+    "hoverable": true,
+    "toolbarButtonList": [
+      {
+        "id": "btn_exportExcel",
+        "name": "导出Excel",
+        "title": "导出Excel",
+        "type": "toolbar",
+        "target": "",
+        "icon": "",
+        "order": 0,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_edit",
+        "name": "编辑",
+        "title": "编辑",
+        "type": "edit",
+        "target": "",
+        "icon": "",
+        "order": 1,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_delete",
+        "name": "删除",
+        "title": "删除",
+        "type": "delete",
+        "target": "",
+        "icon": "",
+        "order": 2,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_payChange",
+        "name": "发起付款计划变更",
+        "title": "发起付款计划变更",
+        "type": "process",
+        "target": "p2002010-contract-pay-change-00000001",
+        "icon": "",
+        "order": 3,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_pay",
+        "name": "合同付款",
+        "title": "合同付款",
+        "type": "process",
+        "target": "p2002011-contract-pay-000000000000001",
+        "icon": "",
+        "order": 4,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      }
+    ]
+  },
+  "toolbarButtonList": [
+    {
+      "id": "btn_exportExcel",
+      "name": "导出Excel",
+      "title": "导出Excel",
+      "type": "toolbar",
+      "target": "",
+      "icon": "",
+      "order": 0,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_edit",
+      "name": "编辑",
+      "title": "编辑",
+      "type": "edit",
+      "target": "",
+      "icon": "",
+      "order": 1,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_delete",
+      "name": "删除",
+      "title": "删除",
+      "type": "delete",
+      "target": "",
+      "icon": "",
+      "order": 2,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_payChange",
+      "name": "发起付款计划变更",
+      "title": "发起付款计划变更",
+      "type": "process",
+      "target": "p2002010-contract-pay-change-00000001",
+      "icon": "",
+      "order": 3,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_pay",
+      "name": "合同付款",
+      "title": "合同付款",
+      "type": "process",
+      "target": "p2002011-contract-pay-000000000000001",
+      "icon": "",
+      "order": 4,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    }
+  ]
+}

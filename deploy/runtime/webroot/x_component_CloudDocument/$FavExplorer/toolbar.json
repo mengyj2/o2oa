@@ -1,0 +1,11 @@
+{
+  "headToolBar" : [
+  ],
+  "selectToolBar": [
+    {
+      "title": "取消星标",
+      "action": "unStarMulti",
+      "style" : ""
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "q2002006-invoice-full-join-000000001",
+  "name": "开票申请全量",
+  "alias": "开票申请全量",
+  "description": "开票申请带合同与累计开票信息",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT i.id AS id, i.invoice_apply_no AS invoice_apply_no, i.contract_no AS contract_no, i.invoice_type AS invoice_type, i.invoice_amount AS invoice_amount, i.tax_rate AS tax_rate, i.tax_amount AS tax_amount, i.net_amount AS net_amount, i.buyer_name AS buyer_name, i.buyer_tax_no AS buyer_tax_no, i.invoice_no AS invoice_no, i.invoice_date AS invoice_date, i.apply_status AS apply_status, c.contract_name AS contract_name, c.project_no AS project_no, c.contract_amount AS contract_amount, c.invoice_total AS invoice_total FROM contract_invoice i LEFT JOIN contract_main c ON c.contract_no = i.contract_no",
+  "sql": "SELECT i.id AS id, i.invoice_apply_no AS invoice_apply_no, i.contract_no AS contract_no, i.invoice_type AS invoice_type, i.invoice_amount AS invoice_amount, i.tax_rate AS tax_rate, i.tax_amount AS tax_amount, i.net_amount AS net_amount, i.buyer_name AS buyer_name, i.buyer_tax_no AS buyer_tax_no, i.invoice_no AS invoice_no, i.invoice_date AS invoice_date, i.apply_status AS apply_status, c.contract_name AS contract_name, c.project_no AS project_no, c.contract_amount AS contract_amount, c.invoice_total AS invoice_total FROM contract_invoice i LEFT JOIN contract_main c ON c.contract_no = i.contract_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

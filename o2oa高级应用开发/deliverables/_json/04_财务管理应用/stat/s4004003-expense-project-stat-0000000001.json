@@ -1,0 +1,27 @@
+{
+  "id": "s4004003-expense-project-stat-0000000001",
+  "name": "项目报销统计",
+  "alias": "项目报销统计",
+  "description": "按项目统计报销金额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v4004001-expense-list-view-000000000001",
+  "categoryPath": "project_no",
+  "valuePath": "total_amount",
+  "categoryTitle": "项目编号",
+  "valueTitle": "报销金额",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

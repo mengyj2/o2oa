@@ -1,0 +1,54 @@
+{
+  "listen_host": "0.0.0.0",
+  "listen_port": 18790,
+  "token": "local-o2-agent-2026",
+  "bionic_base": "http://127.0.0.1:1234",
+  "embed_base": "http://127.0.0.1:8089",
+  "bionic_key": "lm-studio",
+  "chat_model": "qwen3.8-27b",
+  "embed_models": [
+    "qwen3-embed"
+  ],
+  "rag_top_k": 12,
+  "chunk_size": 500,
+  "chunk_overlap": 60,
+  "max_turns": 5,
+  "mcp_max_turns": 20,
+  "mcp_timeout": 180,
+  "o2oa_base": "http://127.0.0.1:9090",
+  "o2oa_admin_token": "",
+  "ocr_base": "http://127.0.0.1:8091",
+  "ocr_max_chars": 20000,
+  "mcp_servers": [
+    {
+      "name": "demo",
+      "transport": "stdio",
+      "command": "C:/Users/meng_/.workbuddy/binaries/python/envs/default/Scripts/python.exe",
+      "args": [
+        "D:/O2OA/gateway/demo_mcp_server.py"
+      ]
+    },
+    {
+      "name": "o2oa",
+      "transport": "stdio",
+      "command": "python",
+      "args": [
+        "D:/O2OA/gateway/o2oa_tools_mcp.py"
+      ],
+      "env": {
+        "O2OA_BASE": "http://127.0.0.1:9090",
+        "O2OA_USER": "xadmin",
+        "O2OA_PASSWORD": "o2oaadmin2026"
+      },
+      "timeout": 30
+    }
+  ],
+  "rerank_enable": false,
+  "rerank_base": "http://127.0.0.1:8092",
+  "rerank_model": "bge-reranker-v2-m3",
+  "rag_rerank_candidate": 24,
+  "rewrite_enable": true,
+  "o2oa_svc_user": "网关服务号",
+  "o2oa_svc_pwd": "GwSvc@o2oa2026",
+  "web_enable": false
+}

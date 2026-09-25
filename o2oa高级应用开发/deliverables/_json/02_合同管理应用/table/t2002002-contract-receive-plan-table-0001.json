@@ -1,0 +1,15 @@
+{
+  "id": "t2002002-contract-receive-plan-table-0001",
+  "name": "t2002002_contract_receive_plan_table",
+  "alias": "收款计划表",
+  "description": "合同分期收款计划明细",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"plan_no\", \"description\": \"计划编号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"period_index\", \"description\": \"期次\", \"type\": \"integer\"}, {\"name\": \"period_name\", \"description\": \"期次名称\", \"type\": \"string\"}, {\"name\": \"plan_ratio\", \"description\": \"占比%\", \"type\": \"double\"}, {\"name\": \"plan_amount\", \"description\": \"计划金额\", \"type\": \"double\"}, {\"name\": \"plan_date\", \"description\": \"计划收款日期\", \"type\": \"date\"}, {\"name\": \"receive_condition\", \"description\": \"收款条件\", \"type\": \"string\"}, {\"name\": \"received_amount\", \"description\": \"已收金额\", \"type\": \"double\"}, {\"name\": \"plan_status\", \"description\": \"计划状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"plan_no\", \"description\": \"计划编号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"period_index\", \"description\": \"期次\", \"type\": \"integer\"}, {\"name\": \"period_name\", \"description\": \"期次名称\", \"type\": \"string\"}, {\"name\": \"plan_ratio\", \"description\": \"占比%\", \"type\": \"double\"}, {\"name\": \"plan_amount\", \"description\": \"计划金额\", \"type\": \"double\"}, {\"name\": \"plan_date\", \"description\": \"计划收款日期\", \"type\": \"date\"}, {\"name\": \"receive_condition\", \"description\": \"收款条件\", \"type\": \"string\"}, {\"name\": \"received_amount\", \"description\": \"已收金额\", \"type\": \"double\"}, {\"name\": \"plan_status\", \"description\": \"计划状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

@@ -1,0 +1,148 @@
+{
+  "id": "v3003003-budget-warn-view-00000000001",
+  "name": "预算执行预警视图",
+  "alias": "预算执行预警视图",
+  "description": "预算执行率监控与超支预警",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"预算编号\", \"path\": \"budget_no\", \"id\": \"v3003003-budget-warn-view-00000000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"预算名称\", \"path\": \"budget_name\", \"id\": \"v3003003-budget-warn-view-00000000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"关联项目编号\", \"path\": \"project_no\", \"id\": \"v3003003-budget-warn-view-00000000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"预算总额\", \"path\": \"total_amount\", \"id\": \"v3003003-budget-warn-view-00000000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"预算年度\", \"path\": \"budget_year\", \"id\": \"v3003003-budget-warn-view-00000000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "process",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [
+    "p3003001-budget-approve-0000000000001"
+  ],
+  "cmsCategoryList": [],
+  "tableList": [],
+  "filterScript": "",
+  "orderBy": "",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "预算编号",
+      "path": "budget_no",
+      "name": "budget_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "预算名称",
+      "path": "budget_name",
+      "name": "budget_name",
+      "width": "220px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "关联项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "预算总额",
+      "path": "total_amount",
+      "name": "total_amount",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "预算年度",
+      "path": "budget_year",
+      "name": "budget_year",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "预算编号",
+      "path": "budget_no",
+      "name": "budget_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "预算名称",
+      "path": "budget_name",
+      "name": "budget_name",
+      "width": "220px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "关联项目编号",
+      "path": "project_no",
+      "name": "project_no",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "预算总额",
+      "path": "total_amount",
+      "name": "total_amount",
+      "width": "130px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "预算年度",
+      "path": "budget_year",
+      "name": "budget_year",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showOperateBar": true,
+    "operateBarWidth": "120px"
+  }
+}

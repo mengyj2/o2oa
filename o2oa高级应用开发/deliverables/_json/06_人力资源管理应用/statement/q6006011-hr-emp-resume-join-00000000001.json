@@ -1,0 +1,20 @@
+{
+  "id": "q6006011-hr-emp-resume-join-00000000001",
+  "name": "员工简历全景",
+  "alias": "员工简历全景",
+  "description": "档案与五类履历明细、积分的一览聚合",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT e.employee_no AS employee_no, e.employee_name AS employee_name, e.gender AS gender, e.dept AS dept, e.position AS position, e.employee_status AS employee_status, e.education AS education, e.join_date AS join_date, IFNULL(d1.detail_count, 0) AS inner_work_count, IFNULL(d2.detail_count, 0) AS work_count, IFNULL(d3.detail_count, 0) AS edu_count, IFNULL(d4.detail_count, 0) AS tech_count, IFNULL(d5.detail_count, 0) AS award_count, IFNULL(p.point_total, 0) AS point_total FROM hr_employee e LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'inner_work'            GROUP BY employee_no) d1 ON d1.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'work'            GROUP BY employee_no) d2 ON d2.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'edu'            GROUP BY employee_no) d3 ON d3.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'tech'            GROUP BY employee_no) d4 ON d4.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'award'            GROUP BY employee_no) d5 ON d5.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, SUM(total_point) AS point_total            FROM hr_point GROUP BY employee_no) p   ON p.employee_no = e.employee_no",
+  "sql": "SELECT e.employee_no AS employee_no, e.employee_name AS employee_name, e.gender AS gender, e.dept AS dept, e.position AS position, e.employee_status AS employee_status, e.education AS education, e.join_date AS join_date, IFNULL(d1.detail_count, 0) AS inner_work_count, IFNULL(d2.detail_count, 0) AS work_count, IFNULL(d3.detail_count, 0) AS edu_count, IFNULL(d4.detail_count, 0) AS tech_count, IFNULL(d5.detail_count, 0) AS award_count, IFNULL(p.point_total, 0) AS point_total FROM hr_employee e LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'inner_work'            GROUP BY employee_no) d1 ON d1.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'work'            GROUP BY employee_no) d2 ON d2.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'edu'            GROUP BY employee_no) d3 ON d3.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'tech'            GROUP BY employee_no) d4 ON d4.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, COUNT(*) AS detail_count            FROM hr_emp_detail WHERE detail_type = 'award'            GROUP BY employee_no) d5 ON d5.employee_no = e.employee_no LEFT JOIN (SELECT employee_no, SUM(total_point) AS point_total            FROM hr_point GROUP BY employee_no) p   ON p.employee_no = e.employee_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

@@ -1,0 +1,4340 @@
+{
+  "consumers": {
+    "ws_demo": {
+      "type": "ws",
+      "enable": true,
+      "loader": "",
+      "filter": "",
+      "consumer": ""
+    },
+    "pmsinner_demo": {
+      "type": "pmsinner",
+      "enable": true,
+      "loader": "",
+      "filter": "",
+      "consumer": ""
+    },
+    "calendar_demo": {
+      "type": "calendar",
+      "enable": false,
+      "loader": "",
+      "filter": "",
+      "consumer": ""
+    },
+    "dingding_demo": {
+      "type": "dingding",
+      "enable": true,
+      "loader": "",
+      "filter": "",
+      "consumer": ""
+    },
+    "welink_demo": {
+      "type": "welink",
+      "enable": true,
+      "loader": "",
+      "filter": "",
+      "consumer": ""
+    },
+    "qiyeweixin_demo": {
+      "type": "qiyeweixin",
+      "enable": true,
+      "loader": "",
+      "filter": "",
+      "consumer": ""
+    },
+    "mpweixin_demo": {
+      "type": "mpweixin",
+      "enable": true,
+      "loader": "",
+      "filter": "",
+      "consumer": ""
+    },
+    "kafka_demo": {
+      "bootstrapServers": "",
+      "topic": "o2oa",
+      "securityProtocol": "SASL_PLAINTEXT",
+      "saslMechanism": "PLAIN",
+      "username": "",
+      "password": "",
+      "type": "kafka",
+      "enable": false,
+      "loader": "",
+      "filter": ""
+    },
+    "activemq_demo": {
+      "username": "",
+      "password": "",
+      "url": "",
+      "queueName": "",
+      "type": "activemq",
+      "enable": false,
+      "loader": "",
+      "filter": ""
+    },
+    "restful_demo": {
+      "url": "",
+      "method": "get",
+      "internal": true,
+      "type": "restful",
+      "enable": false,
+      "loader": "",
+      "filter": ""
+    },
+    "mail_demo": {
+      "host": "",
+      "port": 465.0,
+      "sslEnable": true,
+      "startTlsEnable": false,
+      "auth": true,
+      "from": "admin@o2oa.net",
+      "password": "password",
+      "type": "mail",
+      "enable": false,
+      "loader": "",
+      "filter": ""
+    },
+    "jdbc_demo": {
+      "driverClass": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://",
+      "username": "root",
+      "password": "password",
+      "catalog": "",
+      "schema": "",
+      "table": "NEWTABLE",
+      "type": "jdbc",
+      "enable": false,
+      "loader": "",
+      "filter": ""
+    },
+    "andfx_demo": {
+      "type": "andfx",
+      "enable": true,
+      "loader": "",
+      "filter": "",
+      "consumer": ""
+    }
+  },
+  "loaders": {},
+  "filters": {},
+  "application_create": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建应用."
+  },
+  "application_update": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "更新应用."
+  },
+  "application_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除应用."
+  },
+  "process_create": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建流程."
+  },
+  "process_update": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "更新流程."
+  },
+  "process_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除流程."
+  },
+  "activity_message": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "有新的工作通过消息节点."
+  },
+  "work_to_workCompleted": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "工作完成转已完成工作."
+  },
+  "work_create": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建工作."
+  },
+  "work_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除工作."
+  },
+  "workCompleted_create": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建已完成工作."
+  },
+  "workCompleted_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除已完成工作."
+  },
+  "task_to_taskCompleted": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "待办完成转已办."
+  },
+  "task_create": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建待办."
+  },
+  "task_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除待办."
+  },
+  "task_urge": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "待办即将过期催办."
+  },
+  "task_expire": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "待办过期."
+  },
+  "task_press": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "待办提醒."
+  },
+  "taskCompleted_create": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建已办."
+  },
+  "taskCompleted_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除已办."
+  },
+  "read_to_readCompleted": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "待阅转已阅."
+  },
+  "read_create": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建待阅."
+  },
+  "read_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除待阅."
+  },
+  "readCompleted_create": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建已阅."
+  },
+  "readCompleted_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除已阅."
+  },
+  "review_create": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建参阅."
+  },
+  "review_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除参阅."
+  },
+  "meeting_invite": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "会议邀请."
+  },
+  "meeting_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除会议."
+  },
+  "meeting_accept": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "会议邀请接受."
+  },
+  "meeting_reject": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "会议邀请拒绝."
+  },
+  "attachment_create": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "创建附件."
+  },
+  "attachment_delete": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "删除附件."
+  },
+  "attachment_share": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "附件分享."
+  },
+  "attachment_shareCancel": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "附件取消分享."
+  },
+  "attachment_editor": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "附件可编辑设置."
+  },
+  "attachment_editorCancel": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "附件可编辑取消."
+  },
+  "attachment_editorModify": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "附件可编辑修改."
+  },
+  "calendar_alarm": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "日历通知."
+  },
+  "custom_create": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "自定义消息创建."
+  },
+  "teamwork_taskCreate": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "工作管理任务创建."
+  },
+  "teamwork_taskUpdate": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "工作管理任务更新."
+  },
+  "teamwork_taskDelete": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "工作管理任务删除."
+  },
+  "teamwork_taskOvertime": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "工作管理任务超时."
+  },
+  "teamwork_chat": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "工作管理聊天."
+  },
+  "cms_publish": {
+    "consumers": [
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "内容管理发布."
+  },
+  "cms_publish_to_creator": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "内容管理发布创建者通知."
+  },
+  "bbs_subjectCreate": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "论坛创建贴子."
+  },
+  "bbs_replyCreate": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "论坛创建回复."
+  },
+  "mind_fileSend": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "脑图发送."
+  },
+  "mind_fileShare": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "calendar",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "kafka",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "activemq",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "restful",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mail",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "api",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "jdbc",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "table",
+        "enable": false,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "脑图分享."
+  },
+  "im_create": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "聊聊消息."
+  },
+  "im_revoke": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "聊聊消息."
+  },
+  "im_conversation_delete": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "聊聊消息."
+  },
+  "im_conversation_update": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "聊聊消息."
+  },
+  "attendance_checkInAlert": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "打卡提醒消息."
+  },
+  "attendance_checkInException": {
+    "consumers": [
+      {
+        "type": "ws",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "pmsinner",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "dingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "welink",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "zhengwudingding",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "qiyeweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      },
+      {
+        "type": "mpweixin",
+        "enable": true,
+        "loader": "",
+        "filter": "",
+        "consumer": ""
+      }
+    ],
+    "description": "打卡异常提醒消息."
+  },
+  "custom": {
+    "foo": {
+      "consumers": [
+        {
+          "type": "ws",
+          "enable": true,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "pmsinner",
+          "enable": true,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "dingding",
+          "enable": true,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "welink",
+          "enable": true,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "zhengwudingding",
+          "enable": true,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "qiyeweixin",
+          "enable": true,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "mpweixin",
+          "enable": true,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "calendar",
+          "enable": false,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "kafka",
+          "enable": false,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "activemq",
+          "enable": false,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "restful",
+          "enable": false,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "mail",
+          "enable": false,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "api",
+          "enable": false,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "jdbc",
+          "enable": false,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        },
+        {
+          "type": "table",
+          "enable": false,
+          "loader": "",
+          "filter": "",
+          "consumer": ""
+        }
+      ],
+      "description": "自定义消息类型."
+    }
+  },
+  "###consumers": "消费器配置.###",
+  "###loaders": "装载器脚本.###",
+  "###filters": "过滤器脚本.###",
+  "###application_create": "创建应用.###",
+  "###application_update": "更新应用.###",
+  "###application_delete": "删除应用.###",
+  "###process_create": "创建流程.###",
+  "###process_update": "更新流程.###",
+  "###process_delete": "删除流程.###",
+  "###activity_message": "有新的工作通过消息节点.###",
+  "###work_to_workCompleted": "工作完成转已完成工作.###",
+  "###work_create": "创建工作.###",
+  "###work_delete": "删除工作.###",
+  "###workCompleted_create": "创建已完成工作.###",
+  "###workCompleted_delete": "删除已完成工作.###",
+  "###task_to_taskCompleted": "待办完成转已办.###",
+  "###task_create": "创建待办.###",
+  "###task_delete": "删除待办.###",
+  "###task_urge": "待办即将过期催办.###",
+  "###task_expire": "待办过期.###",
+  "###task_press": "待办提醒.###",
+  "###taskCompleted_create": "创建已办.###",
+  "###taskCompleted_delete": "删除已办.###",
+  "###read_to_readCompleted": "待阅转已阅.###",
+  "###read_create": "创建待阅.###",
+  "###read_delete": "删除待阅.###",
+  "###readCompleted_create": "创建已阅.###",
+  "###readCompleted_delete": "删除已阅.###",
+  "###review_create": "创建参阅.###",
+  "###review_delete": "删除参阅.###",
+  "###meeting_invite": "会议邀请.###",
+  "###meeting_delete": "删除会议.###",
+  "###meeting_accept": "会议邀请接受.###",
+  "###meeting_reject": "会议邀请拒绝.###",
+  "###attachment_create": "创建附件.###",
+  "###attachment_delete": "删除附件.###",
+  "###attachment_share": "附件分享.###",
+  "###attachment_shareCancel": "附件取消分享.###",
+  "###attachment_editor": "附件可编辑设置.###",
+  "###attachment_editorCancel": "附件可编辑取消.###",
+  "###attachment_editorModify": "附件可编辑修改.###",
+  "###calendar_alarm": "日历通知.###",
+  "###custom_create": "自定义消息创建.###",
+  "###teamwork_taskCreate": "工作管理任务创建.###",
+  "###teamwork_taskUpdate": "工作管理任务更新.###",
+  "###teamwork_taskDelete": "工作管理任务删除.###",
+  "###teamwork_taskOvertime": "工作管理任务超时.###",
+  "###teamwork_chat": "工作管理聊天.###",
+  "###cms_publish": "内容管理发布.###",
+  "###cms_publish_to_creator": "内容管理发布创建者通知.###",
+  "###bbs_subjectCreate": "论坛创建贴子.###",
+  "###bbs_replyCreate": "论坛创建回复.###",
+  "###mind_fileSend": "脑图发送.###",
+  "###mind_fileShare": "脑图分享.###",
+  "###im_create": "聊聊消息.###",
+  "###im_revoke": "聊聊消息.###",
+  "###im_conversation_delete": "聊聊消息.###",
+  "###im_conversation_update": "聊聊消息.###",
+  "###attendance_checkInAlert": "打卡提醒消息.###",
+  "###attendance_checkInException": "打卡异常提醒消息.###",
+  "###custom": "自定义消息.###",
+  "###clean": "清理设置.###",
+  "clean": {
+    "enable": true,
+    "cron": "30 30 6 * * ?",
+    "keep": 7.0,
+    "###enable": "是否启用###",
+    "###cron": "定时cron表达式###",
+    "###keep": "消息保留天数###",
+    "###extension": "扩展设置.###"
+  },
+  "###extension": "扩展设置.###"
+}

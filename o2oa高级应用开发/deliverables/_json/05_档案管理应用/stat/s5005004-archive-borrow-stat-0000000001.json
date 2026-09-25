@@ -1,0 +1,27 @@
+{
+  "id": "s5005004-archive-borrow-stat-0000000001",
+  "name": "档案借阅统计",
+  "alias": "档案借阅统计",
+  "description": "按借阅方式统计借阅次数",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v5005002-archive-borrow-view-0000000001",
+  "categoryPath": "borrow_type",
+  "valuePath": "borrow_no",
+  "categoryTitle": "借阅方式",
+  "valueTitle": "借阅次数",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

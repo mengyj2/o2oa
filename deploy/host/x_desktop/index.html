@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <link rel="stylesheet" type="text/css" href="css/style.css?v=10.0.276ab486c41" charset="UTF-8" />
+        <link rel="stylesheet" type="text/css" href="css/v10/root.css?v=10.0.276ab486c41" charset="UTF-8" />
+        <link rel="stylesheet" type="text/css" href="css/v10/style.css?v=10.0.276ab486c41" id="oo-css-skin" charset="UTF-8" />
+        <link rel="stylesheet" href="css/mBoxNotice.css?v=10.0.276ab486c41" charset="UTF-8" />
+        <link rel="stylesheet" href="css/mBoxTooltip.css?v=10.0.276ab486c41" charset="UTF-8" />
+        <link rel="icon" href="data:;" />
+
+        <title></title>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+        <meta content="telephone=no" name="format-detection" />
+    </head>
+    <body style="overflow: auto; margin: 0px; height: 100%">
+        <div id="appContent" class="appContent" style="overflow: hidden; height: 100%">
+            <div
+                id="loaddingArea"
+                style="overflow: hidden; width: 0px; height: 2px; background-color: #4e82bd; position: absolute; top: 0; z-index: 10000"
+            ></div>
+        </div>
+
+        <script src="../o2_core/o2.js?v=10.0.276ab486c41"></script>
+        <script src="../o2_lib/Decimal.js?v=10.0.276ab486c41"></script>
+        <script src="js/base_portal.js?v=10.0.2-76ab486c41"></script>
+        <script>
+            layout.addReady(function(){
+                (function(layout){
+                    var uri = new URI(window.location.href);
+                    var appNames = "portal.Portal";
+                    var options = {"portalId": "index"};
+
+                    var _load = function(){
+                        layout.apps = [];
+                        layout.node = $("layout") || $("appContent") || document.body;
+      
+                        layout.openApplication(null, appNames, options);
+
+                        if (!layout.session.user || layout.session.user.name === "anonymous"){
+                            o2.loadCss("../o2_core/o2/xDesktop/$Default/blue/style-skin.css");
+                        }else{
+                            o2.xDesktop.getUserLayout(function(){
+                                var style = layout.userLayout.flatStyle;
+                                o2.loadCss("../o2_core/o2/xDesktop/$Default/"+style+"/style-skin.css");
+                            });
+                        }
+                    };
+
+                    /* ---- 本地增强：登录后按身份分流（三分支） --------------------------
+                       1) 管理员（tokenType = manager，或含 Manager@ManagerSystemRole@R 角色，或已知 admin/xadmin 账号）
+                            - 特例：HOME_ENTRY_USERS 名单中的管理员（mengyijie，秘书长业务管理员）
+                              -> 跳 index_home.html（仍进用户门户首页入口）
+                            - 其余管理员 -> admin.html（旧版九宫格桌面）
+                       2) 其余用户 -> 门户首页（与官方 index.html 效果一致）
+                       判据多源取并集：layout.session.user / session.userDetail / session.tokenType，
+                       避免单点取值遗漏（roleList 在浏览器常落在 userDetail 而非 user）。 */
+                    var _HOME_ENTRY_USERS = ["mengyijie"];
+                    var _MANAGER_ROLE = "Manager@ManagerSystemRole@R";
+
+                    var _isManager = function(){
+                        try {
+                            var s = (window.layout && layout.session) || {};
+                            var u = s.user || {};
+                            var ud = s.userDetail || {};
+                            if (u.tokenType === "manager" || s.tokenType === "manager") { return true; }
+                            var roles = [].concat(u.roleList || [], ud.roleList || []);
+                            for (var i = 0; i < roles.length; i++){
+                                if (String(roles[i]).indexOf(_MANAGER_ROLE) > -1) { return true; }
+                            }
+                            var nm = String(u.unique || u.name || "").toLowerCase();
+                            if (nm === "admin" || nm === "xadmin") { return true; }
+                        } catch(e){}
+                        return false;
+                    };
+
+                    /* 名单内管理员：unique/name/distinguishedName 任一命中即视为特例 */
+                    var _isHomeEntry = function(){
+                        try {
+                            var u = ((window.layout && layout.session) || {}).user || {};
+                            var names = [];
+                            if (u.unique) { names.push(String(u.unique)); }
+                            if (u.name) { names.push(String(u.name)); }
+                            if (u.distinguishedName) { names.push(String(u.distinguishedName)); }
+                            for (var i = 0; i < names.length; i++){
+                                var s = names[i].toLowerCase();
+                                for (var j = 0; j < _HOME_ENTRY_USERS.length; j++){
+                                    if (s === _HOME_ENTRY_USERS[j] || s.indexOf(_HOME_ENTRY_USERS[j] + "@") > -1) { return true; }
+                                }
+                            }
+                        } catch(e){}
+                        return false;
+                    };
+
+                    var _goAdmin = function(){
+                        window.location.replace("admin.html");
+                    };
+
+                    var _goHomeEntry = function(){
+                        window.location.replace("index_home.html");
+                    };
+
+                    /* addReady 时会话已就绪，直接读多源判据，不再依赖易碎的匿名 XHR 兜底 */
+                    if (_isManager()) {
+                        if (_isHomeEntry()) { _goHomeEntry(); } else { _goAdmin(); }
+                    } else {
+                        _load();
+                    }
+                })(layout);
+            });
+        </script>
+    </body>
+</html>

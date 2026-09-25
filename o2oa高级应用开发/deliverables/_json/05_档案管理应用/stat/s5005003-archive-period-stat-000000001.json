@@ -1,0 +1,27 @@
+{
+  "id": "s5005003-archive-period-stat-000000001",
+  "name": "保存期限统计",
+  "alias": "保存期限统计",
+  "description": "按保存期限统计档案数量",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v5005001-archive-list-view-000000000001",
+  "categoryPath": "retention_period",
+  "valuePath": "archive_no",
+  "categoryTitle": "保存期限",
+  "valueTitle": "档案数量",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

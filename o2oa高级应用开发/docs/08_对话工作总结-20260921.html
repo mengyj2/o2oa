@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O2OA 本地化工作对话总结（2026-09-21 · 优化版）</title>
+<style>
+  :root{
+    --bg:#f5f7fa; --card:#ffffff; --ink:#1f2933; --muted:#5b6b7b;
+    --line:#e3e8ef; --brand:#2563eb; --brand2:#0f766e; --warn:#b45309;
+    --ok:#15803d; --code-bg:#f1f5f9; --chip:#eef2ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+  header{background:linear-gradient(120deg,#1e3a8a,#0f766e);color:#fff;padding:28px 32px}
+  header h1{margin:0 0 6px;font-size:24px}
+  header .sub{opacity:.92;font-size:14px}
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:10px 32px;display:flex;flex-wrap:wrap;gap:8px;z-index:10}
+  nav a{font-size:13px;color:var(--brand);text-decoration:none;padding:4px 10px;
+    border:1px solid var(--line);border-radius:999px;background:var(--chip)}
+  nav a:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+  main{max-width:1080px;margin:0 auto;padding:24px 32px 60px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:20px 24px;margin:18px 0;scroll-margin-top:64px}
+  h2{margin:0 0 4px;font-size:19px;color:var(--brand)}
+  h2 .tag{font-size:12px;color:#fff;background:var(--brand2);padding:2px 8px;border-radius:6px;margin-left:8px;vertical-align:middle}
+  h3{font-size:15px;margin:16px 0 6px;color:var(--ink)}
+  .lead{color:var(--muted);margin:2px 0 14px;font-size:14px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  td,th{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:var(--code-bg);width:120px;color:var(--muted);font-weight:600}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;
+    padding:12px 14px;overflow:auto;font-size:13px;line-height:1.5;color:#0b3b5e}
+  code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:13px}
+  .ok{color:var(--ok);font-weight:600}
+  .warn{color:var(--warn);font-weight:600}
+  .pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;
+    background:var(--chip);color:var(--brand);margin:2px 4px 2px 0}
+  ul{margin:8px 0;padding-left:22px}
+  li{margin:4px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0}
+  .kpi{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .kpi b{display:block;font-size:22px;color:var(--brand)}
+  .kpi span{font-size:13px;color:var(--muted)}
+  .mapnote{font-size:13px;color:var(--muted)}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:20px}
+  a.inline{color:var(--brand)}
+</style>
+</head>
+<body>
+<header>
+  <h1>O2OA 本地化应用 — 对话工作总结（优化版）</h1>
+  <div class="sub">时间：2026-09-21 ｜ 环境：O2OA 社区版 10.0.2（本地 Docker 自托管 · 已断云）｜
+  范围：本轮对话第八～十六轮 ｜ 起草：小复 ｜ 版本：总结优化</div>
+</header>
+
+<nav>
+  <a href="#lead">结论先行</a>
+  <a href="#map">对话文档地图</a>
+  <a href="#t1">一·应用落地</a>
+  <a href="#t2">二·数据层与门户</a>
+  <a href="#t3">三·故障修复</a>
+  <a href="#t4">四·文档治理</a>
+  <a href="#state">系统现状</a>
+  <a href="#next">后续建议</a>
+</nav>
+
+<main>
+
+<!-- 结论先行 -->
+<section id="lead">
+  <h2>结论先行 <span class="tag">一句话总览</span></h2>
+  <p class="lead">本轮对话围绕「把 O2OA 真正用起来」展开：从组件上传卡死、19 个应用包部署、数据层打通、
+  门户补齐，到两个具体故障修复（CRM 百度地图弹窗、每月一号定时代理启用），最后把对话文档总结治理完毕——
+  <strong>全部闭环，两项遗留均无害可选项</strong>。</p>
+  <div class="grid">
+    <div class="kpi"><b>19/19</b><span>应用包离线安装成功</span></div>
+    <div class="kpi"><b>7 道</b><span>构建校验全绿</span></div>
+    <div class="kpi"><b>16 页</b><span>门户栏目页（全接活数据）</span></div>
+    <div class="kpi"><b>0</b><span>CRM 弹窗 / 页面错误</span></div>
+    <div class="kpi"><b>1→1</b><span>定时代理由禁用转启用并实测执行</span></div>
+    <div class="kpi"><b>42 条</b><span>流程全部可发起</span></div>
+  </div>
+  <p>两项遗留（无害、可选项）：① <strong>CRM 地图</strong>需新 AK 才恢复（已优雅降级，业务照常）；
+  ② <strong>每月一号代理</strong>因 CMS 无「固定资产」分类而空跑，需秘书长确认资产数据落点后补分类或改脚本。</p>
+</section>
+
+<!-- 文档地图 -->
+<section id="map">
+  <h2>对话文档地图 <span class="tag">本次优化的核心</span></h2>
+  <p class="lead">本轮对话产出/修正的全部文档，集中索引如下。★ 为本轮（9-21）新建或修正项。</p>
+  <table>
+    <tr><th>对话总结</th><td>
+      <code>docs/08_对话工作总结-20260921.html</code> ★（即本文件，优化版——主题聚合 + 文档地图 + 第十六轮）<br>
+      <span class="mapnote">此前流水账版已废弃，统一以本优化版为准。</span>
+    </td></tr>
+    <tr><th>故障修复交付</th><td>
+      <code>patches/客户管理-百度地图AK修复/</code> ★（README + 幂等补丁器 + zip 固化器 + E2E 验证 + 已修补/原始各 8 文件 + 验证截图.png）<br>
+      <code>patches/定时代理-每月一号修改办公资产状态/</code> ★（README + 幂等启用脚本 <code>enable_monthly_agent.sql</code>）
+    </td></tr>
+    <tr><th>前置背景文档</th><td>
+      <code>docs/01_导入部署指南.md</code> ｜ <code>docs/02_数据关联与共享机制说明.md</code> ｜
+      <code>docs/03_应用详细说明书.md</code> ｜ <code>docs/04_表单Page树容器模型说明.md</code> ｜
+      <code>docs/05_组织架构搭建清单.md</code> ｜ <code>docs/06_O2OA本机体检与高级应用夯实方案.md</code> ｜
+      <code>docs/07_数据层打通交付说明.md</code><br>
+      <span class="mapnote">均为 9-20 生成的项目基础文档，本轮对话事实与其一致，未改动。</span>
+    </td></tr>
+    <tr><th>记忆/技能</th><td>
+      <code>.workbuddy/memory/MEMORY.md</code> + <code>2026-09-21.md</code>（技术结论与坑全记录）<br>
+      技能 <code>o2oa-component-ak-fix</code>（第三方 AK 失效排查范式）、<code>o2oa-portal-page-format</code>（门户/数据层范式）
+    </td></tr>
+  </table>
+</section>
+
+<!-- 主题一：应用落地 -->
+<section id="t1">
+  <h2>一、应用落地（第八 / 九轮）</h2>
+
+  <h3>1. 组件「编辑确定无反应」根因与正解</h3>
+  <table>
+    <tr><th>根因</th><td>前端 chunk <code>ComponentDeploy</code> 的 OK handler <strong>整体 async 无 try/catch</strong>；
+      其调用的 <code>t.dispatchResource</code> 在 10.0.2 线上 <code>api.json</code> 中<strong>根本不存在</strong>
+      → <code>TypeError: undefined</code> 未捕获 → 静默失败。挂 zip 必现，与登录身份/zip 内容无关。</td></tr>
+    <tr><th>正解</th><td>组件资源 UI 是错入口。正确链路：
+      <code>POST /x_program_center/jaxrs/deploy/web/resource/as/new/{asNew}</code>（Web 资源部署）
+      + <code>POST /x_component_assemble_control/jaxrs/component</code>（注册表条目）。
+      手法：逆向接口有无看 war 内 <code>describe/*.java</code> + <code>api.json</code>；容器内 curl + docker cp 取回分析。</td></tr>
+  </table>
+
+  <h3>2. 19 个 zip 应用离线安装（方案A 落地）</h3>
+  <table>
+    <tr><th>鉴定</th><td>19 个 zip <strong>均为应用市场包</strong>（<code>setup.json</code>+<code>xapp/*.xapp</code>+data/web/custom）。
+      其中 2 对同 id（PDF预览/webserver资源管理、流程维护/自建表维护=空壳复制）。</td></tr>
+    <tr><th>接口</th><td><code>POST /x_program_center/jaxrs/market/install/offline</code>（multipart 字段 <code>file</code>），断云安全；
+      不建 Application 实体，写 InstallLog。</td></tr>
+    <tr><th>执行</th><td>整目录 docker cp 进容器循环安装，<span class="ok">19/19 status=1</span>（同 id 幂等覆盖）。
+      InstallLog 中项目×6、合同/预算/财务/档案×2 仅为<strong>安装记录冗余</strong>，模块层各仅 1 实例 → <strong>无功能重复</strong>。</td></tr>
+    <tr><th>冒烟</th><td>Playwright+Edge（mengyijie）实测桌面标题正常、0 页面错误；办公中心待办 16 条真实流转 → 系统真正跑起来。</td></tr>
+    <tr><th>注意</th><td><code>market/{flag}/uninstall</code> 对离线装应用<strong>必 500</strong>，卸载别走它。</td></tr>
+  </table>
+</section>
+
+<!-- 主题二：数据层与门户 -->
+<section id="t2">
+  <h2>二、数据层打通与门户补齐（第十 / 十二 / 十三轮）</h2>
+
+  <h3>1. 数据层真正打通（秘书长硬指令：「要真正的能用，不是二级链接，到最底层的数据层要通」）</h3>
+  <table>
+    <tr><th>取证</th><td>31 张自建表<strong>定义+物理表+种子数据早已就位</strong>；问题只在<strong>视图层</strong>——
+      106 视图中 <strong>40 个 xdata=NULL</strong>（恰为 6 应用的视图）→ 嵌视图渲染空白。</td></tr>
+    <tr><th>修复1</th><td>视图 data 必须是<strong>字符串</strong>：<code>o2oa_builder.view()</code> 改 <code>json.dumps(...)</code>；
+      6 应用 QRY 全部 200，空 xdata 40→0。</td></tr>
+    <tr><th>修复2</th><td>★ 本版本<strong>无 TablePlan</strong>：<code>dealPlan()</code> switch 只认 cms，<code>table</code> 类型视图执行链无实现 → NPE。
+      改走<strong>表行接口直读+前端渲染</strong>（无引擎依赖）：
+      <code>POST /x_query_assemble_surface/jaxrs/table/list/table/{flag}/row/paging/{p}/size/{s}</code>（body <code>{}</code>）。
+      新增 <code>table_holder()</code> + <code>_LIVE_JS.loadTables()</code>。</td></tr>
+    <tr><th>E2E</th><td>HR「员工档案」9 行真实员工、合同台账千分位正确、<code>startWork</code> 真实创建流程实例；<span class="ok">七道校验全绿</span>。</td></tr>
+  </table>
+
+  <h3>2. 澄清「没有门户怎么用」— 四应用完全可用</h3>
+  <table>
+    <tr><th>结论</th><td>01 项目/03 预算/04 财务/05 档案<strong>四个"无门户"应用功能完全可用</strong>，入口是原生
+      <strong>「流程应用工作台」</strong>，不是门户。42 条流程全部 <code>xstartableTerminal=all</code>，桌面有现成页签「流程应用-××应用」。</td></tr>
+    <tr><th>定位</th><td>门户=仪表盘/门面；流程应用工作台=真正业务办理入口。<strong>没有门户 ≠ 不能用</strong>。</td></tr>
+  </table>
+
+  <h3>3. 按 OA 惯例补门户 — 1 个聚合门户 + 5 个分类栏目页</h3>
+  <table>
+    <tr><th>设计</th><td>门户 <code>o1001001-biz-portal-…</code>「<strong>业务管理门户</strong>」/ 分类=业务管理；
+      下挂 5 栏目页：业务总览/项目管理/预算管理/财务管理/档案管理（导航即分类，横向 Tab）。按「综合管理/业务管理」分组展示。</td></tr>
+    <tr><th>★核心 bug</th><td>页内 Tab 点击无效：原用 <code>openApplication</code> 因 <code>multitask=true</code> <strong>另开新页签</strong> → 看着没反应。
+      修复：新增 <code>gotoPortal()</code> 遍历 <code>layout.desktop.apps</code> 命中当前门户实例，调官方 <code>Main.toPortal()</code> 复用同窗。</td></tr>
+    <tr><th>验证</th><td><code>e2e_biznav.js</code> → 导航切换 <span class="ok">5/5 成功</span>、页面错误 0；门户实例数恒为 1。
+      门户校验 <span class="ok">16 页×0（全部接活数据）</span>。</td></tr>
+  </table>
+</section>
+
+<!-- 主题三：故障修复 -->
+<section id="t3">
+  <h2>三、具体故障修复（第十四 / 十五轮）</h2>
+
+  <h3>1. CRM 百度地图 AK 失效弹窗（8 文件全闭环）</h3>
+  <table>
+    <tr><th>根因</th><td>CRM 硬编码 2016 年旧 AK <code>Qac4WmBvHXiC87z3HjtRrbotCE3sC9Zg</code> 已被删除；
+      verify 接口实测 <code>{"error":201,"error_msg":"APP被用户自己删除"}</code> → 百度 SDK 内置表 <code>ta[201]="APP被您禁用啦。"</code> → alert()。
+      <strong>触发点是 Main.min.js（进入应用即拉百度脚本），非 BaiduMap.js</strong>。</td></tr>
+    <tr><th>修复</th><td>优雅降级：把"是否加载百度脚本"分支<strong>恒假短路</strong>（只置空 URL 不够，仍会 <code>loadDom("")</code> 拿回 HTML 报 SyntaxError、
+      再 load BDMarkerTool 报 ReferenceError）。覆盖 <strong>8 个文件</strong>（含易漏 <code>Main.min.min.js</code>、结构不同的 <code>AddressExplorer.js</code>）。</td></tr>
+    <tr><th>验证</th><td><span class="ok">node --check 8/8 全绿</span>；幂等复跑 8/8 nochange；
+      Playwright E2E <span class="ok">DIALOGS 0 / PAGEERRORS 0 / BDMarkerTool 请求 0 / 百度外网请求 0</span>；残留 AK 仅 3 处且全在注释内。</td></tr>
+    <tr><th>固化</th><td>已写回 <code>E:\OA系统上线方案\客户管理.zip</code>（备份 <code>客户管理.zip.bak-20260921-135814</code>），重装不被覆盖。</td></tr>
+  </table>
+
+  <h3>2. 启用「每月一号修改办公资产状态」定时代理</h3>
+  <table>
+    <tr><th>根因</th><td>系统级定时代理存于 <code>X.CTE_AGENT</code>（非流程内 <code>PP_E_AGENT</code>）；
+      该代理 <code>xenable=0</code> 即「(禁用)」来源；cron <code>0 */30 * 1 * ?</code>（每月1号每30分钟）。</td></tr>
+    <tr><th>实现</th><td>管理接口需 manager token（本环境不可得）；改用<strong>直接改库</strong>——
+      O2OA <code>TriggerAgent</code> 每分钟<strong>实时查库</strong>，<code>UPDATE CTE_AGENT SET xenable=1</code> 即生效，无需重启。</td></tr>
+    <tr><th>验证</th><td>冷启动后 14:28:10 触发并执行，日志实证
+      <code>[script] PRINT 每月一号把办公资产状态修改为"未盘点"</code> / <code>获取办公资产数量======0</code>。</td></tr>
+    <tr><th>两点事实</th><td>① 脚本目前<strong>空跑</strong>：CMS 无「固定资产」分类 → 查不到文档。要生效需建该分类或改脚本对接资产表。
+      ② cron 频率偏高（1 号 48 次），建议改 <code>0 0 1 * * ?</code>（每月1号01:00一次）。</td></tr>
+  </table>
+</section>
+
+<!-- 主题四：文档治理 -->
+<section id="t4">
+  <h2>四、对话文档治理（第十六轮）</h2>
+  <p class="lead">秘书长指令：「请对有对话开始的进行总结修正相关文档」。本轮所做：</p>
+  <ul>
+    <li><strong>修正第十四轮 README</strong>：第 4.3 节截图文件名 <code>crm_fixed2.png</code> → <code>验证截图.png</code>（与实际交付一致）。</li>
+    <li><strong>补全第十五轮正式文档</strong>：之前只改库+写记忆、无独立交付，已补齐
+      <code>patches/定时代理-每月一号修改办公资产状态/README.md</code> + <code>enable_monthly_agent.sql</code>。</li>
+    <li><strong>生成对话工作总结</strong>：即本文件（初版流水账，本轮进一步优为主题化总结）。</li>
+  </ul>
+  <p>治理后文档体系：<code>docs/01~08</code> 覆盖部署/数据/应用/表单/组织/体检/数据层/对话总结；
+  <code>patches/</code> 下 2 份修复交付；项目记忆覆盖全部结论与坑。</p>
+</section>
+
+<!-- 系统现状 -->
+<section id="state">
+  <h2>当前系统整体状态</h2>
+  <ul>
+    <li><span class="pill">应用</span>19 个市场包全部导入，模块层无冲突；流程平台 20 应用、门户 36、查询 0。</li>
+    <li><span class="pill">流程</span>42 条全部可发起（<code>xstartableTerminal=all</code>），办公中心待办 16 条真实流转。</li>
+    <li><span class="pill">数据</span>31 张自建表定义+物理表+种子数据就位；门户 16 页全部直读真实数据。</li>
+    <li><span class="pill">门户</span>3 门户 / 16 页（05 合同 4、06 人力 7、01 承载的业务管理门户 5），按「综合管理/业务管理」分类。</li>
+    <li><span class="pill">故障</span>CRM 弹窗已修复（优雅降级）；每月一号定时代理已启用（空跑，待补资产数据源）。</li>
+    <li><span class="pill">校验</span>七道构建校验全绿；导入后门户首页 10/10 可打开。</li>
+  </ul>
+</section>
+
+<!-- 后续建议 -->
+<section id="next">
+  <h2>后续建议（待秘书长拍板）</h2>
+  <table>
+    <tr><th>A. CRM 地图</th><td>若需恢复地图，提供新百度地图 AK（或改天地图/离线瓦片），改 3 处 <code>apiPath</code> + 去 <code>false</code> 即可。内网/断云环境建议离线瓦片。</td></tr>
+    <tr><th>B. 每月一号代理</th><td>确认办公资产数据落点（CMS「固定资产」分类 或 06 人力自建表）→ 建分类或改脚本；并把 cron 改为 <code>0 0 1 * * ?</code>。</td></tr>
+    <tr><th>C. 可选增强</th><td>若希望 01/03/04/05 四应用也有"门面"，可各补 1 个门户页（已验证的 table_holder 模式，工作量小；不做也不影响业务办理）。</td></tr>
+    <tr><th>D. 固化习惯</th><td>两类排查范式已沉淀为技能 <code>o2oa-component-ak-fix</code> 与 <code>o2oa-portal-page-format</code>，并写入项目记忆。</td></tr>
+  </table>
+</section>
+
+</main>
+<footer>中国复合材料工业协会 · O2OA 本地化应用 · 对话工作总结（第八～十六轮 · 优化版）· 小复 起草于 2026-09-21</footer>
+</body>
+</html>

@@ -1,0 +1,101 @@
+[
+ {
+  "name": "孟弋洁",
+  "unique": "mengyijie",
+  "id": "d7169e66-459d-4316-8497-60a6647c2d50",
+  "dn": "孟弋洁@mengyijie@P",
+  "mobile": "18516833076",
+  "mail": "mengyijie@ccia.xin",
+  "identities": "中国复合材料工业协会; 行业研究部; 综合管理部(主)",
+  "attrs": "",
+  "pwd": "保留原密码"
+ },
+ {
+  "name": "卢宏萍",
+  "unique": "luhongping",
+  "id": "500efc6b-2376-4948-bee5-0dc011cd9196",
+  "dn": "卢宏萍@luhongping@P",
+  "mobile": "13911168091",
+  "mail": "luhongping@ccia.xin",
+  "identities": "中国复合材料工业协会; 会员服务部(主); 国际业务部",
+  "attrs": "",
+  "pwd": "168091%o2"
+ },
+ {
+  "name": "李静",
+  "unique": "lijing",
+  "id": "edec8377-d6a2-4b00-a8b6-2128db8e42cb",
+  "dn": "李静@lijing@P",
+  "mobile": "13371637052",
+  "mail": "lijing@ccia.xin",
+  "identities": "会员服务部(主); 中国复合材料工业协会",
+  "attrs": "",
+  "pwd": "637052%o2"
+ },
+ {
+  "name": "奚莎莎",
+  "unique": "xishasha",
+  "id": "fe973b18-443f-4196-9f0f-21e508a16931",
+  "dn": "奚莎莎@xishasha@P",
+  "mobile": "13371692937",
+  "mail": "xishasha@ccia.xin",
+  "identities": "会员服务部(主); 中国复合材料工业协会",
+  "attrs": "",
+  "pwd": "692937%o2"
+ },
+ {
+  "name": "赵旭东",
+  "unique": "zhaoxudong",
+  "id": "ef48caf9-2a82-4181-8b34-1ade8f05dd29",
+  "dn": "赵旭东@zhaoxudong@P",
+  "mobile": "13381314580",
+  "mail": "zhaoxudong@ccia.xin",
+  "identities": "会员服务部(主); 中国复合材料工业协会",
+  "attrs": "",
+  "pwd": "314580%o2"
+ },
+ {
+  "name": "罗舒涵",
+  "unique": "luoshuhan",
+  "id": "ea518e36-1c3b-45ab-b647-1701451b2db4",
+  "dn": "罗舒涵@luoshuhan@P",
+  "mobile": "13371637051",
+  "mail": "luoshuhan@ccia.xin",
+  "identities": "国际业务部(主); 中国复合材料工业协会",
+  "attrs": "备用手机号=13371677253",
+  "pwd": "637051%o2"
+ },
+ {
+  "name": "时晓明",
+  "unique": "shixiaoming",
+  "id": "bb1d46de-b3f5-4a24-9938-c1e348bee045",
+  "dn": "时晓明@shixiaoming@P",
+  "mobile": "13381201425",
+  "mail": "shixiaoming@ccia.xin",
+  "identities": "行业研究部(主); 中国复合材料工业协会",
+  "attrs": "",
+  "pwd": "201425%o2"
+ },
+ {
+  "name": "杜阳",
+  "unique": "duyang",
+  "id": "664b9867-4f5b-4a36-9cbf-35a31e196180",
+  "dn": "杜阳@duyang@P",
+  "mobile": "13371633027",
+  "mail": "duyang@ccia.xin",
+  "identities": "行业研究部(主); 中国复合材料工业协会",
+  "attrs": "",
+  "pwd": "633027%o2"
+ },
+ {
+  "name": "李芳",
+  "unique": "lifang",
+  "id": "0de7051b-cb98-4154-9921-758ea0d4290f",
+  "dn": "李芳@lifang@P",
+  "mobile": "13381158343",
+  "mail": "lifang@ccia.xin",
+  "identities": "综合管理部(主); 中国复合材料工业协会",
+  "attrs": "",
+  "pwd": "158343%o2"
+ }
+]

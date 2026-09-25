@@ -1,0 +1,20 @@
+{
+  "id": "q6006003-hr-emp-point-join-000000000001",
+  "name": "员工积分全量",
+  "alias": "员工积分全量",
+  "description": "积分台账带员工当前部门与岗位",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT p.id AS id, p.employee_no AS employee_no, p.employee_name AS employee_name, p.point_year AS point_year, p.point_type AS point_type, p.year_point AS year_point, p.total_point AS total_point, p.point_source AS point_source, p.relate_biz AS relate_biz, p.grant_date AS grant_date, p.honor_level AS honor_level, p.rank_no AS rank_no, p.point_status AS point_status, p.dept_avg_point AS dept_avg_point, p.dept_rank AS dept_rank, e.dept AS dept, e.position AS position, e.employee_status AS employee_status FROM hr_point p LEFT JOIN hr_employee e ON e.employee_no = p.employee_no",
+  "sql": "SELECT p.id AS id, p.employee_no AS employee_no, p.employee_name AS employee_name, p.point_year AS point_year, p.point_type AS point_type, p.year_point AS year_point, p.total_point AS total_point, p.point_source AS point_source, p.relate_biz AS relate_biz, p.grant_date AS grant_date, p.honor_level AS honor_level, p.rank_no AS rank_no, p.point_status AS point_status, p.dept_avg_point AS dept_avg_point, p.dept_rank AS dept_rank, e.dept AS dept, e.position AS position, e.employee_status AS employee_status FROM hr_point p LEFT JOIN hr_employee e ON e.employee_no = p.employee_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

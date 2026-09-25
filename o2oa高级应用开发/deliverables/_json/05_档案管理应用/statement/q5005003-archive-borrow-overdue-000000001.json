@@ -1,0 +1,20 @@
+{
+  "id": "q5005003-archive-borrow-overdue-000000001",
+  "name": "档案逾期未归还查询",
+  "alias": "档案逾期未归还查询",
+  "description": "查询逾期未归还的档案借阅记录",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT b.borrow_no, b.archive_no, b.borrower, b.borrow_date, b.plan_return_date, b.borrow_status FROM 档案借阅表 b WHERE b.borrow_status <> '已归还' AND b.plan_return_date < CURRENT_DATE",
+  "sql": "SELECT b.borrow_no, b.archive_no, b.borrower, b.borrow_date, b.plan_return_date, b.borrow_status FROM 档案借阅表 b WHERE b.borrow_status <> '已归还' AND b.plan_return_date < CURRENT_DATE",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

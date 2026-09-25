@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>合同管理 门户</title>
+<style>
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0;
+  font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px; color: #2d3748; background: #f5f7fa;
+}
+a { color: #2b6cb0; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------- 顶栏 ---------- */
+.op-topbar {
+  height: 34px; line-height: 34px; padding: 0 16px;
+  background: #fff; border-bottom: 1px solid #e2e8f0;
+  font-size: 12px; color: #4a5568;
+}
+.op-topbar .greet { float: left; }
+.op-topbar .greet b { color: #1a5fa8; }
+.op-topbar .acts { float: right; }
+.op-topbar .acts a { margin-left: 14px; color: #4a5568; }
+
+/* ---------- 品牌条 ---------- */
+.op-brand {
+  height: 96px; padding: 0 24px;
+  background: linear-gradient(100deg, #eaf3fc 0%, #dbe9f8 48%, #cfe2f6 100%);
+  border-bottom: 1px solid #e2e8f0;
+  position: relative; overflow: hidden;
+}
+.op-brand .logo {
+  position: absolute; left: 24px; top: 22px;
+}
+.op-brand .logo-mark {
+  display: inline-block; width: 30px; height: 30px; border-radius: 4px;
+  background: #2b6cb0; color: #fff; text-align: center;
+  line-height: 30px; font-size: 11px; font-weight: 700; letter-spacing: -.5px;
+  vertical-align: middle;
+}
+.op-brand .logo-text { display: inline-block; vertical-align: middle; margin-left: 10px; }
+.op-brand .logo-text .cn { font-size: 17px; color: #1a5fa8; letter-spacing: 3px; font-weight: 600; }
+.op-brand .logo-text .en { font-size: 10px; color: #94a3b8; letter-spacing: 1px; }
+.op-brand .art {
+  position: absolute; right: 26px; top: 12px; width: 300px; height: 72px;
+}
+.op-brand .art .dev {
+  position: absolute; right: 96px; top: 8px; width: 118px; height: 58px;
+  background: #2f3a4a; border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(43,108,176,.25);
+}
+.op-brand .art .dev:after {
+  content: ""; position: absolute; right: 4px; bottom: 4px; width: 30px; height: 30px;
+  border-radius: 50%; background: #2b6cb0;
+}
+.op-brand .art .plane {
+  position: absolute; right: 40px; top: 0; font-size: 34px; color: #2b6cb0;
+  opacity: .75; transform: rotate(-12deg);
+}
+
+/* ---------- 主体两栏 ---------- */
+.op-main { display: flex; align-items: stretch; min-height: 560px; }
+
+/* ---------- 左侧导航树 ---------- */
+.op-side {
+  width: 186px; flex: 0 0 186px;
+  background: #fff; border-right: 1px solid #e2e8f0;
+  padding-bottom: 20px;
+}
+.op-side .side-title {
+  padding: 12px 16px 10px; font-size: 14px; color: #2d3748; font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+}
+.op-side ul { list-style: none; margin: 0; padding: 0; }
+.op-side li > a, .op-side li > span {
+  display: block; position: relative;
+  padding: 8px 12px 8px 26px;
+  font-size: 13px; color: #4a5568;
+}
+.op-side li.lv1 > a, .op-side li.lv1 > span {
+  padding-left: 14px; font-weight: 600; color: #2d3748;
+}
+.op-side li.lv1 > a:before, .op-side li.lv1 > span:before {
+  content: "\25B8"; display: inline-block; width: 14px; color: #94a3b8;
+}
+.op-side li.lv1.on > a:before { content: "\25BE"; }
+.op-side li.lv2 > a { color: #5a6577; }
+.op-side li.active {
+  background: #e8f0fa;
+}
+.op-side li.active > a { color: #1a5fa8; font-weight: 600; }
+.op-side li.active:before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: #2b6cb0;
+}
+.op-side li { position: relative; }
+.op-side .badge { color: #94a3b8; font-size: 12px; }
+
+/* ---------- 右内容区 ---------- */
+.op-content { flex: 1 1 auto; padding: 0 14px 18px; min-width: 0; }
+
+/* ---------- 卡片 ---------- */
+.op-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 3px;
+  margin-top: 14px;
+}
+.op-card > .hd {
+  position: relative; height: 38px; line-height: 38px;
+  padding: 0 12px 0 14px; border-bottom: 1px solid #e2e8f0;
+}
+.op-card > .hd:before {
+  content: ""; position: absolute; left: 0; top: 11px; width: 3px; height: 16px;
+  background: #2b6cb0;
+}
+.op-card > .hd .t { font-size: 14px; color: #2d3748; font-weight: 600; }
+.op-card > .hd .more { float: right; font-size: 12px; color: #4a5568; }
+.op-card > .bd { padding: 0; }
+
+/* 选项卡（待办事项 / 已办事项） */
+.op-tabs { border-bottom: 1px solid #e2e8f0; padding: 0 8px; height: 40px; }
+.op-tabs .tab {
+  display: inline-block; height: 40px; line-height: 40px;
+  padding: 0 14px; font-size: 14px; color: #4a5568; cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.op-tabs .tab.on { color: #1a5fa8; font-weight: 600; border-bottom-color: #2b6cb0; }
+.op-tabs .right { float: right; height: 40px; line-height: 40px; font-size: 12px; }
+
+/* ---------- 数据表格 ---------- */
+.op-table { width: 100%; border-collapse: collapse; }
+.op-table th, .op-table td {
+  padding: 9px 10px; font-size: 12.5px; text-align: left;
+  border-bottom: 1px solid #eef2f7;
+}
+.op-table th { color: #4a5568; font-weight: 500; background: #fafcfe; }
+.op-table tbody tr:nth-child(even) { background: #f7fafc; }
+.op-table td.idx { width: 22px; color: #2b6cb0; }
+.op-table td.title { color: #2d3748; }
+.op-table td.ctr, .op-table td.date { color: #718096; width: 110px; }
+.op-table td.tag { width: 96px; color: #718096; }
+
+/* 分页 */
+.op-page { padding: 10px 12px; text-align: center; }
+.op-page .pg {
+  display: inline-block; min-width: 52px; height: 24px; line-height: 22px;
+  padding: 0 10px; margin: 0 5px; font-size: 12px;
+  border: 1px solid #e2e8f0; border-radius: 2px;
+  background: #fff; color: #4a5568; cursor: pointer;
+}
+.op-page .pg:hover { border-color: #2b6cb0; color: #1a5fa8; }
+
+/* ---------- 图表 ---------- */
+.op-charts { display: flex; gap: 14px; margin-top: 14px; align-items: stretch; }
+.op-charts > .op-card { flex: 1 1 0; margin-top: 0; min-width: 0; }
+.op-chart-tools { padding: 8px 12px 0; }
+.op-chart-tools .tg {
+  display: inline-block; height: 24px; line-height: 22px; padding: 0 12px;
+  margin-right: 6px; font-size: 12px; cursor: pointer;
+  border: 1px solid #e2e8f0; border-radius: 3px;
+  background: #fff; color: #4a5568;
+}
+.op-chart-tools .tg.on { background: #2b6cb0; border-color: #2b6cb0; color: #fff; }
+.op-chart-body { padding: 12px 16px 16px; }
+.op-chart-title { text-align: center; font-size: 13px; color: #2d3748; margin-bottom: 6px; }
+.op-legend { margin-top: 10px; padding-left: 6px; }
+.op-legend .lg {
+  display: inline-block; margin: 2px 14px 2px 0; font-size: 12px; color: #4a5568;
+}
+.op-legend .lg i {
+  display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+  margin-right: 5px; vertical-align: middle;
+}
+
+/* ---------- 快捷入口（彩色图标） ---------- */
+.op-quick { display: flex; flex-wrap: wrap; padding: 14px 10px; gap: 6px; }
+.op-quick .q {
+  width: 88px; text-align: center; padding: 10px 4px; border-radius: 4px;
+}
+.op-quick .q:hover { background: #f7fafc; }
+.op-quick .q .ic {
+  width: 44px; height: 44px; line-height: 44px; margin: 0 auto 7px;
+  border-radius: 50%; color: #fff; font-size: 19px; text-align: center;
+}
+.op-quick .q .lb { font-size: 12px; color: #4a5568; }
+
+</style>
+</head>
+<body>
+<div class="op-topbar"><div class="greet">欢迎您！<b>秘书长</b>！今天是2026年09月19日(周六)</div><div class="acts"><a href="#">个人设置</a><a href="#">退出</a></div></div>
+<div class="op-brand"><div class="logo"><span class="logo-mark">O2OA</span><span class="logo-text"><span class="cn">整合办公</span><br/><span class="en">智慧赋能</span></span></div><div class="art"><div class="plane">✈</div><div class="dev"></div></div></div>
+<div class="op-main"><div class="op-side"><div class="side-title">合同管理</div><ul><li class="lv1 active"><a href="#">合同管理首页</a></li>
+<li class="lv1"><a href="#">档案管理</a></li>
+<li class="lv2"><a href="#">发起合同审批流程</a></li>
+<li class="lv2"><a href="#">合同档案</a></li>
+<li class="lv2"><a href="#">合同补录</a></li>
+<li class="lv2"><a href="#">合同档案导入</a></li>
+<li class="lv1"><a href="#">过程管理 <span class="badge">(07)</span></a></li>
+<li class="lv2"><a href="#">信息变更</a></li>
+<li class="lv2"><a href="#">状态变更</a></li>
+<li class="lv1"><a href="#">收款管理 <span class="badge">(08)</span></a></li>
+<li class="lv2"><a href="#">收款计划编制</a></li>
+<li class="lv2"><a href="#">收款计划变更</a></li>
+<li class="lv2"><a href="#">合同收款</a></li>
+<li class="lv2"><a href="#">开票申请</a></li>
+<li class="lv1"><a href="#">付款管理</a></li>
+<li class="lv2"><a href="#">付款计划编制</a></li>
+<li class="lv2"><a href="#">付款计划变更</a></li>
+<li class="lv2"><a href="#">合同付款</a></li>
+<li class="lv2"><a href="#">收票记录</a></li></ul></div><div class="op-content"><div class="op-card"><div class="op-tabs"><span class="tab on">待办事项(8)</span><span class="tab">已办事项(2)</span><span class="right"><a href="#">新建流程 ▸</a></span></div><div class="bd"><table class="op-table"><tbody><tr><td class="idx">①</td><td class="title">待办：《高温合金耐久件采购合同》审批</td><td class="ctr">苏娜</td><td class="tag">合同审批</td><td class="date">2026-09-19</td></tr><tr><td class="idx">②</td><td class="title">待办：《碳纤维预浸料供货框架协议》会签</td><td class="ctr">杨苏</td><td class="tag">会签申请</td><td class="date">2026-09-19</td></tr><tr><td class="idx">③</td><td class="title">待办：《实验室检测设备采购合同》法务审核</td><td class="ctr">谢军</td><td class="tag">法务审核</td><td class="date">2026-09-18</td></tr><tr><td class="idx">④</td><td class="title">待办：第三季度合同履约情况汇总</td><td class="ctr">赵娜</td><td class="tag">部门会签</td><td class="date">2026-09-18</td></tr><tr><td class="idx">⑤</td><td class="title">待办：履约中合同到期预警清单</td><td class="ctr">常明</td><td class="tag">教务处理</td><td class="date">2026-09-17</td></tr><tr><td class="idx">⑥</td><td class="title">待办：合同档案归档目录校验</td><td class="ctr">史杰</td><td class="tag">请示审批</td><td class="date">2026-09-17</td></tr><tr><td class="idx">⑦</td><td class="title">待办：签约方信用等级年度复核</td><td class="ctr">张超</td><td class="tag">报验申请</td><td class="date">2026-09-16</td></tr><tr><td class="idx">⑧</td><td class="title">待办：开票申请流程变更确认</td><td class="ctr">郑洋</td><td class="tag">部门发文</td><td class="date">2026-09-16</td></tr></tbody></table><div class="op-page"><span class="pg">上一页</span><span class="pg">下一页</span></div></div></div>
+<div class="op-card"><div class="hd"><span class="t">员工自助</span><span class="more">更多 »</span></div><div class="bd"><div class="op-quick"><div class="q"><div class="ic" style="background:#4a8fe7">▤</div><div class="lb">合同台账</div></div><div class="q"><div class="ic" style="background:#38b2ac">▤</div><div class="lb">收款计划</div></div><div class="q"><div class="ic" style="background:#ed8936">▤</div><div class="lb">付款计划</div></div><div class="q"><div class="ic" style="background:#9f7aea">▤</div><div class="lb">开票申请</div></div><div class="q"><div class="ic" style="background:#f6ad55">▤</div><div class="lb">收票记录</div></div><div class="q"><div class="ic" style="background:#4299e1">▤</div><div class="lb">签约方档案</div></div></div></div></div>
+<div class="op-charts"><div class="op-card"><div class="hd"><span class="t">按状态统计合同数量</span><span class="more">更多 »</span></div><div class="bd"><div class="op-chart-tools"><span class="tg on">饼状图</span><span class="tg">行列转换</span></div><div class="op-chart-body"><svg width="100%" viewBox="0 0 260 260" preserveAspectRatio="xMidYMid meet" style="max-width:280px;display:block;margin:0 auto"><text x="130" y="16" font-size="13" fill="#2d3748" text-anchor="middle">按状态统计合同数量</text><path d="M130,130 L130.00,52.00 A78,78 0 0 1 142.84,206.94 Z" fill="#4a8fe7" stroke="#fff" stroke-width="1"/><path d="M130,130 L142.84,206.94 A78,78 0 0 1 52.27,136.44 Z" fill="#f28b82" stroke="#fff" stroke-width="1"/><path d="M130,130 L52.27,136.44 A78,78 0 0 1 104.67,56.23 Z" fill="#4a5568" stroke="#fff" stroke-width="1"/><path d="M130,130 L104.67,56.23 A78,78 0 0 1 130.00,52.00 Z" fill="#f5c542" stroke="#fff" stroke-width="1"/><line x1="207.73" y1="123.56" x2="233.64" y2="121.41" stroke="#cbd5e0" stroke-width="1"/><text x="255.64" y="121.41" font-size="12" fill="#4a5568" text-anchor="start" dominant-baseline="middle">36</text><line x1="82.09" y1="191.55" x2="66.12" y2="212.07" stroke="#cbd5e0" stroke-width="1"/><text x="44.12" y="212.07" font-size="12" fill="#4a5568" text-anchor="end" dominant-baseline="middle">20</text><line x1="64.70" y1="87.34" x2="42.93" y2="73.12" stroke="#cbd5e0" stroke-width="1"/><text x="20.93" y="73.12" font-size="12" fill="#4a5568" text-anchor="end" dominant-baseline="middle">16</text><line x1="117.16" y1="53.06" x2="112.88" y2="27.42" stroke="#cbd5e0" stroke-width="1"/><text x="90.88" y="27.42" font-size="12" fill="#4a5568" text-anchor="end" dominant-baseline="middle">4</text></svg><div class="op-legend"><span class="lg"><i style="background:#4a8fe7"></i>履行中</span><span class="lg"><i style="background:#f28b82"></i>已终止</span><span class="lg"><i style="background:#4a5568"></i>已解除</span><span class="lg"><i style="background:#f5c542"></i>已中止</span></div></div></div></div><div class="op-card"><div class="hd"><span class="t">按状态统计合同金额</span><span class="more">更多 »</span></div><div class="bd"><div class="op-chart-tools"><span class="tg">饼状图</span><span class="tg">行列转换</span></div><div class="op-chart-body"><svg width="100%" viewBox="0 0 300 220" preserveAspectRatio="xMidYMid meet" style="max-width:320px;display:block;margin:0 auto"><line x1="42" y1="186.0" x2="286" y2="186.0" stroke="#cbd5e0" stroke-width="1"/><text x="36" y="186.0" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">0</text><line x1="42" y1="154.8" x2="286" y2="154.8" stroke="#eef2f7" stroke-width="1"/><text x="36" y="154.8" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">200</text><line x1="42" y1="123.6" x2="286" y2="123.6" stroke="#eef2f7" stroke-width="1"/><text x="36" y="123.6" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">400</text><line x1="42" y1="92.4" x2="286" y2="92.4" stroke="#eef2f7" stroke-width="1"/><text x="36" y="92.4" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">600</text><line x1="42" y1="61.2" x2="286" y2="61.2" stroke="#eef2f7" stroke-width="1"/><text x="36" y="61.2" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">800</text><line x1="42" y1="30.0" x2="286" y2="30.0" stroke="#eef2f7" stroke-width="1"/><text x="36" y="30.0" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">1000</text><rect x="65.7" y="33.9" width="34.0" height="152.1" fill="#4a8fe7" rx="1"/><text x="82.7" y="29.9" font-size="10" fill="#4a5568" text-anchor="middle">975</text><text x="82.7" y="202" font-size="10.5" fill="#4a5568" text-anchor="middle">收款合同</text><rect x="147.0" y="145.0" width="34.0" height="41.0" fill="#4a8fe7" rx="1"/><text x="164.0" y="141.0" font-size="10" fill="#4a5568" text-anchor="middle">263</text><text x="164.0" y="202" font-size="10.5" fill="#4a5568" text-anchor="middle">付款合同</text><rect x="228.3" y="94.4" width="34.0" height="91.6" fill="#4a8fe7" rx="1"/><text x="245.3" y="90.4" font-size="10" fill="#4a5568" text-anchor="middle">587</text><text x="245.3" y="202" font-size="10.5" fill="#4a5568" text-anchor="middle">其他</text><text x="164" y="18" font-size="13" fill="#2d3748" text-anchor="middle">按状态统计合同金额</text></svg></div></div></div></div>
+</div></div>
+</body>
+</html>

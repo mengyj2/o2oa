@@ -1,0 +1,3 @@
+o2.xApplication.CloudDocumentEditor.LP = {
+	"title": "空"
+};

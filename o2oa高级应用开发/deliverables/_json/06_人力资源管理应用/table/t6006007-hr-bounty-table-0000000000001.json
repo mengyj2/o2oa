@@ -1,0 +1,15 @@
+{
+  "id": "t6006007-hr-bounty-table-0000000000001",
+  "name": "t6006007_hr_bounty_table",
+  "alias": "积分悬赏表",
+  "description": "积分悬赏课题台账，对应官方“积分悬赏：分数标签|课题|日期”",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"bounty_no\", \"description\": \"悬赏编号\", \"type\": \"string\"}, {\"name\": \"bounty_title\", \"description\": \"课题名称\", \"type\": \"string\"}, {\"name\": \"bounty_score\", \"description\": \"悬赏分数\", \"type\": \"double\"}, {\"name\": \"score_tag\", \"description\": \"分数标签\", \"type\": \"string\"}, {\"name\": \"bounty_type\", \"description\": \"课题类型\", \"type\": \"string\"}, {\"name\": \"publish_dept\", \"description\": \"发布部门\", \"type\": \"string\"}, {\"name\": \"publisher\", \"description\": \"发布人\", \"type\": \"string\"}, {\"name\": \"publish_date\", \"description\": \"发布日期\", \"type\": \"date\"}, {\"name\": \"deadline\", \"description\": \"截止日期\", \"type\": \"date\"}, {\"name\": \"bounty_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"bounty_desc\", \"description\": \"课题说明\", \"type\": \"stringLob\"}, {\"name\": \"bounty_require\", \"description\": \"交付要求\", \"type\": \"stringLob\"}, {\"name\": \"taker_no\", \"description\": \"领取人编号\", \"type\": \"string\"}, {\"name\": \"finish_date\", \"description\": \"完成日期\", \"type\": \"date\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"bounty_no\", \"description\": \"悬赏编号\", \"type\": \"string\"}, {\"name\": \"bounty_title\", \"description\": \"课题名称\", \"type\": \"string\"}, {\"name\": \"bounty_score\", \"description\": \"悬赏分数\", \"type\": \"double\"}, {\"name\": \"score_tag\", \"description\": \"分数标签\", \"type\": \"string\"}, {\"name\": \"bounty_type\", \"description\": \"课题类型\", \"type\": \"string\"}, {\"name\": \"publish_dept\", \"description\": \"发布部门\", \"type\": \"string\"}, {\"name\": \"publisher\", \"description\": \"发布人\", \"type\": \"string\"}, {\"name\": \"publish_date\", \"description\": \"发布日期\", \"type\": \"date\"}, {\"name\": \"deadline\", \"description\": \"截止日期\", \"type\": \"date\"}, {\"name\": \"bounty_status\", \"description\": \"状态\", \"type\": \"string\"}, {\"name\": \"bounty_desc\", \"description\": \"课题说明\", \"type\": \"stringLob\"}, {\"name\": \"bounty_require\", \"description\": \"交付要求\", \"type\": \"stringLob\"}, {\"name\": \"taker_no\", \"description\": \"领取人编号\", \"type\": \"string\"}, {\"name\": \"finish_date\", \"description\": \"完成日期\", \"type\": \"date\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

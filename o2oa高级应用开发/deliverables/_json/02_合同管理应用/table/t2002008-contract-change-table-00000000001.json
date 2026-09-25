@@ -1,0 +1,15 @@
+{
+  "id": "t2002008-contract-change-table-00000000001",
+  "name": "t2002008_contract_change_table",
+  "alias": "合同变更记录表",
+  "description": "合同信息变更与状态变更的全量留痕记录",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"change_no\", \"description\": \"变更单号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"contract_name\", \"description\": \"合同名称\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"change_type\", \"description\": \"变更类型\", \"type\": \"string\"}, {\"name\": \"before_status\", \"description\": \"变更前状态\", \"type\": \"string\"}, {\"name\": \"after_status\", \"description\": \"变更后状态\", \"type\": \"string\"}, {\"name\": \"before_amount\", \"description\": \"变更前金额\", \"type\": \"double\"}, {\"name\": \"after_amount\", \"description\": \"变更后金额\", \"type\": \"double\"}, {\"name\": \"change_amount\", \"description\": \"变更差额\", \"type\": \"double\"}, {\"name\": \"change_date\", \"description\": \"变更日期\", \"type\": \"date\"}, {\"name\": \"change_reason\", \"description\": \"变更原因\", \"type\": \"stringLob\"}, {\"name\": \"approve_status\", \"description\": \"审批状态\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"change_no\", \"description\": \"变更单号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"contract_name\", \"description\": \"合同名称\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"change_type\", \"description\": \"变更类型\", \"type\": \"string\"}, {\"name\": \"before_status\", \"description\": \"变更前状态\", \"type\": \"string\"}, {\"name\": \"after_status\", \"description\": \"变更后状态\", \"type\": \"string\"}, {\"name\": \"before_amount\", \"description\": \"变更前金额\", \"type\": \"double\"}, {\"name\": \"after_amount\", \"description\": \"变更后金额\", \"type\": \"double\"}, {\"name\": \"change_amount\", \"description\": \"变更差额\", \"type\": \"double\"}, {\"name\": \"change_date\", \"description\": \"变更日期\", \"type\": \"date\"}, {\"name\": \"change_reason\", \"description\": \"变更原因\", \"type\": \"stringLob\"}, {\"name\": \"approve_status\", \"description\": \"审批状态\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

@@ -1,0 +1,247 @@
+{
+  "jaxrs": [
+    {
+      "name": "CacheAction",
+      "methods": [
+        {
+          "name": "configFlush",
+          "uri": "jaxrs/cache/config/flush",
+          "method": "GET"
+        },
+        {
+          "name": "commonScriptFlush",
+          "uri": "jaxrs/cache/commonscript/flush",
+          "method": "GET"
+        },
+        {
+          "name": "receive",
+          "uri": "jaxrs/cache",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "detail",
+          "uri": "jaxrs/cache/detail",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "name": "ChatAction",
+      "methods": [
+        {
+          "name": "listPaging",
+          "uri": "jaxrs/chat/list/paging/{page}/size/{size}",
+          "method": "GET"
+        },
+        {
+          "name": "listCompletionPaging",
+          "uri": "jaxrs/chat/list/completion/{clueId}/paging/{page}/size/{size}",
+          "method": "GET"
+        },
+        {
+          "name": "writeCompletionExtra",
+          "uri": "jaxrs/chat/write/completion/extra",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "delete",
+          "uri": "jaxrs/chat/delete/{clueId}",
+          "method": "GET"
+        },
+        {
+          "name": "completion",
+          "uri": "jaxrs/chat/completion",
+          "method": "POST",
+          "enctype": "application/json"
+        }
+      ]
+    },
+    {
+      "name": "ConfigAction",
+      "methods": [
+        {
+          "name": "getBaseConfig",
+          "uri": "jaxrs/config/base/config",
+          "method": "GET"
+        },
+        {
+          "name": "saveConfig",
+          "uri": "jaxrs/config/save",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "listModelPaging",
+          "uri": "jaxrs/config/list/model/paging/{page}/size/{size}",
+          "method": "GET"
+        },
+        {
+          "name": "createModel",
+          "uri": "jaxrs/config/create/model",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "updateModel",
+          "uri": "jaxrs/config/update/model/{flag}",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "deleteModel",
+          "uri": "jaxrs/config/delete/model/{flag}",
+          "method": "GET"
+        },
+        {
+          "name": "listMcpConfigPaging",
+          "uri": "jaxrs/config/list/mcp/paging/{page}/size/{size}",
+          "method": "GET"
+        },
+        {
+          "name": "createMcpConfig",
+          "uri": "jaxrs/config/create/mcp",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "updateMcpConfig",
+          "uri": "jaxrs/config/update/mcp/{flag}",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "getMcpConfig",
+          "uri": "jaxrs/config/get/mcp/{flag}",
+          "method": "GET"
+        },
+        {
+          "name": "getMcpExt",
+          "uri": "jaxrs/config/get/mcp/ext/{flag}",
+          "method": "GET"
+        },
+        {
+          "name": "deleteMcpConfig",
+          "uri": "jaxrs/config/delete/mcp/{flag}",
+          "method": "GET"
+        },
+        {
+          "name": "listEnableModel",
+          "uri": "jaxrs/config/list/enable/model",
+          "method": "GET"
+        },
+        {
+          "name": "getModel",
+          "uri": "jaxrs/config/get/model/{flag}",
+          "method": "GET"
+        },
+        {
+          "name": "getConfig",
+          "uri": "jaxrs/config/get",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "name": "EchoAction",
+      "methods": [
+        {
+          "name": "get",
+          "uri": "jaxrs/echo",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "name": "FileAction",
+      "methods": [
+        {
+          "name": "downloadScale",
+          "uri": "jaxrs/file/{id}/download/scale",
+          "method": "GET"
+        },
+        {
+          "name": "listWithIds",
+          "uri": "jaxrs/file/list",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "listPaging",
+          "uri": "jaxrs/file/list/paging/{page}/size/{size}",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "get",
+          "uri": "jaxrs/file/{flag}",
+          "method": "GET"
+        },
+        {
+          "name": "delete",
+          "uri": "jaxrs/file/delete/{flag}",
+          "method": "GET"
+        },
+        {
+          "name": "copyFile",
+          "uri": "jaxrs/file/copy/file",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "upload",
+          "uri": "jaxrs/file/upload",
+          "method": "POST",
+          "enctype": "formData"
+        },
+        {
+          "name": "download",
+          "uri": "jaxrs/file/{id}/download",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "name": "FireScheduleAction",
+      "methods": [
+        {
+          "name": "execute",
+          "uri": "jaxrs/fireschedule/classname/{className}",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "name": "IndexAction",
+      "methods": [
+        {
+          "name": "cmsDocIndex",
+          "uri": "jaxrs/index/cms/doc/{docId}",
+          "method": "GET"
+        },
+        {
+          "name": "cmsDocIndexWithApp",
+          "uri": "jaxrs/index/cms/doc/with/app/{appId}",
+          "method": "GET"
+        },
+        {
+          "name": "deleteDocIndex",
+          "uri": "jaxrs/index/delete/{flag}",
+          "method": "GET"
+        },
+        {
+          "name": "listIndexPaging",
+          "uri": "jaxrs/index/list/paging/{page}/size/{size}",
+          "method": "POST",
+          "enctype": "application/json"
+        },
+        {
+          "name": "syncToKnowledge",
+          "uri": "jaxrs/index/sync/to/knowledge",
+          "method": "GET"
+        }
+      ]
+    }
+  ]
+}

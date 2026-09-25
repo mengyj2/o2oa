@@ -1,0 +1,20 @@
+{
+  "id": "q2002002-contract-project-join-0000001",
+  "name": "合同关联项目明细",
+  "alias": "合同关联项目明细",
+  "description": "合同与项目管理应用的数据共享查询（核心跨应用关联）",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT c.contract_no AS contract_no, c.contract_name AS contract_name, c.contract_amount AS contract_amount, c.contract_status AS contract_status, c.project_no AS project_no, c.sign_unit AS sign_unit, p.project_name AS project_name, p.manager AS project_manager, p.total_budget AS project_budget, p.project_status AS project_status FROM contract_main c LEFT JOIN project_master p ON p.project_no = c.project_no",
+  "sql": "SELECT c.contract_no AS contract_no, c.contract_name AS contract_name, c.contract_amount AS contract_amount, c.contract_status AS contract_status, c.project_no AS project_no, c.sign_unit AS sign_unit, p.project_name AS project_name, p.manager AS project_manager, p.total_budget AS project_budget, p.project_status AS project_status FROM contract_main c LEFT JOIN project_master p ON p.project_no = c.project_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

@@ -1,0 +1,20 @@
+{
+  "id": "q1001001-project-fund-summary-00000001",
+  "name": "项目资金汇总查询",
+  "alias": "项目资金汇总查询",
+  "description": "关联项目主表与付款主表，汇总项目累计付款金额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT p.project_no, p.project_name, p.total_budget, SUM(v.payment_amount) AS paid, SUM(v.payment_amount) AS approved FROM 项目主表 p LEFT JOIN 付款主表 v ON p.project_no = v.project_no GROUP BY p.project_no",
+  "sql": "SELECT p.project_no, p.project_name, p.total_budget, SUM(v.payment_amount) AS paid, SUM(v.payment_amount) AS approved FROM 项目主表 p LEFT JOIN 付款主表 v ON p.project_no = v.project_no GROUP BY p.project_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

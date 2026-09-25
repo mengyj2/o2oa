@@ -1,0 +1,66 @@
+[
+  {
+    "title": "下载",
+    "action": "download",
+    "show": "this.data.fileType!==\"folder\""
+  },
+  {
+    "title": "GPG加密下载",
+    "action": "gpgDownload",
+    "show": "1>2"
+  },
+  {
+    "title": "移动",
+    "action": "move",
+    "show": "this.data.person===layout.user.unique"
+  },
+  {
+    "title": "复制到",
+    "action": "copy",
+    "show": "this.data.person===layout.user.unique"
+  },
+  {
+    "title": "重命名",
+    "action": "rename",
+    "show": "this.data.person===layout.user.unique"
+  },
+  {
+    "title": "删除",
+    "action": "remove",
+    "show": "this.data.person===layout.user.unique"
+  },
+  {
+    "title": "标签设置",
+    "action": "tagSet",
+    "show": "this.data.fileType!==\"folder\"&&this.data.person===layout.user.unique"
+  },
+  {
+    "title": "同时在线设置",
+    "action": "onlineSet",
+    "show": "this.data.fileType!==\"folder\"&&this.data.person===layout.user.unique"
+  },
+  {
+    "title": "添加星标",
+    "action": "star",
+    "show": "!this.data.fav&&this.data.fileType!==\"folder\""
+  },
+  {
+    "title": "取消星标",
+    "action": "unstar",
+    "show": "this.data.fav&&this.data.fileType!==\"folder\""
+  },
+  {
+    "title": "分享",
+    "action": "share",
+    "show": "this.data.fileType!==\"folder\"&&this.data.person===layout.user.unique"
+  },
+  {
+    "title": "历史版本",
+    "action": "history",
+    "show": "this.data.person===layout.user.unique&&this.data.fileType!==\"folder\""
+  },
+  {
+    "title": "属性",
+    "action": "properties"
+  }
+]

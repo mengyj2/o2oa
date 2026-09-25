@@ -1,0 +1,166 @@
+# O2OA 10.0.2 本地 Docker 部署（自建镜像 + 外接 MySQL 8）
+# 用法（在 D:\O2OA 目录，需先启动 Docker Desktop 并把本目录加入 File Sharing）：
+#   构建镜像: docker compose build
+#   启动    : docker compose up -d
+#   停止    : docker compose down   （数据卷保留）
+# 访问地址: http://localhost:9090  （首次需设置管理员 xadmin 密码）
+# 注: 9090 是为规避宿主机 8080 已被 searxng 占用而调整，如需改端口可在 .env 设 O2OA_WEB_PORT
+# 平台说明: 本机为 ARM64 + QEMU。mysql:8.0 官方 amd64 镜像在本环境 exec format error（坏层），
+#           故 mysql 用原生 linux/arm64；O2OA 为本地 build 的 linux/amd64，由 QEMU 运行（启动偏慢约数分钟）。
+
+services:
+  mysql:
+    image: mysql:8.0
+    platform: linux/arm64
+    container_name: o2oa-mysql
+    restart: unless-stopped
+    environment:
+      # 库 X 由 MYSQL_DATABASE 自动创建；o2oa 专用账号在 initdb/init.sql 中固定为 o2oa/o2oa_pwd
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-o2oa_root_pwd}
+      MYSQL_DATABASE: X
+      TZ: Asia/Shanghai
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    # 静态 IP：extra_hosts 写死指向它，重启/重建后 IP 不漂移
+    #（2026-09-20 重启后动态分配致 o2oa 抢到 .2、mysql 变 .3，O2OA 连自己 3306 拒连的教训）
+    networks:
+      o2oa-net:
+        ipv4_address: 172.22.0.10
+
+  o2oa:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: o2oa:10.0.2
+    platform: linux/amd64
+    container_name: o2oa-server
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      O2OA_WEB_PORT: ${O2OA_WEB_PORT:-9090}
+      O2OA_JVM_XMS: ${O2OA_JVM_XMS:-4g}
+      O2OA_JVM_XMX: ${O2OA_JVM_XMX:-4g}
+      O2OA_DB_HOST: mysql
+      O2OA_DB_PORT: 3306
+      O2OA_DB_NAME: ${O2OA_DB_NAME:-X}
+      O2OA_DB_USER: ${O2OA_DB_USER:-o2oa}
+      O2OA_DB_PASSWORD: ${O2OA_DB_PASSWORD:-o2oa_pwd}
+    # ---- 离线隔离（挡外网、保留宿主端口映射）----
+    # dns 指向一个不存在的本地解析器 => 容器内任何外网域名解析都失败。
+    # O2OA 对 o2oa.net（更新检查/许可校验/统计上报）的访问全部依赖域名解析，
+    # 因此这样即等于把它的对外通道掐断，而容器间的 mysql 走 extra_hosts 静态解析，
+    # 不受影响；宿主机的端口映射也照常工作（这也是不能用 internal:true 的原因）。
+    dns:
+      - 127.0.0.1
+    extra_hosts:
+      # 固定容器间通信的 mysql 地址（不依赖任何 DNS；mysql 已在 compose 中固定 172.22.0.10，
+      # 一般无需再改此项）。
+      - "mysql:${O2OA_MYSQL_IP:-172.22.0.10}"
+      # 本地邮件验证码服务同理：上面的 dns 指向 127.0.0.1（断云），o2oa 容器内
+      # 任何域名解析都会失败，必须在此静态声明。否则 x_program_center 回调本服务
+      # 下发/校验验证码时抛 UnknownHostException，表现为 CodeFactory create error。
+      - "o2oa-mailservice:${O2OA_MAIL_IP:-172.22.0.30}"
+    ports:
+      - "${O2OA_WEB_PORT:-9090}:${O2OA_WEB_PORT:-9090}"
+      - "20010-20050:20010-20050"
+    volumes:
+      - o2oa-config:/opt/o2server/config
+      - o2oa-local:/opt/o2server/local
+      - o2oa-logs:/opt/o2server/logs
+      - o2oa-webroot:/opt/o2server/webroot
+      - o2oa-custom:/opt/o2server/custom
+      - o2oa-dynamic:/opt/o2server/dynamic
+      # 首页入口分流定制：index.html / index_home.html / res/config/config.json 三份文件
+      # 已由 Dockerfile 的 COPY 烤入镜像（源 = git 跟踪的 deploy/host/x_desktop/），重建不丢。
+      # 注意：此处【不要】再用 bind mount 单文件覆盖——实测 O2OA 不读裸挂载覆盖层，
+      # 线上仍会返回官方版 index.html（坑见 2026-09-25 复盘）。一律走镜像烤入。
+    healthcheck:
+      # 为什么不用 curl：
+      #   ① O2OA 镜像里没有 curl（原写法恒失败）；
+      #   ② 本机是 ARM64 + QEMU，docker exec 偶发 setns 失败（OCI runtime exec failed），
+      #      healthcheck 本质就是 exec，命令越重越容易假阴性。
+      # 改读 /proc/net/tcp（procfs 用大写十六进制表示端口，9090 = 0x2382），
+      # 纯 shell 内置运算、零外部二进制依赖，最稳。
+      test: ["CMD-SHELL", "P=$$(printf '%04X' $${O2OA_WEB_PORT:-9090}); grep -qi \":$$P \" /proc/net/tcp"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 300s
+    networks:
+      o2oa-net:
+        ipv4_address: 172.22.0.20
+
+  # ---------------------------------------------------------------------------
+  # 本地邮件验证码服务（x_sms_assemble_control 平替）
+  #
+  # 为什么做成容器，而不是宿主裸进程 + 看门狗：
+  #   宿主裸进程没有任何东西对它负责 —— 关机/重启/误关窗口即失联，而 O2OA 侧
+  #   只报 CodeFactory create error，症状极其隐蔽。外挂看门狗只是把"进程活了"
+  #   这件事挪到另一个进程里，仍然不是系统的一部分。
+  #   做成 compose 服务后，restart: unless-stopped 由 Docker 引擎保障 ——
+  #   这是【声明式】的持久化：写在代码里、跟着分支走、可复现、可审计。
+  #
+  # 与断云策略（o2oa_netlock.sh）共存，不需要为它开口子：
+  #   · o2oa → mailservice：目的 172.22.0.30 落在 netlock 放行的 172.16/12 内 ✅
+  #   · mailservice → o2oa：netlock 只 DROP「o2oa 容器发出的」包，本服务是旁观者 ✅
+  #   · mailservice → smtp.ym.163.com:465：走 Docker NAT 出网，不受 netlock 影响（已实测可达）
+  # ---------------------------------------------------------------------------
+  mailservice:
+    build:
+      context: ./mailservice
+      dockerfile: Dockerfile
+    image: o2oa-mailservice:1.0.0
+    # 纯 Python 标准库，arm64 原生跑（本机 ARM64；换 amd64 机器改成 linux/amd64 即可）
+    platform: linux/arm64
+    container_name: o2oa-mailservice
+    restart: unless-stopped
+    depends_on:
+      o2oa:
+        condition: service_started
+    environment:
+      # 只声明【部署拓扑】。数据文件里刻意不写这三项 ——
+      # 于是容器形态（服务名/容器名）与宿主形态（localhost/网关 IP）各自都对，
+      # 不需要为容器单独维护一份配置。
+      O2OA_MAIL_O2OA_BASE: "http://o2oa-server:9090"
+      O2OA_MAIL_NODE: "o2oa-mailservice:8095"
+      O2OA_MAIL_PORT: "8095"
+      O2OA_MAIL_DATA_DIR: "/data"
+      # ★★ 凭据（SMTP 授权码 / admin 密码）刻意【不】在这里传：
+      #   compose 的 ${VAR:-} 在 .env 缺省时会传入空串，而空串是有效值，
+      #   会静默覆盖掉界面上填好的授权码 —— 这类"改了不生效"最难排查。
+      #   凭据一律存 /data 挂载卷里的 mail.json。
+    volumes:
+      # 运行期数据（mail.json 凭据 / codes.json / 日志）：落在项目目录内，重启不丢
+      - ./mailservice/data:/data
+    networks:
+      o2oa-net:
+        ipv4_address: 172.22.0.30
+
+volumes:
+  mysql-data:
+  o2oa-config:
+  o2oa-local:
+  o2oa-logs:
+  o2oa-webroot:
+  o2oa-custom:
+  o2oa-dynamic:
+
+networks:
+  # 注意：不要用 internal: true —— 它会同时切断宿主机的端口映射（9090 会变成 502）。
+  # 离线（挡外网、保留宿主访问）的做法见 o2oa 服务里的 dns 配置。
+  # 子网显式声明，配合两容器静态 IP（mysql=.10 / o2oa=.20）实现重启后 IP 稳定。
+  o2oa-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+          gateway: 172.22.0.1

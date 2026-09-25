@@ -1,0 +1,30 @@
+BASE bytes=1244308
+COMPILE_OK
+MATCH_EVAL desc=(Lorg/graalvm/polyglot/Source;Lcom/x/base/core/project/scripting/GraalvmScriptingFactory$Bindings;)Lcom/google/gson/JsonElement;
+MATCH_ALLOWCLASS
+PATCHED com/x/base/core/project/scripting/GraalvmScriptingFactory.class
+JAR_UPDATED /tmp/sh/x_base_core_project.work.jar
+=== eval 确认 ===
+       1: invokestatic  #832                // Method com/x/base/core/project/scripting/ScriptHostAccessPolicy.isDangerousClass:(Ljava/lang/String;)Z
+=== verify ===
+===== HostAccess 层验证（allowHostClassLookup 全放行，隔离测试） =====
+  [PASS] hardenedHostAccess() 返回非 null
+  [PASS] 良性宿主对象方法调用（ArrayList.add/size）可用
+  [PASS] 平台类 com.x.base.core.project.connection.* 不被拒
+  [PASS] 平台类 com.x.organization.core.* 不被拒
+  [PASS] 白名单类 java.util.ArrayList 不被拒
+  [PASS] java.lang.String 不被拒（保留普通对象能力）
+  [PASS] java.lang.Runtime 被拒
+  [PASS] java.lang.ProcessBuilder 被拒
+  [PASS] java.lang.System 被拒
+  [PASS] java.lang.reflect.Method 被拒
+  [PASS] java.lang.reflect.Field 被拒
+  [PASS] java.io.File 被拒
+  [PASS] java.net.Socket 被拒
+  [PASS] java.sql.Connection 被拒
+  [PASS] java.lang.ClassLoader 被拒
+  [PASS] Runtime.getRuntime().exec 被 HostAccess 拦截 : 已拦截 (PolyglotException)
+  [PASS] 反射链 Class.forName().getMethod().invoke() 被拦截 : 已拦截 (PolyglotException)
+  [PASS] new java.io.File().exists() 被 HostAccess 拦截 : 已拦截 (PolyglotException)
+  [PASS] new java.net.Socket() 被 HostAccess 拦截 : 已拦截 (PolyglotException)
+VERIFY_OK

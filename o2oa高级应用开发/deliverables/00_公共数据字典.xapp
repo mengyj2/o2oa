@@ -1,0 +1,1457 @@
+{
+  "name": "00_公共数据字典",
+  "id": "d1d1de2bb10444b0b90c4b8c60207060",
+  "category": "公共",
+  "icon": "",
+  "description": "41 条全局数据字典（供六大应用共用）",
+  "downloadCount": 0,
+  "processPlatformList": [],
+  "portalList": [],
+  "queryList": [],
+  "cmsList": [],
+  "serviceModuleList": [
+    {
+      "id": "a0000000-common-dict-app-0000000000001",
+      "name": "公共数据（全局）",
+      "alias": "公共数据（全局）",
+      "description": "六大应用共用的全局数据字典",
+      "creatorPerson": "xadmin",
+      "lastUpdatePerson": "xadmin",
+      "lastUpdateTime": "2026-09-21 12:12:16",
+      "dictList": [
+        {
+          "id": "d1000001-project-type-dict-000000000001",
+          "name": "项目类别",
+          "alias": "项目类别",
+          "description": "项目类别分类",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "研发项目",
+              "text": "研发项目"
+            },
+            {
+              "value": "信息化项目",
+              "text": "信息化项目"
+            },
+            {
+              "value": "工程建设项目",
+              "text": "工程建设项目"
+            },
+            {
+              "value": "标准化项目",
+              "text": "标准化项目"
+            },
+            {
+              "value": "课题研究",
+              "text": "课题研究"
+            },
+            {
+              "value": "咨询服务",
+              "text": "咨询服务"
+            },
+            {
+              "value": "其他项目",
+              "text": "其他项目"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000002-project-status-dict-00000000002",
+          "name": "项目状态",
+          "alias": "项目状态",
+          "description": "项目全生命周期状态",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "策划中",
+              "text": "策划中"
+            },
+            {
+              "value": "已立项",
+              "text": "已立项"
+            },
+            {
+              "value": "实施中",
+              "text": "实施中"
+            },
+            {
+              "value": "已暂停",
+              "text": "已暂停"
+            },
+            {
+              "value": "已延期",
+              "text": "已延期"
+            },
+            {
+              "value": "收尾中",
+              "text": "收尾中"
+            },
+            {
+              "value": "已结项",
+              "text": "已结项"
+            },
+            {
+              "value": "已终止",
+              "text": "已终止"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000003-currency-unit-dict-00000000003",
+          "name": "币种",
+          "alias": "币种",
+          "description": "币种",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "CNY",
+              "text": "CNY 人民币"
+            },
+            {
+              "value": "USD",
+              "text": "USD 美元"
+            },
+            {
+              "value": "EUR",
+              "text": "EUR 欧元"
+            },
+            {
+              "value": "HKD",
+              "text": "HKD 港元"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000004-budget-type-dict-0000000000004",
+          "name": "预算类别",
+          "alias": "预算类别",
+          "description": "预算类别",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "项目预算",
+              "text": "项目预算"
+            },
+            {
+              "value": "部门预算",
+              "text": "部门预算"
+            },
+            {
+              "value": "年度预算",
+              "text": "年度预算"
+            },
+            {
+              "value": "专项预算",
+              "text": "专项预算"
+            },
+            {
+              "value": "预算调整",
+              "text": "预算调整"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000005-expense-type-dict-000000000005",
+          "name": "费用类型",
+          "alias": "费用类型",
+          "description": "费用类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "差旅费",
+              "text": "差旅费"
+            },
+            {
+              "value": "会议费",
+              "text": "会议费"
+            },
+            {
+              "value": "办公费",
+              "text": "办公费"
+            },
+            {
+              "value": "材料费",
+              "text": "材料费"
+            },
+            {
+              "value": "设备费",
+              "text": "设备费"
+            },
+            {
+              "value": "劳务费",
+              "text": "劳务费"
+            },
+            {
+              "value": "咨询费",
+              "text": "咨询费"
+            },
+            {
+              "value": "测试化验费",
+              "text": "测试化验费"
+            },
+            {
+              "value": "委托业务费",
+              "text": "委托业务费"
+            },
+            {
+              "value": "其他费用",
+              "text": "其他费用"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000006-pay-type-dict-00000000000006",
+          "name": "付款类型",
+          "alias": "付款类型",
+          "description": "付款类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "预付款",
+              "text": "预付款"
+            },
+            {
+              "value": "进度款",
+              "text": "进度款"
+            },
+            {
+              "value": "尾款",
+              "text": "尾款"
+            },
+            {
+              "value": "质保金",
+              "text": "质保金"
+            },
+            {
+              "value": "全额付款",
+              "text": "全额付款"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000007-contract-type-dict-00000000007",
+          "name": "合同类型",
+          "alias": "合同类型",
+          "description": "合同类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "采购合同",
+              "text": "采购合同"
+            },
+            {
+              "value": "服务合同",
+              "text": "服务合同"
+            },
+            {
+              "value": "技术开发合同",
+              "text": "技术开发合同"
+            },
+            {
+              "value": "咨询合同",
+              "text": "咨询合同"
+            },
+            {
+              "value": "租赁合同",
+              "text": "租赁合同"
+            },
+            {
+              "value": "框架协议",
+              "text": "框架协议"
+            },
+            {
+              "value": "其他合同",
+              "text": "其他合同"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000008-contract-status-dict-0000000008",
+          "name": "合同状态",
+          "alias": "合同状态",
+          "description": "合同状态（官方口径 履行中/已终止/已解除/已中止 + 流程中间态）",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "草拟",
+              "text": "草拟"
+            },
+            {
+              "value": "审批中",
+              "text": "审批中"
+            },
+            {
+              "value": "已生效",
+              "text": "已生效"
+            },
+            {
+              "value": "履行中",
+              "text": "履行中"
+            },
+            {
+              "value": "已完成",
+              "text": "已完成"
+            },
+            {
+              "value": "已终止",
+              "text": "已终止"
+            },
+            {
+              "value": "已解除",
+              "text": "已解除"
+            },
+            {
+              "value": "已中止",
+              "text": "已中止"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000009-archive-type-dict-000000000009",
+          "name": "档案类别",
+          "alias": "档案类别",
+          "description": "档案类别",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "项目档案",
+              "text": "项目档案"
+            },
+            {
+              "value": "合同档案",
+              "text": "合同档案"
+            },
+            {
+              "value": "财务档案",
+              "text": "财务档案"
+            },
+            {
+              "value": "预算档案",
+              "text": "预算档案"
+            },
+            {
+              "value": "文书档案",
+              "text": "文书档案"
+            },
+            {
+              "value": "人事档案",
+              "text": "人事档案"
+            },
+            {
+              "value": "科技档案",
+              "text": "科技档案"
+            },
+            {
+              "value": "其他档案",
+              "text": "其他档案"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000010-archive-level-dict-00000000010",
+          "name": "保密等级",
+          "alias": "保密等级",
+          "description": "保密等级",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "公开",
+              "text": "公开"
+            },
+            {
+              "value": "内部",
+              "text": "内部"
+            },
+            {
+              "value": "秘密",
+              "text": "秘密"
+            },
+            {
+              "value": "机密",
+              "text": "机密"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000011-archive-state-dict-00000000011",
+          "name": "档案状态",
+          "alias": "档案状态",
+          "description": "档案状态",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "待归档",
+              "text": "待归档"
+            },
+            {
+              "value": "已归档",
+              "text": "已归档"
+            },
+            {
+              "value": "借阅中",
+              "text": "借阅中"
+            },
+            {
+              "value": "已销毁",
+              "text": "已销毁"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d1000012-fund-source-dict-000000000012",
+          "name": "资金来源",
+          "alias": "资金来源",
+          "description": "资金来源",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "财政拨款",
+              "text": "财政拨款"
+            },
+            {
+              "value": "自筹资金",
+              "text": "自筹资金"
+            },
+            {
+              "value": "专项资金",
+              "text": "专项资金"
+            },
+            {
+              "value": "会费收入",
+              "text": "会费收入"
+            },
+            {
+              "value": "服务收入",
+              "text": "服务收入"
+            },
+            {
+              "value": "其他来源",
+              "text": "其他来源"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d2002001-partner-type-dict-000000000001",
+          "name": "签约方类型",
+          "alias": "签约方类型",
+          "description": "签约对方类型（官方签约方档案）",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "供应商",
+              "text": "供应商"
+            },
+            {
+              "value": "客户",
+              "text": "客户"
+            },
+            {
+              "value": "合作伙伴",
+              "text": "合作伙伴"
+            },
+            {
+              "value": "服务商",
+              "text": "服务商"
+            },
+            {
+              "value": "委托方",
+              "text": "委托方"
+            },
+            {
+              "value": "其他",
+              "text": "其他"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d2002002-receive-type-dict-000000000002",
+          "name": "收款类型",
+          "alias": "收款类型",
+          "description": "合同回款类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "预收款",
+              "text": "预收款"
+            },
+            {
+              "value": "进度款",
+              "text": "进度款"
+            },
+            {
+              "value": "验收款",
+              "text": "验收款"
+            },
+            {
+              "value": "质保金退还",
+              "text": "质保金退还"
+            },
+            {
+              "value": "全额收款",
+              "text": "全额收款"
+            },
+            {
+              "value": "其他收款",
+              "text": "其他收款"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d2002003-invoice-type-dict-000000000003",
+          "name": "发票类型",
+          "alias": "发票类型",
+          "description": "发票类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "增值税专用发票",
+              "text": "增值税专用发票"
+            },
+            {
+              "value": "增值税普通发票",
+              "text": "增值税普通发票"
+            },
+            {
+              "value": "电子专用发票",
+              "text": "电子专用发票"
+            },
+            {
+              "value": "电子普通发票",
+              "text": "电子普通发票"
+            },
+            {
+              "value": "机动车销售统一发票",
+              "text": "机动车销售统一发票"
+            },
+            {
+              "value": "不开票",
+              "text": "不开票"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d2002004-change-type-dict-0000000000004",
+          "name": "合同变更类型",
+          "alias": "合同变更类型",
+          "description": "合同变更类型（官方「信息变更 / 状态变更」）",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "信息变更",
+              "text": "信息变更"
+            },
+            {
+              "value": "金额变更",
+              "text": "金额变更"
+            },
+            {
+              "value": "履行期变更",
+              "text": "履行期变更"
+            },
+            {
+              "value": "主体变更",
+              "text": "主体变更"
+            },
+            {
+              "value": "状态变更",
+              "text": "状态变更"
+            },
+            {
+              "value": "终止",
+              "text": "终止"
+            },
+            {
+              "value": "解除",
+              "text": "解除"
+            },
+            {
+              "value": "中止",
+              "text": "中止"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d2002005-ticket-type-dict-000000000005",
+          "name": "票据类型",
+          "alias": "票据类型",
+          "description": "进项票据类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "增值税专票",
+              "text": "增值税专票"
+            },
+            {
+              "value": "增值税普票",
+              "text": "增值税普票"
+            },
+            {
+              "value": "机动车票",
+              "text": "机动车票"
+            },
+            {
+              "value": "差旅运输票",
+              "text": "差旅运输票"
+            },
+            {
+              "value": "其他票据",
+              "text": "其他票据"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d2002006-plan-status-dict-000000000006",
+          "name": "计划状态",
+          "alias": "计划状态",
+          "description": "收款/付款计划状态",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "草拟",
+              "text": "草拟"
+            },
+            {
+              "value": "审批中",
+              "text": "审批中"
+            },
+            {
+              "value": "已生效",
+              "text": "已生效"
+            },
+            {
+              "value": "已执行",
+              "text": "已执行"
+            },
+            {
+              "value": "已作废",
+              "text": "已作废"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d2002007-approve-status-dict-00000000007",
+          "name": "审批状态",
+          "alias": "审批状态",
+          "description": "合同变更/开票申请的审批状态",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "待提交",
+              "text": "待提交"
+            },
+            {
+              "value": "审批中",
+              "text": "审批中"
+            },
+            {
+              "value": "已通过",
+              "text": "已通过"
+            },
+            {
+              "value": "已退回",
+              "text": "已退回"
+            },
+            {
+              "value": "已撤销",
+              "text": "已撤销"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006001-gender-type-dict-0000000000001",
+          "name": "性别",
+          "alias": "性别",
+          "description": "员工档案性别",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "男",
+              "text": "男"
+            },
+            {
+              "value": "女",
+              "text": "女"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006002-political-status-dict-000000001",
+          "name": "政治面貌",
+          "alias": "政治面貌",
+          "description": "员工档案政治面貌",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "中共党员",
+              "text": "中共党员"
+            },
+            {
+              "value": "中共预备党员",
+              "text": "中共预备党员"
+            },
+            {
+              "value": "共青团员",
+              "text": "共青团员"
+            },
+            {
+              "value": "民革党派",
+              "text": "民革党派"
+            },
+            {
+              "value": "群众",
+              "text": "群众"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006003-marital-status-dict-0000000001",
+          "name": "婚姻状态",
+          "alias": "婚姻状态",
+          "description": "员工档案婚姻状态",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "未婚",
+              "text": "未婚"
+            },
+            {
+              "value": "已婚",
+              "text": "已婚"
+            },
+            {
+              "value": "离异",
+              "text": "离异"
+            },
+            {
+              "value": "丧偶",
+              "text": "丧偶"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006004-education-level-dict-000000001",
+          "name": "最高学历",
+          "alias": "最高学历",
+          "description": "员工最高学历",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "中专及以下",
+              "text": "中专及以下"
+            },
+            {
+              "value": "大专",
+              "text": "大专"
+            },
+            {
+              "value": "本科",
+              "text": "本科"
+            },
+            {
+              "value": "硕士",
+              "text": "硕士"
+            },
+            {
+              "value": "博士",
+              "text": "博士"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006005-degree-type-dict-0000000000001",
+          "name": "最高学位",
+          "alias": "最高学位",
+          "description": "员工最高学位",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "无",
+              "text": "无"
+            },
+            {
+              "value": "学士",
+              "text": "学士"
+            },
+            {
+              "value": "硕士",
+              "text": "硕士"
+            },
+            {
+              "value": "博士",
+              "text": "博士"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006006-employee-status-dict-000000001",
+          "name": "员工状态",
+          "alias": "员工状态",
+          "description": "对齐官方「档案查询」分组口径",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "试用期员工",
+              "text": "试用期员工"
+            },
+            {
+              "value": "正式员工",
+              "text": "正式员工"
+            },
+            {
+              "value": "实习期员工",
+              "text": "实习期员工"
+            },
+            {
+              "value": "借调员工",
+              "text": "借调员工"
+            },
+            {
+              "value": "离职员工",
+              "text": "离职员工"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006007-work-nature-dict-0000000000001",
+          "name": "用工性质",
+          "alias": "用工性质",
+          "description": "员工用工性质",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "正式编制",
+              "text": "正式编制"
+            },
+            {
+              "value": "劳务派遣",
+              "text": "劳务派遣"
+            },
+            {
+              "value": "顾问",
+              "text": "顾问"
+            },
+            {
+              "value": "实习",
+              "text": "实习"
+            },
+            {
+              "value": "兼职",
+              "text": "兼职"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006008-transfer-type-dict-00000000001",
+          "name": "转岗类型",
+          "alias": "转岗类型",
+          "description": "对齐官方「员工转岗公示」",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "内部调动",
+              "text": "内部调动"
+            },
+            {
+              "value": "竞聘上岗",
+              "text": "竞聘上岗"
+            },
+            {
+              "value": "职务任命",
+              "text": "职务任命"
+            },
+            {
+              "value": "轮岗",
+              "text": "轮岗"
+            },
+            {
+              "value": "借调",
+              "text": "借调"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006009-resign-type-dict-0000000000001",
+          "name": "离职类型",
+          "alias": "离职类型",
+          "description": "对齐官方「员工离职公示」",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "主动离职",
+              "text": "主动离职"
+            },
+            {
+              "value": "合同到期",
+              "text": "合同到期"
+            },
+            {
+              "value": "协商解除",
+              "text": "协商解除"
+            },
+            {
+              "value": "辞退",
+              "text": "辞退"
+            },
+            {
+              "value": "退休",
+              "text": "退休"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006010-bid-type-dict-00000000000001",
+          "name": "竞聘类型",
+          "alias": "竞聘类型",
+          "description": "对齐官方「岗位池」竞聘类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "公开竞聘",
+              "text": "公开竞聘"
+            },
+            {
+              "value": "内部竞聘",
+              "text": "内部竞聘"
+            },
+            {
+              "value": "组织选拔",
+              "text": "组织选拔"
+            },
+            {
+              "value": "竞聘上岗",
+              "text": "竞聘上岗"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006011-job-category-dict-00000000001",
+          "name": "岗位序列",
+          "alias": "岗位序列",
+          "description": "员工岗位序列",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "管理序列",
+              "text": "管理序列"
+            },
+            {
+              "value": "专业技术序列",
+              "text": "专业技术序列"
+            },
+            {
+              "value": "工勤序列",
+              "text": "工勤序列"
+            },
+            {
+              "value": "技能操作序列",
+              "text": "技能操作序列"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006012-job-status-dict-0000000000001",
+          "name": "岗位状态",
+          "alias": "岗位状态",
+          "description": "对齐官方「岗位池」状态列",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "报名中",
+              "text": "报名中"
+            },
+            {
+              "value": "面试中",
+              "text": "面试中"
+            },
+            {
+              "value": "已截止",
+              "text": "已截止"
+            },
+            {
+              "value": "已完成",
+              "text": "已完成"
+            },
+            {
+              "value": "已取消",
+              "text": "已取消"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006013-job-type-dict-000000000000001",
+          "name": "岗位类型",
+          "alias": "岗位类型",
+          "description": "岗位类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "管理岗",
+              "text": "管理岗"
+            },
+            {
+              "value": "技术岗",
+              "text": "技术岗"
+            },
+            {
+              "value": "业务岗",
+              "text": "业务岗"
+            },
+            {
+              "value": "操作岗",
+              "text": "操作岗"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006014-point-type-dict-0000000000001",
+          "name": "积分类型",
+          "alias": "积分类型",
+          "description": "对齐官方「积分管理」年度/永久口径",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "年度积分",
+              "text": "年度积分"
+            },
+            {
+              "value": "永久积分",
+              "text": "永久积分"
+            },
+            {
+              "value": "悬赏积分",
+              "text": "悬赏积分"
+            },
+            {
+              "value": "奖励积分",
+              "text": "奖励积分"
+            },
+            {
+              "value": "扣分",
+              "text": "扣分"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006015-bounty-type-dict-00000000001",
+          "name": "课题类型",
+          "alias": "课题类型",
+          "description": "积分悬赏课题类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "技术攻关",
+              "text": "技术攻关"
+            },
+            {
+              "value": "标准研究",
+              "text": "标准研究"
+            },
+            {
+              "value": "工艺优化",
+              "text": "工艺优化"
+            },
+            {
+              "value": "专利申报",
+              "text": "专利申报"
+            },
+            {
+              "value": "论文发表",
+              "text": "论文发表"
+            },
+            {
+              "value": "培训讲师",
+              "text": "培训讲师"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006016-bounty-status-dict-000000001",
+          "name": "悬赏状态",
+          "alias": "悬赏状态",
+          "description": "积分悬赏状态",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "待领取",
+              "text": "待领取"
+            },
+            {
+              "value": "已领取",
+              "text": "已领取"
+            },
+            {
+              "value": "已完成",
+              "text": "已完成"
+            },
+            {
+              "value": "已失效",
+              "text": "已失效"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006017-leave-type-dict-0000000000001",
+          "name": "假期类型",
+          "alias": "假期类型",
+          "description": "考勤管理假期类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "事假",
+              "text": "事假"
+            },
+            {
+              "value": "病假",
+              "text": "病假"
+            },
+            {
+              "value": "年假",
+              "text": "年假"
+            },
+            {
+              "value": "调休",
+              "text": "调休"
+            },
+            {
+              "value": "婚假",
+              "text": "婚假"
+            },
+            {
+              "value": "产假",
+              "text": "产假"
+            },
+            {
+              "value": "陪产假",
+              "text": "陪产假"
+            },
+            {
+              "value": "丧假",
+              "text": "丧假"
+            },
+            {
+              "value": "探亲假",
+              "text": "探亲假"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006018-overtime-type-dict-0000000001",
+          "name": "加班类型",
+          "alias": "加班类型",
+          "description": "加班类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "工作日加班",
+              "text": "工作日加班"
+            },
+            {
+              "value": "休息日加班",
+              "text": "休息日加班"
+            },
+            {
+              "value": "法定节假日加班",
+              "text": "法定节假日加班"
+            },
+            {
+              "value": "应急加班",
+              "text": "应急加班"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006019-attend-status-dict-0000000001",
+          "name": "考勤状态",
+          "alias": "考勤状态",
+          "description": "考勤月报状态",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "待确认",
+              "text": "待确认"
+            },
+            {
+              "value": "已确认",
+              "text": "已确认"
+            },
+            {
+              "value": "异议中",
+              "text": "异议中"
+            },
+            {
+              "value": "已结束",
+              "text": "已结束"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006020-apply-status-dict-00000000001",
+          "name": "报名状态",
+          "alias": "报名状态",
+          "description": "对齐官方「我的报名表」状态",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "已报名",
+              "text": "已报名"
+            },
+            {
+              "value": "资格审查",
+              "text": "资格审查"
+            },
+            {
+              "value": "面试中",
+              "text": "面试中"
+            },
+            {
+              "value": "已入选",
+              "text": "已入选"
+            },
+            {
+              "value": "未入选",
+              "text": "未入选"
+            },
+            {
+              "value": "已撤销",
+              "text": "已撤销"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006021-self-service-type-dict-0000001",
+          "name": "自助申请类型",
+          "alias": "自助申请类型",
+          "description": "员工自助综合申请类型",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "请假申请",
+              "text": "请假申请"
+            },
+            {
+              "value": "加班申请",
+              "text": "加班申请"
+            },
+            {
+              "value": "出差申请",
+              "text": "出差申请"
+            },
+            {
+              "value": "转正申请",
+              "text": "转正申请"
+            },
+            {
+              "value": "转岗申请",
+              "text": "转岗申请"
+            },
+            {
+              "value": "离职申请",
+              "text": "离职申请"
+            },
+            {
+              "value": "证明开具",
+              "text": "证明开具"
+            },
+            {
+              "value": "员工培训",
+              "text": "员工培训"
+            },
+            {
+              "value": "其他申请",
+              "text": "其他申请"
+            }
+          ],
+          "properties": {}
+        },
+        {
+          "id": "d6006022-language-type-dict-0000000001",
+          "name": "语言设置",
+          "alias": "语言设置",
+          "description": "对齐官方「个人设置」语言项",
+          "application": "",
+          "creatorPerson": "xadmin",
+          "lastUpdatePerson": "xadmin",
+          "lastUpdateTime": "2026-09-21 12:12:14",
+          "data": [
+            {
+              "value": "中文简体",
+              "text": "中文简体"
+            },
+            {
+              "value": "中文繁体",
+              "text": "中文繁体"
+            },
+            {
+              "value": "English",
+              "text": "English"
+            }
+          ],
+          "properties": {}
+        }
+      ],
+      "agentList": [],
+      "invokeList": [],
+      "scriptList": []
+    }
+  ]
+}

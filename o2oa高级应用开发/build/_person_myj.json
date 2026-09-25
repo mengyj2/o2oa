@@ -1,0 +1,11 @@
+{
+  "type": "error",
+  "message": "手机号错误:13800000001, 手机号已有值重复.",
+  "date": "2026-09-20 08:57:49",
+  "spent": 279,
+  "size": -1,
+  "count": 0,
+  "position": 0,
+  "prompt": "com.x.organization.assemble.control.jaxrs.person.ExceptionMobileDuplicate"
+}
+HTTP 500

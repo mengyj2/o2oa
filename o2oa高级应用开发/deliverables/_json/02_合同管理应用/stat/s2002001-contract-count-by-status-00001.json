@@ -1,0 +1,31 @@
+{
+  "id": "s2002001-contract-count-by-status-00001",
+  "name": "按状态统计合同数量",
+  "alias": "按状态统计合同数量",
+  "description": "官方门户首页饼图：履行中 / 已终止 / 已解除 / 已中止",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v2002001-contract-list-view-0000000001",
+  "categoryPath": "contract_status",
+  "valuePath": "count",
+  "categoryTitle": "合同状态",
+  "valueTitle": "合同数量",
+  "chartType": "pie",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column"
+    ],
+    "defaultChartType": "pie",
+    "legendPosition": "bottom",
+    "showLegend": true,
+    "showLabel": true,
+    "isRowColumnConvert": true,
+    "moreLink": "v2002001-contract-list-view-0000000001"
+  }
+}

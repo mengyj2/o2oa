@@ -1,0 +1,419 @@
+Compiled from "DynamicEntity.java"
+public class com.x.base.core.entity.dynamic.DynamicEntity extends com.x.base.core.project.gson.GsonPropertyObject {
+  private static final long serialVersionUID;
+
+  public static final java.lang.String TABLE_PREFIX;
+
+  public static final java.lang.String CLASS_PACKAGE;
+
+  public static final java.lang.String FIELDNAME_SUFFIX;
+
+  public static final java.lang.String JAR_NAME;
+
+  public static final java.lang.String JAR_PREFIX;
+
+  public static final java.lang.String BUNDLE_FIELD;
+
+  private java.lang.String name;
+
+  private java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> fieldList;
+
+  public java.lang.String tableName();
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field name:Ljava/lang/String;
+       4: invokestatic  #7                  // Method org/apache/commons/lang3/StringUtils.isEmpty:(Ljava/lang/CharSequence;)Z
+       7: ifeq          20
+      10: new           #13                 // class java/lang/IllegalStateException
+      13: dup
+      14: ldc           #15                 // String table name is empty.
+      16: invokespecial #17                 // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      19: athrow
+      20: aload_0
+      21: getfield      #1                  // Field name:Ljava/lang/String;
+      24: invokestatic  #21                 // Method org/apache/commons/lang3/StringUtils.upperCase:(Ljava/lang/String;)Ljava/lang/String;
+      27: invokedynamic #25,  0             // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      32: areturn
+
+  public java.lang.String classSimpleName();
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field name:Ljava/lang/String;
+       4: invokestatic  #7                  // Method org/apache/commons/lang3/StringUtils.isEmpty:(Ljava/lang/CharSequence;)Z
+       7: ifeq          20
+      10: new           #13                 // class java/lang/IllegalStateException
+      13: dup
+      14: ldc           #28                 // String class simple name is empty.
+      16: invokespecial #17                 // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      19: athrow
+      20: aload_0
+      21: getfield      #1                  // Field name:Ljava/lang/String;
+      24: areturn
+
+  public java.lang.String className();
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field name:Ljava/lang/String;
+       4: invokestatic  #7                  // Method org/apache/commons/lang3/StringUtils.isEmpty:(Ljava/lang/CharSequence;)Z
+       7: ifeq          20
+      10: new           #13                 // class java/lang/IllegalStateException
+      13: dup
+      14: ldc           #30                 // String class name is empty.
+      16: invokespecial #17                 // Method java/lang/IllegalStateException."<init>":(Ljava/lang/String;)V
+      19: athrow
+      20: aload_0
+      21: getfield      #1                  // Field name:Ljava/lang/String;
+      24: invokedynamic #32,  0             // InvokeDynamic #1:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      29: areturn
+
+  public com.x.base.core.entity.dynamic.DynamicEntity();
+    Code:
+       0: aload_0
+       1: invokespecial #33                 // Method com/x/base/core/project/gson/GsonPropertyObject."<init>":()V
+       4: aload_0
+       5: new           #38                 // class java/util/ArrayList
+       8: dup
+       9: invokespecial #40                 // Method java/util/ArrayList."<init>":()V
+      12: putfield      #41                 // Field fieldList:Ljava/util/List;
+      15: aload_0
+      16: new           #38                 // class java/util/ArrayList
+      19: dup
+      20: invokespecial #40                 // Method java/util/ArrayList."<init>":()V
+      23: putfield      #41                 // Field fieldList:Ljava/util/List;
+      26: return
+
+  public com.x.base.core.entity.dynamic.DynamicEntity(java.lang.String);
+    Code:
+       0: aload_0
+       1: invokespecial #45                 // Method "<init>":()V
+       4: aload_0
+       5: aload_1
+       6: putfield      #1                  // Field name:Ljava/lang/String;
+       9: return
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> stringFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #52,  0             // InvokeDynamic #2:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> integerFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #72,  0             // InvokeDynamic #3:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> longFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #73,  0             // InvokeDynamic #4:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> doubleFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #74,  0             // InvokeDynamic #5:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> booleanFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #75,  0             // InvokeDynamic #6:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> dateFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #76,  0             // InvokeDynamic #7:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> timeFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #77,  0             // InvokeDynamic #8:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> dateTimeFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #78,  0             // InvokeDynamic #9:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> stringListFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #79,  0             // InvokeDynamic #10:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> integerListFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #80,  0             // InvokeDynamic #11:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> longListFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #81,  0             // InvokeDynamic #12:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> doubleListFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #82,  0             // InvokeDynamic #13:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> booleanListFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #83,  0             // InvokeDynamic #14:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> stringLobFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #84,  0             // InvokeDynamic #15:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> stringMapFields();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: invokeinterface #46,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       9: invokedynamic #85,  0             // InvokeDynamic #16:test:()Ljava/util/function/Predicate;
+      14: invokeinterface #56,  2           // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+      19: invokestatic  #62                 // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      22: invokeinterface #68,  2           // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      27: checkcast     #47                 // class java/util/List
+      30: areturn
+
+  public java.lang.String getName();
+    Code:
+       0: aload_0
+       1: getfield      #1                  // Field name:Ljava/lang/String;
+       4: areturn
+
+  public void setName(java.lang.String);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #1                  // Field name:Ljava/lang/String;
+       5: return
+
+  public java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field> getFieldList();
+    Code:
+       0: aload_0
+       1: getfield      #41                 // Field fieldList:Ljava/util/List;
+       4: areturn
+
+  public void setFieldList(java.util.List<com.x.base.core.entity.dynamic.DynamicEntity$Field>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #41                 // Field fieldList:Ljava/util/List;
+       5: return
+
+  private static boolean lambda$stringMapFields$14(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #94                 // String stringMap
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$stringLobFields$13(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #100                // String stringLob
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$booleanListFields$12(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #102                // String booleanList
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$doubleListFields$11(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #104                // String doubleList
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$longListFields$10(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #106                // String longList
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$integerListFields$9(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #108                // String integerList
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$stringListFields$8(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #110                // String stringList
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$dateTimeFields$7(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #112                // String dateTime
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$timeFields$6(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #114                // String time
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$dateFields$5(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #116                // String date
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$booleanFields$4(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #118                // String boolean
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$doubleFields$3(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #120                // String double
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$longFields$2(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #122                // String long
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$integerFields$1(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #124                // String integer
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+
+  private static boolean lambda$stringFields$0(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: aload_0
+       1: invokevirtual #86                 // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getType:()Ljava/lang/String;
+       4: ldc           #126                // String string
+       6: invokestatic  #96                 // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+       9: ireturn
+}

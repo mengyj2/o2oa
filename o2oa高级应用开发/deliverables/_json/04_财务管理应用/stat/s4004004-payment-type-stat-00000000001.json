@@ -1,0 +1,27 @@
+{
+  "id": "s4004004-payment-type-stat-00000000001",
+  "name": "付款类型统计",
+  "alias": "付款类型统计",
+  "description": "按付款类型统计金额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v4004002-payment-list-view-00000000001",
+  "categoryPath": "pay_type",
+  "valuePath": "payment_amount",
+  "categoryTitle": "付款类型",
+  "valueTitle": "付款金额",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

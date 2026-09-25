@@ -1,0 +1,20 @@
+{
+  "id": "q3003001-budget-exec-summary-00000000001",
+  "name": "预算执行汇总查询",
+  "alias": "预算执行汇总查询",
+  "description": "按预算汇总已执行金额与执行率",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT b.budget_no, b.budget_name, b.project_no, b.total_amount, SUM(d.exec_amount) AS executed, ROUND(SUM(d.exec_amount) * 100.0 / b.total_amount, 2) AS exec_rate FROM 预算主表 b LEFT JOIN 预算明细表 d ON b.budget_no = d.budget_no GROUP BY b.budget_no",
+  "sql": "SELECT b.budget_no, b.budget_name, b.project_no, b.total_amount, SUM(d.exec_amount) AS executed, ROUND(SUM(d.exec_amount) * 100.0 / b.total_amount, 2) AS exec_rate FROM 预算主表 b LEFT JOIN 预算明细表 d ON b.budget_no = d.budget_no GROUP BY b.budget_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

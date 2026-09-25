@@ -1,0 +1,1152 @@
+Compiled from "Executor.java"
+public class com.x.query.core.express.statement.Executor {
+  private static final java.lang.String JOIN_KEY;
+
+  private static final java.lang.String JOIN_ON_KEY;
+
+  private static final com.x.base.core.project.logger.Logger LOGGER;
+
+  private com.x.query.core.express.statement.Executor();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static java.lang.Object executeData(com.x.query.core.entity.schema.Statement, com.x.query.core.express.statement.Runtime, com.x.query.core.express.statement.ExecuteTarget) throws java.lang.Exception;
+    Code:
+       0: aload_2
+       1: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+       4: invokevirtual #13                 // Method java/lang/String.toUpperCase:()Ljava/lang/String;
+       7: astore_3
+       8: aload_0
+       9: invokevirtual #18                 // Method com/x/query/core/entity/schema/Statement.getFormat:()Ljava/lang/String;
+      12: iconst_2
+      13: anewarray     #23                 // class java/lang/CharSequence
+      16: dup
+      17: iconst_0
+      18: ldc           #25                 // String sql
+      20: aastore
+      21: dup
+      22: iconst_1
+      23: ldc           #27                 // String sqlScript
+      25: aastore
+      26: invokestatic  #29                 // Method org/apache/commons/lang3/StringUtils.equalsAnyIgnoreCase:(Ljava/lang/CharSequence;[Ljava/lang/CharSequence;)Z
+      29: ifeq          39
+      32: aload_1
+      33: aload_2
+      34: iconst_0
+      35: invokestatic  #35                 // Method executeDataSql:(Lcom/x/query/core/express/statement/Runtime;Lcom/x/query/core/express/statement/ExecuteTarget;Z)Ljava/lang/Object;
+      38: areturn
+      39: aload_3
+      40: ldc           #41                 // String  JOIN
+      42: invokevirtual #43                 // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+      45: iconst_m1
+      46: if_icmple     66
+      49: aload_3
+      50: ldc           #47                 // String  ON
+      52: invokevirtual #43                 // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+      55: iconst_m1
+      56: if_icmple     66
+      59: aload_1
+      60: aload_2
+      61: iconst_1
+      62: invokestatic  #35                 // Method executeDataSql:(Lcom/x/query/core/express/statement/Runtime;Lcom/x/query/core/express/statement/ExecuteTarget;Z)Ljava/lang/Object;
+      65: areturn
+      66: aload_0
+      67: aload_1
+      68: aload_2
+      69: invokestatic  #49                 // Method executeDataJpql:(Lcom/x/query/core/entity/schema/Statement;Lcom/x/query/core/express/statement/Runtime;Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/lang/Object;
+      72: areturn
+
+  private static java.lang.Object executeDataSql(com.x.query.core.express.statement.Runtime, com.x.query.core.express.statement.ExecuteTarget, boolean) throws java.lang.Exception;
+    Code:
+       0: aload_1
+       1: invokevirtual #53                 // Method com/x/query/core/express/statement/ExecuteTarget.getParsedStatement:()Lnet/sf/jsqlparser/statement/Statement;
+       4: invokestatic  #57                 // Method checkDeleteInsertUpdateDml:(Lnet/sf/jsqlparser/statement/Statement;)V
+       7: invokestatic  #61                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.instance:()Lcom/x/base/core/container/factory/EntityManagerContainerFactory;
+      10: invokevirtual #67                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.create:()Lcom/x/base/core/container/EntityManagerContainer;
+      13: astore_3
+      14: aload_3
+      15: ldc           #71                 // class com/x/base/core/entity/dynamic/DynamicBaseEntity
+      17: invokevirtual #73                 // Method com/x/base/core/container/EntityManagerContainer.get:(Ljava/lang/Class;)Ljavax/persistence/EntityManager;
+      20: astore        4
+      22: getstatic     #79                 // Field LOGGER:Lcom/x/base/core/project/logger/Logger;
+      25: ldc           #83                 // String executeDataSql:{}, param:{}.
+      27: iconst_2
+      28: anewarray     #85                 // class java/util/function/Supplier
+      31: dup
+      32: iconst_0
+      33: aload_1
+      34: dup
+      35: invokestatic  #87                 // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      38: pop
+      39: invokedynamic #93,  0             // InvokeDynamic #0:get:(Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/util/function/Supplier;
+      44: aastore
+      45: dup
+      46: iconst_1
+      47: aload_1
+      48: dup
+      49: invokestatic  #87                 // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      52: pop
+      53: invokedynamic #96,  0             // InvokeDynamic #1:get:(Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/util/function/Supplier;
+      58: aastore
+      59: invokevirtual #97                 // Method com/x/base/core/project/logger/Logger.debug:(Ljava/lang/String;[Ljava/util/function/Supplier;)V
+      62: aload_1
+      63: invokevirtual #53                 // Method com/x/query/core/express/statement/ExecuteTarget.getParsedStatement:()Lnet/sf/jsqlparser/statement/Statement;
+      66: instanceof    #103                // class net/sf/jsqlparser/statement/select/Select
+      69: ifeq          113
+      72: iload_2
+      73: ifeq          95
+      76: aload         4
+      78: aload_1
+      79: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+      82: invokestatic  #105                // Method joinSql:(Ljava/lang/String;)Ljava/lang/String;
+      85: invokeinterface #109,  2          // InterfaceMethod javax/persistence/EntityManager.createNativeQuery:(Ljava/lang/String;)Ljavax/persistence/Query;
+      90: astore        5
+      92: goto          126
+      95: aload         4
+      97: aload_1
+      98: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+     101: ldc           #115                // class java/util/LinkedHashMap
+     103: invokeinterface #117,  3          // InterfaceMethod javax/persistence/EntityManager.createNativeQuery:(Ljava/lang/String;Ljava/lang/Class;)Ljavax/persistence/Query;
+     108: astore        5
+     110: goto          126
+     113: aload         4
+     115: aload_1
+     116: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+     119: invokeinterface #109,  2          // InterfaceMethod javax/persistence/EntityManager.createNativeQuery:(Ljava/lang/String;)Ljavax/persistence/Query;
+     124: astore        5
+     126: aload_1
+     127: invokevirtual #120                // Method com/x/query/core/express/statement/ExecuteTarget.getQuestionMarkParam:()Ljava/util/Map;
+     130: invokeinterface #124,  1          // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+     135: invokeinterface #130,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+     140: astore        6
+     142: aload         6
+     144: invokeinterface #136,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     149: ifeq          203
+     152: aload         6
+     154: invokeinterface #142,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     159: checkcast     #146                // class java/util/Map$Entry
+     162: astore        7
+     164: aload         7
+     166: invokeinterface #148,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+     171: checkcast     #14                 // class java/lang/String
+     174: iconst_1
+     175: invokevirtual #151                // Method java/lang/String.substring:(I)Ljava/lang/String;
+     178: invokestatic  #155                // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+     181: istore        8
+     183: aload         5
+     185: iload         8
+     187: aload         7
+     189: invokeinterface #160,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+     194: invokeinterface #163,  3          // InterfaceMethod javax/persistence/Query.setParameter:(ILjava/lang/Object;)Ljavax/persistence/Query;
+     199: pop
+     200: goto          142
+     203: aload_1
+     204: invokevirtual #53                 // Method com/x/query/core/express/statement/ExecuteTarget.getParsedStatement:()Lnet/sf/jsqlparser/statement/Statement;
+     207: instanceof    #103                // class net/sf/jsqlparser/statement/select/Select
+     210: ifeq          385
+     213: aload_0
+     214: aload         5
+     216: invokestatic  #169                // Method appendSelectRange:(Lcom/x/query/core/express/statement/Runtime;Ljavax/persistence/Query;)V
+     219: iload_2
+     220: ifeq          243
+     223: aload         5
+     225: invokeinterface #173,  1          // InterfaceMethod javax/persistence/Query.getResultList:()Ljava/util/List;
+     230: astore        6
+     232: aload_3
+     233: ifnull        240
+     236: aload_3
+     237: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     240: aload         6
+     242: areturn
+     243: aload         5
+     245: invokeinterface #173,  1          // InterfaceMethod javax/persistence/Query.getResultList:()Ljava/util/List;
+     250: astore        6
+     252: aload         6
+     254: invokeinterface #180,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+     259: astore        7
+     261: aload         7
+     263: invokeinterface #136,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     268: ifeq          370
+     271: aload         7
+     273: invokeinterface #142,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     278: checkcast     #115                // class java/util/LinkedHashMap
+     281: astore        8
+     283: aload         8
+     285: ifnull        367
+     288: aload         8
+     290: invokevirtual #183                // Method java/util/LinkedHashMap.entrySet:()Ljava/util/Set;
+     293: invokeinterface #130,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+     298: astore        9
+     300: aload         9
+     302: invokeinterface #136,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     307: ifeq          367
+     310: aload         9
+     312: invokeinterface #142,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     317: checkcast     #146                // class java/util/Map$Entry
+     320: astore        10
+     322: aload         10
+     324: invokeinterface #160,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+     329: instanceof    #184                // class java/sql/Clob
+     332: ifeq          364
+     335: aload         8
+     337: aload         10
+     339: invokeinterface #148,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+     344: checkcast     #14                 // class java/lang/String
+     347: aload         10
+     349: invokeinterface #160,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+     354: checkcast     #184                // class java/sql/Clob
+     357: invokestatic  #186                // Method convertClobToString:(Ljava/sql/Clob;)Ljava/lang/String;
+     360: invokevirtual #190                // Method java/util/LinkedHashMap.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+     363: pop
+     364: goto          300
+     367: goto          261
+     370: aload         6
+     372: astore        7
+     374: aload_3
+     375: ifnull        382
+     378: aload_3
+     379: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     382: aload         7
+     384: areturn
+     385: aload_3
+     386: ldc           #71                 // class com/x/base/core/entity/dynamic/DynamicBaseEntity
+     388: invokevirtual #194                // Method com/x/base/core/container/EntityManagerContainer.beginTransaction:(Ljava/lang/Class;)Ljavax/persistence/EntityManager;
+     391: pop
+     392: aload         5
+     394: invokeinterface #197,  1          // InterfaceMethod javax/persistence/Query.executeUpdate:()I
+     399: invokestatic  #201                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     402: astore        6
+     404: aload_3
+     405: invokevirtual #205                // Method com/x/base/core/container/EntityManagerContainer.commit:()V
+     408: aload         6
+     410: astore        7
+     412: aload_3
+     413: ifnull        420
+     416: aload_3
+     417: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     420: aload         7
+     422: areturn
+     423: astore        4
+     425: aload_3
+     426: ifnull        445
+     429: aload_3
+     430: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     433: goto          445
+     436: astore        5
+     438: aload         4
+     440: aload         5
+     442: invokevirtual #210                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+     445: aload         4
+     447: athrow
+    Exception table:
+       from    to  target type
+          14   232   423   Class java/lang/Throwable
+         243   374   423   Class java/lang/Throwable
+         385   412   423   Class java/lang/Throwable
+         429   433   436   Class java/lang/Throwable
+
+  private static java.lang.String convertClobToString(java.sql.Clob) throws java.sql.SQLException, java.io.IOException;
+    Code:
+       0: new           #214                // class java/lang/StringBuilder
+       3: dup
+       4: invokespecial #216                // Method java/lang/StringBuilder."<init>":()V
+       7: astore_1
+       8: aload_0
+       9: invokeinterface #217,  1          // InterfaceMethod java/sql/Clob.getCharacterStream:()Ljava/io/Reader;
+      14: astore_2
+      15: new           #221                // class java/io/BufferedReader
+      18: dup
+      19: aload_2
+      20: invokespecial #223                // Method java/io/BufferedReader."<init>":(Ljava/io/Reader;)V
+      23: astore_3
+      24: aload_3
+      25: invokevirtual #226                // Method java/io/BufferedReader.readLine:()Ljava/lang/String;
+      28: dup
+      29: astore        4
+      31: ifnull        44
+      34: aload_1
+      35: aload         4
+      37: invokevirtual #229                // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+      40: pop
+      41: goto          24
+      44: aload_3
+      45: invokevirtual #233                // Method java/io/BufferedReader.close:()V
+      48: goto          72
+      51: astore        4
+      53: aload_3
+      54: invokevirtual #233                // Method java/io/BufferedReader.close:()V
+      57: goto          69
+      60: astore        5
+      62: aload         4
+      64: aload         5
+      66: invokevirtual #210                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+      69: aload         4
+      71: athrow
+      72: aload_2
+      73: ifnull        105
+      76: aload_2
+      77: invokevirtual #234                // Method java/io/Reader.close:()V
+      80: goto          105
+      83: astore_3
+      84: aload_2
+      85: ifnull        103
+      88: aload_2
+      89: invokevirtual #234                // Method java/io/Reader.close:()V
+      92: goto          103
+      95: astore        4
+      97: aload_3
+      98: aload         4
+     100: invokevirtual #210                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+     103: aload_3
+     104: athrow
+     105: aload_1
+     106: invokevirtual #237                // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+     109: areturn
+    Exception table:
+       from    to  target type
+          24    44    51   Class java/lang/Throwable
+          53    57    60   Class java/lang/Throwable
+          15    72    83   Class java/lang/Throwable
+          88    92    95   Class java/lang/Throwable
+
+  private static void appendSelectRange(com.x.query.core.express.statement.Runtime, javax.persistence.Query);
+    Code:
+       0: aload_0
+       1: getfield      #240                // Field com/x/query/core/express/statement/Runtime.page:Ljava/lang/Integer;
+       4: iconst_0
+       5: invokestatic  #201                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+       8: invokestatic  #246                // Method com/x/base/core/project/tools/NumberTools.greaterThan:(Ljava/lang/Number;Ljava/lang/Number;)Z
+      11: ifeq          66
+      14: aload_0
+      15: getfield      #252                // Field com/x/query/core/express/statement/Runtime.size:Ljava/lang/Integer;
+      18: iconst_0
+      19: invokestatic  #201                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      22: invokestatic  #246                // Method com/x/base/core/project/tools/NumberTools.greaterThan:(Ljava/lang/Number;Ljava/lang/Number;)Z
+      25: ifeq          66
+      28: aload_1
+      29: aload_0
+      30: getfield      #240                // Field com/x/query/core/express/statement/Runtime.page:Ljava/lang/Integer;
+      33: invokevirtual #255                // Method java/lang/Integer.intValue:()I
+      36: iconst_1
+      37: isub
+      38: aload_0
+      39: getfield      #252                // Field com/x/query/core/express/statement/Runtime.size:Ljava/lang/Integer;
+      42: invokevirtual #255                // Method java/lang/Integer.intValue:()I
+      45: imul
+      46: invokeinterface #258,  2          // InterfaceMethod javax/persistence/Query.setFirstResult:(I)Ljavax/persistence/Query;
+      51: pop
+      52: aload_1
+      53: aload_0
+      54: getfield      #252                // Field com/x/query/core/express/statement/Runtime.size:Ljava/lang/Integer;
+      57: invokevirtual #255                // Method java/lang/Integer.intValue:()I
+      60: invokeinterface #262,  2          // InterfaceMethod javax/persistence/Query.setMaxResults:(I)Ljavax/persistence/Query;
+      65: pop
+      66: return
+
+  private static java.lang.Object executeDataJpql(com.x.query.core.entity.schema.Statement, com.x.query.core.express.statement.Runtime, com.x.query.core.express.statement.ExecuteTarget) throws java.lang.Exception;
+    Code:
+       0: aload_2
+       1: invokevirtual #53                 // Method com/x/query/core/express/statement/ExecuteTarget.getParsedStatement:()Lnet/sf/jsqlparser/statement/Statement;
+       4: invokestatic  #265                // Method checkJpqlDeleteInsertUpdateDml:(Lnet/sf/jsqlparser/statement/Statement;)V
+       7: invokestatic  #61                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.instance:()Lcom/x/base/core/container/factory/EntityManagerContainerFactory;
+      10: invokevirtual #67                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.create:()Lcom/x/base/core/container/EntityManagerContainer;
+      13: astore_3
+      14: aload_3
+      15: aload_0
+      16: invokestatic  #268                // Method clazz:(Lcom/x/base/core/container/EntityManagerContainer;Lcom/x/query/core/entity/schema/Statement;)Ljava/lang/Class;
+      19: astore        4
+      21: aload_0
+      22: invokevirtual #272                // Method com/x/query/core/entity/schema/Statement.getEntityCategory:()Ljava/lang/String;
+      25: ldc_w         #275                // String dynamic
+      28: invokestatic  #277                // Method org/apache/commons/lang3/StringUtils.equalsIgnoreCase:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+      31: ifeq          55
+      34: aload_2
+      35: invokevirtual #53                 // Method com/x/query/core/express/statement/ExecuteTarget.getParsedStatement:()Lnet/sf/jsqlparser/statement/Statement;
+      38: instanceof    #103                // class net/sf/jsqlparser/statement/select/Select
+      41: ifeq          55
+      44: aload_3
+      45: ldc           #71                 // class com/x/base/core/entity/dynamic/DynamicBaseEntity
+      47: invokevirtual #73                 // Method com/x/base/core/container/EntityManagerContainer.get:(Ljava/lang/Class;)Ljavax/persistence/EntityManager;
+      50: astore        5
+      52: goto          64
+      55: aload_3
+      56: ldc_w         #281                // class com/x/base/core/entity/ApplicationBaseEntity
+      59: invokevirtual #73                 // Method com/x/base/core/container/EntityManagerContainer.get:(Ljava/lang/Class;)Ljavax/persistence/EntityManager;
+      62: astore        5
+      64: getstatic     #79                 // Field LOGGER:Lcom/x/base/core/project/logger/Logger;
+      67: ldc_w         #283                // String executeDataJpql:{}, param:{}.
+      70: iconst_2
+      71: anewarray     #85                 // class java/util/function/Supplier
+      74: dup
+      75: iconst_0
+      76: aload_2
+      77: dup
+      78: invokestatic  #87                 // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      81: pop
+      82: invokedynamic #93,  0             // InvokeDynamic #0:get:(Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/util/function/Supplier;
+      87: aastore
+      88: dup
+      89: iconst_1
+      90: aload_2
+      91: dup
+      92: invokestatic  #87                 // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      95: pop
+      96: invokedynamic #96,  0             // InvokeDynamic #1:get:(Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/util/function/Supplier;
+     101: aastore
+     102: invokevirtual #97                 // Method com/x/base/core/project/logger/Logger.debug:(Ljava/lang/String;[Ljava/util/function/Supplier;)V
+     105: aload         5
+     107: aload_2
+     108: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+     111: invokeinterface #285,  2          // InterfaceMethod javax/persistence/EntityManager.createQuery:(Ljava/lang/String;)Ljavax/persistence/Query;
+     116: astore        6
+     118: aload_2
+     119: invokevirtual #120                // Method com/x/query/core/express/statement/ExecuteTarget.getQuestionMarkParam:()Ljava/util/Map;
+     122: invokeinterface #124,  1          // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+     127: invokeinterface #130,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+     132: astore        7
+     134: aload         7
+     136: invokeinterface #136,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     141: ifeq          195
+     144: aload         7
+     146: invokeinterface #142,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     151: checkcast     #146                // class java/util/Map$Entry
+     154: astore        8
+     156: aload         8
+     158: invokeinterface #148,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+     163: checkcast     #14                 // class java/lang/String
+     166: iconst_1
+     167: invokevirtual #151                // Method java/lang/String.substring:(I)Ljava/lang/String;
+     170: invokestatic  #155                // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+     173: istore        9
+     175: aload         6
+     177: iload         9
+     179: aload         8
+     181: invokeinterface #160,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+     186: invokeinterface #163,  3          // InterfaceMethod javax/persistence/Query.setParameter:(ILjava/lang/Object;)Ljavax/persistence/Query;
+     191: pop
+     192: goto          134
+     195: aload_2
+     196: invokevirtual #53                 // Method com/x/query/core/express/statement/ExecuteTarget.getParsedStatement:()Lnet/sf/jsqlparser/statement/Statement;
+     199: instanceof    #103                // class net/sf/jsqlparser/statement/select/Select
+     202: ifeq          287
+     205: aload_1
+     206: aload         6
+     208: invokestatic  #169                // Method appendSelectRange:(Lcom/x/query/core/express/statement/Runtime;Ljavax/persistence/Query;)V
+     211: aload         6
+     213: invokeinterface #173,  1          // InterfaceMethod javax/persistence/Query.getResultList:()Ljava/util/List;
+     218: astore        7
+     220: aload_0
+     221: invokevirtual #288                // Method com/x/query/core/entity/schema/Statement.getFv:()Ljava/lang/Float;
+     224: astore        8
+     226: aconst_null
+     227: aload         8
+     229: if_acmpeq     272
+     232: aload         8
+     234: invokevirtual #292                // Method java/lang/Float.floatValue:()F
+     237: getstatic     #298                // Field com/x/query/core/entity/schema/Statement.VALUE_FV_8_0:Ljava/lang/Float;
+     240: invokevirtual #292                // Method java/lang/Float.floatValue:()F
+     243: fcmpl
+     244: iflt          272
+     247: aload_2
+     248: invokevirtual #53                 // Method com/x/query/core/express/statement/ExecuteTarget.getParsedStatement:()Lnet/sf/jsqlparser/statement/Statement;
+     251: checkcast     #103                // class net/sf/jsqlparser/statement/select/Select
+     254: aload         7
+     256: invokestatic  #302                // Method jpqlResultToMap:(Lnet/sf/jsqlparser/statement/select/Select;Ljava/util/List;)Ljava/lang/Object;
+     259: astore        9
+     261: aload_3
+     262: ifnull        269
+     265: aload_3
+     266: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     269: aload         9
+     271: areturn
+     272: aload         7
+     274: astore        9
+     276: aload_3
+     277: ifnull        284
+     280: aload_3
+     281: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     284: aload         9
+     286: areturn
+     287: aload_3
+     288: aload         4
+     290: invokevirtual #194                // Method com/x/base/core/container/EntityManagerContainer.beginTransaction:(Ljava/lang/Class;)Ljavax/persistence/EntityManager;
+     293: pop
+     294: aload         6
+     296: invokeinterface #197,  1          // InterfaceMethod javax/persistence/Query.executeUpdate:()I
+     301: invokestatic  #201                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     304: astore        7
+     306: aload_3
+     307: invokevirtual #205                // Method com/x/base/core/container/EntityManagerContainer.commit:()V
+     310: aload         7
+     312: astore        8
+     314: aload_3
+     315: ifnull        322
+     318: aload_3
+     319: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     322: aload         8
+     324: areturn
+     325: astore        4
+     327: aload_3
+     328: ifnull        347
+     331: aload_3
+     332: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     335: goto          347
+     338: astore        5
+     340: aload         4
+     342: aload         5
+     344: invokevirtual #210                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+     347: aload         4
+     349: athrow
+    Exception table:
+       from    to  target type
+          14   261   325   Class java/lang/Throwable
+         272   276   325   Class java/lang/Throwable
+         287   314   325   Class java/lang/Throwable
+         331   335   338   Class java/lang/Throwable
+
+  private static java.lang.Object jpqlResultToMap(net.sf.jsqlparser.statement.select.Select, java.util.List<?>);
+    Code:
+       0: iconst_1
+       1: anewarray     #181                // class java/util/List
+       4: dup
+       5: iconst_0
+       6: aload_1
+       7: aastore
+       8: invokestatic  #306                // Method com/x/base/core/project/tools/ListTools.isEmpty:([Ljava/util/List;)Z
+      11: ifeq          16
+      14: aload_1
+      15: areturn
+      16: aload_1
+      17: iconst_0
+      18: invokeinterface #312,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+      23: astore_2
+      24: aconst_null
+      25: aload_2
+      26: if_acmpeq     44
+      29: ldc_w         #315                // class com/x/base/core/entity/JpaObject
+      32: aload_2
+      33: invokevirtual #317                // Method java/lang/Object.getClass:()Ljava/lang/Class;
+      36: invokevirtual #321                // Method java/lang/Class.isAssignableFrom:(Ljava/lang/Class;)Z
+      39: ifeq          44
+      42: aload_1
+      43: areturn
+      44: aload_0
+      45: invokestatic  #327                // Method selectItemMapping:(Lnet/sf/jsqlparser/statement/select/Select;)Ljava/util/Map;
+      48: astore_3
+      49: new           #331                // class java/util/ArrayList
+      52: dup
+      53: invokespecial #333                // Method java/util/ArrayList."<init>":()V
+      56: astore        4
+      58: aload_1
+      59: invokeinterface #334,  1          // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+      64: aload_3
+      65: aload         4
+      67: invokedynamic #338,  0            // InvokeDynamic #2:accept:(Ljava/util/Map;Ljava/util/List;)Ljava/util/function/Consumer;
+      72: invokeinterface #342,  2          // InterfaceMethod java/util/stream/Stream.forEach:(Ljava/util/function/Consumer;)V
+      77: aload         4
+      79: areturn
+
+  private static java.util.Map<java.lang.Integer, java.lang.String> selectItemMapping(net.sf.jsqlparser.statement.select.Select);
+    Code:
+       0: new           #115                // class java/util/LinkedHashMap
+       3: dup
+       4: invokespecial #348                // Method java/util/LinkedHashMap."<init>":()V
+       7: astore_1
+       8: aload_0
+       9: invokevirtual #349                // Method net/sf/jsqlparser/statement/select/Select.getSelectBody:()Lnet/sf/jsqlparser/statement/select/SelectBody;
+      12: checkcast     #353                // class net/sf/jsqlparser/statement/select/PlainSelect
+      15: astore_2
+      16: aload_2
+      17: invokevirtual #355                // Method net/sf/jsqlparser/statement/select/PlainSelect.getSelectItems:()Ljava/util/List;
+      20: astore_3
+      21: aconst_null
+      22: aload_3
+      23: if_acmpeq     115
+      26: iconst_0
+      27: istore        4
+      29: iload         4
+      31: aload_2
+      32: invokevirtual #355                // Method net/sf/jsqlparser/statement/select/PlainSelect.getSelectItems:()Ljava/util/List;
+      35: invokeinterface #358,  1          // InterfaceMethod java/util/List.size:()I
+      40: if_icmpge     115
+      43: aload_3
+      44: iload         4
+      46: invokeinterface #312,  2          // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+      51: checkcast     #360                // class net/sf/jsqlparser/statement/select/SelectExpressionItem
+      54: astore        5
+      56: aload         5
+      58: invokevirtual #362                // Method net/sf/jsqlparser/statement/select/SelectExpressionItem.getAlias:()Lnet/sf/jsqlparser/expression/Alias;
+      61: astore        6
+      63: aconst_null
+      64: aload         6
+      66: if_acmpeq     89
+      69: aload_1
+      70: iload         4
+      72: invokestatic  #201                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      75: aload         6
+      77: invokevirtual #366                // Method net/sf/jsqlparser/expression/Alias.getName:()Ljava/lang/String;
+      80: invokeinterface #371,  3          // InterfaceMethod java/util/Map.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+      85: pop
+      86: goto          109
+      89: aload_1
+      90: iload         4
+      92: invokestatic  #201                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      95: aload         5
+      97: invokevirtual #372                // Method net/sf/jsqlparser/statement/select/SelectExpressionItem.toString:()Ljava/lang/String;
+     100: invokestatic  #373                // Method simplifyName:(Ljava/lang/String;)Ljava/lang/String;
+     103: invokeinterface #371,  3          // InterfaceMethod java/util/Map.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+     108: pop
+     109: iinc          4, 1
+     112: goto          29
+     115: aload_1
+     116: areturn
+
+  private static java.lang.String simplifyName(java.lang.String);
+    Code:
+       0: aload_0
+       1: invokestatic  #376                // Method org/apache/commons/lang3/StringUtils.trimToEmpty:(Ljava/lang/String;)Ljava/lang/String;
+       4: astore_0
+       5: aload_0
+       6: ldc_w         #379                // String (
+       9: invokevirtual #381                // Method java/lang/String.startsWith:(Ljava/lang/String;)Z
+      12: ifeq          40
+      15: aload_0
+      16: ldc_w         #385                // String )
+      19: invokevirtual #387                // Method java/lang/String.endsWith:(Ljava/lang/String;)Z
+      22: ifeq          40
+      25: aload_0
+      26: iconst_1
+      27: aload_0
+      28: invokevirtual #390                // Method java/lang/String.length:()I
+      31: iconst_1
+      32: isub
+      33: invokevirtual #393                // Method java/lang/String.substring:(II)Ljava/lang/String;
+      36: astore_0
+      37: goto          5
+      40: aload_0
+      41: iconst_2
+      42: anewarray     #23                 // class java/lang/CharSequence
+      45: dup
+      46: iconst_0
+      47: ldc_w         #379                // String (
+      50: aastore
+      51: dup
+      52: iconst_1
+      53: ldc_w         #385                // String )
+      56: aastore
+      57: invokestatic  #396                // Method org/apache/commons/lang3/StringUtils.containsAny:(Ljava/lang/CharSequence;[Ljava/lang/CharSequence;)Z
+      60: ifeq          65
+      63: aload_0
+      64: areturn
+      65: aload_0
+      66: ldc_w         #399                // String .
+      69: invokestatic  #401                // Method org/apache/commons/lang3/StringUtils.contains:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+      72: ifeq          85
+      75: aload_0
+      76: ldc_w         #399                // String .
+      79: invokestatic  #404                // Method org/apache/commons/lang3/StringUtils.substringAfterLast:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+      82: goto          86
+      85: aload_0
+      86: areturn
+
+  public static java.lang.Long executeCount(com.x.query.core.entity.schema.Statement, com.x.query.core.express.statement.ExecuteTarget) throws java.lang.Exception;
+    Code:
+       0: aload_1
+       1: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+       4: invokevirtual #13                 // Method java/lang/String.toUpperCase:()Ljava/lang/String;
+       7: astore_2
+       8: aload_0
+       9: invokevirtual #18                 // Method com/x/query/core/entity/schema/Statement.getFormat:()Ljava/lang/String;
+      12: iconst_2
+      13: anewarray     #23                 // class java/lang/CharSequence
+      16: dup
+      17: iconst_0
+      18: ldc           #25                 // String sql
+      20: aastore
+      21: dup
+      22: iconst_1
+      23: ldc           #27                 // String sqlScript
+      25: aastore
+      26: invokestatic  #29                 // Method org/apache/commons/lang3/StringUtils.equalsAnyIgnoreCase:(Ljava/lang/CharSequence;[Ljava/lang/CharSequence;)Z
+      29: ifeq          38
+      32: aload_1
+      33: iconst_0
+      34: invokestatic  #408                // Method executeCountSql:(Lcom/x/query/core/express/statement/ExecuteTarget;Z)Ljava/lang/Long;
+      37: areturn
+      38: aload_2
+      39: ldc           #41                 // String  JOIN
+      41: invokevirtual #43                 // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+      44: iconst_m1
+      45: if_icmple     64
+      48: aload_2
+      49: ldc           #47                 // String  ON
+      51: invokevirtual #43                 // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+      54: iconst_m1
+      55: if_icmple     64
+      58: aload_1
+      59: iconst_1
+      60: invokestatic  #408                // Method executeCountSql:(Lcom/x/query/core/express/statement/ExecuteTarget;Z)Ljava/lang/Long;
+      63: areturn
+      64: aload_0
+      65: aload_1
+      66: invokestatic  #412                // Method executeCountJpql:(Lcom/x/query/core/entity/schema/Statement;Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/lang/Long;
+      69: areturn
+
+  private static java.lang.Long executeCountSql(com.x.query.core.express.statement.ExecuteTarget, boolean) throws java.lang.Exception;
+    Code:
+       0: invokestatic  #61                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.instance:()Lcom/x/base/core/container/factory/EntityManagerContainerFactory;
+       3: invokevirtual #67                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.create:()Lcom/x/base/core/container/EntityManagerContainer;
+       6: astore_2
+       7: aload_2
+       8: ldc           #71                 // class com/x/base/core/entity/dynamic/DynamicBaseEntity
+      10: invokevirtual #73                 // Method com/x/base/core/container/EntityManagerContainer.get:(Ljava/lang/Class;)Ljavax/persistence/EntityManager;
+      13: astore_3
+      14: getstatic     #79                 // Field LOGGER:Lcom/x/base/core/project/logger/Logger;
+      17: ldc_w         #416                // String executeCountSql:{}, param:{}.
+      20: iconst_2
+      21: anewarray     #85                 // class java/util/function/Supplier
+      24: dup
+      25: iconst_0
+      26: aload_0
+      27: dup
+      28: invokestatic  #87                 // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      31: pop
+      32: invokedynamic #93,  0             // InvokeDynamic #0:get:(Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/util/function/Supplier;
+      37: aastore
+      38: dup
+      39: iconst_1
+      40: aload_0
+      41: dup
+      42: invokestatic  #87                 // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      45: pop
+      46: invokedynamic #96,  0             // InvokeDynamic #1:get:(Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/util/function/Supplier;
+      51: aastore
+      52: invokevirtual #97                 // Method com/x/base/core/project/logger/Logger.debug:(Ljava/lang/String;[Ljava/util/function/Supplier;)V
+      55: iload_1
+      56: ifeq          69
+      59: aload_0
+      60: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+      63: invokestatic  #105                // Method joinSql:(Ljava/lang/String;)Ljava/lang/String;
+      66: goto          73
+      69: aload_0
+      70: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+      73: astore        4
+      75: aload_3
+      76: aload         4
+      78: invokeinterface #109,  2          // InterfaceMethod javax/persistence/EntityManager.createNativeQuery:(Ljava/lang/String;)Ljavax/persistence/Query;
+      83: astore        5
+      85: aload_0
+      86: invokevirtual #120                // Method com/x/query/core/express/statement/ExecuteTarget.getQuestionMarkParam:()Ljava/util/Map;
+      89: invokeinterface #124,  1          // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+      94: invokeinterface #130,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+      99: astore        6
+     101: aload         6
+     103: invokeinterface #136,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     108: ifeq          162
+     111: aload         6
+     113: invokeinterface #142,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     118: checkcast     #146                // class java/util/Map$Entry
+     121: astore        7
+     123: aload         7
+     125: invokeinterface #148,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+     130: checkcast     #14                 // class java/lang/String
+     133: iconst_1
+     134: invokevirtual #151                // Method java/lang/String.substring:(I)Ljava/lang/String;
+     137: invokestatic  #155                // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+     140: istore        8
+     142: aload         5
+     144: iload         8
+     146: aload         7
+     148: invokeinterface #160,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+     153: invokeinterface #163,  3          // InterfaceMethod javax/persistence/Query.setParameter:(ILjava/lang/Object;)Ljavax/persistence/Query;
+     158: pop
+     159: goto          101
+     162: aload         5
+     164: invokeinterface #418,  1          // InterfaceMethod javax/persistence/Query.getSingleResult:()Ljava/lang/Object;
+     169: checkcast     #421                // class java/lang/Number
+     172: invokevirtual #423                // Method java/lang/Number.longValue:()J
+     175: invokestatic  #427                // Method java/lang/Long.valueOf:(J)Ljava/lang/Long;
+     178: astore        6
+     180: aload_2
+     181: ifnull        188
+     184: aload_2
+     185: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     188: aload         6
+     190: areturn
+     191: astore_3
+     192: aload_2
+     193: ifnull        211
+     196: aload_2
+     197: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     200: goto          211
+     203: astore        4
+     205: aload_3
+     206: aload         4
+     208: invokevirtual #210                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+     211: aload_3
+     212: athrow
+    Exception table:
+       from    to  target type
+           7   180   191   Class java/lang/Throwable
+         196   200   203   Class java/lang/Throwable
+
+  private static java.lang.Long executeCountJpql(com.x.query.core.entity.schema.Statement, com.x.query.core.express.statement.ExecuteTarget) throws java.lang.Exception;
+    Code:
+       0: invokestatic  #61                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.instance:()Lcom/x/base/core/container/factory/EntityManagerContainerFactory;
+       3: invokevirtual #67                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.create:()Lcom/x/base/core/container/EntityManagerContainer;
+       6: astore_2
+       7: aload_0
+       8: invokevirtual #272                // Method com/x/query/core/entity/schema/Statement.getEntityCategory:()Ljava/lang/String;
+      11: ldc_w         #275                // String dynamic
+      14: invokestatic  #277                // Method org/apache/commons/lang3/StringUtils.equalsIgnoreCase:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+      17: ifeq          40
+      20: aload_1
+      21: invokevirtual #53                 // Method com/x/query/core/express/statement/ExecuteTarget.getParsedStatement:()Lnet/sf/jsqlparser/statement/Statement;
+      24: instanceof    #103                // class net/sf/jsqlparser/statement/select/Select
+      27: ifeq          40
+      30: aload_2
+      31: ldc           #71                 // class com/x/base/core/entity/dynamic/DynamicBaseEntity
+      33: invokevirtual #73                 // Method com/x/base/core/container/EntityManagerContainer.get:(Ljava/lang/Class;)Ljavax/persistence/EntityManager;
+      36: astore_3
+      37: goto          48
+      40: aload_2
+      41: ldc_w         #281                // class com/x/base/core/entity/ApplicationBaseEntity
+      44: invokevirtual #73                 // Method com/x/base/core/container/EntityManagerContainer.get:(Ljava/lang/Class;)Ljavax/persistence/EntityManager;
+      47: astore_3
+      48: getstatic     #79                 // Field LOGGER:Lcom/x/base/core/project/logger/Logger;
+      51: ldc_w         #432                // String executeCountJpql:{}, param:{}.
+      54: iconst_2
+      55: anewarray     #85                 // class java/util/function/Supplier
+      58: dup
+      59: iconst_0
+      60: aload_1
+      61: dup
+      62: invokestatic  #87                 // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      65: pop
+      66: invokedynamic #93,  0             // InvokeDynamic #0:get:(Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/util/function/Supplier;
+      71: aastore
+      72: dup
+      73: iconst_1
+      74: aload_1
+      75: dup
+      76: invokestatic  #87                 // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      79: pop
+      80: invokedynamic #96,  0             // InvokeDynamic #1:get:(Lcom/x/query/core/express/statement/ExecuteTarget;)Ljava/util/function/Supplier;
+      85: aastore
+      86: invokevirtual #97                 // Method com/x/base/core/project/logger/Logger.debug:(Ljava/lang/String;[Ljava/util/function/Supplier;)V
+      89: aload_3
+      90: aload_1
+      91: invokevirtual #7                  // Method com/x/query/core/express/statement/ExecuteTarget.getSql:()Ljava/lang/String;
+      94: invokeinterface #285,  2          // InterfaceMethod javax/persistence/EntityManager.createQuery:(Ljava/lang/String;)Ljavax/persistence/Query;
+      99: astore        4
+     101: aload_1
+     102: invokevirtual #120                // Method com/x/query/core/express/statement/ExecuteTarget.getQuestionMarkParam:()Ljava/util/Map;
+     105: invokeinterface #124,  1          // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+     110: invokeinterface #130,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+     115: astore        5
+     117: aload         5
+     119: invokeinterface #136,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     124: ifeq          178
+     127: aload         5
+     129: invokeinterface #142,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     134: checkcast     #146                // class java/util/Map$Entry
+     137: astore        6
+     139: aload         6
+     141: invokeinterface #148,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+     146: checkcast     #14                 // class java/lang/String
+     149: iconst_1
+     150: invokevirtual #151                // Method java/lang/String.substring:(I)Ljava/lang/String;
+     153: invokestatic  #155                // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+     156: istore        7
+     158: aload         4
+     160: iload         7
+     162: aload         6
+     164: invokeinterface #160,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+     169: invokeinterface #163,  3          // InterfaceMethod javax/persistence/Query.setParameter:(ILjava/lang/Object;)Ljavax/persistence/Query;
+     174: pop
+     175: goto          117
+     178: aload         4
+     180: invokeinterface #418,  1          // InterfaceMethod javax/persistence/Query.getSingleResult:()Ljava/lang/Object;
+     185: checkcast     #421                // class java/lang/Number
+     188: invokevirtual #423                // Method java/lang/Number.longValue:()J
+     191: invokestatic  #427                // Method java/lang/Long.valueOf:(J)Ljava/lang/Long;
+     194: astore        5
+     196: aload_2
+     197: ifnull        204
+     200: aload_2
+     201: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     204: aload         5
+     206: areturn
+     207: astore_3
+     208: aload_2
+     209: ifnull        227
+     212: aload_2
+     213: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     216: goto          227
+     219: astore        4
+     221: aload_3
+     222: aload         4
+     224: invokevirtual #210                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+     227: aload_3
+     228: athrow
+    Exception table:
+       from    to  target type
+           7   196   207   Class java/lang/Throwable
+         212   216   219   Class java/lang/Throwable
+
+  private static void checkJpqlDeleteInsertUpdateDml(net.sf.jsqlparser.statement.Statement) throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: instanceof    #434                // class net/sf/jsqlparser/statement/insert/Insert
+       4: ifeq          15
+       7: new           #436                // class com/x/query/core/express/statement/ExceptionJpqlInsertNotSupported
+      10: dup
+      11: invokespecial #438                // Method com/x/query/core/express/statement/ExceptionJpqlInsertNotSupported."<init>":()V
+      14: athrow
+      15: aload_0
+      16: invokestatic  #57                 // Method checkDeleteInsertUpdateDml:(Lnet/sf/jsqlparser/statement/Statement;)V
+      19: return
+
+  private static void checkDeleteInsertUpdateDml(net.sf.jsqlparser.statement.Statement) throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: instanceof    #439                // class net/sf/jsqlparser/statement/delete/Delete
+       4: ifeq          27
+       7: invokestatic  #441                // Method com/x/base/core/project/config/Config.query:()Lcom/x/base/core/project/config/Query;
+      10: invokevirtual #447                // Method com/x/base/core/project/config/Query.getStatementDeleteEnable:()Ljava/lang/Boolean;
+      13: invokestatic  #453                // Method org/apache/commons/lang3/BooleanUtils.isNotTrue:(Ljava/lang/Boolean;)Z
+      16: ifeq          96
+      19: new           #459                // class com/x/query/core/express/statement/ExceptionDisableDelete
+      22: dup
+      23: invokespecial #461                // Method com/x/query/core/express/statement/ExceptionDisableDelete."<init>":()V
+      26: athrow
+      27: aload_0
+      28: instanceof    #462                // class net/sf/jsqlparser/statement/update/Update
+      31: ifeq          54
+      34: invokestatic  #441                // Method com/x/base/core/project/config/Config.query:()Lcom/x/base/core/project/config/Query;
+      37: invokevirtual #464                // Method com/x/base/core/project/config/Query.getStatementUpdateEnable:()Ljava/lang/Boolean;
+      40: invokestatic  #453                // Method org/apache/commons/lang3/BooleanUtils.isNotTrue:(Ljava/lang/Boolean;)Z
+      43: ifeq          96
+      46: new           #467                // class com/x/query/core/express/statement/ExceptionDisableUpdate
+      49: dup
+      50: invokespecial #469                // Method com/x/query/core/express/statement/ExceptionDisableUpdate."<init>":()V
+      53: athrow
+      54: aload_0
+      55: instanceof    #434                // class net/sf/jsqlparser/statement/insert/Insert
+      58: ifeq          81
+      61: invokestatic  #441                // Method com/x/base/core/project/config/Config.query:()Lcom/x/base/core/project/config/Query;
+      64: invokevirtual #470                // Method com/x/base/core/project/config/Query.getStatementInsertEnable:()Ljava/lang/Boolean;
+      67: invokestatic  #453                // Method org/apache/commons/lang3/BooleanUtils.isNotTrue:(Ljava/lang/Boolean;)Z
+      70: ifeq          96
+      73: new           #473                // class com/x/query/core/express/statement/ExceptionDisableInsert
+      76: dup
+      77: invokespecial #475                // Method com/x/query/core/express/statement/ExceptionDisableInsert."<init>":()V
+      80: athrow
+      81: aload_0
+      82: instanceof    #103                // class net/sf/jsqlparser/statement/select/Select
+      85: ifne          96
+      88: new           #476                // class com/x/query/core/express/statement/ExceptionDmlNotAllowed
+      91: dup
+      92: invokespecial #478                // Method com/x/query/core/express/statement/ExceptionDmlNotAllowed."<init>":()V
+      95: athrow
+      96: return
+
+  private static java.lang.Class<? extends com.x.base.core.entity.JpaObject> clazz(com.x.base.core.container.EntityManagerContainer, com.x.query.core.entity.schema.Statement) throws java.lang.Exception;
+    Code:
+       0: aconst_null
+       1: astore_2
+       2: ldc_w         #479                // String official
+       5: aload_1
+       6: invokevirtual #272                // Method com/x/query/core/entity/schema/Statement.getEntityCategory:()Ljava/lang/String;
+       9: invokestatic  #481                // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+      12: ifne          28
+      15: ldc_w         #484                // String custom
+      18: aload_1
+      19: invokevirtual #272                // Method com/x/query/core/entity/schema/Statement.getEntityCategory:()Ljava/lang/String;
+      22: invokestatic  #481                // Method org/apache/commons/lang3/StringUtils.equals:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+      25: ifeq          45
+      28: invokestatic  #486                // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;
+      31: invokevirtual #492                // Method java/lang/Thread.getContextClassLoader:()Ljava/lang/ClassLoader;
+      34: aload_1
+      35: invokevirtual #496                // Method com/x/query/core/entity/schema/Statement.getEntityClassName:()Ljava/lang/String;
+      38: invokevirtual #499                // Method java/lang/ClassLoader.loadClass:(Ljava/lang/String;)Ljava/lang/Class;
+      41: astore_2
+      42: goto          108
+      45: aload_0
+      46: aload_1
+      47: invokevirtual #505                // Method com/x/query/core/entity/schema/Statement.getTable:()Ljava/lang/String;
+      50: ldc_w         #508                // class com/x/query/core/entity/schema/Table
+      53: invokevirtual #510                // Method com/x/base/core/container/EntityManagerContainer.flag:(Ljava/lang/String;Ljava/lang/Class;)Lcom/x/base/core/entity/JpaObject;
+      56: checkcast     #508                // class com/x/query/core/entity/schema/Table
+      59: astore_3
+      60: aconst_null
+      61: aload_3
+      62: if_acmpne     80
+      65: new           #514                // class com/x/base/core/project/exception/ExceptionEntityNotExist
+      68: dup
+      69: aload_1
+      70: invokevirtual #505                // Method com/x/query/core/entity/schema/Statement.getTable:()Ljava/lang/String;
+      73: ldc_w         #508                // class com/x/query/core/entity/schema/Table
+      76: invokespecial #516                // Method com/x/base/core/project/exception/ExceptionEntityNotExist."<init>":(Ljava/lang/String;Ljava/lang/Class;)V
+      79: athrow
+      80: new           #519                // class com/x/base/core/entity/dynamic/DynamicEntity
+      83: dup
+      84: aload_3
+      85: invokevirtual #521                // Method com/x/query/core/entity/schema/Table.getName:()Ljava/lang/String;
+      88: invokespecial #522                // Method com/x/base/core/entity/dynamic/DynamicEntity."<init>":(Ljava/lang/String;)V
+      91: astore        4
+      93: invokestatic  #486                // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;
+      96: invokevirtual #492                // Method java/lang/Thread.getContextClassLoader:()Ljava/lang/ClassLoader;
+      99: aload         4
+     101: invokevirtual #525                // Method com/x/base/core/entity/dynamic/DynamicEntity.className:()Ljava/lang/String;
+     104: invokevirtual #499                // Method java/lang/ClassLoader.loadClass:(Ljava/lang/String;)Ljava/lang/Class;
+     107: astore_2
+     108: aload_2
+     109: areturn
+
+  private static java.lang.String joinSql(java.lang.String) throws java.lang.Exception;
+    Code:
+       0: aload_0
+       1: invokevirtual #13                 // Method java/lang/String.toUpperCase:()Ljava/lang/String;
+       4: astore_1
+       5: aload_1
+       6: ldc           #41                 // String  JOIN
+       8: invokevirtual #43                 // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+      11: iconst_m1
+      12: if_icmple     175
+      15: aload_1
+      16: ldc           #47                 // String  ON
+      18: invokevirtual #43                 // Method java/lang/String.indexOf:(Ljava/lang/String;)I
+      21: iconst_m1
+      22: if_icmple     175
+      25: aload_0
+      26: ldc_w         #528                // String \\.
+      29: ldc_w         #530                // String .x
+      32: invokevirtual #532                // Method java/lang/String.replaceAll:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+      35: astore_0
+      36: aload_0
+      37: ldc_w         #535                // String \\.x\\*
+      40: ldc_w         #537                // String .*
+      43: invokevirtual #532                // Method java/lang/String.replaceAll:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+      46: astore_0
+      47: invokestatic  #61                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.instance:()Lcom/x/base/core/container/factory/EntityManagerContainerFactory;
+      50: invokevirtual #67                 // Method com/x/base/core/container/factory/EntityManagerContainerFactory.create:()Lcom/x/base/core/container/EntityManagerContainer;
+      53: astore_3
+      54: aload_3
+      55: ldc_w         #508                // class com/x/query/core/entity/schema/Table
+      58: iconst_1
+      59: anewarray     #14                 // class java/lang/String
+      62: dup
+      63: iconst_0
+      64: ldc_w         #539                // String name
+      67: aastore
+      68: invokestatic  #541                // Method com/x/base/core/project/tools/ListTools.toList:([Ljava/lang/Object;)Ljava/util/List;
+      71: ldc_w         #545                // String status
+      74: ldc_w         #547                // String build
+      77: invokevirtual #549                // Method com/x/base/core/container/EntityManagerContainer.fetchEqual:(Ljava/lang/Class;Ljava/util/List;Ljava/lang/String;Ljava/lang/Object;)Ljava/util/List;
+      80: astore_2
+      81: aload_3
+      82: ifnull        117
+      85: aload_3
+      86: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+      89: goto          117
+      92: astore        4
+      94: aload_3
+      95: ifnull        114
+      98: aload_3
+      99: invokevirtual #177                // Method com/x/base/core/container/EntityManagerContainer.close:()V
+     102: goto          114
+     105: astore        5
+     107: aload         4
+     109: aload         5
+     111: invokevirtual #210                // Method java/lang/Throwable.addSuppressed:(Ljava/lang/Throwable;)V
+     114: aload         4
+     116: athrow
+     117: aload_2
+     118: invokeinterface #180,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+     123: astore_3
+     124: aload_3
+     125: invokeinterface #136,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     130: ifeq          175
+     133: aload_3
+     134: invokeinterface #142,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     139: checkcast     #508                // class com/x/query/core/entity/schema/Table
+     142: astore        4
+     144: aload_0
+     145: aload         4
+     147: invokevirtual #521                // Method com/x/query/core/entity/schema/Table.getName:()Ljava/lang/String;
+     150: invokedynamic #553,  0            // InvokeDynamic #3:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     155: aload         4
+     157: invokevirtual #521                // Method com/x/query/core/entity/schema/Table.getName:()Ljava/lang/String;
+     160: invokevirtual #13                 // Method java/lang/String.toUpperCase:()Ljava/lang/String;
+     163: invokedynamic #556,  0            // InvokeDynamic #4:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     168: invokevirtual #532                // Method java/lang/String.replaceAll:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     171: astore_0
+     172: goto          124
+     175: aload_0
+     176: areturn
+    Exception table:
+       from    to  target type
+          54    81    92   Class java/lang/Throwable
+          98   102   105   Class java/lang/Throwable
+
+  private static void lambda$jpqlResultToMap$1(java.util.Map, java.util.List, java.lang.Object);
+    Code:
+       0: new           #115                // class java/util/LinkedHashMap
+       3: dup
+       4: invokespecial #348                // Method java/util/LinkedHashMap."<init>":()V
+       7: astore_3
+       8: aload_2
+       9: invokevirtual #317                // Method java/lang/Object.getClass:()Ljava/lang/Class;
+      12: invokevirtual #557                // Method java/lang/Class.isArray:()Z
+      15: ifeq          46
+      18: aload_2
+      19: checkcast     #560                // class "[Ljava/lang/Object;"
+      22: astore        4
+      24: aload_0
+      25: invokeinterface #124,  1          // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+      30: aload_3
+      31: aload         4
+      33: invokedynamic #562,  0            // InvokeDynamic #5:accept:(Ljava/util/Map;[Ljava/lang/Object;)Ljava/util/function/Consumer;
+      38: invokeinterface #565,  2          // InterfaceMethod java/util/Set.forEach:(Ljava/util/function/Consumer;)V
+      43: goto          67
+      46: aload_3
+      47: aload_0
+      48: iconst_0
+      49: invokestatic  #201                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      52: invokeinterface #566,  2          // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+      57: checkcast     #14                 // class java/lang/String
+      60: aload_2
+      61: invokeinterface #371,  3          // InterfaceMethod java/util/Map.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+      66: pop
+      67: aload_1
+      68: aload_3
+      69: invokeinterface #568,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      74: pop
+      75: return
+
+  private static void lambda$jpqlResultToMap$0(java.util.Map, java.lang.Object[], java.util.Map$Entry);
+    Code:
+       0: aload_0
+       1: aload_2
+       2: invokeinterface #160,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+       7: checkcast     #14                 // class java/lang/String
+      10: aload_1
+      11: aload_2
+      12: invokeinterface #148,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+      17: checkcast     #156                // class java/lang/Integer
+      20: invokevirtual #255                // Method java/lang/Integer.intValue:()I
+      23: aaload
+      24: invokeinterface #371,  3          // InterfaceMethod java/util/Map.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+      29: pop
+      30: return
+
+  static {};
+    Code:
+       0: ldc           #36                 // class com/x/query/core/express/statement/Executor
+       2: invokestatic  #572                // Method com/x/base/core/project/logger/LoggerFactory.getLogger:(Ljava/lang/Class;)Lcom/x/base/core/project/logger/Logger;
+       5: putstatic     #79                 // Field LOGGER:Lcom/x/base/core/project/logger/Logger;
+       8: return
+}

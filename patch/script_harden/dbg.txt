@@ -1,0 +1,8 @@
+MATCH_EVAL desc=(Lorg/graalvm/polyglot/Source;Lcom/x/base/core/project/scripting/GraalvmScriptingFactory$Bindings;)Lcom/google/gson/JsonElement;
+EVAL_FIELD opcode=178 owner=com/x/base/core/project/scripting/GraalvmScriptingFactory name=ENGINE desc=Lorg/graalvm/polyglot/Engine;
+EVAL_FIELD opcode=178 owner=org/graalvm/polyglot/HostAccess name=ALL desc=Lorg/graalvm/polyglot/HostAccess;
+MATCH_ALLOWCLASS
+PATCHED com/x/base/core/project/scripting/GraalvmScriptingFactory.class
+=== eval method fields in dbg jar ===
+10:      17: getstatic     #63                 // Field org/graalvm/polyglot/HostAccess.ALL:Lorg/graalvm/polyglot/HostAccess;
+11:      20: invokevirtual #69                 // Method org/graalvm/polyglot/Context$Builder.allowHostAccess:(Lorg/graalvm/polyglot/HostAccess;)Lorg/graalvm/polyglot/Context$Builder;

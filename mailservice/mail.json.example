@@ -1,0 +1,30 @@
+{
+  "_comment": [
+    "O2OA 本地邮件验证码服务 —— 配置模板。",
+    "复制为 mailservice/data/mail.json 即为运行期配置（容器挂载在 /data）。",
+    "优先级：代码内默认值 < O2OA_MAIL_* 环境变量 < 本文件。",
+    "smtpPassword / o2oaPassword 属凭据，不要提交进版本库。"
+  ],
+  "enabled": true,
+  "o2oaBase": "http://o2oa-server:9090",
+  "o2oaAdmin": "admin",
+  "o2oaPassword": "",
+  "port": 8095,
+  "node": "o2oa-mailservice:8095",
+
+  "senderMail": "",
+  "senderName": "",
+  "smtpHost": "smtp.ym.163.com",
+  "smtpPort": 465,
+  "smtpUser": "",
+  "smtpPassword": "",
+  "timeout": 15,
+  "ssl": true,
+  "starttls": false,
+
+  "codeLength": 6,
+  "codeTtlMinutes": 5,
+  "resendSeconds": 60,
+  "redirectTo": "",
+  "showCodeInLog": true
+}

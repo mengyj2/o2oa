@@ -1,0 +1,15 @@
+{
+  "id": "t1001003-project-milestone-table-00001",
+  "name": "t1001003_project_milestone_table",
+  "alias": "项目里程碑表",
+  "description": "项目关键里程碑节点",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"milestone_name\", \"description\": \"里程碑名称\", \"type\": \"string\"}, {\"name\": \"plan_date\", \"description\": \"计划完成日期\", \"type\": \"date\"}, {\"name\": \"actual_date\", \"description\": \"实际完成日期\", \"type\": \"date\"}, {\"name\": \"is_done\", \"description\": \"是否完成\", \"type\": \"boolean\"}, {\"name\": \"delay_days\", \"description\": \"延期天数\", \"type\": \"double\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"milestone_name\", \"description\": \"里程碑名称\", \"type\": \"string\"}, {\"name\": \"plan_date\", \"description\": \"计划完成日期\", \"type\": \"date\"}, {\"name\": \"actual_date\", \"description\": \"实际完成日期\", \"type\": \"date\"}, {\"name\": \"is_done\", \"description\": \"是否完成\", \"type\": \"boolean\"}, {\"name\": \"delay_days\", \"description\": \"延期天数\", \"type\": \"double\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

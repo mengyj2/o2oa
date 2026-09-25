@@ -1,0 +1,27 @@
+{
+  "id": "s4004002-expense-dept-stat-000000000001",
+  "name": "部门报销统计",
+  "alias": "部门报销统计",
+  "description": "按部门统计报销金额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v4004001-expense-list-view-000000000001",
+  "categoryPath": "apply_dept",
+  "valuePath": "total_amount",
+  "categoryTitle": "部门",
+  "valueTitle": "报销金额",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

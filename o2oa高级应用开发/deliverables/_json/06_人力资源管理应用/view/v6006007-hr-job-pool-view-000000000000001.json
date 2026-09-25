@@ -1,0 +1,313 @@
+{
+  "id": "v6006007-hr-job-pool-view-000000000000001",
+  "name": "岗位池",
+  "alias": "岗位池",
+  "description": "官方列顺序：岗位|招聘部门|招聘人数|标准职级|竞聘类型|发布时间|状态",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"岗位\", \"path\": \"job_name\", \"id\": \"v6006007-hr-job-pool-view-000000000000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"招聘部门\", \"path\": \"recruit_dept\", \"id\": \"v6006007-hr-job-pool-view-000000000000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"招聘人数\", \"path\": \"recruit_count\", \"id\": \"v6006007-hr-job-pool-view-000000000000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"标准职级\", \"path\": \"standard_grade\", \"id\": \"v6006007-hr-job-pool-view-000000000000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"竞聘类型\", \"path\": \"bid_type\", \"id\": \"v6006007-hr-job-pool-view-000000000000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_5\", \"displayName\": \"发布时间\", \"path\": \"publish_date\", \"id\": \"v6006007-hr-job-pool-view-000000000000001_col5\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_6\", \"displayName\": \"状态\", \"path\": \"job_status\", \"id\": \"v6006007-hr-job-pool-view-000000000000001_col6\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "table",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [],
+  "cmsCategoryList": [],
+  "tableList": [
+    "t6006004-hr-job-table-0000000000000001"
+  ],
+  "filterScript": "",
+  "orderBy": "",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "岗位",
+      "path": "job_name",
+      "name": "job_name",
+      "width": "180px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "招聘部门",
+      "path": "recruit_dept",
+      "name": "recruit_dept",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "招聘人数",
+      "path": "recruit_count",
+      "name": "recruit_count",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "标准职级",
+      "path": "standard_grade",
+      "name": "standard_grade",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "竞聘类型",
+      "path": "bid_type",
+      "name": "bid_type",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "发布时间",
+      "path": "publish_date",
+      "name": "publish_date",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "状态",
+      "path": "job_status",
+      "name": "job_status",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "岗位",
+      "path": "job_name",
+      "name": "job_name",
+      "width": "180px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "招聘部门",
+      "path": "recruit_dept",
+      "name": "recruit_dept",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "招聘人数",
+      "path": "recruit_count",
+      "name": "recruit_count",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "标准职级",
+      "path": "standard_grade",
+      "name": "standard_grade",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "竞聘类型",
+      "path": "bid_type",
+      "name": "bid_type",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "发布时间",
+      "path": "publish_date",
+      "name": "publish_date",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "状态",
+      "path": "job_status",
+      "name": "job_status",
+      "width": "100px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "searchPlaceholder": "输入关键字搜索视图",
+    "isAdvanceSearch": true,
+    "isSelectAll": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showPageBar": true,
+    "pageBarButtons": [
+      "第一页",
+      "上一页",
+      "下一页",
+      "最后一页"
+    ],
+    "showOperateBar": true,
+    "operateBarWidth": "150px",
+    "rowHeight": "36px",
+    "striped": true,
+    "bordered": true,
+    "hoverable": true
+  },
+  "toolbarButtonList": [
+    {
+      "id": "btn_exportExcel",
+      "name": "导出Excel",
+      "title": "导出Excel",
+      "type": "toolbar",
+      "target": "",
+      "icon": "",
+      "order": 0,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_publish",
+      "name": "发布岗位",
+      "title": "发布岗位",
+      "type": "process",
+      "target": "p6006005-hr-job-publish-000000000001",
+      "icon": "",
+      "order": 1,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_apply",
+      "name": "竞聘报名",
+      "title": "竞聘报名",
+      "type": "process",
+      "target": "p6006006-hr-job-apply-0000000000001",
+      "icon": "",
+      "order": 2,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_edit",
+      "name": "编辑",
+      "title": "编辑",
+      "type": "edit",
+      "target": "",
+      "icon": "",
+      "order": 3,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_delete",
+      "name": "删除",
+      "title": "删除",
+      "type": "delete",
+      "target": "",
+      "icon": "",
+      "order": 4,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "q6006002-hr-emp-change-join-00000000001",
+  "name": "人事变动全量",
+  "alias": "人事变动全量",
+  "description": "人事变动记录带当前档案信息，支撑官方四宫格公示",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT c.id AS id, c.change_no AS change_no, c.change_type AS change_type, c.employee_no AS employee_no, c.employee_name AS employee_name, c.old_dept AS old_dept, c.new_dept AS new_dept, c.old_position AS old_position, c.new_position AS new_position, c.old_grade AS old_grade, c.new_grade AS new_grade, c.old_status AS old_status, c.new_status AS new_status, c.effect_date AS effect_date, c.apply_date AS apply_date, c.approve_status AS approve_status, c.publish_flag AS publish_flag, c.process_id AS process_id, e.dept AS current_dept, e.position AS current_position, e.employee_status AS current_status, e.education AS education, e.join_date AS join_date FROM hr_change c LEFT JOIN hr_employee e ON e.employee_no = c.employee_no",
+  "sql": "SELECT c.id AS id, c.change_no AS change_no, c.change_type AS change_type, c.employee_no AS employee_no, c.employee_name AS employee_name, c.old_dept AS old_dept, c.new_dept AS new_dept, c.old_position AS old_position, c.new_position AS new_position, c.old_grade AS old_grade, c.new_grade AS new_grade, c.old_status AS old_status, c.new_status AS new_status, c.effect_date AS effect_date, c.apply_date AS apply_date, c.approve_status AS approve_status, c.publish_flag AS publish_flag, c.process_id AS process_id, e.dept AS current_dept, e.position AS current_position, e.employee_status AS current_status, e.education AS education, e.join_date AS join_date FROM hr_change c LEFT JOIN hr_employee e ON e.employee_no = c.employee_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

@@ -1,0 +1,71 @@
+{
+  "type": "success",
+  "data": [
+    {
+      "control": {
+        "allowEdit": true,
+        "allowDelete": true
+      },
+      "id": "51fc920c-8e7b-409f-9d0e-585fadee3518",
+      "pinyin": "ceshiyonghub",
+      "pinyinInitial": "csyhb",
+      "name": "测试用户B",
+      "unique": "8b8e1f9e-e7bf-4b31-bed2-17566dec0dff",
+      "distinguishedName": "测试用户B@8b8e1f9e-e7bf-4b31-bed2-17566dec0dff@P",
+      "orderNumber": 275087652,
+      "lastLoginTime": "2026-09-19 21:15:39",
+      "lastLoginAddress": "172.22.0.1",
+      "lastLoginClient": "",
+      "mobile": "13800000003",
+      "status": "0",
+      "createTime": "2026-09-19 21:14:13",
+      "updateTime": "2026-09-19 21:15:39"
+    },
+    {
+      "control": {
+        "allowEdit": true,
+        "allowDelete": true
+      },
+      "id": "51fb5d8a-b3d6-46c9-9613-20903c28f0d2",
+      "pinyin": "ceshiyonghua",
+      "pinyinInitial": "csyha",
+      "name": "测试用户A",
+      "unique": "3b272544-12e3-41ab-96dd-5fa570d2b555",
+      "distinguishedName": "测试用户A@3b272544-12e3-41ab-96dd-5fa570d2b555@P",
+      "orderNumber": 275084058,
+      "lastLoginTime": "2026-09-19 23:34:30",
+      "lastLoginAddress": "172.22.0.1",
+      "lastLoginClient": "",
+      "mobile": "13800000002",
+      "status": "0",
+      "createTime": "2026-09-19 20:14:18",
+      "updateTime": "2026-09-19 23:34:30"
+    },
+    {
+      "control": {
+        "allowEdit": true,
+        "allowDelete": true
+      },
+      "id": "1f897dfd-2c8e-47ce-821c-d336a0a69128",
+      "pinyin": "wangguanfuwuhao",
+      "pinyinInitial": "wgfwh",
+      "name": "网关服务号",
+      "unique": "4582d166-6062-4772-9985-70a103002c87",
+      "distinguishedName": "网关服务号@4582d166-6062-4772-9985-70a103002c87@P",
+      "orderNumber": 275083534,
+      "lastLoginTime": "2026-09-19 21:09:41",
+      "lastLoginAddress": "172.22.0.1",
+      "lastLoginClient": "",
+      "mobile": "13800000001",
+      "status": "0",
+      "createTime": "2026-09-19 20:05:35",
+      "updateTime": "2026-09-19 21:09:41"
+    }
+  ],
+  "message": "",
+  "date": "2026-09-20 09:00:36",
+  "spent": 58,
+  "size": 3,
+  "count": 3,
+  "position": 0
+}

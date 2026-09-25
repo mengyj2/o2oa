@@ -1,0 +1,27 @@
+{
+  "id": "s2002006-contract-pay-by-month-00000001",
+  "name": "合同付款趋势",
+  "alias": "合同付款趋势",
+  "description": "按付款日期统计付款金额，输出趋势折线",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v2002006-contract-pay-view-0000000000001",
+  "categoryPath": "pay_date",
+  "valuePath": "pay_amount",
+  "categoryTitle": "付款日期",
+  "valueTitle": "付款金额（元）",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "line",
+      "column",
+      "bar"
+    ],
+    "defaultChartType": "line"
+  }
+}

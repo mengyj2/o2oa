@@ -1,0 +1,29 @@
+{
+  "id": "s6006007-hr-point-by-period-0000000001",
+  "name": "按年度统计积分",
+  "alias": "按年度统计积分",
+  "description": "年度积分与永久积分的年度分布",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006009-hr-point-view-00000000000000001",
+  "categoryPath": "point_year",
+  "valuePath": "total_point",
+  "categoryTitle": "年度",
+  "valueTitle": "积分",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "column",
+      "line"
+    ],
+    "defaultChartType": "column",
+    "showLegend": true,
+    "showLabel": true,
+    "moreLink": "v6006009-hr-point-view-00000000000000001"
+  }
+}

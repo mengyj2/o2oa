@@ -1,0 +1,27 @@
+{
+  "id": "s1001005-project-risk-stat-00000000001",
+  "name": "项目风险分布统计",
+  "alias": "项目风险分布统计",
+  "description": "按风险等级统计报告数量",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v1001003-project-progress-view-000000001",
+  "categoryPath": "risk_level",
+  "valuePath": "project_no",
+  "categoryTitle": "风险等级",
+  "valueTitle": "报告数",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

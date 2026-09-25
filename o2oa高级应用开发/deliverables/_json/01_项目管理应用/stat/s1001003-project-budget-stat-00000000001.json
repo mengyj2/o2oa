@@ -1,0 +1,27 @@
+{
+  "id": "s1001003-project-budget-stat-00000000001",
+  "name": "部门预算分布统计",
+  "alias": "部门预算分布统计",
+  "description": "按主办部门统计项目总预算",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v1001001-project-list-view-00000000001",
+  "categoryPath": "dept_name",
+  "valuePath": "total_budget",
+  "categoryTitle": "主办部门",
+  "valueTitle": "总预算",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

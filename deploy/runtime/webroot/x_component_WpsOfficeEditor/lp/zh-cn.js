@@ -1,0 +1,4 @@
+
+MWF.xApplication.WpsOfficeEditor.LP= {
+	"title": "空"
+};

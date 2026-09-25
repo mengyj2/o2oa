@@ -1,0 +1,24 @@
+<div class="file_newpop">
+    <form class="ant-form ant-form-horizontal">
+        <div class="ant-row ant-form-item">
+            <div class="ant-col ant-form-item-control-wrapper">
+                <div class="ant-form-item-control">
+                    <span class="ant-form-item-children"><input placeholder="请输入文件夹名" type="text" class="ant-input" value="{{$.name}}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="ant-row ant-form-item" data-o2-element="openFolderNode">
+            <div class="ant-col ant-form-item-control-wrapper">
+                <div class="ant-form-item-control">
+                    <span class="ant-form-item-children">
+                        <div class="path-input" >
+                            <i class="iconfont icon_folder"></i>
+                            <span class="path-name" folderId = "{{$.folderId}}">{{$.folderName}}</span>
+                            <i class="iconfont icon_down2"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

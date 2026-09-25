@@ -1,0 +1,131 @@
+<div id="cloudDocument">
+    <div id="header">
+        <div class="header">
+            <div class="header_wrap ">
+                <div class="header_logo">
+                    <span class="header_logo_img"></span>
+                </div>
+                <div class="header_user">
+                    <div class="userpanel" data-o2-element="userpanel" data-o2-events="click:showUserPanel">
+                        <div class="userpanel-avatar">
+                            <span class="ant-avatar ant-avatar-circle ant-avatar-image">
+                                <img src="data:image/png;base64,{{$.user.icon}}"/>
+                            </span>
+                        </div>
+                        <i class="iconfont icon_down2" style="color: rgb(255, 255, 255); font-size: 10px;"></i>
+                    </div>
+                </div>
+                <div class="header_search">
+                    <div class="searchbar ant-select-show-search ant-select-auto-complete
+                    ant-select ant-select-combobox ant-select-enabled">
+                        <div class="ant-select-selection ant-select-selection--single" >
+                            <div class="ant-select-selection__rendered">
+                                <ul>
+                                    <li class="ant-select-search ant-select-search--inline">
+                                        <div class="ant-select-search__field__wrap">
+                                             <span class="searchbar-input ant-select-search__field ant-input-affix-wrapper">
+                                                 <span class="ant-input-prefix">
+                                                     <i class="iconfont icon_search2" ></i>
+                                                 </span>
+                                                 <input class="ant-input" maxlength="60" type="text" value=""
+                                                        data-o2-events="keyup:search;" data-o2-element="searchInputNode" />
+                                                 <span class="ant-input-suffix">
+                                                     <i class="iconfont icon_close2 none"
+                                                        data-o2-element="searchCloseNode" data-o2-events="click:cancelSearch" ></i>
+                                                     <span>
+                                                        <i class="iconfont icon_down2" style="font-size: 12px"></i>
+                                                     </span>
+                                                 </span>
+                                             </span>
+                                            <span class="ant-select-search__field__mirror">&nbsp;</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu">
+            <div class="menu_wrap">
+                <ul class="ant-menu ant-dropdown-trigger ant-menu-light ant-menu-root ant-menu-inline"
+                    data-o2-element="menuNode">
+                    <li class="ant-menu-item ant-menu-item-selected" menuType="folder">
+                        <span class="team-name">
+                            <i class="iconfont icon_file"></i>
+                            <span class="team-text">我的文档</span>
+                        </span>
+                    </li>
+                    <li class="ant-menu-item" menuType="latest">
+                        <span class="team-name">
+                            <i class="iconfont icon_latest"></i>
+                            <span class="team-text">最近浏览</span>
+                        </span>
+                    </li>
+                    <li class="ant-menu-item" menuType="share">
+                        <span class="team-name">
+                            <i class="iconfont icon_share"></i>
+                            <span class="team-text">我的分享</span>
+                        </span>
+                    </li>
+                    <li class="ant-menu-item" menuType="fav">
+                        <span class="team-name">
+                            <i class="iconfont icon_fav"></i>
+                            <span class="team-text">星标文档</span>
+                        </span>
+                    </li>
+                    <li class="ant-menu-item" menuType="recycle">
+                        <span class="team-name">
+                            <i class="iconfont icon_recycler"></i>
+                            <span class="team-text">回收站</span>
+                        </span>
+                    </li>
+                </ul>
+                <div class="menu_team" style="display: none">
+                    <div class="menu_team_wrap">
+                        <div class="menu_team_title">
+                            <span>我的团队</span>
+                            <span class="add-team" data-o2-element="addTeamNode" data-o2-events="click:addTeam;" >
+                                <i class="iconfont icon_plus"></i>
+                            </span>
+                        </div>
+                        <div data-o2-element="teamNode" class="cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="root">
+        <div class="root">
+            <div class="root_wrap" data-o2-element="contentNode">
+                <div class="root_head" data-o2-element="rootHeadNode">
+                    <span class="breadcrumb ant-breadcrumb" data-o2-element="breadNode"></span>
+                    <div class="root_head_tool" data-o2-element="actionNode">
+                        <button type="button" class="ant-btn dropdown-button ant-dropdown-trigger" style="margin-right: 10px;"
+                                data-o2-element="addOpNode" data-o2-events="click:new;">
+                            <span class="text">新建</span>
+                            <i class="iconfont icon_down2" style="font-size: 10px"></i>
+                        </button>
+                        <button type="button" class="ant-btn dropdown-button ant-dropdown-trigger"
+                                data-o2-element="uploadOpNode" data-o2-events="click:upload;">
+                            <span class="text">上传</span>
+                            <i class="iconfont icon_down2" style="font-size: 10px"></i>
+                        </button>
+                        <button type="button" class=" ant-btn clear-btn ant-btn-ghost none"
+                                data-o2-element="clearAllOpNode" data-o2-events="click:clearAll;">
+                            <span>清空回收站</span>
+                        </button>
+                    </div>
+                </div>
+                <div class=" root_content">
+                    <div class="root_row_title" data-o2-element="fileListTitleNode">
+                    </div>
+                    <div class="root_row_content" data-o2-element="fileListNode">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

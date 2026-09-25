@@ -1,0 +1,20 @@
+{
+  "id": "q6006005-hr-job-apply-join-000000000001",
+  "name": "岗位报名全量",
+  "alias": "岗位报名全量",
+  "description": "报名记录带岗位标准职级/竞聘类型/截止时间",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT a.id AS id, a.apply_no AS apply_no, a.job_no AS job_no, a.job_name AS job_name, a.recruit_dept AS recruit_dept, a.employee_no AS employee_no, a.employee_name AS employee_name, a.dept AS dept, a.position AS position, a.grade AS grade, a.join_date AS join_date, a.apply_date AS apply_date, a.is_summary AS is_summary, a.apply_status AS apply_status, a.interview_score AS interview_score, a.apply_result AS apply_result, a.process_id AS process_id, j.standard_grade AS standard_grade, j.bid_type AS bid_type, j.recruit_count AS recruit_count, j.publish_date AS publish_date, j.deadline AS deadline, j.job_status AS job_status FROM hr_job_apply a LEFT JOIN hr_job j ON j.job_no = a.job_no",
+  "sql": "SELECT a.id AS id, a.apply_no AS apply_no, a.job_no AS job_no, a.job_name AS job_name, a.recruit_dept AS recruit_dept, a.employee_no AS employee_no, a.employee_name AS employee_name, a.dept AS dept, a.position AS position, a.grade AS grade, a.join_date AS join_date, a.apply_date AS apply_date, a.is_summary AS is_summary, a.apply_status AS apply_status, a.interview_score AS interview_score, a.apply_result AS apply_result, a.process_id AS process_id, j.standard_grade AS standard_grade, j.bid_type AS bid_type, j.recruit_count AS recruit_count, j.publish_date AS publish_date, j.deadline AS deadline, j.job_status AS job_status FROM hr_job_apply a LEFT JOIN hr_job j ON j.job_no = a.job_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

@@ -1,0 +1,15 @@
+{
+  "id": "t3003001-budget-master-table-000000001",
+  "name": "t3003001_budget_master_table",
+  "alias": "预算主表",
+  "description": "预算主数据，与项目/财务应用共享",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"budget_no\", \"description\": \"预算编号\", \"type\": \"string\"}, {\"name\": \"budget_name\", \"description\": \"预算名称\", \"type\": \"string\"}, {\"name\": \"budget_type\", \"description\": \"预算类别\", \"type\": \"string\"}, {\"name\": \"budget_year\", \"description\": \"预算年度\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"dept_name\", \"description\": \"编制部门\", \"type\": \"string\"}, {\"name\": \"fund_source\", \"description\": \"资金来源\", \"type\": \"string\"}, {\"name\": \"total_amount\", \"description\": \"预算总额\", \"type\": \"double\"}, {\"name\": \"executed_amount\", \"description\": \"已执行金额\", \"type\": \"double\"}, {\"name\": \"remain_amount\", \"description\": \"剩余额度\", \"type\": \"double\"}, {\"name\": \"exec_rate\", \"description\": \"执行率\", \"type\": \"double\"}, {\"name\": \"budget_status\", \"description\": \"预算状态\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"budget_no\", \"description\": \"预算编号\", \"type\": \"string\"}, {\"name\": \"budget_name\", \"description\": \"预算名称\", \"type\": \"string\"}, {\"name\": \"budget_type\", \"description\": \"预算类别\", \"type\": \"string\"}, {\"name\": \"budget_year\", \"description\": \"预算年度\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"dept_name\", \"description\": \"编制部门\", \"type\": \"string\"}, {\"name\": \"fund_source\", \"description\": \"资金来源\", \"type\": \"string\"}, {\"name\": \"total_amount\", \"description\": \"预算总额\", \"type\": \"double\"}, {\"name\": \"executed_amount\", \"description\": \"已执行金额\", \"type\": \"double\"}, {\"name\": \"remain_amount\", \"description\": \"剩余额度\", \"type\": \"double\"}, {\"name\": \"exec_rate\", \"description\": \"执行率\", \"type\": \"double\"}, {\"name\": \"budget_status\", \"description\": \"预算状态\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

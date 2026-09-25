@@ -1,0 +1,28 @@
+{
+  "id": "s6006003-hr-emp-by-education-00000000001",
+  "name": "按学历统计员工人数",
+  "alias": "按学历统计员工人数",
+  "description": "专科/本科/硕士/博士学历分布",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006001-hr-employee-all-view-0000000001",
+  "categoryPath": "education",
+  "valuePath": "count",
+  "categoryTitle": "最高学历",
+  "valueTitle": "人数",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ],
+    "defaultChartType": "pie"
+  }
+}

@@ -1,0 +1,336 @@
+{
+  "id": "v2002009-contract-expire-view-0000000001",
+  "name": "合同到期预警",
+  "alias": "合同到期预警",
+  "description": "90 天内到期的履行中合同清单",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "enableCache": true,
+  "data": "{\"where\": {\"accessible\": true, \"scope\": \"all\"}, \"noDataText\": \"未找到数据\", \"selectList\": [{\"column\": \"col_0\", \"displayName\": \"合同名称\", \"path\": \"contract_name\", \"id\": \"v2002009-contract-expire-view-0000000001_col0\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_1\", \"displayName\": \"合同编号\", \"path\": \"contract_no\", \"id\": \"v2002009-contract-expire-view-0000000001_col1\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_2\", \"displayName\": \"签约单位\", \"path\": \"sign_unit\", \"id\": \"v2002009-contract-expire-view-0000000001_col2\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_3\", \"displayName\": \"到期日期\", \"path\": \"end_date\", \"id\": \"v2002009-contract-expire-view-0000000001_col3\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_4\", \"displayName\": \"履约进度%\", \"path\": \"perform_rate\", \"id\": \"v2002009-contract-expire-view-0000000001_col4\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_5\", \"displayName\": \"合同金额\", \"path\": \"contract_amount\", \"id\": \"v2002009-contract-expire-view-0000000001_col5\", \"hideColumn\": false, \"orderType\": \"original\"}, {\"column\": \"col_6\", \"displayName\": \"合同状态\", \"path\": \"contract_status\", \"id\": \"v2002009-contract-expire-view-0000000001_col6\", \"hideColumn\": false, \"orderType\": \"original\"}], \"filterList\": [], \"customFilterList\": [], \"orderList\": [], \"group\": {}, \"columnList\": [], \"calculate\": {}, \"afterGridScriptText\": \"\", \"afterGroupGridScriptText\": \"\", \"afterCalculateGridScriptText\": \"\", \"exportGrid\": true, \"isExpand\": \"no\", \"isSequence\": false, \"events\": {}, \"viewStyleType\": \"list\", \"viewStyles\": {}, \"actionbarList\": [], \"pagingList\": [], \"actionbarHidden\": false, \"select\": \"none\", \"selectBoxShow\": false, \"allowSelectAll\": false, \"firstTdHidden\": true, \"pagingbarHidden\": false, \"searchbarHidden\": false, \"languageType\": \"default\"}",
+  "type": "table",
+  "display": true,
+  "cacheAccess": true,
+  "processList": [],
+  "cmsCategoryList": [],
+  "tableList": [
+    "t2002001-contract-main-table-0000000001"
+  ],
+  "filterScript": "return (this.data.contract_status === '履行中') && (this.data.end_date !== null) && (new Date(this.data.end_date).getTime() - new Date().getTime() <= 90*24*3600*1000);",
+  "orderBy": "end_date asc",
+  "columnList": [
+    {
+      "id": "col_0",
+      "title": "合同名称",
+      "path": "contract_name",
+      "name": "contract_name",
+      "width": "220px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "合同编号",
+      "path": "contract_no",
+      "name": "contract_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "签约单位",
+      "path": "sign_unit",
+      "name": "sign_unit",
+      "width": "200px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "到期日期",
+      "path": "end_date",
+      "name": "end_date",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "履约进度%",
+      "path": "perform_rate",
+      "name": "perform_rate",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "合同金额",
+      "path": "contract_amount",
+      "name": "contract_amount",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "合同状态",
+      "path": "contract_status",
+      "name": "contract_status",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "columns": [
+    {
+      "id": "col_0",
+      "title": "合同名称",
+      "path": "contract_name",
+      "name": "contract_name",
+      "width": "220px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": true
+    },
+    {
+      "id": "col_1",
+      "title": "合同编号",
+      "path": "contract_no",
+      "name": "contract_no",
+      "width": "160px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_2",
+      "title": "签约单位",
+      "path": "sign_unit",
+      "name": "sign_unit",
+      "width": "200px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_3",
+      "title": "到期日期",
+      "path": "end_date",
+      "name": "end_date",
+      "width": "120px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_4",
+      "title": "履约进度%",
+      "path": "perform_rate",
+      "name": "perform_rate",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_5",
+      "title": "合同金额",
+      "path": "contract_amount",
+      "name": "contract_amount",
+      "width": "140px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    },
+    {
+      "id": "col_6",
+      "title": "合同状态",
+      "path": "contract_status",
+      "name": "contract_status",
+      "width": "110px",
+      "isSort": true,
+      "sortType": "asc",
+      "hidden": false,
+      "isTitle": false
+    }
+  ],
+  "afterGridScriptText": "",
+  "afterGroupGridScriptText": "",
+  "afterCalculateGridScriptText": "",
+  "code": "",
+  "properties": {
+    "isExport": true,
+    "isSearch": true,
+    "searchPlaceholder": "输入关键字搜索视图",
+    "isAdvanceSearch": true,
+    "isSelectAll": true,
+    "isPage": true,
+    "pageSize": 20,
+    "showPageBar": true,
+    "pageBarButtons": [
+      "第一页",
+      "上一页",
+      "下一页",
+      "最后一页"
+    ],
+    "showOperateBar": true,
+    "operateBarWidth": "150px",
+    "rowHeight": "36px",
+    "striped": true,
+    "bordered": true,
+    "hoverable": true,
+    "toolbarButtonList": [
+      {
+        "id": "btn_exportExcel",
+        "name": "导出Excel",
+        "title": "导出Excel",
+        "type": "toolbar",
+        "target": "",
+        "icon": "",
+        "order": 0,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_receivePlan",
+        "name": "发起收款计划编制",
+        "title": "发起收款计划编制",
+        "type": "process",
+        "target": "p2002005-contract-receive-plan-00000001",
+        "icon": "",
+        "order": 1,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      },
+      {
+        "id": "btn_payPlan",
+        "name": "发起付款计划编制",
+        "title": "发起付款计划编制",
+        "type": "process",
+        "target": "p2002009-contract-pay-plan-0000000001",
+        "icon": "",
+        "order": 2,
+        "style": {
+          "border": "1px solid #a8c7e8",
+          "background": "#f2f7fd",
+          "color": "#1a5fa8",
+          "borderRadius": "3px",
+          "padding": "4px 12px",
+          "marginRight": "6px",
+          "height": "28px",
+          "lineHeight": "20px",
+          "fontSize": "13px",
+          "cursor": "pointer"
+        }
+      }
+    ]
+  },
+  "toolbarButtonList": [
+    {
+      "id": "btn_exportExcel",
+      "name": "导出Excel",
+      "title": "导出Excel",
+      "type": "toolbar",
+      "target": "",
+      "icon": "",
+      "order": 0,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_receivePlan",
+      "name": "发起收款计划编制",
+      "title": "发起收款计划编制",
+      "type": "process",
+      "target": "p2002005-contract-receive-plan-00000001",
+      "icon": "",
+      "order": 1,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    },
+    {
+      "id": "btn_payPlan",
+      "name": "发起付款计划编制",
+      "title": "发起付款计划编制",
+      "type": "process",
+      "target": "p2002009-contract-pay-plan-0000000001",
+      "icon": "",
+      "order": 2,
+      "style": {
+        "border": "1px solid #a8c7e8",
+        "background": "#f2f7fd",
+        "color": "#1a5fa8",
+        "borderRadius": "3px",
+        "padding": "4px 12px",
+        "marginRight": "6px",
+        "height": "28px",
+        "lineHeight": "20px",
+        "fontSize": "13px",
+        "cursor": "pointer"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "t1001001-project-master-table-00000001",
+  "name": "t1001001_project_master_table",
+  "alias": "项目主表",
+  "description": "项目主数据，作为五大应用的关联基础",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"project_name\", \"description\": \"项目名称\", \"type\": \"string\"}, {\"name\": \"project_type\", \"description\": \"项目类别\", \"type\": \"string\"}, {\"name\": \"project_status\", \"description\": \"项目状态\", \"type\": \"string\"}, {\"name\": \"project_level\", \"description\": \"项目级别\", \"type\": \"string\"}, {\"name\": \"dept_name\", \"description\": \"主办部门\", \"type\": \"string\"}, {\"name\": \"manager\", \"description\": \"项目负责人\", \"type\": \"string\"}, {\"name\": \"start_date\", \"description\": \"计划开始日期\", \"type\": \"date\"}, {\"name\": \"end_date\", \"description\": \"计划结束日期\", \"type\": \"date\"}, {\"name\": \"total_budget\", \"description\": \"总预算（元）\", \"type\": \"double\"}, {\"name\": \"fund_source\", \"description\": \"资金来源\", \"type\": \"string\"}, {\"name\": \"project_goal\", \"description\": \"项目目标\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"关联合同编号\", \"type\": \"string\"}, {\"name\": \"budget_no\", \"description\": \"关联预算编号\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}, {\"name\": \"update_time\", \"description\": \"更新时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"project_name\", \"description\": \"项目名称\", \"type\": \"string\"}, {\"name\": \"project_type\", \"description\": \"项目类别\", \"type\": \"string\"}, {\"name\": \"project_status\", \"description\": \"项目状态\", \"type\": \"string\"}, {\"name\": \"project_level\", \"description\": \"项目级别\", \"type\": \"string\"}, {\"name\": \"dept_name\", \"description\": \"主办部门\", \"type\": \"string\"}, {\"name\": \"manager\", \"description\": \"项目负责人\", \"type\": \"string\"}, {\"name\": \"start_date\", \"description\": \"计划开始日期\", \"type\": \"date\"}, {\"name\": \"end_date\", \"description\": \"计划结束日期\", \"type\": \"date\"}, {\"name\": \"total_budget\", \"description\": \"总预算（元）\", \"type\": \"double\"}, {\"name\": \"fund_source\", \"description\": \"资金来源\", \"type\": \"string\"}, {\"name\": \"project_goal\", \"description\": \"项目目标\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"关联合同编号\", \"type\": \"string\"}, {\"name\": \"budget_no\", \"description\": \"关联预算编号\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}, {\"name\": \"update_time\", \"description\": \"更新时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

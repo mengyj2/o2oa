@@ -1,0 +1,28 @@
+{
+  "id": "s6006004-hr-emp-by-nature-000000000001",
+  "name": "按用工性质统计员工人数",
+  "alias": "按用工性质统计员工人数",
+  "description": "正式编制/劳务派遣/顾问等用工性质分布",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v6006001-hr-employee-all-view-0000000001",
+  "categoryPath": "work_nature",
+  "valuePath": "count",
+  "categoryTitle": "用工性质",
+  "valueTitle": "人数",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ],
+    "defaultChartType": "pie"
+  }
+}

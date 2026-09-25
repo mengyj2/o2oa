@@ -1,0 +1,15 @@
+{
+  "id": "t4004001-expense-master-table-00000001",
+  "name": "t4004001_expense_master_table",
+  "alias": "报销主表",
+  "description": "报销主数据，与项目/预算/合同应用共享",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"expense_no\", \"description\": \"报销单号\", \"type\": \"string\"}, {\"name\": \"expense_title\", \"description\": \"报销事项\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"budget_no\", \"description\": \"关联预算编号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"关联合同编号\", \"type\": \"string\"}, {\"name\": \"expense_type\", \"description\": \"报销类型\", \"type\": \"string\"}, {\"name\": \"applicant\", \"description\": \"报销人\", \"type\": \"string\"}, {\"name\": \"apply_dept\", \"description\": \"所在部门\", \"type\": \"string\"}, {\"name\": \"apply_date\", \"description\": \"申请日期\", \"type\": \"date\"}, {\"name\": \"total_amount\", \"description\": \"报销总金额\", \"type\": \"double\"}, {\"name\": \"payee_name\", \"description\": \"收款人\", \"type\": \"string\"}, {\"name\": \"pay_status\", \"description\": \"支付状态\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"expense_no\", \"description\": \"报销单号\", \"type\": \"string\"}, {\"name\": \"expense_title\", \"description\": \"报销事项\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"budget_no\", \"description\": \"关联预算编号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"关联合同编号\", \"type\": \"string\"}, {\"name\": \"expense_type\", \"description\": \"报销类型\", \"type\": \"string\"}, {\"name\": \"applicant\", \"description\": \"报销人\", \"type\": \"string\"}, {\"name\": \"apply_dept\", \"description\": \"所在部门\", \"type\": \"string\"}, {\"name\": \"apply_date\", \"description\": \"申请日期\", \"type\": \"date\"}, {\"name\": \"total_amount\", \"description\": \"报销总金额\", \"type\": \"double\"}, {\"name\": \"payee_name\", \"description\": \"收款人\", \"type\": \"string\"}, {\"name\": \"pay_status\", \"description\": \"支付状态\", \"type\": \"string\"}, {\"name\": \"process_id\", \"description\": \"关联流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

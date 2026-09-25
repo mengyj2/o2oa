@@ -1,0 +1,92 @@
+{
+  "id": "o6006001-hr-portal-00000000000000001",
+  "name": "人力资源管理门户",
+  "alias": "人力资源管理门户",
+  "description": "人力资源管理应用门户（对齐 O2OA 官方人力资源系统版式）",
+  "portalCategory": "综合管理",
+  "icon": "",
+  "firstPage": "o6006002-hr-portal-home-page-000000000001",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "controllerList": [],
+  "availableIdentityList": [],
+  "availableUnitList": [],
+  "pcClient": true,
+  "mobileClient": false,
+  "pageList": [
+    {
+      "id": "o6006002-hr-portal-home-page-000000000001",
+      "name": "人力资源首页",
+      "alias": "人力资源首页",
+      "description": "官方矩阵式首页",
+      "portal": "o6006001-hr-portal-00000000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o6006002-hr-portal-home-page-000000000001\\\", \\\"name\\\": \\\"人力资源首页\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o6006001-hr-portal-000000000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o6006003-hr-portal-emp-page-0000000000001",
+      "name": "员工档案",
+      "alias": "员工档案",
+      "description": "员工档案与档案查询",
+      "portal": "o6006001-hr-portal-00000000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o6006003-hr-portal-emp-page-0000000000001\\\", \\\"name\\\": \\\"员工档案\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o6006001-hr-portal-00000000000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o6006004-hr-portal-job-page-0000000000001",
+      "name": "人才市场",
+      "alias": "人才市场",
+      "description": "岗位池与竞聘报名",
+      "portal": "o6006001-hr-portal-00000000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o6006004-hr-portal-job-page-0000000000001\\\", \\\"name\\\": \\\"人才市场\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o6006001-hr-portal-00000000000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o6006005-hr-portal-point-page-00000000001",
+      "name": "积分管理",
+      "alias": "积分管理",
+      "description": "我的积分与排名公示",
+      "portal": "o6006001-hr-portal-00000000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o6006005-hr-portal-point-page-00000000001\\\", \\\"name\\\": \\\"积分管理\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o6006001-hr-portal-00000000000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o6006006-hr-portal-attend-page-0000000001",
+      "name": "考勤管理",
+      "alias": "考勤管理",
+      "description": "考勤月历与统计",
+      "portal": "o6006001-hr-portal-00000000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o6006006-hr-portal-attend-page-0000000001\\\", \\\"name\\\": \\\"考勤管理\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o6006001-hr-portal-00000000000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o6006007-hr-portal-self-page-000000000001",
+      "name": "员工自助",
+      "alias": "员工自助",
+      "description": "员工自助一站式入口",
+      "portal": "o6006001-hr-portal-00000000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o6006007-hr-portal-self-page-000000000001\\\", \\\"name\\\": \\\"员工自助\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o6006001-hr-portal-00000000000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o6006008-hr-portal-chg-page-0000000000001",
+      "name": "员工管理",
+      "alias": "员工管理",
+      "description": "入职/转正/调动/离职办理",
+      "portal": "o6006001-hr-portal-00000000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o6006008-hr-portal-chg-page-0000000000001\\\", \\\"name\\\": \\\"员工管理\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o6006001-hr-portal-00000000000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    }
+  ],
+  "scriptList": [],
+  "fileList": [],
+  "widgetList": []
+}

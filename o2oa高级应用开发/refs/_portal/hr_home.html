@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>人力资源管理系统</title>
+<style>
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0;
+  font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px; color: #2d3748; background: #f5f7fa;
+}
+a { color: #2b6cb0; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------- 顶栏 ---------- */
+.op-topbar {
+  height: 34px; line-height: 34px; padding: 0 16px;
+  background: #fff; border-bottom: 1px solid #e2e8f0;
+  font-size: 12px; color: #4a5568;
+}
+.op-topbar .greet { float: left; }
+.op-topbar .greet b { color: #1a5fa8; }
+.op-topbar .acts { float: right; }
+.op-topbar .acts a { margin-left: 14px; color: #4a5568; }
+
+/* ---------- 品牌条 ---------- */
+.op-brand {
+  height: 96px; padding: 0 24px;
+  background: linear-gradient(100deg, #eaf3fc 0%, #dbe9f8 48%, #cfe2f6 100%);
+  border-bottom: 1px solid #e2e8f0;
+  position: relative; overflow: hidden;
+}
+.op-brand .logo {
+  position: absolute; left: 24px; top: 22px;
+}
+.op-brand .logo-mark {
+  display: inline-block; width: 30px; height: 30px; border-radius: 4px;
+  background: #2b6cb0; color: #fff; text-align: center;
+  line-height: 30px; font-size: 11px; font-weight: 700; letter-spacing: -.5px;
+  vertical-align: middle;
+}
+.op-brand .logo-text { display: inline-block; vertical-align: middle; margin-left: 10px; }
+.op-brand .logo-text .cn { font-size: 17px; color: #1a5fa8; letter-spacing: 3px; font-weight: 600; }
+.op-brand .logo-text .en { font-size: 10px; color: #94a3b8; letter-spacing: 1px; }
+.op-brand .art {
+  position: absolute; right: 26px; top: 12px; width: 300px; height: 72px;
+}
+.op-brand .art .dev {
+  position: absolute; right: 96px; top: 8px; width: 118px; height: 58px;
+  background: #2f3a4a; border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(43,108,176,.25);
+}
+.op-brand .art .dev:after {
+  content: ""; position: absolute; right: 4px; bottom: 4px; width: 30px; height: 30px;
+  border-radius: 50%; background: #2b6cb0;
+}
+.op-brand .art .plane {
+  position: absolute; right: 40px; top: 0; font-size: 34px; color: #2b6cb0;
+  opacity: .75; transform: rotate(-12deg);
+}
+
+/* ---------- 主体两栏 ---------- */
+.op-main { display: flex; align-items: stretch; min-height: 560px; }
+
+/* ---------- 左侧导航树 ---------- */
+.op-side {
+  width: 186px; flex: 0 0 186px;
+  background: #fff; border-right: 1px solid #e2e8f0;
+  padding-bottom: 20px;
+}
+.op-side .side-title {
+  padding: 12px 16px 10px; font-size: 14px; color: #2d3748; font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+}
+.op-side ul { list-style: none; margin: 0; padding: 0; }
+.op-side li > a, .op-side li > span {
+  display: block; position: relative;
+  padding: 8px 12px 8px 26px;
+  font-size: 13px; color: #4a5568;
+}
+.op-side li.lv1 > a, .op-side li.lv1 > span {
+  padding-left: 14px; font-weight: 600; color: #2d3748;
+}
+.op-side li.lv1 > a:before, .op-side li.lv1 > span:before {
+  content: "\25B8"; display: inline-block; width: 14px; color: #94a3b8;
+}
+.op-side li.lv1.on > a:before { content: "\25BE"; }
+.op-side li.lv2 > a { color: #5a6577; }
+.op-side li.active {
+  background: #e8f0fa;
+}
+.op-side li.active > a { color: #1a5fa8; font-weight: 600; }
+.op-side li.active:before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: #2b6cb0;
+}
+.op-side li { position: relative; }
+.op-side .badge { color: #94a3b8; font-size: 12px; }
+
+/* ---------- 右内容区 ---------- */
+.op-content { flex: 1 1 auto; padding: 0 14px 18px; min-width: 0; }
+
+/* ---------- 卡片 ---------- */
+.op-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 3px;
+  margin-top: 14px;
+}
+.op-card > .hd {
+  position: relative; height: 38px; line-height: 38px;
+  padding: 0 12px 0 14px; border-bottom: 1px solid #e2e8f0;
+}
+.op-card > .hd:before {
+  content: ""; position: absolute; left: 0; top: 11px; width: 3px; height: 16px;
+  background: #2b6cb0;
+}
+.op-card > .hd .t { font-size: 14px; color: #2d3748; font-weight: 600; }
+.op-card > .hd .more { float: right; font-size: 12px; color: #4a5568; }
+.op-card > .bd { padding: 0; }
+
+/* 选项卡（待办事项 / 已办事项） */
+.op-tabs { border-bottom: 1px solid #e2e8f0; padding: 0 8px; height: 40px; }
+.op-tabs .tab {
+  display: inline-block; height: 40px; line-height: 40px;
+  padding: 0 14px; font-size: 14px; color: #4a5568; cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.op-tabs .tab.on { color: #1a5fa8; font-weight: 600; border-bottom-color: #2b6cb0; }
+.op-tabs .right { float: right; height: 40px; line-height: 40px; font-size: 12px; }
+
+/* ---------- 数据表格 ---------- */
+.op-table { width: 100%; border-collapse: collapse; }
+.op-table th, .op-table td {
+  padding: 9px 10px; font-size: 12.5px; text-align: left;
+  border-bottom: 1px solid #eef2f7;
+}
+.op-table th { color: #4a5568; font-weight: 500; background: #fafcfe; }
+.op-table tbody tr:nth-child(even) { background: #f7fafc; }
+.op-table td.idx { width: 22px; color: #2b6cb0; }
+.op-table td.title { color: #2d3748; }
+.op-table td.ctr, .op-table td.date { color: #718096; width: 110px; }
+.op-table td.tag { width: 96px; color: #718096; }
+
+/* 分页 */
+.op-page { padding: 10px 12px; text-align: center; }
+.op-page .pg {
+  display: inline-block; min-width: 52px; height: 24px; line-height: 22px;
+  padding: 0 10px; margin: 0 5px; font-size: 12px;
+  border: 1px solid #e2e8f0; border-radius: 2px;
+  background: #fff; color: #4a5568; cursor: pointer;
+}
+.op-page .pg:hover { border-color: #2b6cb0; color: #1a5fa8; }
+
+/* ---------- 图表 ---------- */
+.op-charts { display: flex; gap: 14px; margin-top: 14px; align-items: stretch; }
+.op-charts > .op-card { flex: 1 1 0; margin-top: 0; min-width: 0; }
+.op-chart-tools { padding: 8px 12px 0; }
+.op-chart-tools .tg {
+  display: inline-block; height: 24px; line-height: 22px; padding: 0 12px;
+  margin-right: 6px; font-size: 12px; cursor: pointer;
+  border: 1px solid #e2e8f0; border-radius: 3px;
+  background: #fff; color: #4a5568;
+}
+.op-chart-tools .tg.on { background: #2b6cb0; border-color: #2b6cb0; color: #fff; }
+.op-chart-body { padding: 12px 16px 16px; }
+.op-chart-title { text-align: center; font-size: 13px; color: #2d3748; margin-bottom: 6px; }
+.op-legend { margin-top: 10px; padding-left: 6px; }
+.op-legend .lg {
+  display: inline-block; margin: 2px 14px 2px 0; font-size: 12px; color: #4a5568;
+}
+.op-legend .lg i {
+  display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+  margin-right: 5px; vertical-align: middle;
+}
+
+/* ---------- 快捷入口（彩色图标） ---------- */
+.op-quick { display: flex; flex-wrap: wrap; padding: 14px 10px; gap: 6px; }
+.op-quick .q {
+  width: 88px; text-align: center; padding: 10px 4px; border-radius: 4px;
+}
+.op-quick .q:hover { background: #f7fafc; }
+.op-quick .q .ic {
+  width: 44px; height: 44px; line-height: 44px; margin: 0 auto 7px;
+  border-radius: 50%; color: #fff; font-size: 19px; text-align: center;
+}
+.op-quick .q .lb { font-size: 12px; color: #4a5568; }
+
+/* ---------- 品牌条 ---------- */
+.hr-brand {
+  height: 52px; line-height: 52px; padding: 0 26px;
+  font-size: 19px; font-weight: 700; color: #1a5fa8;
+  background: linear-gradient(90deg, #f4f9ff 0%, #ffffff 62%);
+  border-bottom: 1px solid #e2e8f0; letter-spacing: .5px;
+}
+.hr-brand .mark { color: #2b6cb0; margin-right: 6px; }
+
+/* ---------- HR 顶部一级导航 ---------- */
+.hr-nav {
+  height: 44px; line-height: 44px; padding: 0 26px;
+  border-bottom: 1px solid #e2e8f0; background: #fff;
+  white-space: nowrap; overflow-x: auto;
+}
+.hr-nav a {
+  display: inline-block; height: 44px; line-height: 44px;
+  padding: 0 20px; font-size: 14.5px; color: #4a5568;
+  border-bottom: 2px solid transparent;
+}
+.hr-nav a.on { color: #1a5fa8; font-weight: 600; border-bottom-color: #2b6cb0; }
+
+/* ---------- HR 二级标签 ---------- */
+.hr-subnav {
+  height: 38px; line-height: 38px; padding: 0 26px;
+  background: #fbfdff; border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap; overflow-x: auto;
+}
+.hr-subnav a {
+  display: inline-block; padding: 0 14px; font-size: 12.5px; color: #4a5568;
+}
+.hr-subnav a.on { color: #1a5fa8; font-weight: 600; }
+
+/* ---------- 矩阵卡片 ---------- */
+.hr-matrix { padding: 14px 18px 22px; }
+.hr-row { display: flex; gap: 14px; margin-bottom: 14px; align-items: stretch; }
+.hr-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+.hr-col.wide { flex: 1.4 1 0; }
+
+/* ---------- 大图新闻卡 ---------- */
+.hr-news-img {
+  height: 108px; border-radius: 3px; margin: 12px 12px 0;
+  background: linear-gradient(120deg, #4a8fe7 0%, #6fb3f2 100%);
+  position: relative; overflow: hidden;
+}
+.hr-news-img .cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 6px 10px; font-size: 12px; color: #fff;
+  background: rgba(0,0,0,.32);
+}
+.hr-news-list { padding: 8px 12px 12px; }
+.hr-news-list li {
+  list-style: none; padding: 6px 0; font-size: 12.5px; color: #4a5568;
+  border-bottom: 1px dashed #eef2f7;
+}
+.hr-news-list li:before {
+  content: ""; display: inline-block; width: 5px; height: 5px;
+  border-radius: 50%; background: #2b6cb0; margin-right: 8px;
+  vertical-align: middle;
+}
+.hr-news-list li .d { float: right; color: #94a3b8; font-size: 11.5px; }
+
+/* ---------- 四宫格小表 ---------- */
+.hr-mini-table { width: 100%; border-collapse: collapse; }
+.hr-mini-table th, .hr-mini-table td {
+  padding: 7px 10px; font-size: 12.5px; text-align: left;
+  border-bottom: 1px solid #eef2f7;
+}
+.hr-mini-table th { color: #4a5568; font-weight: 500; background: #fafcfe; }
+.hr-mini-table tbody tr:nth-child(even) { background: #f7fafc; }
+
+/* ---------- 积分卡（年度/永久） ---------- */
+.hr-point-box { padding: 14px 12px; display: flex; gap: 10px; }
+.hr-point-box .pb {
+  flex: 1 1 0; text-align: center; padding: 12px 6px;
+  background: #f7fafd; border: 1px solid #e2e8f0; border-radius: 4px;
+}
+.hr-point-box .pb .n {
+  font-size: 22px; font-weight: 700; color: #1a5fa8;
+}
+.hr-point-box .pb .n small { font-size: 12px; font-weight: 400; color: #4a5568; }
+.hr-point-box .pb .l { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+.hr-point-box .pb .r { font-size: 11.5px; color: #e07b39; margin-top: 3px; }
+.hr-point-btn {
+  display: block; margin: 0 12px 14px; height: 34px; line-height: 34px;
+  text-align: center; font-size: 13px; color: #fff; border-radius: 3px;
+  background: #2b6cb0;
+}
+
+/* ---------- 排名（带蓝色排名块） ---------- */
+.hr-rank-tbl { width: 100%; border-collapse: collapse; }
+.hr-rank-tbl th, .hr-rank-tbl td {
+  padding: 7px 10px; font-size: 12.5px; border-bottom: 1px solid #eef2f7;
+}
+.hr-rank-tbl th { color: #4a5568; font-weight: 500; background: #fafcfe; text-align: left; }
+.hr-rank-tbl td.rk { width: 46px; text-align: center; }
+.hr-rank-tbl td.rk span {
+  display: inline-block; min-width: 22px; height: 20px; line-height: 20px;
+  padding: 0 5px; border-radius: 2px; font-size: 11.5px;
+  background: #2b6cb0; color: #fff;
+}
+
+/* ---------- 考勤小月历 ---------- */
+.hr-cal { padding: 10px 12px 14px; }
+.hr-cal .hd {
+  text-align: center; font-size: 13px; color: #2d3748; margin-bottom: 8px;
+}
+.hr-cal table { width: 100%; border-collapse: collapse; }
+.hr-cal th {
+  font-size: 11.5px; color: #94a3b8; font-weight: 400; padding: 4px 0;
+}
+.hr-cal td {
+  text-align: center; font-size: 12px; padding: 5px 0; color: #4a5568;
+  border-radius: 3px;
+}
+.hr-cal td.other { color: #cbd5e0; }
+.hr-cal td.on { background: #e8f0fa; color: #1a5fa8; font-weight: 600; }
+.hr-cal td.late { color: #e07b39; font-weight: 600; }
+
+/* ---------- 底部版权 ---------- */
+.hr-footer {
+  padding: 16px 0 22px; text-align: center;
+  font-size: 12px; color: #94a3b8;
+}
+
+</style>
+</head>
+<body>
+<div class="op-topbar"><div class="greet">欢迎您！<b>秘书长</b>！今天是2026年05月09日(周六)</div><div class="acts"><a href="#">个人设置</a><a href="#">退出</a></div></div><div class="hr-brand"><span class="mark">▌</span>人力资源管理系统</div><div class="hr-nav"><a href="#" class="on">首页</a><a href="#" class="">员工档案</a><a href="#" class="">员工管理</a><a href="#" class="">人才市场</a><a href="#" class="">积分管理</a><a href="#" class="">考勤管理</a><a href="#" class="">员工自助</a><a href="#" class="">个人设置</a></div><div class="hr-subnav"><a href="#" class="on">个人信息</a><a href="#" class="">界面配置</a><a href="#" class="">常用意见</a><a href="#" class="">外出授权</a><a href="#" class="">修改密码</a><a href="#" class="">单点登录</a><a href="#" class="">人脸登录</a></div><div class="hr-matrix"><div class="hr-row"><div class="hr-col wide"><div class="op-card"><div class="hd"><span class="t">新闻公告</span><span class="more">更多 »</span></div><div class="bd"><div class="hr-news-img"><div class="cap">中国复材协会·人才培训与职业发展</div></div><ul class="hr-news-list"><li>协会发布2026年度人才发展规划<span class="d">05-08</span></li><li>复合材料产业人才需求报告发布<span class="d">05-06</span></li><li>2026年度职称评审工作启动<span class="d">05-04</span></li><li>新员工入职培训计划安排<span class="d">05-02</span></li></ul></div></div></div><div class="hr-col"><div class="op-card"><div class="hd"><span class="t">员工自助</span><span class="more">更多 »</span></div><div class="bd"><div class="op-quick"><div class="q"><div class="ic" style="background:#4a8fe7">▤</div><div class="lb">我的档案</div></div><div class="q"><div class="ic" style="background:#38b2ac">✎</div><div class="lb">我的报名</div></div><div class="q"><div class="ic" style="background:#ed8936">★</div><div class="lb">我的积分</div></div><div class="q"><div class="ic" style="background:#9f7aea">✈</div><div class="lb">我要请假</div></div><div class="q"><div class="ic" style="background:#f6ad55">⏰</div><div class="lb">我要加班</div></div><div class="q"><div class="ic" style="background:#4299e1">✈</div><div class="lb">我要出差</div></div></div></div></div></div><div class="hr-col"><div class="op-card"><div class="hd"><span class="t">员工转岗公示</span><span class="more">更多 »</span></div><div class="bd"><table class="hr-mini-table"><thead><tr><th>姓名</th><th>日期</th><th>部门</th><th>岗位</th></tr></thead><tbody><tr><td>苏娜</td><td>2026-05-06</td><td>复合材料部</td><td>高级工程师</td></tr><tr><td>杨苏</td><td>2026-05-05</td><td>检测中心</td><td>技术主管</td></tr><tr><td>谢军</td><td>2026-05-03</td><td>信息部</td><td>项目经理</td></tr></tbody></table></div></div></div></div><div class="hr-row"><div class="hr-col wide"><div class="op-card"><div class="hd"><span class="t">待办工作</span><span class="more">新建 ⊕　更多 »</span></div><div class="bd"><table class="hr-mini-table"><thead><tr><th>序号</th><th>标题</th><th>经办</th><th>日期</th></tr></thead><tbody><tr><td>①</td><td>《员工转正申请》审批 - 张超</td><td>人力资源部</td><td>05-09</td></tr><tr><td>②</td><td>《请假申请》审批 - 史杰</td><td>复合材料部</td><td>05-09</td></tr><tr><td>③</td><td>《岗位需求》审核 - 复合材料部</td><td>人力资源部</td><td>05-08</td></tr><tr><td>④</td><td>《员工离职》审批 - 李婷</td><td>供应部</td><td>05-08</td></tr><tr><td>⑤</td><td>《出差申请》审批 - 谢军</td><td>信息部</td><td>05-07</td></tr><tr><td>⑥</td><td>《加班申请》审批 - 郑洋</td><td>检测中心</td><td>05-07</td></tr></tbody></table></div></div></div><div class="hr-col"><div class="op-card"><div class="hd"><span class="t">岗位报名</span><span class="more">更多 »</span></div><div class="bd"><table class="hr-mini-table"><thead><tr><th>岗位</th><th>招聘部门</th><th>发布时间</th><th>状态</th></tr></thead><tbody><tr><td>高级工程师</td><td>复合材料部</td><td>2026-05-06</td><td>报名中</td></tr><tr><td>检测技术主管</td><td>检测中心</td><td>2026-05-05</td><td>报名中</td></tr><tr><td>项目经理</td><td>信息部</td><td>2026-05-04</td><td>面试中</td></tr><tr><td>设备运维技术员</td><td>生产部</td><td>2026-05-02</td><td>已截止</td></tr></tbody></table></div></div></div><div class="hr-col"><div class="op-card"><div class="hd"><span class="t">积分公示</span><span class="more">更多 »</span></div><div class="bd"><table class="hr-rank-tbl"><thead><tr><th>姓名</th><th>积分</th><th>排名</th></tr></thead><tbody><tr><td>苏娜</td><td>336</td><td class="rk"><span>1</span></td></tr><tr><td>张超</td><td>161</td><td class="rk"><span>2</span></td></tr><tr><td>杨苏</td><td>120</td><td class="rk"><span>3</span></td></tr><tr><td>史杰</td><td>96</td><td class="rk"><span>4</span></td></tr><tr><td>谢军</td><td>88</td><td class="rk"><span>5</span></td></tr><tr><td>郑洋</td><td>72</td><td class="rk"><span>6</span></td></tr></tbody></table></div></div></div></div><div class="hr-row"><div class="hr-col wide"><div class="op-card"><div class="hd"><span class="t">待阅工作</span><span class="more">新建 ⊕　更多 »</span></div><div class="bd"><table class="hr-mini-table"><thead><tr><th>序号</th><th>标题</th><th>经办</th><th>日期</th></tr></thead><tbody><tr><td>①</td><td>2026年度员工培训计划</td><td>人力资源部</td><td>05-07</td></tr><tr><td>②</td><td>新版考勤管理制度宣贯</td><td>人力资源部</td><td>05-05</td></tr><tr><td>③</td><td>职称评审申报通知</td><td>综合办公室</td><td>05-03</td></tr></tbody></table></div></div></div><div class="hr-col"><div class="op-card"><div class="hd"><span class="t">本月考勤</span><span class="more">更多 »</span></div><div class="bd"><div class="hr-cal"><div class="hd">2026年05月　考勤周期：05月01日-05月31日</div><table><thead><tr><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th></tr></thead><tbody><tr><td class="other">-</td><td class="other">-</td><td class="other">-</td><td class="other">-</td><td class="">1</td><td class="">2</td><td class="">3</td></tr><tr><td class="">4</td><td class="">5</td><td class="">6</td><td class="">7</td><td class="">8</td><td class="on">9</td><td class="">10</td></tr><tr><td class="">11</td><td class="late">12</td><td class="">13</td><td class="">14</td><td class="">15</td><td class="">16</td><td class="">17</td></tr><tr><td class="">18</td><td class="late">19</td><td class="">20</td><td class="">21</td><td class="">22</td><td class="">23</td><td class="">24</td></tr><tr><td class="">25</td><td class="late">26</td><td class="">27</td><td class="">28</td><td class="">29</td><td class="">30</td><td class="">31</td></tr></tbody></table></div></div></div></div><div class="hr-col"><div class="op-card"><div class="hd"><span class="t">部门月度人均积分排名</span><span class="more">更多 »</span></div><div class="bd"><table class="hr-rank-tbl"><thead><tr><th>部门</th><th>人均积分</th><th>月排名</th></tr></thead><tbody><tr><td>复合材料部</td><td>168.5</td><td class="rk"><span>1</span></td></tr><tr><td>检测中心</td><td>121.0</td><td class="rk"><span>2</span></td></tr><tr><td>信息部</td><td>96.5</td><td class="rk"><span>3</span></td></tr><tr><td>综合办公室</td><td>88.0</td><td class="rk"><span>4</span></td></tr></tbody></table></div></div></div></div><div class="hr-row"><div class="hr-col wide"><div class="op-card"><div class="hd"><span class="t">我的积分与积分悬赏</span><span class="more">更多 »</span></div><div class="bd"><div class="hr-point-box"><div class="pb"><div class="n">161<small> 分</small></div><div class="l">年度积分</div><div class="r">2 名</div></div><div class="pb"><div class="n">161<small> 分</small></div><div class="l">永久积分</div><div class="r">2 名</div></div></div><a href="#" class="hr-point-btn">积分兑换</a><table class="hr-mini-table"><thead><tr><th>分数标签</th><th>课题</th><th>日期</th></tr></thead><tbody><tr><td>1-10 分</td><td>碳纤维成型工艺优化</td><td>2026-05-08</td></tr><tr><td>11-30 分</td><td>复材检测标准研究</td><td>2026-05-06</td></tr><tr><td>31-50 分</td><td>热塑性树脂改性方案</td><td>2026-05-03</td></tr><tr><td>51-100 分</td><td>新型复材工艺专利申报</td><td>2026-04-28</td></tr></tbody></table></div></div></div><div class="hr-col"><div class="op-card"><div class="hd"><span class="t">按部门统计员工人数</span><span class="more">更多 »</span></div><div class="bd"><div class="op-chart-tools"><span class="tg on">柱状图</span><span class="tg">饼状图</span></div><div class="op-chart-body"><svg width="100%" viewBox="0 0 300 220" preserveAspectRatio="xMidYMid meet" style="max-width:320px;display:block;margin:0 auto"><line x1="42" y1="186.0" x2="286" y2="186.0" stroke="#cbd5e0" stroke-width="1"/><text x="36" y="186.0" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">0</text><line x1="42" y1="154.8" x2="286" y2="154.8" stroke="#eef2f7" stroke-width="1"/><text x="36" y="154.8" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">10</text><line x1="42" y1="123.6" x2="286" y2="123.6" stroke="#eef2f7" stroke-width="1"/><text x="36" y="123.6" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">20</text><line x1="42" y1="92.4" x2="286" y2="92.4" stroke="#eef2f7" stroke-width="1"/><text x="36" y="92.4" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">30</text><line x1="42" y1="61.2" x2="286" y2="61.2" stroke="#eef2f7" stroke-width="1"/><text x="36" y="61.2" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">40</text><line x1="42" y1="30.0" x2="286" y2="30.0" stroke="#eef2f7" stroke-width="1"/><text x="36" y="30.0" font-size="10" fill="#94a3b8" text-anchor="end" dominant-baseline="middle">50</text><rect x="65.7" y="55.0" width="34.0" height="131.0" fill="#4a8fe7" rx="1"/><text x="82.7" y="51.0" font-size="10" fill="#4a5568" text-anchor="middle">42</text><text x="82.7" y="202" font-size="10.5" fill="#4a5568" text-anchor="middle">复材部</text><rect x="147.0" y="98.6" width="34.0" height="87.4" fill="#4a8fe7" rx="1"/><text x="164.0" y="94.6" font-size="10" fill="#4a5568" text-anchor="middle">28</text><text x="164.0" y="202" font-size="10.5" fill="#4a5568" text-anchor="middle">检测中心</text><rect x="228.3" y="136.1" width="34.0" height="49.9" fill="#4a8fe7" rx="1"/><text x="245.3" y="132.1" font-size="10" fill="#4a5568" text-anchor="middle">16</text><text x="245.3" y="202" font-size="10.5" fill="#4a5568" text-anchor="middle">信息部</text><text x="164" y="18" font-size="13" fill="#2d3748" text-anchor="middle">按部门统计员工人数</text></svg></div></div></div></div><div class="hr-col"><div class="op-card"><div class="hd"><span class="t">按员工状态统计人数</span><span class="more">更多 »</span></div><div class="bd"><div class="op-chart-tools"><span class="tg on">柱状图</span><span class="tg">饼状图</span></div><div class="op-chart-body"><svg width="100%" viewBox="0 0 260 260" preserveAspectRatio="xMidYMid meet" style="max-width:280px;display:block;margin:0 auto"><text x="130" y="16" font-size="13" fill="#2d3748" text-anchor="middle">按员工状态统计人数</text><path d="M130,130 L130.00,52.00 A78,78 0 1 1 53.09,142.97 Z" fill="#4a8fe7" stroke="#fff" stroke-width="1"/><path d="M130,130 L53.09,142.97 A78,78 0 0 1 67.20,83.73 Z" fill="#f28b82" stroke="#fff" stroke-width="1"/><path d="M130,130 L67.20,83.73 A78,78 0 0 1 90.25,62.89 Z" fill="#4a5568" stroke="#fff" stroke-width="1"/><path d="M130,130 L90.25,62.89 A78,78 0 0 1 130.00,52.00 Z" fill="#f5c542" stroke="#fff" stroke-width="1"/><line x1="189.56" y1="180.36" x2="209.42" y2="197.15" stroke="#cbd5e0" stroke-width="1"/><text x="231.42" y="197.15" font-size="12" fill="#4a5568" text-anchor="start" dominant-baseline="middle">68</text><line x1="54.12" y1="111.92" x2="28.83" y2="105.89" stroke="#cbd5e0" stroke-width="1"/><text x="6.83" y="105.89" font-size="12" fill="#4a5568" text-anchor="end" dominant-baseline="middle">12</text><line x1="77.68" y1="72.15" x2="60.24" y2="52.87" stroke="#cbd5e0" stroke-width="1"/><text x="38.24" y="52.87" font-size="12" fill="#4a5568" text-anchor="end" dominant-baseline="middle">6</text><line x1="109.39" y1="54.77" x2="102.52" y2="29.70" stroke="#cbd5e0" stroke-width="1"/><text x="80.52" y="29.70" font-size="12" fill="#4a5568" text-anchor="end" dominant-baseline="middle">8</text></svg><div class="op-legend"><span class="lg"><i style="background:#4a8fe7"></i>正式员工</span><span class="lg"><i style="background:#f28b82"></i>试用期员工</span><span class="lg"><i style="background:#4a5568"></i>实习期员工</span><span class="lg"><i style="background:#f5c542"></i>离职员工</span></div></div></div></div></div></div></div><div class="hr-footer">版权所有：O2OA</div>
+</body>
+</html>

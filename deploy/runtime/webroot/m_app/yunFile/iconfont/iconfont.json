@@ -1,0 +1,261 @@
+{
+  "id": "1382462",
+  "name": "云盘",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "36066",
+      "name": "视频",
+      "font_class": "vedio",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "613092",
+      "name": "其他",
+      "font_class": "other",
+      "unicode": "e7ef",
+      "unicode_decimal": 59375
+    },
+    {
+      "icon_id": "790893",
+      "name": "链接",
+      "font_class": "link",
+      "unicode": "e797",
+      "unicode_decimal": 59287
+    },
+    {
+      "icon_id": "974715",
+      "name": "移动",
+      "font_class": "move",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "981564",
+      "name": "文档",
+      "font_class": "doc",
+      "unicode": "e6bc",
+      "unicode_decimal": 59068
+    },
+    {
+      "icon_id": "1112224",
+      "name": "上传",
+      "font_class": "upload",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "1241243",
+      "name": "下载",
+      "font_class": "download",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "1638252",
+      "name": "重命名",
+      "font_class": "rename",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "1784707",
+      "name": "复选框",
+      "font_class": "check",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "3034428",
+      "name": "取消",
+      "font_class": "shareCancel",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "3248061",
+      "name": "list",
+      "font_class": "list",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "3789462",
+      "name": "清空回收站",
+      "font_class": "clear",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "4800244",
+      "name": "新建文件夹icon",
+      "font_class": "newfolder",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "4919192",
+      "name": "grid",
+      "font_class": "grid",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "5311294",
+      "name": "文件夹",
+      "font_class": "dir",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "5390742",
+      "name": "复选框-true",
+      "font_class": "checked",
+      "unicode": "e746",
+      "unicode_decimal": 59206
+    },
+    {
+      "icon_id": "5477163",
+      "name": "图片",
+      "font_class": "pic",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "5541648",
+      "name": "sort",
+      "font_class": "sort",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "5587325",
+      "name": "全部文件-未选中",
+      "font_class": "disk",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "5968139",
+      "name": "折叠",
+      "font_class": "fold",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "6028599",
+      "name": "quxiao",
+      "font_class": "searchCancel",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "6246764",
+      "name": "音乐",
+      "font_class": "music",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "6338804",
+      "name": "删 除",
+      "font_class": "delete",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "6763418",
+      "name": "取消",
+      "font_class": "cancel",
+      "unicode": "e6cc",
+      "unicode_decimal": 59084
+    },
+    {
+      "icon_id": "7700993",
+      "name": "展开",
+      "font_class": "span",
+      "unicode": "e75f",
+      "unicode_decimal": 59231
+    },
+    {
+      "icon_id": "7766530",
+      "name": "屏蔽",
+      "font_class": "shield",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "8414584",
+      "name": "转存",
+      "font_class": "shareSave",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "8494244",
+      "name": "确认",
+      "font_class": "ok",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "8499390",
+      "name": "restore",
+      "font_class": "restore",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "8971859",
+      "name": "选中",
+      "font_class": "listChecked",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "9299673",
+      "name": "共享",
+      "font_class": "sharedir",
+      "unicode": "e6b3",
+      "unicode_decimal": 59059
+    },
+    {
+      "icon_id": "9509090",
+      "name": "排序",
+      "font_class": "downtitle",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "9644211",
+      "name": "下载",
+      "font_class": "shareDownload",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "9791268",
+      "name": "回收站 (1)",
+      "font_class": "recycle",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "9984534",
+      "name": "分 享",
+      "font_class": "share",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "10267591",
+      "name": "search",
+      "font_class": "search",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    }
+  ]
+}

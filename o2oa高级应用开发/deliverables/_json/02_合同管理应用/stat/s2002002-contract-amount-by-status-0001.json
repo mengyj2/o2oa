@@ -1,0 +1,31 @@
+{
+  "id": "s2002002-contract-amount-by-status-0001",
+  "name": "按状态统计合同金额",
+  "alias": "按状态统计合同金额",
+  "description": "官方门户首页柱图：各状态下的合同金额合计",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v2002001-contract-list-view-0000000001",
+  "categoryPath": "contract_status",
+  "valuePath": "contract_amount",
+  "categoryTitle": "合同状态",
+  "valueTitle": "合同金额（元）",
+  "chartType": "column",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "column",
+      "pie",
+      "bar"
+    ],
+    "defaultChartType": "column",
+    "showLegend": true,
+    "showLabel": true,
+    "isRowColumnConvert": true,
+    "moreLink": "v2002001-contract-list-view-0000000001"
+  }
+}

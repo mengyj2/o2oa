@@ -1,0 +1,1817 @@
+Compiled from "DynamicEntityBuilder.java"
+public class com.x.base.core.entity.dynamic.DynamicEntityBuilder {
+  public static final java.lang.String FIELDNAME_SUFFIX;
+
+  public static final java.lang.String DOT_CLASS;
+
+  private com.x.base.core.entity.dynamic.DynamicEntity dynamicEntity;
+
+  private java.io.File dir;
+
+  public com.x.base.core.entity.dynamic.DynamicEntityBuilder(com.x.base.core.entity.dynamic.DynamicEntity, java.io.File);
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: aload_1
+       6: putfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       9: aload_0
+      10: aload_2
+      11: putfield      #13                 // Field dir:Ljava/io/File;
+      14: return
+
+  public com.squareup.javapoet.JavaFile build() throws java.lang.Exception;
+    Code:
+       0: ldc           #17                 // class javax/persistence/Entity
+       2: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       5: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+       8: astore_1
+       9: ldc           #31                 // class com/x/base/core/entity/annotation/ContainerEntity
+      11: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      14: ldc           #33                 // String dumpSize
+      16: ldc           #35                 // String 500
+      18: iconst_0
+      19: anewarray     #2                  // class java/lang/Object
+      22: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      25: ldc           #41                 // String type
+      27: ldc           #43                 // String com.x.base.core.entity.annotation.ContainerEntity.Type.custom
+      29: iconst_0
+      30: anewarray     #2                  // class java/lang/Object
+      33: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      36: ldc           #45                 // String reference
+      38: ldc           #47                 // String com.x.base.core.entity.annotation.ContainerEntity.Reference.strong
+      40: iconst_0
+      41: anewarray     #2                  // class java/lang/Object
+      44: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      47: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      50: astore_2
+      51: ldc           #49                 // class javax/persistence/Table
+      53: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      56: ldc           #51                 // String name
+      58: aload_0
+      59: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+      62: invokevirtual #53                 // Method com/x/base/core/entity/dynamic/DynamicEntity.tableName:()Ljava/lang/String;
+      65: invokedynamic #59,  0             // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      70: iconst_0
+      71: anewarray     #2                  // class java/lang/Object
+      74: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      77: ldc           #63                 // String uniqueConstraints
+      79: aload_0
+      80: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+      83: invokevirtual #53                 // Method com/x/base/core/entity/dynamic/DynamicEntity.tableName:()Ljava/lang/String;
+      86: invokedynamic #65,  0             // InvokeDynamic #1:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      91: iconst_0
+      92: anewarray     #2                  // class java/lang/Object
+      95: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      98: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     101: astore_3
+     102: ldc           #66                 // class javax/persistence/Inheritance
+     104: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     107: ldc           #68                 // String strategy
+     109: ldc           #70                 // String javax.persistence.InheritanceType.TABLE_PER_CLASS
+     111: iconst_0
+     112: anewarray     #2                  // class java/lang/Object
+     115: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     118: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     121: astore        4
+     123: getstatic     #72                 // Field java/lang/Long.TYPE:Ljava/lang/Class;
+     126: ldc           #78                 // String serialVersionUID
+     128: iconst_3
+     129: anewarray     #80                 // class javax/lang/model/element/Modifier
+     132: dup
+     133: iconst_0
+     134: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+     137: aastore
+     138: dup
+     139: iconst_1
+     140: getstatic     #86                 // Field javax/lang/model/element/Modifier.STATIC:Ljavax/lang/model/element/Modifier;
+     143: aastore
+     144: dup
+     145: iconst_2
+     146: getstatic     #89                 // Field javax/lang/model/element/Modifier.FINAL:Ljavax/lang/model/element/Modifier;
+     149: aastore
+     150: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     153: ldc           #97                 // String 1L
+     155: iconst_0
+     156: anewarray     #2                  // class java/lang/Object
+     159: invokevirtual #99                 // Method com/squareup/javapoet/FieldSpec$Builder.initializer:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     162: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     165: astore        5
+     167: ldc           #108                // class java/lang/String
+     169: ldc           #110                // String TABLE
+     171: iconst_3
+     172: anewarray     #80                 // class javax/lang/model/element/Modifier
+     175: dup
+     176: iconst_0
+     177: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+     180: aastore
+     181: dup
+     182: iconst_1
+     183: getstatic     #86                 // Field javax/lang/model/element/Modifier.STATIC:Ljavax/lang/model/element/Modifier;
+     186: aastore
+     187: dup
+     188: iconst_2
+     189: getstatic     #89                 // Field javax/lang/model/element/Modifier.FINAL:Ljavax/lang/model/element/Modifier;
+     192: aastore
+     193: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     196: aload_0
+     197: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+     200: invokevirtual #53                 // Method com/x/base/core/entity/dynamic/DynamicEntity.tableName:()Ljava/lang/String;
+     203: invokedynamic #59,  0             // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     208: iconst_0
+     209: anewarray     #2                  // class java/lang/Object
+     212: invokevirtual #99                 // Method com/squareup/javapoet/FieldSpec$Builder.initializer:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     215: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     218: astore        6
+     220: aload_0
+     221: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+     224: invokevirtual #112                // Method com/x/base/core/entity/dynamic/DynamicEntity.classSimpleName:()Ljava/lang/String;
+     227: invokestatic  #115                // Method com/squareup/javapoet/TypeSpec.classBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     230: ldc           #121                // class com/x/base/core/entity/SliceJpaObject
+     232: invokevirtual #123                // Method com/squareup/javapoet/TypeSpec$Builder.superclass:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     235: iconst_1
+     236: anewarray     #80                 // class javax/lang/model/element/Modifier
+     239: dup
+     240: iconst_0
+     241: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     244: aastore
+     245: invokevirtual #132                // Method com/squareup/javapoet/TypeSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     248: aload_1
+     249: invokevirtual #136                // Method com/squareup/javapoet/TypeSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     252: aload_2
+     253: invokevirtual #136                // Method com/squareup/javapoet/TypeSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     256: aload         4
+     258: invokevirtual #136                // Method com/squareup/javapoet/TypeSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     261: aload_3
+     262: invokevirtual #136                // Method com/squareup/javapoet/TypeSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     265: aload         5
+     267: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     270: aload         6
+     272: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     275: astore        7
+     277: aload_0
+     278: aload         7
+     280: invokevirtual #144                // Method createIdField:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     283: aload_0
+     284: aload         7
+     286: invokevirtual #148                // Method createBundleField:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     289: aload_0
+     290: aload         7
+     292: invokevirtual #151                // Method createOnPersistMethod:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     295: aload_0
+     296: aload         7
+     298: invokevirtual #154                // Method createStringFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     301: aload_0
+     302: aload         7
+     304: invokevirtual #157                // Method createIntegerFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     307: aload_0
+     308: aload         7
+     310: invokevirtual #160                // Method createLongFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     313: aload_0
+     314: aload         7
+     316: invokevirtual #163                // Method createDoubleFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     319: aload_0
+     320: aload         7
+     322: invokevirtual #166                // Method createBooleanFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     325: aload_0
+     326: aload         7
+     328: invokevirtual #169                // Method createDateFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     331: aload_0
+     332: aload         7
+     334: invokevirtual #172                // Method createTimeFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     337: aload_0
+     338: aload         7
+     340: invokevirtual #175                // Method createDateTimeFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     343: aload_0
+     344: aload         7
+     346: invokevirtual #178                // Method createListStringFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     349: aload_0
+     350: aload         7
+     352: invokevirtual #181                // Method createListIntegerFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     355: aload_0
+     356: aload         7
+     358: invokevirtual #184                // Method createListLongFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     361: aload_0
+     362: aload         7
+     364: invokevirtual #187                // Method createListDoubleFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     367: aload_0
+     368: aload         7
+     370: invokevirtual #190                // Method createListBooleanFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     373: aload_0
+     374: aload         7
+     376: invokevirtual #193                // Method createStringLobFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     379: aload_0
+     380: aload         7
+     382: invokevirtual #196                // Method createStringMapFields:(Lcom/squareup/javapoet/TypeSpec$Builder;)V
+     385: aload         7
+     387: invokevirtual #199                // Method com/squareup/javapoet/TypeSpec$Builder.build:()Lcom/squareup/javapoet/TypeSpec;
+     390: astore        8
+     392: ldc           #202                // String com.x.query.dynamic.entity
+     394: aload         8
+     396: invokestatic  #204                // Method com/squareup/javapoet/JavaFile.builder:(Ljava/lang/String;Lcom/squareup/javapoet/TypeSpec;)Lcom/squareup/javapoet/JavaFile$Builder;
+     399: invokevirtual #209                // Method com/squareup/javapoet/JavaFile$Builder.build:()Lcom/squareup/javapoet/JavaFile;
+     402: astore        9
+     404: aload         9
+     406: aload_0
+     407: getfield      #13                 // Field dir:Ljava/io/File;
+     410: invokevirtual #214                // Method com/squareup/javapoet/JavaFile.writeTo:(Ljava/io/File;)V
+     413: aload         9
+     415: areturn
+
+  private void createOnPersistMethod(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: ldc           #218                // String onPersist
+       2: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+       5: iconst_1
+       6: anewarray     #80                 // class javax/lang/model/element/Modifier
+       9: dup
+      10: iconst_0
+      11: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+      14: aastore
+      15: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+      18: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+      21: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+      24: ldc           #238                // class java/lang/Exception
+      26: invokevirtual #240                // Method com/squareup/javapoet/MethodSpec$Builder.addException:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+      29: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+      32: astore_2
+      33: aload_1
+      34: aload_2
+      35: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+      38: pop
+      39: return
+
+  private void createIdField(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: ldc           #250                // class com/x/base/core/project/annotation/FieldDescribe
+       2: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       5: ldc           #252                // String value
+       7: ldc           #254                // String \"数据库主键,自动生成.\"
+       9: iconst_0
+      10: anewarray     #2                  // class java/lang/Object
+      13: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      16: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      19: astore_2
+      20: ldc_w         #256                // class javax/persistence/Id
+      23: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      26: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      29: astore_3
+      30: ldc_w         #258                // class javax/persistence/Column
+      33: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      36: ldc_w         #260                // String length
+      39: ldc_w         #262                // String length_id
+      42: iconst_0
+      43: anewarray     #2                  // class java/lang/Object
+      46: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      49: ldc           #51                 // String name
+      51: ldc_w         #264                // String ColumnNamePrefix + id_FIELDNAME
+      54: iconst_0
+      55: anewarray     #2                  // class java/lang/Object
+      58: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      61: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      64: astore        4
+      66: ldc_w         #266                // String getId
+      69: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+      72: iconst_1
+      73: anewarray     #80                 // class javax/lang/model/element/Modifier
+      76: dup
+      77: iconst_0
+      78: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+      81: aastore
+      82: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+      85: ldc           #108                // class java/lang/String
+      87: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+      90: ldc_w         #268                // String return this.id
+      93: iconst_0
+      94: anewarray     #2                  // class java/lang/Object
+      97: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     100: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     103: astore        5
+     105: ldc_w         #274                // String setId
+     108: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     111: iconst_1
+     112: anewarray     #80                 // class javax/lang/model/element/Modifier
+     115: dup
+     116: iconst_0
+     117: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     120: aastore
+     121: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     124: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+     127: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     130: ldc           #108                // class java/lang/String
+     132: ldc_w         #276                // String id
+     135: iconst_0
+     136: anewarray     #80                 // class javax/lang/model/element/Modifier
+     139: invokevirtual #278                // Method com/squareup/javapoet/MethodSpec$Builder.addParameter:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     142: ldc_w         #282                // String this.id = id
+     145: iconst_0
+     146: anewarray     #2                  // class java/lang/Object
+     149: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     152: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     155: astore        6
+     157: ldc           #108                // class java/lang/String
+     159: ldc_w         #276                // String id
+     162: iconst_1
+     163: anewarray     #80                 // class javax/lang/model/element/Modifier
+     166: dup
+     167: iconst_0
+     168: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+     171: aastore
+     172: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     175: ldc_w         #286                // String createId()
+     178: iconst_0
+     179: anewarray     #2                  // class java/lang/Object
+     182: invokevirtual #99                 // Method com/squareup/javapoet/FieldSpec$Builder.initializer:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     185: aload_2
+     186: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     189: aload_3
+     190: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     193: aload         4
+     195: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     198: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     201: astore        7
+     203: aload_1
+     204: aload         7
+     206: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     209: aload         6
+     211: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     214: aload         5
+     216: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     219: pop
+     220: return
+
+  private void createBundleField(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: new           #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+       3: dup
+       4: invokespecial #293                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field."<init>":()V
+       7: astore_2
+       8: aload_2
+       9: ldc_w         #294                // String bundle
+      12: invokevirtual #296                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.setName:(Ljava/lang/String;)V
+      15: aload_2
+      16: ldc_w         #300                // String 流程实例的JOB
+      19: invokevirtual #302                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.setDescription:(Ljava/lang/String;)V
+      22: aload_2
+      23: ldc_w         #305                // String string
+      26: invokevirtual #307                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.setType:(Ljava/lang/String;)V
+      29: aload_0
+      30: aload_1
+      31: aload_2
+      32: ldc           #108                // class java/lang/String
+      34: invokevirtual #310                // Method createField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      37: return
+
+  private void createStringFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #314                // Method com/x/base/core/entity/dynamic/DynamicEntity.stringFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          50
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc           #108                // class java/lang/String
+      44: invokevirtual #310                // Method createField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      47: goto          20
+      50: return
+
+  private void createIntegerFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #340                // Method com/x/base/core/entity/dynamic/DynamicEntity.integerFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          51
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc_w         #343                // class java/lang/Integer
+      45: invokevirtual #310                // Method createField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      48: goto          20
+      51: return
+
+  private void createLongFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #345                // Method com/x/base/core/entity/dynamic/DynamicEntity.longFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          50
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc           #73                 // class java/lang/Long
+      44: invokevirtual #310                // Method createField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      47: goto          20
+      50: return
+
+  private void createDoubleFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #348                // Method com/x/base/core/entity/dynamic/DynamicEntity.doubleFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          51
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc_w         #351                // class java/lang/Double
+      45: invokevirtual #310                // Method createField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      48: goto          20
+      51: return
+
+  private void createBooleanFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #353                // Method com/x/base/core/entity/dynamic/DynamicEntity.booleanFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          51
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc_w         #356                // class java/lang/Boolean
+      45: invokevirtual #310                // Method createField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      48: goto          20
+      51: return
+
+  private void createField(com.squareup.javapoet.TypeSpec$Builder, com.x.base.core.entity.dynamic.DynamicEntity$Field, java.lang.Class<?>);
+    Code:
+       0: aconst_null
+       1: astore        4
+       3: aload_3
+       4: ldc           #108                // class java/lang/String
+       6: if_acmpne     54
+       9: ldc_w         #258                // class javax/persistence/Column
+      12: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      15: ldc_w         #260                // String length
+      18: ldc_w         #358                // String length_255B
+      21: iconst_0
+      22: anewarray     #2                  // class java/lang/Object
+      25: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      28: ldc           #51                 // String name
+      30: aload_2
+      31: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      34: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      39: iconst_0
+      40: anewarray     #2                  // class java/lang/Object
+      43: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      46: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      49: astore        4
+      51: goto          83
+      54: ldc_w         #258                // class javax/persistence/Column
+      57: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      60: ldc           #51                 // String name
+      62: aload_2
+      63: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      66: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      71: iconst_0
+      72: anewarray     #2                  // class java/lang/Object
+      75: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      78: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      81: astore        4
+      83: aload_3
+      84: aload_2
+      85: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+      88: iconst_1
+      89: anewarray     #80                 // class javax/lang/model/element/Modifier
+      92: dup
+      93: iconst_0
+      94: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+      97: aastore
+      98: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     101: aload_0
+     102: aload_2
+     103: invokevirtual #367                // Method fieldDescribe:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+     106: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     109: aload_0
+     110: aload_2
+     111: invokevirtual #371                // Method index:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+     114: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     117: aload_0
+     118: aload_2
+     119: invokevirtual #374                // Method checkPersist:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+     122: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     125: aload         4
+     127: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     130: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     133: astore        5
+     135: aload_2
+     136: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     139: invokestatic  #377                // Method com/x/base/core/project/tools/StringTools.getMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     142: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     145: iconst_1
+     146: anewarray     #80                 // class javax/lang/model/element/Modifier
+     149: dup
+     150: iconst_0
+     151: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     154: aastore
+     155: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     158: aload_3
+     159: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     162: aload_2
+     163: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     166: invokedynamic #382,  0            // InvokeDynamic #3:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     171: iconst_0
+     172: anewarray     #2                  // class java/lang/Object
+     175: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     178: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     181: astore        6
+     183: aload_2
+     184: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     187: invokestatic  #383                // Method com/x/base/core/project/tools/StringTools.setMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     190: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     193: iconst_1
+     194: anewarray     #80                 // class javax/lang/model/element/Modifier
+     197: dup
+     198: iconst_0
+     199: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     202: aastore
+     203: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     206: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+     209: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     212: aload_3
+     213: aload_2
+     214: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     217: iconst_0
+     218: anewarray     #80                 // class javax/lang/model/element/Modifier
+     221: invokevirtual #278                // Method com/squareup/javapoet/MethodSpec$Builder.addParameter:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     224: aload_2
+     225: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     228: aload_2
+     229: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     232: invokedynamic #386,  0            // InvokeDynamic #4:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     237: iconst_0
+     238: anewarray     #2                  // class java/lang/Object
+     241: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     244: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     247: astore        7
+     249: aload_1
+     250: aload_0
+     251: aload_2
+     252: invokevirtual #389                // Method fieldName:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/FieldSpec;
+     255: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     258: aload         5
+     260: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     263: aload         6
+     265: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     268: aload         7
+     270: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     273: pop
+     274: return
+
+  private void createDateFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #392                // Method com/x/base/core/entity/dynamic/DynamicEntity.dateFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          48
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: invokevirtual #395                // Method createDateField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)V
+      45: goto          20
+      48: return
+
+  private void createDateField(com.squareup.javapoet.TypeSpec$Builder, com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc_w         #258                // class javax/persistence/Column
+       3: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       6: ldc           #51                 // String name
+       8: aload_2
+       9: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      12: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      17: iconst_0
+      18: anewarray     #2                  // class java/lang/Object
+      21: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      24: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      27: astore_3
+      28: ldc_w         #399                // class javax/persistence/Temporal
+      31: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      34: ldc           #252                // String value
+      36: ldc_w         #401                // String javax.persistence.TemporalType.DATE
+      39: iconst_0
+      40: anewarray     #2                  // class java/lang/Object
+      43: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      46: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      49: astore        4
+      51: ldc_w         #403                // class java/util/Date
+      54: aload_2
+      55: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+      58: iconst_1
+      59: anewarray     #80                 // class javax/lang/model/element/Modifier
+      62: dup
+      63: iconst_0
+      64: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+      67: aastore
+      68: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      71: aload_0
+      72: aload_2
+      73: invokevirtual #367                // Method fieldDescribe:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      76: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      79: aload_0
+      80: aload_2
+      81: invokevirtual #371                // Method index:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      84: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      87: aload_0
+      88: aload_2
+      89: invokevirtual #374                // Method checkPersist:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      92: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      95: aload_3
+      96: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      99: aload         4
+     101: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     104: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     107: astore        5
+     109: aload_2
+     110: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     113: invokestatic  #377                // Method com/x/base/core/project/tools/StringTools.getMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     116: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     119: iconst_1
+     120: anewarray     #80                 // class javax/lang/model/element/Modifier
+     123: dup
+     124: iconst_0
+     125: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     128: aastore
+     129: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     132: ldc_w         #403                // class java/util/Date
+     135: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     138: aload_2
+     139: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     142: invokedynamic #382,  0            // InvokeDynamic #3:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     147: iconst_0
+     148: anewarray     #2                  // class java/lang/Object
+     151: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     154: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     157: astore        6
+     159: aload_2
+     160: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     163: invokestatic  #383                // Method com/x/base/core/project/tools/StringTools.setMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     166: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     169: iconst_1
+     170: anewarray     #80                 // class javax/lang/model/element/Modifier
+     173: dup
+     174: iconst_0
+     175: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     178: aastore
+     179: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     182: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+     185: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     188: ldc_w         #403                // class java/util/Date
+     191: aload_2
+     192: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     195: iconst_0
+     196: anewarray     #80                 // class javax/lang/model/element/Modifier
+     199: invokevirtual #278                // Method com/squareup/javapoet/MethodSpec$Builder.addParameter:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     202: aload_2
+     203: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     206: aload_2
+     207: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     210: invokedynamic #386,  0            // InvokeDynamic #4:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     215: iconst_0
+     216: anewarray     #2                  // class java/lang/Object
+     219: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     222: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     225: astore        7
+     227: aload_1
+     228: aload_0
+     229: aload_2
+     230: invokevirtual #389                // Method fieldName:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/FieldSpec;
+     233: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     236: aload         5
+     238: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     241: aload         6
+     243: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     246: aload         7
+     248: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     251: pop
+     252: return
+
+  private void createTimeFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #405                // Method com/x/base/core/entity/dynamic/DynamicEntity.timeFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          48
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: invokevirtual #408                // Method createTimeField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)V
+      45: goto          20
+      48: return
+
+  private void createTimeField(com.squareup.javapoet.TypeSpec$Builder, com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc_w         #258                // class javax/persistence/Column
+       3: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       6: ldc           #51                 // String name
+       8: aload_2
+       9: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      12: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      17: iconst_0
+      18: anewarray     #2                  // class java/lang/Object
+      21: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      24: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      27: astore_3
+      28: ldc_w         #399                // class javax/persistence/Temporal
+      31: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      34: ldc           #252                // String value
+      36: ldc_w         #411                // String javax.persistence.TemporalType.TIME
+      39: iconst_0
+      40: anewarray     #2                  // class java/lang/Object
+      43: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      46: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      49: astore        4
+      51: ldc_w         #403                // class java/util/Date
+      54: aload_2
+      55: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+      58: iconst_1
+      59: anewarray     #80                 // class javax/lang/model/element/Modifier
+      62: dup
+      63: iconst_0
+      64: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+      67: aastore
+      68: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      71: aload_0
+      72: aload_2
+      73: invokevirtual #367                // Method fieldDescribe:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      76: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      79: aload_0
+      80: aload_2
+      81: invokevirtual #371                // Method index:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      84: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      87: aload_0
+      88: aload_2
+      89: invokevirtual #374                // Method checkPersist:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      92: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      95: aload_3
+      96: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      99: aload         4
+     101: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     104: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     107: astore        5
+     109: aload_2
+     110: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     113: invokestatic  #377                // Method com/x/base/core/project/tools/StringTools.getMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     116: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     119: iconst_1
+     120: anewarray     #80                 // class javax/lang/model/element/Modifier
+     123: dup
+     124: iconst_0
+     125: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     128: aastore
+     129: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     132: ldc_w         #403                // class java/util/Date
+     135: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     138: aload_2
+     139: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     142: invokedynamic #382,  0            // InvokeDynamic #3:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     147: iconst_0
+     148: anewarray     #2                  // class java/lang/Object
+     151: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     154: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     157: astore        6
+     159: aload_2
+     160: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     163: invokestatic  #383                // Method com/x/base/core/project/tools/StringTools.setMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     166: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     169: iconst_1
+     170: anewarray     #80                 // class javax/lang/model/element/Modifier
+     173: dup
+     174: iconst_0
+     175: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     178: aastore
+     179: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     182: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+     185: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     188: ldc_w         #403                // class java/util/Date
+     191: aload_2
+     192: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     195: iconst_0
+     196: anewarray     #80                 // class javax/lang/model/element/Modifier
+     199: invokevirtual #278                // Method com/squareup/javapoet/MethodSpec$Builder.addParameter:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     202: aload_2
+     203: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     206: aload_2
+     207: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     210: invokedynamic #386,  0            // InvokeDynamic #4:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     215: iconst_0
+     216: anewarray     #2                  // class java/lang/Object
+     219: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     222: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     225: astore        7
+     227: aload_1
+     228: aload_0
+     229: aload_2
+     230: invokevirtual #389                // Method fieldName:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/FieldSpec;
+     233: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     236: aload         5
+     238: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     241: aload         6
+     243: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     246: aload         7
+     248: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     251: pop
+     252: return
+
+  private void createDateTimeFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #413                // Method com/x/base/core/entity/dynamic/DynamicEntity.dateTimeFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          48
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: invokevirtual #416                // Method createDateTimeField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)V
+      45: goto          20
+      48: return
+
+  private void createDateTimeField(com.squareup.javapoet.TypeSpec$Builder, com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc_w         #258                // class javax/persistence/Column
+       3: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       6: ldc           #51                 // String name
+       8: aload_2
+       9: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      12: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      17: iconst_0
+      18: anewarray     #2                  // class java/lang/Object
+      21: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      24: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      27: astore_3
+      28: ldc_w         #399                // class javax/persistence/Temporal
+      31: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      34: ldc           #252                // String value
+      36: ldc_w         #419                // String javax.persistence.TemporalType.TIMESTAMP
+      39: iconst_0
+      40: anewarray     #2                  // class java/lang/Object
+      43: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      46: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      49: astore        4
+      51: ldc_w         #403                // class java/util/Date
+      54: aload_2
+      55: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+      58: iconst_1
+      59: anewarray     #80                 // class javax/lang/model/element/Modifier
+      62: dup
+      63: iconst_0
+      64: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+      67: aastore
+      68: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      71: aload_0
+      72: aload_2
+      73: invokevirtual #367                // Method fieldDescribe:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      76: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      79: aload_0
+      80: aload_2
+      81: invokevirtual #371                // Method index:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      84: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      87: aload_0
+      88: aload_2
+      89: invokevirtual #374                // Method checkPersist:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+      92: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      95: aload_3
+      96: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      99: aload         4
+     101: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     104: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     107: astore        5
+     109: aload_2
+     110: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     113: invokestatic  #377                // Method com/x/base/core/project/tools/StringTools.getMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     116: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     119: iconst_1
+     120: anewarray     #80                 // class javax/lang/model/element/Modifier
+     123: dup
+     124: iconst_0
+     125: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     128: aastore
+     129: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     132: ldc_w         #403                // class java/util/Date
+     135: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     138: aload_2
+     139: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     142: invokedynamic #382,  0            // InvokeDynamic #3:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     147: iconst_0
+     148: anewarray     #2                  // class java/lang/Object
+     151: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     154: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     157: astore        6
+     159: aload_2
+     160: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     163: invokestatic  #383                // Method com/x/base/core/project/tools/StringTools.setMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     166: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     169: iconst_1
+     170: anewarray     #80                 // class javax/lang/model/element/Modifier
+     173: dup
+     174: iconst_0
+     175: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     178: aastore
+     179: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     182: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+     185: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     188: ldc_w         #403                // class java/util/Date
+     191: aload_2
+     192: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     195: iconst_0
+     196: anewarray     #80                 // class javax/lang/model/element/Modifier
+     199: invokevirtual #278                // Method com/squareup/javapoet/MethodSpec$Builder.addParameter:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     202: aload_2
+     203: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     206: aload_2
+     207: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     210: invokedynamic #386,  0            // InvokeDynamic #4:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     215: iconst_0
+     216: anewarray     #2                  // class java/lang/Object
+     219: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     222: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     225: astore        7
+     227: aload_1
+     228: aload_0
+     229: aload_2
+     230: invokevirtual #389                // Method fieldName:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/FieldSpec;
+     233: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     236: aload         5
+     238: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     241: aload         6
+     243: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     246: aload         7
+     248: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     251: pop
+     252: return
+
+  private void createListStringFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #421                // Method com/x/base/core/entity/dynamic/DynamicEntity.stringListFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          50
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc           #108                // class java/lang/String
+      44: invokevirtual #424                // Method createListFields:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      47: goto          20
+      50: return
+
+  private void createListIntegerFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #427                // Method com/x/base/core/entity/dynamic/DynamicEntity.integerListFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          51
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc_w         #343                // class java/lang/Integer
+      45: invokevirtual #424                // Method createListFields:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      48: goto          20
+      51: return
+
+  private void createListLongFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #430                // Method com/x/base/core/entity/dynamic/DynamicEntity.longListFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          50
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc           #73                 // class java/lang/Long
+      44: invokevirtual #424                // Method createListFields:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      47: goto          20
+      50: return
+
+  private void createListDoubleFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #433                // Method com/x/base/core/entity/dynamic/DynamicEntity.doubleListFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          51
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc_w         #351                // class java/lang/Double
+      45: invokevirtual #424                // Method createListFields:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      48: goto          20
+      51: return
+
+  private void createListBooleanFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #436                // Method com/x/base/core/entity/dynamic/DynamicEntity.booleanListFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          51
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: ldc_w         #356                // class java/lang/Boolean
+      45: invokevirtual #424                // Method createListFields:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;Ljava/lang/Class;)V
+      48: goto          20
+      51: return
+
+  private void createListFields(com.squareup.javapoet.TypeSpec$Builder, com.x.base.core.entity.dynamic.DynamicEntity$Field, java.lang.Class<?>);
+    Code:
+       0: ldc_w         #439                // class org/apache/openjpa/persistence/jdbc/ContainerTable
+       3: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       6: ldc           #51                 // String name
+       8: aload_2
+       9: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      12: invokedynamic #441,  0            // InvokeDynamic #5:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      17: iconst_0
+      18: anewarray     #2                  // class java/lang/Object
+      21: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      24: ldc_w         #442                // String joinIndex
+      27: aload_2
+      28: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      31: invokedynamic #444,  0            // InvokeDynamic #6:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      36: iconst_0
+      37: anewarray     #2                  // class java/lang/Object
+      40: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      43: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      46: astore        4
+      48: ldc_w         #445                // class org/apache/openjpa/persistence/jdbc/ElementIndex
+      51: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      54: ldc           #51                 // String name
+      56: aload_2
+      57: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      60: invokedynamic #447,  0            // InvokeDynamic #7:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      65: iconst_0
+      66: anewarray     #2                  // class java/lang/Object
+      69: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      72: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      75: astore        5
+      77: ldc_w         #448                // class org/apache/openjpa/persistence/PersistentCollection
+      80: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      83: ldc_w         #450                // String fetch
+      86: ldc_w         #452                // String javax.persistence.FetchType.EAGER
+      89: iconst_0
+      90: anewarray     #2                  // class java/lang/Object
+      93: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      96: ldc_w         #454                // String elementType
+      99: aload_3
+     100: invokevirtual #456                // Method java/lang/Class.getSimpleName:()Ljava/lang/String;
+     103: invokedynamic #461,  0            // InvokeDynamic #8:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     108: iconst_0
+     109: anewarray     #2                  // class java/lang/Object
+     112: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     115: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     118: astore        6
+     120: ldc_w         #462                // class javax/persistence/OrderColumn
+     123: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     126: ldc           #51                 // String name
+     128: ldc_w         #464                // String ORDERCOLUMNCOLUMN
+     131: iconst_0
+     132: anewarray     #2                  // class java/lang/Object
+     135: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     138: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     141: astore        7
+     143: aconst_null
+     144: astore        8
+     146: ldc_w         #466                // class java/lang/CharSequence
+     149: aload_3
+     150: invokevirtual #468                // Method java/lang/Class.isAssignableFrom:(Ljava/lang/Class;)Z
+     153: ifeq          201
+     156: ldc_w         #472                // class org/apache/openjpa/persistence/jdbc/ElementColumn
+     159: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     162: ldc_w         #260                // String length
+     165: ldc_w         #358                // String length_255B
+     168: iconst_0
+     169: anewarray     #2                  // class java/lang/Object
+     172: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     175: ldc           #51                 // String name
+     177: aload_2
+     178: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+     181: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     186: iconst_0
+     187: anewarray     #2                  // class java/lang/Object
+     190: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     193: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     196: astore        8
+     198: goto          230
+     201: ldc_w         #472                // class org/apache/openjpa/persistence/jdbc/ElementColumn
+     204: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     207: ldc           #51                 // String name
+     209: aload_2
+     210: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+     213: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     218: iconst_0
+     219: anewarray     #2                  // class java/lang/Object
+     222: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     225: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     228: astore        8
+     230: aload_3
+     231: invokestatic  #474                // Method com/squareup/javapoet/ClassName.get:(Ljava/lang/Class;)Lcom/squareup/javapoet/ClassName;
+     234: astore        9
+     236: ldc_w         #480                // class java/util/List
+     239: invokestatic  #474                // Method com/squareup/javapoet/ClassName.get:(Ljava/lang/Class;)Lcom/squareup/javapoet/ClassName;
+     242: astore        10
+     244: aload         10
+     246: iconst_1
+     247: anewarray     #482                // class com/squareup/javapoet/TypeName
+     250: dup
+     251: iconst_0
+     252: aload         9
+     254: aastore
+     255: invokestatic  #484                // Method com/squareup/javapoet/ParameterizedTypeName.get:(Lcom/squareup/javapoet/ClassName;[Lcom/squareup/javapoet/TypeName;)Lcom/squareup/javapoet/ParameterizedTypeName;
+     258: astore        11
+     260: aload         11
+     262: aload_2
+     263: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     266: iconst_1
+     267: anewarray     #80                 // class javax/lang/model/element/Modifier
+     270: dup
+     271: iconst_0
+     272: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+     275: aastore
+     276: invokestatic  #489                // Method com/squareup/javapoet/FieldSpec.builder:(Lcom/squareup/javapoet/TypeName;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     279: aload_0
+     280: aload_2
+     281: invokevirtual #367                // Method fieldDescribe:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+     284: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     287: aload         4
+     289: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     292: aload         5
+     294: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     297: aload         6
+     299: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     302: aload         7
+     304: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     307: aload         8
+     309: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     312: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     315: astore        12
+     317: aload_2
+     318: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     321: invokestatic  #377                // Method com/x/base/core/project/tools/StringTools.getMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     324: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     327: iconst_1
+     328: anewarray     #80                 // class javax/lang/model/element/Modifier
+     331: dup
+     332: iconst_0
+     333: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     336: aastore
+     337: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     340: aload         11
+     342: invokevirtual #492                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Lcom/squareup/javapoet/TypeName;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     345: aload_2
+     346: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     349: invokedynamic #382,  0            // InvokeDynamic #3:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     354: iconst_0
+     355: anewarray     #2                  // class java/lang/Object
+     358: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     361: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     364: astore        13
+     366: aload_2
+     367: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     370: invokestatic  #383                // Method com/x/base/core/project/tools/StringTools.setMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     373: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     376: iconst_1
+     377: anewarray     #80                 // class javax/lang/model/element/Modifier
+     380: dup
+     381: iconst_0
+     382: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     385: aastore
+     386: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     389: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+     392: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     395: aload         11
+     397: aload_2
+     398: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     401: iconst_0
+     402: anewarray     #80                 // class javax/lang/model/element/Modifier
+     405: invokevirtual #495                // Method com/squareup/javapoet/MethodSpec$Builder.addParameter:(Lcom/squareup/javapoet/TypeName;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     408: aload_2
+     409: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     412: aload_2
+     413: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     416: invokedynamic #386,  0            // InvokeDynamic #4:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     421: iconst_0
+     422: anewarray     #2                  // class java/lang/Object
+     425: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     428: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     431: astore        14
+     433: aload_1
+     434: aload_0
+     435: aload_2
+     436: invokevirtual #389                // Method fieldName:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/FieldSpec;
+     439: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     442: aload         12
+     444: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     447: aload         13
+     449: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     452: aload         14
+     454: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     457: pop
+     458: return
+
+  private void createStringLobFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #498                // Method com/x/base/core/entity/dynamic/DynamicEntity.stringLobFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          48
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: invokevirtual #501                // Method createStringLobField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)V
+      45: goto          20
+      48: return
+
+  private void createStringLobField(com.squareup.javapoet.TypeSpec$Builder, com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc_w         #504                // class javax/persistence/Lob
+       3: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       6: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+       9: astore_3
+      10: ldc_w         #506                // class javax/persistence/Basic
+      13: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      16: ldc_w         #450                // String fetch
+      19: ldc_w         #452                // String javax.persistence.FetchType.EAGER
+      22: iconst_0
+      23: anewarray     #2                  // class java/lang/Object
+      26: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      29: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      32: astore        4
+      34: ldc_w         #258                // class javax/persistence/Column
+      37: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      40: ldc_w         #260                // String length
+      43: ldc_w         #508                // String length_100M
+      46: iconst_0
+      47: anewarray     #2                  // class java/lang/Object
+      50: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      53: ldc           #51                 // String name
+      55: aload_2
+      56: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      59: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      64: iconst_0
+      65: anewarray     #2                  // class java/lang/Object
+      68: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      71: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      74: astore        5
+      76: ldc           #108                // class java/lang/String
+      78: aload_2
+      79: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+      82: iconst_1
+      83: anewarray     #80                 // class javax/lang/model/element/Modifier
+      86: dup
+      87: iconst_0
+      88: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+      91: aastore
+      92: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      95: aload_0
+      96: aload_2
+      97: invokevirtual #367                // Method fieldDescribe:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+     100: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     103: aload_3
+     104: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     107: aload         4
+     109: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     112: aload         5
+     114: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     117: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     120: astore        6
+     122: aload_2
+     123: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     126: invokestatic  #377                // Method com/x/base/core/project/tools/StringTools.getMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     129: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     132: iconst_1
+     133: anewarray     #80                 // class javax/lang/model/element/Modifier
+     136: dup
+     137: iconst_0
+     138: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     141: aastore
+     142: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     145: ldc           #108                // class java/lang/String
+     147: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     150: aload_2
+     151: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     154: invokedynamic #382,  0            // InvokeDynamic #3:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     159: iconst_0
+     160: anewarray     #2                  // class java/lang/Object
+     163: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     166: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     169: astore        7
+     171: aload_2
+     172: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     175: invokestatic  #383                // Method com/x/base/core/project/tools/StringTools.setMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     178: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     181: iconst_1
+     182: anewarray     #80                 // class javax/lang/model/element/Modifier
+     185: dup
+     186: iconst_0
+     187: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     190: aastore
+     191: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     194: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+     197: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     200: ldc           #108                // class java/lang/String
+     202: aload_2
+     203: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     206: iconst_0
+     207: anewarray     #80                 // class javax/lang/model/element/Modifier
+     210: invokevirtual #278                // Method com/squareup/javapoet/MethodSpec$Builder.addParameter:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     213: aload_2
+     214: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     217: aload_2
+     218: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     221: invokedynamic #386,  0            // InvokeDynamic #4:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     226: iconst_0
+     227: anewarray     #2                  // class java/lang/Object
+     230: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     233: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     236: astore        8
+     238: aload_1
+     239: aload_0
+     240: aload_2
+     241: invokevirtual #389                // Method fieldName:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/FieldSpec;
+     244: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     247: aload         6
+     249: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     252: aload         7
+     254: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     257: aload         8
+     259: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     262: pop
+     263: return
+
+  private void createStringMapFields(com.squareup.javapoet.TypeSpec$Builder);
+    Code:
+       0: aload_0
+       1: getfield      #7                  // Field dynamicEntity:Lcom/x/base/core/entity/dynamic/DynamicEntity;
+       4: invokevirtual #510                // Method com/x/base/core/entity/dynamic/DynamicEntity.stringMapFields:()Ljava/util/List;
+       7: iconst_1
+       8: iconst_1
+       9: iconst_0
+      10: anewarray     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      13: invokestatic  #318                // Method com/x/base/core/project/tools/ListTools.trim:(Ljava/util/List;ZZ[Ljava/lang/Object;)Ljava/util/ArrayList;
+      16: invokevirtual #324                // Method java/util/ArrayList.iterator:()Ljava/util/Iterator;
+      19: astore_2
+      20: aload_2
+      21: invokeinterface #330,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: ifeq          48
+      29: aload_2
+      30: invokeinterface #336,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: checkcast     #291                // class com/x/base/core/entity/dynamic/DynamicEntity$Field
+      38: astore_3
+      39: aload_0
+      40: aload_1
+      41: aload_3
+      42: invokevirtual #513                // Method createStringMapField:(Lcom/squareup/javapoet/TypeSpec$Builder;Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)V
+      45: goto          20
+      48: return
+
+  private void createStringMapField(com.squareup.javapoet.TypeSpec$Builder, com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc_w         #516                // class org/apache/openjpa/persistence/PersistentMap
+       3: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       6: ldc_w         #450                // String fetch
+       9: ldc_w         #518                // String  javax.persistence.FetchType.EAGER
+      12: iconst_0
+      13: anewarray     #2                  // class java/lang/Object
+      16: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      19: ldc_w         #454                // String elementType
+      22: ldc_w         #520                // String String.class
+      25: iconst_0
+      26: anewarray     #2                  // class java/lang/Object
+      29: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      32: ldc_w         #522                // String keyType
+      35: ldc_w         #520                // String String.class
+      38: iconst_0
+      39: anewarray     #2                  // class java/lang/Object
+      42: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      45: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      48: astore_3
+      49: ldc_w         #439                // class org/apache/openjpa/persistence/jdbc/ContainerTable
+      52: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      55: ldc           #51                 // String name
+      57: aload_2
+      58: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      61: invokedynamic #441,  0            // InvokeDynamic #5:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      66: iconst_0
+      67: anewarray     #2                  // class java/lang/Object
+      70: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      73: ldc_w         #442                // String joinIndex
+      76: aload_2
+      77: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      80: invokedynamic #444,  0            // InvokeDynamic #6:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      85: iconst_0
+      86: anewarray     #2                  // class java/lang/Object
+      89: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      92: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      95: astore        4
+      97: ldc_w         #524                // class org/apache/openjpa/persistence/jdbc/KeyColumn
+     100: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     103: ldc           #51                 // String name
+     105: ldc_w         #526                // String ColumnNamePrefix + key_FIELDNAME
+     108: iconst_0
+     109: anewarray     #2                  // class java/lang/Object
+     112: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     115: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     118: astore        5
+     120: ldc_w         #472                // class org/apache/openjpa/persistence/jdbc/ElementColumn
+     123: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     126: ldc           #51                 // String name
+     128: aload_2
+     129: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+     132: invokedynamic #363,  0            // InvokeDynamic #2:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     137: iconst_0
+     138: anewarray     #2                  // class java/lang/Object
+     141: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     144: ldc_w         #260                // String length
+     147: ldc_w         #358                // String length_255B
+     150: iconst_0
+     151: anewarray     #2                  // class java/lang/Object
+     154: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     157: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     160: astore        6
+     162: ldc_w         #445                // class org/apache/openjpa/persistence/jdbc/ElementIndex
+     165: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     168: ldc           #51                 // String name
+     170: aload_2
+     171: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+     174: invokedynamic #447,  0            // InvokeDynamic #7:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     179: iconst_0
+     180: anewarray     #2                  // class java/lang/Object
+     183: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     186: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     189: astore        7
+     191: ldc_w         #528                // class org/apache/openjpa/persistence/jdbc/KeyIndex
+     194: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     197: ldc           #51                 // String name
+     199: aload_2
+     200: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+     203: invokedynamic #530,  0            // InvokeDynamic #9:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     208: iconst_0
+     209: anewarray     #2                  // class java/lang/Object
+     212: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+     215: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+     218: astore        8
+     220: ldc           #108                // class java/lang/String
+     222: invokestatic  #474                // Method com/squareup/javapoet/ClassName.get:(Ljava/lang/Class;)Lcom/squareup/javapoet/ClassName;
+     225: astore        9
+     227: ldc_w         #531                // class java/util/LinkedHashMap
+     230: invokestatic  #474                // Method com/squareup/javapoet/ClassName.get:(Ljava/lang/Class;)Lcom/squareup/javapoet/ClassName;
+     233: astore        10
+     235: aload         10
+     237: iconst_2
+     238: anewarray     #482                // class com/squareup/javapoet/TypeName
+     241: dup
+     242: iconst_0
+     243: aload         9
+     245: aastore
+     246: dup
+     247: iconst_1
+     248: aload         9
+     250: aastore
+     251: invokestatic  #484                // Method com/squareup/javapoet/ParameterizedTypeName.get:(Lcom/squareup/javapoet/ClassName;[Lcom/squareup/javapoet/TypeName;)Lcom/squareup/javapoet/ParameterizedTypeName;
+     254: astore        11
+     256: aload         11
+     258: aload_2
+     259: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     262: iconst_1
+     263: anewarray     #80                 // class javax/lang/model/element/Modifier
+     266: dup
+     267: iconst_0
+     268: getstatic     #82                 // Field javax/lang/model/element/Modifier.PRIVATE:Ljavax/lang/model/element/Modifier;
+     271: aastore
+     272: invokestatic  #489                // Method com/squareup/javapoet/FieldSpec.builder:(Lcom/squareup/javapoet/TypeName;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     275: aload_0
+     276: aload_2
+     277: invokevirtual #367                // Method fieldDescribe:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/AnnotationSpec;
+     280: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     283: aload_3
+     284: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     287: aload         4
+     289: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     292: aload         5
+     294: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     297: aload         6
+     299: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     302: aload         7
+     304: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     307: aload         8
+     309: invokevirtual #288                // Method com/squareup/javapoet/FieldSpec$Builder.addAnnotation:(Lcom/squareup/javapoet/AnnotationSpec;)Lcom/squareup/javapoet/FieldSpec$Builder;
+     312: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+     315: astore        12
+     317: aload_2
+     318: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     321: invokestatic  #377                // Method com/x/base/core/project/tools/StringTools.getMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     324: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     327: iconst_1
+     328: anewarray     #80                 // class javax/lang/model/element/Modifier
+     331: dup
+     332: iconst_0
+     333: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     336: aastore
+     337: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     340: aload         11
+     342: invokevirtual #492                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Lcom/squareup/javapoet/TypeName;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     345: aload_2
+     346: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     349: invokedynamic #382,  0            // InvokeDynamic #3:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     354: iconst_0
+     355: anewarray     #2                  // class java/lang/Object
+     358: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     361: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     364: astore        13
+     366: aload_2
+     367: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     370: invokestatic  #383                // Method com/x/base/core/project/tools/StringTools.setMethodName:(Ljava/lang/String;)Ljava/lang/String;
+     373: invokestatic  #220                // Method com/squareup/javapoet/MethodSpec.methodBuilder:(Ljava/lang/String;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     376: iconst_1
+     377: anewarray     #80                 // class javax/lang/model/element/Modifier
+     380: dup
+     381: iconst_0
+     382: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+     385: aastore
+     386: invokevirtual #226                // Method com/squareup/javapoet/MethodSpec$Builder.addModifiers:([Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     389: getstatic     #231                // Field java/lang/Void.TYPE:Ljava/lang/Class;
+     392: invokevirtual #234                // Method com/squareup/javapoet/MethodSpec$Builder.returns:(Ljava/lang/reflect/Type;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     395: aload         11
+     397: aload_2
+     398: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     401: iconst_0
+     402: anewarray     #80                 // class javax/lang/model/element/Modifier
+     405: invokevirtual #495                // Method com/squareup/javapoet/MethodSpec$Builder.addParameter:(Lcom/squareup/javapoet/TypeName;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     408: aload_2
+     409: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     412: aload_2
+     413: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+     416: invokedynamic #386,  0            // InvokeDynamic #4:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     421: iconst_0
+     422: anewarray     #2                  // class java/lang/Object
+     425: invokevirtual #270                // Method com/squareup/javapoet/MethodSpec$Builder.addStatement:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/MethodSpec$Builder;
+     428: invokevirtual #243                // Method com/squareup/javapoet/MethodSpec$Builder.build:()Lcom/squareup/javapoet/MethodSpec;
+     431: astore        14
+     433: aload_1
+     434: aload_0
+     435: aload_2
+     436: invokevirtual #389                // Method fieldName:(Lcom/x/base/core/entity/dynamic/DynamicEntity$Field;)Lcom/squareup/javapoet/FieldSpec;
+     439: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     442: aload         12
+     444: invokevirtual #140                // Method com/squareup/javapoet/TypeSpec$Builder.addField:(Lcom/squareup/javapoet/FieldSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     447: aload         13
+     449: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     452: aload         14
+     454: invokevirtual #246                // Method com/squareup/javapoet/TypeSpec$Builder.addMethod:(Lcom/squareup/javapoet/MethodSpec;)Lcom/squareup/javapoet/TypeSpec$Builder;
+     457: pop
+     458: return
+
+  private com.squareup.javapoet.FieldSpec fieldName(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc           #108                // class java/lang/String
+       2: aload_1
+       3: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+       6: iconst_3
+       7: anewarray     #80                 // class javax/lang/model/element/Modifier
+      10: dup
+      11: iconst_0
+      12: getstatic     #129                // Field javax/lang/model/element/Modifier.PUBLIC:Ljavax/lang/model/element/Modifier;
+      15: aastore
+      16: dup
+      17: iconst_1
+      18: getstatic     #86                 // Field javax/lang/model/element/Modifier.STATIC:Ljavax/lang/model/element/Modifier;
+      21: aastore
+      22: dup
+      23: iconst_2
+      24: getstatic     #89                 // Field javax/lang/model/element/Modifier.FINAL:Ljavax/lang/model/element/Modifier;
+      27: aastore
+      28: invokestatic  #92                 // Method com/squareup/javapoet/FieldSpec.builder:(Ljava/lang/reflect/Type;Ljava/lang/String;[Ljavax/lang/model/element/Modifier;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      31: aload_1
+      32: invokevirtual #364                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getName:()Ljava/lang/String;
+      35: invokedynamic #59,  0             // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      40: iconst_0
+      41: anewarray     #2                  // class java/lang/Object
+      44: invokevirtual #99                 // Method com/squareup/javapoet/FieldSpec$Builder.initializer:(Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/FieldSpec$Builder;
+      47: invokevirtual #105                // Method com/squareup/javapoet/FieldSpec$Builder.build:()Lcom/squareup/javapoet/FieldSpec;
+      50: astore_2
+      51: aload_2
+      52: areturn
+
+  private com.squareup.javapoet.AnnotationSpec fieldDescribe(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc           #250                // class com/x/base/core/project/annotation/FieldDescribe
+       2: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       5: ldc           #252                // String value
+       7: aload_1
+       8: invokevirtual #533                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.getDescription:()Ljava/lang/String;
+      11: invokedynamic #59,  0             // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      16: iconst_0
+      17: anewarray     #2                  // class java/lang/Object
+      20: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      23: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      26: astore_2
+      27: aload_2
+      28: areturn
+
+  private com.squareup.javapoet.AnnotationSpec checkPersist(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc_w         #536                // class com/x/base/core/entity/annotation/CheckPersist
+       3: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       6: ldc_w         #538                // String allowEmpty
+       9: ldc_w         #540                // String true
+      12: iconst_0
+      13: anewarray     #2                  // class java/lang/Object
+      16: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      19: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      22: astore_2
+      23: aload_2
+      24: areturn
+
+  private com.squareup.javapoet.AnnotationSpec index(com.x.base.core.entity.dynamic.DynamicEntity$Field);
+    Code:
+       0: ldc_w         #542                // class org/apache/openjpa/persistence/jdbc/Index
+       3: invokestatic  #19                 // Method com/squareup/javapoet/AnnotationSpec.builder:(Ljava/lang/Class;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+       6: ldc           #51                 // String name
+       8: aload_1
+       9: invokevirtual #360                // Method com/x/base/core/entity/dynamic/DynamicEntity$Field.fieldName:()Ljava/lang/String;
+      12: invokedynamic #544,  0            // InvokeDynamic #10:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+      17: iconst_0
+      18: anewarray     #2                  // class java/lang/Object
+      21: invokevirtual #37                 // Method com/squareup/javapoet/AnnotationSpec$Builder.addMember:(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Lcom/squareup/javapoet/AnnotationSpec$Builder;
+      24: invokevirtual #25                 // Method com/squareup/javapoet/AnnotationSpec$Builder.build:()Lcom/squareup/javapoet/AnnotationSpec;
+      27: astore_2
+      28: aload_2
+      29: areturn
+}

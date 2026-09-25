@@ -1,0 +1,27 @@
+{
+  "id": "s3003002-budget-dept-stat-0000000000001",
+  "name": "部门预算统计",
+  "alias": "部门预算统计",
+  "description": "按编制部门统计预算总额",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v3003001-budget-list-view-00000000000001",
+  "categoryPath": "dept_name",
+  "valuePath": "total_amount",
+  "categoryTitle": "编制部门",
+  "valueTitle": "预算总额",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ]
+  }
+}

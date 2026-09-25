@@ -1,0 +1,15 @@
+{
+  "id": "t2002004-contract-invoice-table-000000001",
+  "name": "t2002004_contract_invoice_table",
+  "alias": "开票申请表",
+  "description": "合同开票申请与发票登记",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"invoice_apply_no\", \"description\": \"开票申请单号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"contract_name\", \"description\": \"合同名称\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"invoice_type\", \"description\": \"发票类型\", \"type\": \"string\"}, {\"name\": \"invoice_amount\", \"description\": \"开票金额\", \"type\": \"double\"}, {\"name\": \"tax_rate\", \"description\": \"税率\", \"type\": \"double\"}, {\"name\": \"tax_amount\", \"description\": \"税额\", \"type\": \"double\"}, {\"name\": \"net_amount\", \"description\": \"不含税金额\", \"type\": \"double\"}, {\"name\": \"buyer_name\", \"description\": \"购方名称\", \"type\": \"string\"}, {\"name\": \"buyer_tax_no\", \"description\": \"购方纳税人识别号\", \"type\": \"string\"}, {\"name\": \"invoice_no\", \"description\": \"发票号码\", \"type\": \"string\"}, {\"name\": \"invoice_date\", \"description\": \"开票日期\", \"type\": \"date\"}, {\"name\": \"apply_status\", \"description\": \"申请状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"invoice_apply_no\", \"description\": \"开票申请单号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"contract_name\", \"description\": \"合同名称\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"invoice_type\", \"description\": \"发票类型\", \"type\": \"string\"}, {\"name\": \"invoice_amount\", \"description\": \"开票金额\", \"type\": \"double\"}, {\"name\": \"tax_rate\", \"description\": \"税率\", \"type\": \"double\"}, {\"name\": \"tax_amount\", \"description\": \"税额\", \"type\": \"double\"}, {\"name\": \"net_amount\", \"description\": \"不含税金额\", \"type\": \"double\"}, {\"name\": \"buyer_name\", \"description\": \"购方名称\", \"type\": \"string\"}, {\"name\": \"buyer_tax_no\", \"description\": \"购方纳税人识别号\", \"type\": \"string\"}, {\"name\": \"invoice_no\", \"description\": \"发票号码\", \"type\": \"string\"}, {\"name\": \"invoice_date\", \"description\": \"开票日期\", \"type\": \"date\"}, {\"name\": \"apply_status\", \"description\": \"申请状态\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

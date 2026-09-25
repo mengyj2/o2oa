@@ -1,0 +1,14 @@
+Compiled from "DynamicEntity.java"
+public class com.x.base.core.entity.dynamic.DynamicEntity$Field {
+  private java.lang.String name;
+  private java.lang.String description;
+  private java.lang.String type;
+  public com.x.base.core.entity.dynamic.DynamicEntity$Field();
+  public java.lang.String fieldName();
+  public java.lang.String getName();
+  public void setName(java.lang.String);
+  public java.lang.String getDescription();
+  public void setDescription(java.lang.String);
+  public java.lang.String getType();
+  public void setType(java.lang.String);
+}

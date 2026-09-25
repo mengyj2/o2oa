@@ -1,0 +1,20 @@
+{
+  "id": "q2002008-partner-contract-join-00001",
+  "name": "签约方履约画像",
+  "alias": "签约方履约画像",
+  "description": "每家签约方的合同数量与金额聚合，供供应商评估",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT p.partner_no AS partner_no, p.partner_name AS partner_name, p.partner_type AS partner_type, p.partner_level AS partner_level, p.credit_code AS credit_code, p.contact_name AS contact_name, p.contact_phone AS contact_phone, COUNT(c.contract_no) AS contract_count, SUM(c.contract_amount) AS total_amount, SUM(c.receive_total) AS total_receive, SUM(c.pay_total) AS total_pay FROM contract_partner p LEFT JOIN contract_main c ON c.partner_no = p.partner_no GROUP BY p.partner_no, p.partner_name, p.partner_type, p.partner_level, p.credit_code, p.contact_name, p.contact_phone",
+  "sql": "SELECT p.partner_no AS partner_no, p.partner_name AS partner_name, p.partner_type AS partner_type, p.partner_level AS partner_level, p.credit_code AS credit_code, p.contact_name AS contact_name, p.contact_phone AS contact_phone, COUNT(c.contract_no) AS contract_count, SUM(c.contract_amount) AS total_amount, SUM(c.receive_total) AS total_receive, SUM(c.pay_total) AS total_pay FROM contract_partner p LEFT JOIN contract_main c ON c.partner_no = p.partner_no GROUP BY p.partner_no, p.partner_name, p.partner_type, p.partner_level, p.credit_code, p.contact_name, p.contact_phone",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

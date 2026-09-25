@@ -1,0 +1,20 @@
+{
+  "id": "q6006009-hr-attend-stat-0000000000001",
+  "name": "考勤月度统计",
+  "alias": "考勤月度统计",
+  "description": "官方“考勤统计”的数据源：按员工+周期汇总",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT a.employee_no AS employee_no, a.employee_name AS employee_name, a.attend_period AS attend_period, SUM(a.should_days) AS should_days, SUM(a.actual_days) AS actual_days, SUM(a.late_count) AS late_count, SUM(a.early_count) AS early_count, SUM(a.absent_count) AS absent_count, SUM(a.leave_days) AS leave_days, SUM(a.overtime_hours) AS overtime_hours, SUM(a.travel_days) AS travel_days, e.dept AS dept, e.position AS position FROM hr_attend a LEFT JOIN hr_employee e ON e.employee_no = a.employee_no GROUP BY a.employee_no, a.employee_name, a.attend_period, e.dept, e.position",
+  "sql": "SELECT a.employee_no AS employee_no, a.employee_name AS employee_name, a.attend_period AS attend_period, SUM(a.should_days) AS should_days, SUM(a.actual_days) AS actual_days, SUM(a.late_count) AS late_count, SUM(a.early_count) AS early_count, SUM(a.absent_count) AS absent_count, SUM(a.leave_days) AS leave_days, SUM(a.overtime_hours) AS overtime_hours, SUM(a.travel_days) AS travel_days, e.dept AS dept, e.position AS position FROM hr_attend a LEFT JOIN hr_employee e ON e.employee_no = a.employee_no GROUP BY a.employee_no, a.employee_name, a.attend_period, e.dept, e.position",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

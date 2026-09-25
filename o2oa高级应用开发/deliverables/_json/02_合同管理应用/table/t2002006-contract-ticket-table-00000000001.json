@@ -1,0 +1,15 @@
+{
+  "id": "t2002006-contract-ticket-table-00000000001",
+  "name": "t2002006_contract_ticket_table",
+  "alias": "收票记录表",
+  "description": "合同相关进项票据登记与核验",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"ticket_no\", \"description\": \"收票单号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"contract_name\", \"description\": \"合同名称\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"invoice_no\", \"description\": \"发票号码\", \"type\": \"string\"}, {\"name\": \"invoice_code\", \"description\": \"发票代码\", \"type\": \"string\"}, {\"name\": \"ticket_type\", \"description\": \"票据类型\", \"type\": \"string\"}, {\"name\": \"ticket_amount\", \"description\": \"票据金额\", \"type\": \"double\"}, {\"name\": \"tax_amount\", \"description\": \"税额\", \"type\": \"double\"}, {\"name\": \"ticket_date\", \"description\": \"收票日期\", \"type\": \"date\"}, {\"name\": \"supplier_name\", \"description\": \"开票方名称\", \"type\": \"string\"}, {\"name\": \"check_status\", \"description\": \"核验状态\", \"type\": \"string\"}, {\"name\": \"pay_no\", \"description\": \"关联付款单号\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"ticket_no\", \"description\": \"收票单号\", \"type\": \"string\"}, {\"name\": \"contract_no\", \"description\": \"合同编号\", \"type\": \"string\"}, {\"name\": \"contract_name\", \"description\": \"合同名称\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"invoice_no\", \"description\": \"发票号码\", \"type\": \"string\"}, {\"name\": \"invoice_code\", \"description\": \"发票代码\", \"type\": \"string\"}, {\"name\": \"ticket_type\", \"description\": \"票据类型\", \"type\": \"string\"}, {\"name\": \"ticket_amount\", \"description\": \"票据金额\", \"type\": \"double\"}, {\"name\": \"tax_amount\", \"description\": \"税额\", \"type\": \"double\"}, {\"name\": \"ticket_date\", \"description\": \"收票日期\", \"type\": \"date\"}, {\"name\": \"supplier_name\", \"description\": \"开票方名称\", \"type\": \"string\"}, {\"name\": \"check_status\", \"description\": \"核验状态\", \"type\": \"string\"}, {\"name\": \"pay_no\", \"description\": \"关联付款单号\", \"type\": \"string\"}, {\"name\": \"remark\", \"description\": \"备注\", \"type\": \"stringLob\"}, {\"name\": \"process_id\", \"description\": \"流程实例ID\", \"type\": \"string\"}, {\"name\": \"create_time\", \"description\": \"创建时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

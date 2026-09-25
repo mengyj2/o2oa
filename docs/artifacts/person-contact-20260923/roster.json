@@ -1,0 +1,30 @@
+{
+  "_comment": "O2OA 人员联系方式批量运维名册 —— 2026-09-23 实名名单落地。字段：unique=登录账号；mobile 含 ';' 时第1段为主手机号、其余进人员属性「备用手机号」；reset=false 表示不重置密码。",
+  "_tool": "tools/o2_batch_person_contact.py",
+  "base": "http://localhost:9090",
+  "operator": {
+    "_comment": "★ 必须用 xadmin（initial manager）：ActionEdit 会把操作者写进目标人 controllerList，只有 xadmin 被跳过。",
+    "credential": "xadmin",
+    "password": "o2oaadmin2026"
+  },
+  "mysql": {
+    "_comment": "可选。仅用于 verify 的旁证：区分「初始密码失效是因为用户本人改了密码」与「真故障」。reset/password 不写 xchangePasswordTime，故该列非空即代表用户本人改过密。",
+    "container": "o2oa-mysql",
+    "user": "root",
+    "password": "o2oa_root_pwd",
+    "database": "X"
+  },
+  "people": [
+    { "unique": "mengyijie",  "mobile": "18516833076", "mail": "mengyijie@ccia.xin",  "reset": false,
+      "_note": "持有 Manager@ManagerSystemRole@R 系统管理员角色；在用，按指令不重置密码" },
+    { "unique": "luhongping", "mobile": "13911168091", "mail": "luhongping@ccia.xin", "reset": true },
+    { "unique": "lijing",     "mobile": "13371637052", "mail": "lijing@ccia.xin",     "reset": true },
+    { "unique": "xishasha",   "mobile": "13371692937", "mail": "xishasha@ccia.xin",   "reset": true },
+    { "unique": "zhaoxudong", "mobile": "13381314580", "mail": "zhaoxudong@ccia.xin", "reset": true },
+    { "unique": "luoshuhan",  "mobile": "13371637051;13371677253", "mail": "luoshuhan@ccia.xin", "reset": true,
+      "_note": "两个号：主号 13371637051 + 人员属性「备用手机号」=13371677253（O2OA mobile 是单值）" },
+    { "unique": "shixiaoming", "mobile": "13381201425", "mail": "shixiaoming@ccia.xin", "reset": true },
+    { "unique": "duyang",     "mobile": "13371633027", "mail": "duyang@ccia.xin",     "reset": true },
+    { "unique": "lifang",     "mobile": "13381158343", "mail": "lifang@ccia.xin",     "reset": true }
+  ]
+}

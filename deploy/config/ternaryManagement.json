@@ -1,0 +1,31 @@
+{
+	"enable": false,
+	"systemManagerPassword": "",
+	"securityManagerPassword": "",
+	"auditManagerPassword": "",
+	"securityClearanceEnable": false,
+	"systemSecurityClearance": 400,
+	"defaultSubjectSecurityClearance": 200,
+	"subjectSecurityClearance": {
+		"重要": 400,
+		"一般": 300,
+		"内部": 200,
+		"义务": 100
+	},
+	"objectSecurityClearance": {
+		"机密": 400,
+		"秘密": 300,
+		"内部": 200,
+		"非密": 100
+	},
+	"###enable": "是否启用三元管理.###",
+	"###systemManagerPassword": "系统管理员账号密码.###",
+	"###securityManagerPassword": "安全管理员账号密码.###",
+	"###auditManagerPassword": "安全审计员账号密码.###",
+	"###securityClearanceEnable": "启用密级标识.###",
+	"###systemSecurityClearance": "系统密级标识.###",
+	"###defaultSubjectSecurityClearance": "默认主体密级标识.###",
+	"###subjectSecurityClearance": "主体密级标识配置.###",
+	"###objectSecurityClearance": "客体密级标识配置.###",
+	"###extension": "扩展设置.###"
+}

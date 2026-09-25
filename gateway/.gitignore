@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pid
+*.log
+gw_new.log
+data.db

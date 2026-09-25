@@ -1,0 +1,20 @@
+{
+  "id": "q2002001-contract-full-join-00000000001",
+  "name": "合同台账全量（含签约方）",
+  "alias": "合同台账全量（含签约方）",
+  "description": "合同主表左连接签约方档案，供合同档案视图使用",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT c.id AS id, c.contract_no AS contract_no, c.contract_name AS contract_name, c.contract_type AS contract_type, c.sign_unit AS sign_unit, c.sign_date AS sign_date, c.handle_dept AS handle_dept, c.handle_person AS handle_person, c.contract_amount AS contract_amount, c.contract_status AS contract_status, c.start_date AS start_date, c.end_date AS end_date, c.perform_rate AS perform_rate, c.receive_total AS receive_total, c.pay_total AS pay_total, c.invoice_total AS invoice_total, p.partner_no AS partner_no, p.partner_type AS partner_type, p.credit_code AS credit_code, p.contact_name AS contact_name, p.contact_phone AS contact_phone, p.partner_level AS partner_level FROM contract_main c LEFT JOIN contract_partner p ON p.partner_no = c.partner_no",
+  "sql": "SELECT c.id AS id, c.contract_no AS contract_no, c.contract_name AS contract_name, c.contract_type AS contract_type, c.sign_unit AS sign_unit, c.sign_date AS sign_date, c.handle_dept AS handle_dept, c.handle_person AS handle_person, c.contract_amount AS contract_amount, c.contract_status AS contract_status, c.start_date AS start_date, c.end_date AS end_date, c.perform_rate AS perform_rate, c.receive_total AS receive_total, c.pay_total AS pay_total, c.invoice_total AS invoice_total, p.partner_no AS partner_no, p.partner_type AS partner_type, p.credit_code AS credit_code, p.contact_name AS contact_name, p.contact_phone AS contact_phone, p.partner_level AS partner_level FROM contract_main c LEFT JOIN contract_partner p ON p.partner_no = c.partner_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

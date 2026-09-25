@@ -1,0 +1,29 @@
+{
+  "externalDataSources": [
+    {
+      "enable": true,
+      "url": "jdbc:mysql://mysql:3306/X?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8",
+      "username": "o2oa",
+      "password": "o2oa_pwd",
+      "driverClassName": "com.mysql.cj.jdbc.Driver",
+      "dictionary": "",
+      "maxTotal": 100.0,
+      "maxIdle": 0.0,
+      "statEnable": true,
+      "statFilter": "mergeStat",
+      "includes": [],
+      "excludes": [],
+      "logLevel": "ERROR",
+      "transactionIsolation": "read-committed",
+      "testConnectionOnCheckin": false,
+      "testConnectionOnCheckout": false,
+      "maxIdleTime": 300.0,
+      "autoCommit": false,
+      "schema": "",
+      "logStatEnable": false,
+      "logStatInterval": 180.0,
+      "slowSqlEnable": true,
+      "slowSqlThreshold": 3000.0
+    }
+  ]
+}

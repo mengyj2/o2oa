@@ -1,0 +1,28 @@
+{
+  "id": "s2002003-contract-amount-by-type-000001",
+  "name": "按合同类型统计金额",
+  "alias": "按合同类型统计金额",
+  "description": "采购/销售/委外/租赁等类型的金额分布",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "viewId": "v2002001-contract-list-view-0000000001",
+  "categoryPath": "contract_type",
+  "valuePath": "contract_amount",
+  "categoryTitle": "合同类型",
+  "valueTitle": "合同金额（元）",
+  "chartType": "all",
+  "properties": {
+    "isCategory": true,
+    "isTotal": false,
+    "orderType": "none",
+    "chartTypes": [
+      "pie",
+      "column",
+      "line",
+      "bar"
+    ],
+    "defaultChartType": "pie"
+  }
+}

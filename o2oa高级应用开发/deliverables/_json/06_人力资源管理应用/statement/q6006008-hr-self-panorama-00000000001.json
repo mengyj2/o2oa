@@ -1,0 +1,20 @@
+{
+  "id": "q6006008-hr-self-panorama-00000000001",
+  "name": "员工自助全景",
+  "alias": "员工自助全景",
+  "description": "官方列顺序：流程类型|标题|发起人|开始时间|当前步骤",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "statement": "SELECT s.id AS id, s.self_no AS self_no, s.employee_no AS employee_no, s.employee_name AS employee_name, s.self_type AS self_type, s.apply_title AS apply_title, s.start_time AS start_time, s.end_time AS end_time, s.current_step AS current_step, s.self_status AS self_status, s.contact_phone AS contact_phone, s.process_id AS process_id, e.dept AS dept, e.position AS position, e.employee_status AS employee_status, IFNULL(l.days, 0) AS leave_days, IFNULL(o.hours, 0) AS overtime_hours, IFNULL(t.days, 0) AS travel_days FROM hr_self s LEFT JOIN hr_employee e ON e.employee_no = s.employee_no LEFT JOIN (SELECT leave_no AS biz_no, leave_days AS days            FROM hr_leave) l ON l.biz_no = s.self_no LEFT JOIN (SELECT overtime_no AS biz_no,            overtime_hours AS hours            FROM hr_overtime) o ON o.biz_no = s.self_no LEFT JOIN (SELECT travel_no AS biz_no, travel_days AS days            FROM hr_travel) t ON t.biz_no = s.self_no",
+  "sql": "SELECT s.id AS id, s.self_no AS self_no, s.employee_no AS employee_no, s.employee_name AS employee_name, s.self_type AS self_type, s.apply_title AS apply_title, s.start_time AS start_time, s.end_time AS end_time, s.current_step AS current_step, s.self_status AS self_status, s.contact_phone AS contact_phone, s.process_id AS process_id, e.dept AS dept, e.position AS position, e.employee_status AS employee_status, IFNULL(l.days, 0) AS leave_days, IFNULL(o.hours, 0) AS overtime_hours, IFNULL(t.days, 0) AS travel_days FROM hr_self s LEFT JOIN hr_employee e ON e.employee_no = s.employee_no LEFT JOIN (SELECT leave_no AS biz_no, leave_days AS days            FROM hr_leave) l ON l.biz_no = s.self_no LEFT JOIN (SELECT overtime_no AS biz_no,            overtime_hours AS hours            FROM hr_overtime) o ON o.biz_no = s.self_no LEFT JOIN (SELECT travel_no AS biz_no, travel_days AS days            FROM hr_travel) t ON t.biz_no = s.self_no",
+  "queryType": "sql",
+  "format": "sql",
+  "countMethod": "ignore",
+  "entityCategory": "dynamic",
+  "table": "",
+  "data": "",
+  "countData": "",
+  "properties": {}
+}

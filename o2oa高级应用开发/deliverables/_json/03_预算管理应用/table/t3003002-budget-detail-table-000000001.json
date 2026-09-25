@@ -1,0 +1,15 @@
+{
+  "id": "t3003002-budget-detail-table-000000001",
+  "name": "t3003002_budget_detail_table",
+  "alias": "预算明细表",
+  "description": "预算分费用类型明细，支持预算与实际对比",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"budget_no\", \"description\": \"预算编号\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"expense_type\", \"description\": \"费用类型\", \"type\": \"string\"}, {\"name\": \"budget_item\", \"description\": \"预算项目\", \"type\": \"string\"}, {\"name\": \"budget_amount\", \"description\": \"预算金额\", \"type\": \"double\"}, {\"name\": \"exec_amount\", \"description\": \"已执行金额\", \"type\": \"double\"}, {\"name\": \"exec_rate\", \"description\": \"执行率\", \"type\": \"double\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"budget_no\", \"description\": \"预算编号\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"关联项目编号\", \"type\": \"string\"}, {\"name\": \"expense_type\", \"description\": \"费用类型\", \"type\": \"string\"}, {\"name\": \"budget_item\", \"description\": \"预算项目\", \"type\": \"string\"}, {\"name\": \"budget_amount\", \"description\": \"预算金额\", \"type\": \"double\"}, {\"name\": \"exec_amount\", \"description\": \"已执行金额\", \"type\": \"double\"}, {\"name\": \"exec_rate\", \"description\": \"执行率\", \"type\": \"double\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

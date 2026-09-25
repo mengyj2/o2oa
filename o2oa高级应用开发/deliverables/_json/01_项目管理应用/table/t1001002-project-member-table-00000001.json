@@ -1,0 +1,15 @@
+{
+  "id": "t1001002-project-member-table-00000001",
+  "name": "t1001002_project_member_table",
+  "alias": "项目成员表",
+  "description": "项目成员及角色分配",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"member_name\", \"description\": \"成员姓名\", \"type\": \"string\"}, {\"name\": \"member_identity\", \"description\": \"成员身份\", \"type\": \"string\"}, {\"name\": \"role\", \"description\": \"项目角色\", \"type\": \"string\"}, {\"name\": \"join_date\", \"description\": \"加入日期\", \"type\": \"date\"}, {\"name\": \"leave_date\", \"description\": \"退出日期\", \"type\": \"date\"}, {\"name\": \"workload\", \"description\": \"工作量占比（%）\", \"type\": \"double\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"member_name\", \"description\": \"成员姓名\", \"type\": \"string\"}, {\"name\": \"member_identity\", \"description\": \"成员身份\", \"type\": \"string\"}, {\"name\": \"role\", \"description\": \"项目角色\", \"type\": \"string\"}, {\"name\": \"join_date\", \"description\": \"加入日期\", \"type\": \"date\"}, {\"name\": \"leave_date\", \"description\": \"退出日期\", \"type\": \"date\"}, {\"name\": \"workload\", \"description\": \"工作量占比（%）\", \"type\": \"double\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

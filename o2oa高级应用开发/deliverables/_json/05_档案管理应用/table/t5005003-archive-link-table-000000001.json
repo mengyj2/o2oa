@@ -1,0 +1,15 @@
+{
+  "id": "t5005003-archive-link-table-000000001",
+  "name": "t5005003_archive_link_table",
+  "alias": "档案关联关系表",
+  "description": "档案与各业务单据的关联关系，支持反向查询",
+  "query": "",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "data": "{\"fieldList\": [{\"name\": \"archive_no\", \"description\": \"档案编号\", \"type\": \"string\"}, {\"name\": \"biz_type\", \"description\": \"业务类型\", \"type\": \"string\"}, {\"name\": \"biz_no\", \"description\": \"业务单号\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"link_time\", \"description\": \"关联时间\", \"type\": \"dateTime\"}]}",
+  "draftData": "{\"fieldList\": [{\"name\": \"archive_no\", \"description\": \"档案编号\", \"type\": \"string\"}, {\"name\": \"biz_type\", \"description\": \"业务类型\", \"type\": \"string\"}, {\"name\": \"biz_no\", \"description\": \"业务单号\", \"type\": \"string\"}, {\"name\": \"project_no\", \"description\": \"项目编号\", \"type\": \"string\"}, {\"name\": \"link_time\", \"description\": \"关联时间\", \"type\": \"dateTime\"}]}",
+  "status": "draft",
+  "display": true,
+  "properties": {}
+}

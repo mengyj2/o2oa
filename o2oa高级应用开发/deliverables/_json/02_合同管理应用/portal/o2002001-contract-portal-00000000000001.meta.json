@@ -1,0 +1,62 @@
+{
+  "id": "o2002001-contract-portal-00000000000001",
+  "name": "合同管理门户",
+  "alias": "合同管理门户",
+  "description": "合同管理应用门户（对齐 O2OA 官方合同应用门户版式）",
+  "portalCategory": "综合管理",
+  "icon": "",
+  "firstPage": "o2002002-contract-portal-home-page-000001",
+  "creatorPerson": "xadmin",
+  "lastUpdatePerson": "xadmin",
+  "lastUpdateTime": "2026-09-21 12:12:14",
+  "controllerList": [],
+  "availableIdentityList": [],
+  "availableUnitList": [],
+  "pcClient": true,
+  "mobileClient": false,
+  "pageList": [
+    {
+      "id": "o2002002-contract-portal-home-page-000001",
+      "name": "合同管理首页",
+      "alias": "合同管理首页",
+      "description": "官方风格门户首页",
+      "portal": "o2002001-contract-portal-00000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o2002002-contract-portal-home-page-000001\\\", \\\"name\\\": \\\"合同管理首页\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o2002001-contract-portal-000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o2002003-contract-portal-list-page-000001",
+      "name": "合同台账",
+      "alias": "合同台账",
+      "description": "合同台账列表",
+      "portal": "o2002001-contract-portal-00000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o2002003-contract-portal-list-page-000001\\\", \\\"name\\\": \\\"合同台账\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o2002001-contract-portal-00000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o2002004-contract-portal-report-page-00001",
+      "name": "统计报表",
+      "alias": "统计报表",
+      "description": "合同统计报表",
+      "portal": "o2002001-contract-portal-00000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o2002004-contract-portal-report-page-00001\\\", \\\"name\\\": \\\"统计报表\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o2002001-contract-portal-0000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    },
+    {
+      "id": "o2002005-contract-portal-quick-page-000001",
+      "name": "快捷入口",
+      "alias": "快捷入口",
+      "description": "员工自助快捷入口",
+      "portal": "o2002001-contract-portal-00000000000001",
+      "data": "{\\\"json\\\": {\\\"id\\\": \\\"o2002005-contract-portal-quick-page-000001\\\", \\\"name\\\": \\\"快捷入口\\\", \\\"type\\\": \\\"Form\\\", \\\"mode\\\": \\\"PC\\\", \\\"description\\\": \\\"\\\", \\\"application\\\": \\\"o2002001-contract-portal-0000000 ...<truncated>",
+      "mobileData": "",
+      "hasMobile": false
+    }
+  ],
+  "scriptList": [],
+  "fileList": [],
+  "widgetList": []
+}
