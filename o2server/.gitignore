@@ -1,3 +1,9 @@
 /graalvm.sh
 /test.sh
 /webroot
+# 构建产物（Route B：源码可重现，产物不入库）
+target/
+store/jars/*
+!store/jars/manifest.cfg
+store/*.war
+commons/

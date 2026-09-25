@@ -33,7 +33,8 @@ COPY externalDataSources.json.tmpl ${O2OA_HOME}/externalDataSources.json.tmpl
 RUN chmod +x ${O2OA_HOME}/entrypoint.sh
 
 # 【关键补丁】x_base_core_project.jar 由 patch/o2oa_rebuild_patches.sh 流水线生成（patch/ 挂载进容器 /src），
-# 携带两层加固：
+# ★ 2026-09-25 路线B起：输入 jar 为【官方 10.0.2-ce 源码 mvn 全量编译产物】（不再取自官方 zip），
+#   全流程复现见 tools/build_o2server_from_source.sh。携带两层加固：
 #   ① 数据源补丁：Config.externalDataSources() / ExternalDataSources.enable() 真正读 JSON（10.0.2 体检判定为 no-op，
 #      原样透传；新版若又硬编码则自动重打）。Javassist 实现见 patch/ConfigPatch2.java / ExternalDataSourcesPatch.java。
 #   ② 脚本沙箱 HostAccess 收敛：GraalvmScriptingFactory.eval 的 allowHostAccess(HostAccess.ALL)

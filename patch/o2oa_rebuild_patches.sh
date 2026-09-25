@@ -255,7 +255,7 @@ cd "$WORK" || exit 1
 # RCE/反射链/IO/Net/SQL 必须被拦截，良性 ArrayList/String/平台类必须零回归。
 log "离线 JVM 安全验证（-Xverify:all + GraalVM 模块）..."
 GRAAL_MOD=$D/commons/module_java11
-CPV="$shcls:$OUT/x_base_core_project.patched.jar"
+CPV="$WORK/shcls:$OUT/x_base_core_project.patched.jar"
 for j in $D/store/jars/*.jar $D/commons/ext_java11/*.jar $D/commons/*.jar; do
   CPV="$CPV:$j"
 done
