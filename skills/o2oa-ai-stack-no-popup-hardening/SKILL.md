@@ -13,7 +13,7 @@ category: diagnostics
 - `localhost:9090` 在浏览器里卡死/超时，但服务其实活着。
 - `gateway\watchdog.log` 出现 `gateway:18790 DOWN -> 重新拉起` 每 30~40s 一轮。
 
-## 根因（四条，按出现频率）
+## 根因（六条，按出现频率）
 1. **venv 启动器丢失无窗标志（弹窗主因）**
    `Scripts\python.exe` 是启动器，会再 spawn 基础解释器；父进程用 `DETACHED_PROCESS(0x8)` 时无控制台可继承 → 孙进程被 Windows 新分配【可见】控制台。
    修复：`start_ai_stack_detached.py` 的 `DETACHED` 改为
@@ -37,6 +37,27 @@ category: diagnostics
    - **彻底移除首轮无条件 `free_port`**：旧版每轮首轮对 18790 无差别 free_port 是误杀健康孤儿的直接代码证据，已删除。
    - **rerank 开关解耦**：看门狗读 `config.json` 的 `rerank_enable`（不再仅依赖 `--rerank`），改 config 即开/关 8092 rerank 服务。
    - 务必**只保留一条启动链路**（VBS 或 bat 二选一）；socket 锁已让双开无害（第二个实例自动退出）。
+6. **★★ 看门狗把「正在服务请求」的网关误判为孤儿并杀掉（2026-09-27 实证，危害最大）**
+   用户侧症状：前端调用 AI 技能时弹 `POST connect connection error, address:
+   http://192.168.1.5:18790/ai-gateway-clue/list/... because: connect timed out`，
+   看起来像"服务没起来/地址写错/鉴权失败"，**全都不是**。
+   取证关键（先做这三步，别急着改配置）：
+   - `gateway.log` 显示**该请求其实 200 成功**（如 `23:38:56 POST /ai-gateway-completion/generate -> 200`），
+     会话也已落库 → 说明网关当时是好的。
+   - `watchdog.log` 在同一秒附近有 `gateway:18790 被外部/孤儿进程 [0, <pid>] 占用，释放后重建`
+     + `DOWN -> 重新拉起` → **是看门狗在用户提问那一刻把网关杀了**。
+   - owners 里出现 **pid 0** 是同症状（端口上的非 LISTENING 连接痕迹）。
+   机理：健康端点 `/gateway/health` 与 LLM 生成**共用同一事件循环**，
+   长任务（流式生成）期间健康探测排队超时 → `port_state()` 判 `foreign` → `free_port()` 误杀。
+   修复（2026-09-27 已落地，`0b4dcb0`）：
+   - 新增 `port_busy(port)`：检测端口上 **ESTABLISHED / SYN_RECEIVED**。
+     ★★ **绝不能用 `netstat -p TCP` 过滤** —— 那会漏掉 ESTABLISHED 行、恒返回 False，
+     这是最容易写错的实现细节。
+   - `port_state()` 新增 **busy 态**：有活动连接即视为健康、**绝不 free_port**；
+     且下 `foreign` 结论前追加一次 1s 延迟的二次健康确认。
+   - 主循环 `busy` 与 `ours` 同等待遇（跳过重建 + 校正 pid）。
+   - `is_up()` 超时 1s → 3s（容忍高峰期排队）。
+   - 判据口诀：**"端口有人在连" 优先于 "健康端点答不答"** —— 有连接就说明进程在干活。
 
 ## 涉及文件（全部位于 D:\O2OA\gateway\，除 VBS 在启动文件夹）
 - `start_ai_stack_detached.py` — `DETACHED` 常量 + `healthy()` TCP 版。
@@ -83,11 +104,42 @@ O2OA 本地「知识管理」模块未装（断云），用 **CMS（内容管理
 
 ## 验证命令（沙箱内可执行，用于取证）
 ```
-curl -s --max-time 10 http://localhost:18790/gateway/health -o /dev/null -w "gateway=%{http_code}\n"
-curl -s --max-time 10 http://localhost:9090/ -o /dev/null -w "o2oa9090=%{http_code}\n"
+# ★ 必须绕过系统代理，否则本机代理会返回 502，让你误判服务已死
+curl -s --max-time 10 --noproxy '*' http://127.0.0.1:18790/gateway/health -o /dev/null -w "gateway=%{http_code}\n"
 tail -20 D:\O2OA\gateway\watchdog.log
+tail -20 D:\O2OA\gateway\gateway.log
 ```
 服务侧通常一直 200；弹窗是看门狗误杀循环，不是服务真死。
+★ `watchdog.log` 是**纯 UTF-8**，在 GBK 控制台下直接 `grep` 会显示成 `琚�澶栭儴`
+这类乱码——**文件没问题，是终端解码问题**；用 Python 以 utf-8 读或先 `chcp 65001`。
+
+## ★★ bat 启动器三个隐蔽 bug（2026-09-27 实测，会导致"双击没反应"）
+1. **LF-only 行尾**：`cmd` 只认 CRLF。LF-only 会把多行**粘成一条命令**，报
+   `'xxx' 不是内部或外部命令`。实测 `restart_ai_gateway.bat` / `start_ai_watchdog.bat` /
+   `start_gateway.bat` / `start_llama.bat` 四个都是 LF-only（57 个 LF、0 个 CRLF）。
+   自检：`open(p,'rb').read()` 里 `count(b'\r\n')` 与总 LF 数是否相等。
+   修复：统一转 CRLF（UTF-8 **无** BOM，与 `.ps1` 的"有 BOM"约定**相反**）。
+2. **`$_.CommandLine` 在 `powershell -Command` 内联里会失败**：
+   它是只读属性，内联场景报
+   `ParameterBindingValidationException`，导致 `Where-Object` 匹配数为 0 →
+   **清理旧进程的逻辑静默失效**、旧进程残留。改 `-match 'a\.py|b\.py'` 管道式写法。
+3. **`-ArgumentList 'x',''` 会校验失败**：`ARGS` 为空时传 `''` 报
+   `The argument is null or empty` → **看门狗根本没被拉起**。
+   改 `if defined ARGS (... ) else ( ... )` 分支。
+   另：`timeout /t N` 在本机不可用（报 `invalid time interval`）→ 用 `ping -n N+1 127.0.0.1 >nul`。
+
+## ★★ 沙箱内无法启动常驻进程（交付前必须先说清，别急着说"已修好"）
+本会话（及任何沙箱化会话）在**每条命令结束时回收该命令派生的所有子进程**：
+`subprocess.Popen(DETACHED_PROCESS)`、`Start-Process -WindowStyle Hidden`、
+`cmd /c start /MIN`、VBS 桥（`cscript`/`wscript` 本身被安全策略拦）**全部会被回收**。
+典型症状：看门狗日志写了 `看门狗启动：...`、端口短暂 LISTEN，**45s 后再查进程数为 0**，
+`*.pid` 文件却还在（所以 pid 文件"alive"判断也可能因 PID 复用而误导）。
+→ **常驻服务（看门狗/网关/OCR）只能由用户在真实桌面双击 bat 启动。**
+→ 排查此类问题时，切勿把"沙箱回收"误判成"代码 bug"而反复重启；先把当前代码改对、
+   语法校验通过、单测跑通，**再明确告知用户"需要你双击一次 start_ai_watchdog.bat"**。
+→ 单测技巧：`port_busy`/`port_state` 这类纯函数可在沙箱内直接 import 单测
+   （用 `socket.create_connection` 自己造一条长连接来模拟"正在服务请求"），
+   **不需要真的起服务**。
 
 ## 让修复生效（沙箱隔离主机进程，需用户在真实主机执行一次）
 ```powershell
