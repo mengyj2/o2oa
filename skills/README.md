@@ -2,7 +2,7 @@
 
 > 位置：`~/.workbuddy/skills/`（= `C:\Users\meng_\.workbuddy\skills\`），跨项目可用。
 > 本文件**不是 skill**（根目录 README，不参与加载），只作导航与边界说明。
-> 最后整理：2026-09-27（含 Clawith 相关技能下线，见 §7；新增 `o2oa-mcp-tool-hardening`）。
+> 最后整理：2026-09-27（含 Clawith 相关技能下线，见 §7；新增 `o2oa-mcp-tool-hardening`、`o2oa-driver-repo-clean`）。
 > **镜像**：本目录已同步进两个 O2OA 仓（`D:\O2OA\skills\`、`D:\o2oaccia\skills\`），
 > 同步用 `D:\O2OA\tools\sync_skills_to_repos.sh`（随每日双仓同步自动跑）。
 
@@ -26,6 +26,7 @@
 | `o2oa-portal-brand-guard` | 门户首页功能失效（点了没反应）修复 + 入口文件三件套（index/index_home/admin）+ 品牌残留治理 | 门户**页格式/渲染**问题 → `o2oa-portal-page-format` |
 | `o2oa-reveal-fix` | 首页「公文管理 Reveal 对象已存在」+ 登录 `randomWithWeight count=0` 双根因闭环 | — |
 | `o2oa-market-offline-install` | 断云环境离线安装应用市场 zip 包（setup.json+xapp），含冲突判断与卸载限制 | 非市场包（自研 xapp）→ `o2oa-app-io` |
+| `o2oa-driver-repo-clean` | ★ 驱动仓清洗管道（D:/O2OA → 私有仓 `o2oa-driver`）：代码被洗成 `***REMOVED***`、镜像落后源仓、fetch 静默失败、校验假绿、替换表过宽/漏项 | 纯 git 历史改写工具 → 无 |
 
 ## 2. diagnostics —— 排障 / 根因定位（不改状态）
 
