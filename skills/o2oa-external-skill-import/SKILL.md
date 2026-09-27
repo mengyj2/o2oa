@@ -65,6 +65,15 @@ v = list(struct.unpack("<%df" % (len(b)//4), b[: (len(b)//4)*4]))   # b = 该行
 **没有 `embed_text()`**；查询向量也要自己归一化后再点积。
 `chunks` 表主键是 **`rowid_`**（没有 `id` 列）。
 
+### 坑⑤ 手工补灌单篇知识库文档，docId 必须带 `o2kb::` 前缀
+`ingest_o2oa_kb.py` 生成的 id 规则是 `o2kb::{category}::{slug}`（脚本 line 115）。
+直接照 category 拼 `o2oa_ops::xxx` 去 POST → **新建出一篇重复文档**（实测总数 253→254）。
+✅ 补灌前先查真 id：
+```sql
+select id, title, length(content) from docs where id like '%<关键词>%';
+```
+删重复：`POST /idx-gateway-doc/delete` body `{"id": "..."}`（同时清 chunks）。
+
 ## 3. 操作 SOP
 
 ```bash
