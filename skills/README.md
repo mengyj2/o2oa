@@ -2,7 +2,7 @@
 
 > 位置：`~/.workbuddy/skills/`（= `C:\Users\meng_\.workbuddy\skills\`），跨项目可用。
 > 本文件**不是 skill**（根目录 README，不参与加载），只作导航与边界说明。
-> 最后整理：2026-09-27（含 Clawith 相关技能下线，见 §7；新增 `o2oa-mcp-tool-hardening`、`o2oa-driver-repo-clean`）。
+> 最后整理：2026-09-27（含 Clawith 相关技能下线，见 §7；新增 `o2oa-mcp-tool-hardening`、`o2oa-driver-repo-clean`、`o2oa-external-skill-import`）。共 23 个。
 > **镜像**：本目录已同步进两个 O2OA 仓（`D:\O2OA\skills\`、`D:\o2oaccia\skills\`），
 > 同步用 `D:\O2OA\tools\sync_skills_to_repos.sh`（随每日双仓同步自动跑）。
 
@@ -49,13 +49,14 @@
 
 ## 4. integration —— 对接外部服务 / 本地 AI 栈
 
-> ★ 这 4 个都以「本地推理」为中心，**按问题定位选**：
+> ★ 这些都以「本地推理」为中心，**按问题定位选**：
 
 | skill | 一句话定位 | 边界 |
 |---|---|---|
 | `o2oa-local-ai-assistant` | 让 O2OA AI 助手接本机/局域网 OpenAI 兼容端点；离线网关（对话/RAG/MCP）；`reasoning_content` 空白陷阱 | **O2OA 侧**集成与协议适配 |
 | `o2oa-bionic-agent-bridge` | Bionic CLI/runtime/工具调用接入网关；治「模型拒绝调工具」「调了没数据」「web_search 超时」 | **Bionic 侧**能力桥接 |
 | `o2oa-local-ocr-service` | 离线 OCR（RapidOCR ONNX，纯 CPU）：扫描件/表格/PDF + 网关附件链路 | 附件进不了 AI 就找它 |
+| `o2oa-external-skill-import` | 把外部 skill 目录（LM Studio/Claude 风格 `SKILL.md`+`chapters/`+`kb/chunks/`）导入 O2OA AI，让 `skills_list/skills_get/skills_run` 与 `kb_search/kb_read` 都能用；治「导入了但 AI 看不到/搜不到」 | 只导**知识**→ `ingest_o2oa_kb.py` |
 | `lmstudio-backend-install` | `lms` CLI 装/选/验 LM Studio 推理后端（ROCm/CUDA/Vulkan） | **后端本身**装不上/跑不动 |
 
 ## 5. security —— 隔离 / 加固
