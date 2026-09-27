@@ -219,8 +219,9 @@ tools/fix_hr_archive_perm_form.py:20   USER = ("xadmin", "***REMOVED***")
 |---|---|---|
 | **safe-delete 钩子** | 一次 `rm -rf` >50 项要批量确认 → **静默不执行** → 紧接着的 `clone` 报"目标非空" | **用带时间戳的新目录**从根上避免"先删残留"；确需清目录用 `robocopy <空目录> <目标> /MIR` |
 | **显示层屏蔽密钥** | 同一密钥在两次 `Read` 里显示成两个不同但等长的字符串 | 只是显示装饰；已用「同进程写盘→读回→sha1 自比」证实写盘忠实。判断真值**比哈希**；构造探针模式用**分段拼接** `printf 'o2oa%s' 'admin2026'` |
-| **push 挂死** | `lowSpeedLimit=1` 时 1 字节/秒也算"有进度"，挂 35 分钟不动 | 用 `lowSpeedLimit=2000 lowSpeedTime=45` 快速失败 |
-| **push 反复 502** | 单发 6 次全败；`response 502` 与 `Empty reply from server` 交替 | ★ **502 是窗口期**：改为**3 次重试/间隔 60s**（脚本已内置，`PUSH_RETRY`/`PUSH_RETRY_GAP` 可覆盖）。实测 o2oaccia 第 3 次成功、驱动镜像第 1 次成功 |
+| **push 挂死（传输阶段）** | `lowSpeedLimit=1` 时 1 字节/秒也算"有进度"，挂 35 分钟不动 | 用 `lowSpeedLimit=2000 lowSpeedTime=45` 快速失败 |
+| **push 挂死（CONNECT 阶段）** | ★★ 代理 CONNECT 隧道挂起时**没有字节流**，git 认为传输未开始 → `lowSpeed` 完全不生效，实测 280s 都不中断（外层 `timeout` 才切断，rc=124） | **每次 push 必须再套一层 `timeout 150`**（`PUSH_TIMEOUT` 可覆盖），否则凌晨流水被单次挂起拖死 |
+| **push 反复 502** | 单发 6 次全败；`response 502` 与 `Empty reply from server` 交替 | ★ **502 是窗口期**：改为**3 次重试/间隔 60s**（脚本已内置，`PUSH_RETRY`/`PUSH_RETRY_GAP` 可覆盖）。实测驱动镜像第 1 次成功；o2oaccia 白天第 3 次成功、**深夜第 4 次才成功** → 重试次数给足比加大单次超时有用 |
 | **agent 提交被拦** | 提交信息含 `Set-Item` / `$env:` 等字样触发安全钩子 | `git commit -F <msgfile>` |
 
 ---
