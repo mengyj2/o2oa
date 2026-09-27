@@ -2,7 +2,7 @@
 
 > 位置：`~/.workbuddy/skills/`（= `C:\Users\meng_\.workbuddy\skills\`），跨项目可用。
 > 本文件**不是 skill**（根目录 README，不参与加载），只作导航与边界说明。
-> 最后整理：2026-09-27（含 Clawith 相关技能下线，见 §7）。
+> 最后整理：2026-09-27（含 Clawith 相关技能下线，见 §7；新增 `o2oa-mcp-tool-hardening`）。
 > **镜像**：本目录已同步进两个 O2OA 仓（`D:\O2OA\skills\`、`D:\o2oaccia\skills\`），
 > 同步用 `D:\O2OA\tools\sync_skills_to_repos.sh`（随每日双仓同步自动跑）。
 
@@ -35,6 +35,7 @@
 | `o2oa-log-triage-health` | 问题日志 CTE 三表列名、一次性爆发 vs 持续性故障判定、审计 `CUSTOM_AUDIT_LOG` 为空的两级根因 |
 | `o2oa-component-ak-fix` | 组件内硬编码第三方 AK 过期导致的开应用弹窗/白屏（服务端零报错） |
 | `o2oa-ai-stack-no-popup-hardening` | AI 栈看门狗反复弹控制台窗 + 9090 看似卡死；含持续化与知识库落库 |
+| `o2oa-mcp-tool-hardening` | ★ 9 个 MCP 工具（会议/日程/HR/薪资/邮件/待办/流程）报 500、静默不落库、卡片回吐 `${xxx}`、查询越权返回全量；核心是 invoke `bodyMap` 未替换占位符 |
 | `o2oa-local-ai-assistant`（兼） | 推理模型「界面空白」= `reasoning_content` 陷阱（见 §4） |
 
 ## 3. development —— 写组件 / 门户 / 表单 / 服务
