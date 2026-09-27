@@ -52,6 +52,19 @@ sqlite3.connect('gateway/data.db').execute(
 # 每个 v 是 JSON，.content 就是模型最终回答
 ```
 
+### 坑④ 复算余弦时别用 `json.loads` 解向量 → 假结果 0.005
+`chunks.embedding` 是 **float32 小端 BLOB**（1024 维、已归一化，长度恒 4096 字节），
+**不是** JSON 文本。手写验证脚本若 `json.loads(blob)` 会抛 `TypeError` 被 `except: continue`
+悄悄吞掉 → 相似度退化成"遍历第一个非空值"，打印出 0.005 这种**看似检索失效**的假结论。
+✅ 正确解码：
+```python
+import struct
+v = list(struct.unpack("<%df" % (len(b)//4), b[: (len(b)//4)*4]))   # b = 该行 embedding 字节
+```
+另：网关里的嵌入函数叫 **`embed(texts: list) -> list[vector]`**（`o2_agent_gateway.py:347`），
+**没有 `embed_text()`**；查询向量也要自己归一化后再点积。
+`chunks` 表主键是 **`rowid_`**（没有 `id` 列）。
+
 ## 3. 操作 SOP
 
 ```bash
@@ -81,11 +94,12 @@ g.exec_builtin("kb_read", {"doc_id": "o2kb::ext::<name>::ch09-summary"})
 # ③ 落库与向量化
 sqlite3: select count(*) from docs where category like 'o2kb::ext::%'
          select count(*) from chunks where doc_id like 'o2kb::ext::%'
-         -- 必须确认 embedding 非空的 chunk 数为 0 例外
+         -- 空向量 chunk 数必须为 0
 ```
 
-**检索质量判据**：正样本（领域问题）余弦 0.60~0.76，负样本（O2OA 待办/会议室）0.34~0.36
-→ 区分度够。若正负样本差距 <0.1，说明分块或内容有问题。
+**检索质量判据**（实测《复合材料大全》70 篇 / 4564 切片）：
+正样本余弦 0.65~0.78，负样本（O2OA 待办/会议室）0.34~0.36 → 区分度 ~0.3，合格。
+若正负样本差距 <0.1，先怀疑**自己的解码方式**（见坑④），再怀疑分块或内容。
 
 ## 5. 关键接口事实
 
