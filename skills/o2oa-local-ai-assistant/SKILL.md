@@ -1,6 +1,6 @@
 ---
 name: o2oa-local-ai-assistant
-description: 让 O2OA（开源版 / Docker 自托管）的 AI 助手在不连云、不用官方密钥的前提下，接入本机/局域网的 OpenAI 兼容推理端点（官方 llama.cpp standalone / LM Studio / Bionic / vLLM），并根治推理模型 "界面空白" 的 reasoning_content 陷阱。含：智能体私有协议本地适配网关（对话/知识库RAG/MCP 全离线）、用本机 GGUF 完全脱离 Bionic（官方 llama-server 组装 + ROCm，含 0xC0E90002 SxS 打包缺陷的绕法）、RAG "System message must be at the beginning" 修复、升级后自愈。当用户问"O2OA 智能体密钥是什么""系统里有模型吗""怎么接本地模型""AI 助手回复空白/没内容""开启智能体功能""reasoning_content 没有 content""reasoning_effort none""内置模型能直接用吗""不依赖 bionic/lm studio 能驱动吗""本地下好的 gguf 怎么用""官方 llama.cpp / llama-server.exe 怎么装""llama-server 启动报错 0xC0E90002 / 退出码 -1058471934""RAG 报 system message 错误"时调用。
+description: 让 O2OA（开源版 / Docker 自托管）的 AI 助手在不连云、不用官方密钥的前提下，接入本机/局域网的 OpenAI 兼容推理端点（官方 llama.cpp standalone / LM Studio / Bionic / vLLM），并根治推理模型 "界面空白" 的 reasoning_content 陷阱。含：智能体私有协议本地适配网关（对话/知识库RAG/MCP 全离线）、用本机 GGUF 完全脱离 Bionic（官方 llama-server 组装 + ROCm，含 0xC0E90002 SxS 打包缺陷的绕法）、RAG "System message must be at the beginning" 修复、升级后自愈、以及「前端选模型无效（选 A 实跑 B）」的 endpointName 路由修复。当用户问"O2OA 智能体密钥是什么""系统里有模型吗""怎么接本地模型""AI 助手回复空白/没内容""开启智能体功能""reasoning_content 没有 content""reasoning_effort none""内置模型能直接用吗""不依赖 bionic/lm studio 能驱动吗""本地下好的 gguf 怎么用""官方 llama.cpp / llama-server.exe 怎么装""llama-server 启动报错 0xC0E90002 / 退出码 -1058471934""RAG 报 system message 错误""选了模型没生效/选 qwen 跑的还是别的模型/模型切换无效"时调用。
 agent_created: true
 category: integration
 
@@ -570,3 +570,83 @@ curl -X POST -H "Authorization: Bearer <token>" -H "Content-Type: application/js
 3. **`spawn(detached:true).unref()` 不常驻**：网关进程会随调用方 shell 结束被回收，
    需用后台任务机制。停网关按端口找 PID 时，别用 `cmd findstr`（Git Bash 转义地狱），
    改用 Node 解析 `netstat -ano -p tcp`。
+
+---
+
+## 15. ★★ 前端选模型无效（选了 A 实跑 B）—— 网关忽略 `endpointName`
+
+**症状**：在 O2OA AI 助手界面选了「本地qwen3.8-27b」，实际回复来自另一个模型（如 agentscope-9b）。
+
+### 根因链（四层，逐层排除）
+1. **LM Studio 层无罪**：直接 `POST :1234/v1/chat/completions` 带 `model=qwen3.8-27b`，
+   约 25s 内 JIT 自动加载并正确回 `resp model = qwen3.8-27b`，**不会静默回退**。模型 ID 正确。
+2. **O2OA 层无罪**：`x_ai_assemble_control` 的 `ActionChat.o2Chat()` 把整个 Wi
+   （**含 `endpointName` = AiModel.name**）`gson.toJson` 原样 POST 到网关。
+   取证：`docker cp o2oa-server:/opt/o2server/logs/out.log` 后搜
+   `chat to /ai-gateway-completion/generate body:`，可见 `"endpointName": "本地qwen3.8-27b"`。
+3. **★真凶 = 网关忽略 `endpointName`**：`generate()` 只读
+   `generateType/clueId/input/permissionList/person/token/referenceIdList`，
+   下游全部硬编码 `CFG["chat_model"]`（`from_mcp_loop` / `stream_openai` /
+   `_final_answer_mcp` / `chat_complete`）→ 前端选什么都用同一个。
+4. **O2OA 另有一条分支**：`ActionChat` 中若 o2Ai 未启用
+   （`o2AiEnable`/`o2AiBaseUrl`/`o2AiToken` 不全），则走 `getActiveModel(wi.getEndpointName())`
+   按选择查 AiModel 并**直连 completionUrl** —— 此时选择有效。本机配了网关 18790，
+   故一直走 o2Chat 分支，选择被吞。
+
+### 修复（`gateway/o2_agent_gateway.py`，5 处）
+```python
+# 1) 新增解析器（放在 generate() 之前）
+_ep_model_cache = {"ts": 0.0, "map": {}}
+def resolve_endpoint_model(name, user_token=""):
+    if not name: return None
+    if now - _ep_model_cache["ts"] > 120 or name not in _ep_model_cache["map"]:
+        # ★★ 两个坑：
+        #   a) /config/list/enable/model 会裁剪字段（无 model），必须用 paging 接口
+        #   b) paging 返回嵌套 {data:{data:[...]}}，_o2_rest_user_or_manager 只认顶层 list
+        #      → 直接调 _o2_rest 并手工解嵌套
+        code, text = _o2_rest("/x_ai_assemble_control/jaxrs/config/list/model/paging/1/size/200",
+                              method="GET", user_token=user_token)
+        rows = (json.loads(text).get("data") or {})
+        rows = rows.get("data") if isinstance(rows, dict) else rows
+        m = {str(r["name"]): (r.get("model"), r.get("type"), r.get("completionUrl"))
+             for r in (rows or []) if isinstance(r, dict) and r.get("name")}
+        if m: _ep_model_cache.update(ts=now, map=m)
+    info = _ep_model_cache["map"].get(name)
+    if not info: return None
+    mid, mtype, curl = info
+    if mtype != "local": return None            # 仅本地类型可覆盖
+    bbase = (CFG.get("bionic_base") or "").rstrip("/")
+    if curl and bbase and not (curl.startswith(bbase) or ":1234" in curl): return None
+    return mid or None
+
+# 2) generate() 内解析（紧接 refs = wi.get("referenceIdList") 之后）
+sel_ep = (wi.get("endpointName") or "").strip()
+req_model = resolve_endpoint_model(sel_ep, usertoken) or CFG["chat_model"]
+if sel_ep: log(f"endpoint model: {sel_ep!r} -> {req_model}")
+
+# 3) from_mcp_loop(..., model=req_model)  # 函数签名末尾加 model=""，内部
+#    json={"model": model or CFG["chat_model"], ...}
+# 4) extra = {"tools": [], "model": req_model} if gtype=="mcp" else {"model": req_model}
+#    # stream_sync_gen → stream_openai 的 payload.update(extra) 会覆盖硬编码 model
+```
+无 `endpointName` 时行为与改动前完全一致（安全兜底）。
+
+### 验收（决定性证据）
+同一个问题分别发给两个 endpoint，**回答与耗时都应不同**：
+```bash
+python tools/o2_gw_endpoint_model_test.py     # 内置两个 endpoint 对比
+# 实测：endpointName=本地qwen3.8-27b → 8.1s / 回答"不便披露"
+#       endpointName=本地Agentscope-9B → 14.5s / 回答"我是…Qwen2.5…72B"
+```
+再核对日志：`findstr /C:"endpoint model" D:\O2OA\gateway\gateway.log`
+→ 应见 `endpoint model: '本地qwen3.8-27b' -> qwen3.8-27b`。
+
+### 排查此问题的三个必备手法（踩过坑）
+1. **`urllib` 必须 `ProxyHandler({})`**：否则 localhost 被系统代理劫持成
+   `502 Bad Gateway` 假错误，误判网关挂了。
+2. **确认单实例**：多实例抢 18790 会造成「请求有响应但日志不更新」的假象
+   （响应来自旧代码进程、日志写别处）。排查前先
+   `netstat -ano | findstr 18790` 拿 PID，`taskkill /F /PID` 清场。
+3. **模型名对不对**：`GET :1234/v1/models` 列出**全部已下载**模型（不只已加载），
+   同族可能有 `qwen3.8-27b` 与 `qwen/qwen3.8-27b` 两个 ID，别配错。
+

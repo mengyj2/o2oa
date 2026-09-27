@@ -95,7 +95,7 @@ MySQL 未暴露宿主端口 → 用 `docker exec o2oa-mysql mysql -uroot -po2oa_
   （`xtitle`='微软'/'的'）、`CMS_DOCUMENT` 里 `xtitle LIKE '%计划%'` **0 命中** → 真实计划不在这里。
 - 找不到就**直说查不到**，并让用户指认入口/贴原文，不要自行编造一份"看起来像"的计划。
 
-## 5. 第二步（落库）——接口已确认，待用户放行
+## 5. 第二步（落库）——接口与字段已全部实证（2026-09-28 真机跑通）
 **服务名 = `x_teamwork_assemble_control`**（已证实；`x_tew2_*` / `x_work_*` / `x_task_*` 都是错的）。
 describe 源：`o2oa优化/_tmp/desc/x_teamwork_assemble_control.json`（宿主可直接解析，不必进容器）。
 
@@ -107,14 +107,61 @@ describe 源：`o2oa优化/_tmp/desc/x_teamwork_assemble_control.json`（宿主�
 | **回写完成率** | `POST .../jaxrs/task/{id}/property`（updateSingleProperty） |
 | 改参与人 | `POST .../jaxrs/task/updateParticipant` |
 
-**字段口径（与直觉不同，落库前必看）**：
-- `TEW2_TASK.xexecutor` 存的是 **person unique 名**（现有值 `xadmin`），**不是**身份 DN。
-- `TEW2_PROJECT` 标题列是 **`xtitle`**，没有 `xname`（查 xname 会报 Unknown column）。
-- 根级任务 `xparent='0'`；`xprogress` 为 int(0–100)；`xworkStatus` 现有值 `processing`。
+### ★★★ TaskAction.save 请求体（缺一则失败，逐条实测）
+JSON 用**无 `x` 前缀**的属性名（与 `GET /jaxrs/task/{id}` 返回实体一致）：
+```json
+{ "project":"<TEW2_PROJECT.xid>", "taskGroupId":"<TEW2_TASKGROUP.xid>",
+  "taskListId":"<TEW2_TASKLIST.xid>", "parent":"<父任务id 或 '0'>",
+  "name":"任务名", "startTime":"YYYY-MM-DD HH:MM:SS", "endTime":"...",
+  "workStatus":"processing", "progress":0, "order":0,
+  "important":"中", "urgency":"中", "executor":"<person unique>",
+  "participantList":[], "manageablePersonList":[] }
+```
+- **★ `taskGroupId` + `taskListId` 必带**，否则 HTTP 500 `groupId is empty`。
+  取值：`TEW2_TASKGROUP`（每个项目至少一条 `xname='所有工作'`）、
+  `TEW2_TASKLIST`（优先 `xname='已规划的工作'`）——都按 `xproject` 过滤。
+- 成功返回 `{"type":"success","data":{"id":"<新任务id>",...}}`；**子任务的 `parent` 取这个 id**。
+- `executor` 存 **person unique**（`lifang`/`mengyijie`），**既非身份DN也非中文名**。
+- `TEW2_PROJECT` 标题列是 **`xtitle`**（无 `xname`，查 xname 会 `Unknown column`）。
+- 根级任务 `xparent='0'`；`xprogress` int(0–100)。
+
+### 前端组件（已在用）
+`patch/web/x_component_PlanDecompose/`（原生 DOM；落库用 `MWF.Actions.load(
+"x_teamwork_assemble_control").TaskAction.save(body, ok, err)`，以**当前登录用户**身份创建）。
+预览数据源 = `gateway/o2_plan_service.py`（127.0.0.1:18792，只读，**绝不落库**）。
+部署：`docker cp patch/web/x_component_PlanDecompose/. o2oa-server:/opt/o2server/webroot/x_component_PlanDecompose/`
+（★ 目标必须是 **webroot**；`/.` 结尾避免嵌套）→ 新目录首部署需 `docker restart o2oa-server`
+→ 注册 `CPT_COMPONENT`（xname/xpath=`PlanDecompose`, xtype=`system`, xiconPath=`appicon.png`）。
+
+## 5.5 ★★ 本机环境硬坑（做本模块必踩，先看这里）
+1. **`docker exec ... /opt/...` 会被 MSYS 路径转换**成 `C:/Users/<u>/.../opt/...`，
+   `find`/`ls` 全查宿主机假路径（表现为"容器里找不到组件"）→ **`export MSYS_NO_PATHCONV=1`**。
+2. **`docker cp` 到已存在目录会"嵌套"**而非覆盖 → `docker cp src/. dst/`（带 `/.`）；
+   且 `MSYS_NO_PATHCONV=1` 下源路径要用 `D:/O2OA/...`（`/d/O2OA/...` 会失败）。
+3. **Bash 工具里 `cmd //c`、`.\x.bat` 都不работ**（bash 不搜 CWD；`//` 传参畸形）；
+   PowerShell 工具里也**不能**调 `cmd.exe`。杀进程/启服务统一用 **PowerShell 工具**：
+   ```powershell
+   $ids=(Get-NetTCPConnection -LocalPort 18792 -EA SilentlyContinue).OwningProcess
+   $ids|Sort-Object -Unique|%{ Stop-Process -Id $_ -Force -EA SilentlyContinue }
+   ```
+4. **改 `start_ai_stack_detached.py` 后必须删 pyc**：`gateway/__pycache__/start_ai_stack_detached*.pyc`
+   陈旧会让看门狗用旧组件列表（不拉 plan_service）。
+5. **常驻**：AI 侧（含 plan_service）由 `gateway/watchdog_ai_stack.py` 托管，
+   需用户双击 `gateway\start_ai_watchdog.bat` 常驻（AI 拉起的进程会被 Job Object 随会话回收）。
+
+## 5.6 真机 UI 验证范式（`tools/o2_plandecompose_ui_verify.js`）
+- 用 `playwright-core`（`C:/Users/meng_/.workbuddy/binaries/node/workspace/node_modules`）
+  + 系统 Edge（`C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe`），`headless:true`。
+- **登录必须绕验证码**（表单是算术题如 `31+19=?`，自动填必失败）：
+  同域 `fetch('/x_organization_assemble_authentication/jaxrs/authentication',{...})`
+  → 取响应头 `x-token` → `addCookies` + 写 localStorage/sessionStorage → 重载桌面。
+- 组件打开：`/x_desktop/app.html?app=PlanDecompose`；判据 `document.querySelector('.pd-title')` 有文本。
+- 断言取 DOM 文本（不要截图喂视觉模型，易触发限流）。
 
 其余待办：按配置口径向上加权汇总；「待分配预警」+ 3 天升级推送（定时任务 + 最高管理者工作台入口）；
 建议先在组织里补配部门负责人，否则每次分解都会上收秘书长。
 
 ## 6. 相关
 - 组织/账号事实：`o2oa-local-admin-account`
+- 自研组件落地：`o2oa-custom-desktop-component`
 - 知识库：本技能的实证结论已写入 `D:/O2OA/.workbuddy/memory/2026-09-28.md`
