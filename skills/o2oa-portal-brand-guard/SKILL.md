@@ -24,15 +24,20 @@ category: operations
 
 ```
 用户报"首页不对"
-├─ 能渲染但点击无反应 / 控制台报 this.xxx is not a function  → A 类（§2，数据层，最高危）
-├─ 整页白屏 / 404 / 脚本语法错 / 登录后跳错页面               → B 类（§3，文件层）
+├─ 能渲染但点击无反应 / 控制台报 this.xxx is not a function  → A 类（§2，数据层）
+├─ 整页白屏 / 404 / 脚本语法错 / 登录后跳错页面 / ★重启后变回去了 → B 类（§3，文件层）
+├─ ★多栏主页面(图1)退化成了两栏壳(图2) / "我要的首页不见了"     → B' 类（§3.1b，indexPage 开关层）
 ├─ 换了 logo/图标后功能或显示异常                              → C 类（§4）
 └─ 显示正常，只是文案/标题/字号还是旧品牌                      → D 类（§5）
 ```
 
 > ★ **A 类与 B 类症状相似但根因完全不同**，选错方向会白排查几小时。
-> 一句话判定：**「能看不能点」= A 类（数据的交互字段没了）；「连看都看不到」= B 类（文件坏了）**。
+> 一句话判定：**「能看不能点」= A 类（数据的交互字段没了）；「连看都看不到 / 重启后变回去」= B 类（文件被卷覆盖）**。
 > 用户说"index 完全破坏了、没有链接"时，**先确认是哪一类**再动手。
+> **B 类的头号诱因是 webroot 命名卷覆盖镜像层（§3.2），不是数据、也不是 bind mount。**
+> ★ **B' 类最容易误判成 B 类**：用户说"定制的首页文件丢了、就在 x_desktop 里"，
+> 但**图1 从来不是 HTML 文件**——是 `indexPage` + 门户 + 个人版式三层合成（§3.1b）。
+> 判定：先 `GET /x_program_center/jaxrs/config/portal` 看 `indexPage.enable`，**是三秒能验的第一步**。
 
 ## 2. A 类（数据层）：门户首页「点击失效」（真根因固定）
 
@@ -98,24 +103,245 @@ O2OA 登录后落到 `x_desktop/index.html`，本项目已定制成**按身份�
 - `index_home.html` = 管理员仍进"用户门户首页入口"（不分流去 admin 后台）。
 - `admin.html` = 官方版仅改 `<title>`。
 
-### 3.2 ★★ 生效纪律：真源在 git，镜像靠 COPY（这是最容易白干的地方）
+### 3.1b ★★★ 入口职责分离（**2026-09-28 修订版**）+ 「图1 主页面」的真身
 
-- **git 真源 = `deploy/host/x_desktop/` 三份**（`index.html` / `index_home.html` / `admin.html`）。
-- `Dockerfile` 用 `COPY` 把它们烤进镜像：
+> **修订说明**：本节原先描述"三分流"（按角色在 index.html 内 `location.href` 跳 admin/index_home）。
+> **该方案已废弃**。用户 2026-09-28 明确要求改为「**职责分离**」：
+> index.html 对所有人一视同仁渲染多栏仪表盘；admin.html 自己做管理员守卫。
+> 依赖前端跳转分流有三个固有缺陷：① 跳转前有白屏/闪烁；② 角色判据要读多个来源易错；
+> ③ 一旦某个入口文件被 webroot 卷旧版覆盖，"分流逻辑整个消失"却看不出来（§3.2 的真实事故）。
+
+**项目约定（修订版，永久有效，勿再搞混）**：
+
+| 入口 | 职责 | 谁能进 |
+|---|---|---|
+| `/x_desktop/index.html` | **主页面 = 多栏仪表盘**（图1：13 组件）。**已取消任何分流** | **所有人**（含管理员） |
+| `/x_desktop/admin.html` | **九宫格桌面**（后台图标工作台） | **仅管理员**；非管理员被守卫弹回 `index.html` |
+| `/x_desktop/index_home.html` | 备用入口（与 index.html 等价，当前无人引用） | — |
+| `/x_desktop/portal.html` | 官方门户壳（带 `?id=` 参数，一般不用） | — |
+
+**关键差异（对照旧方案）**：
+- 旧：`index.html` 里按 `_isManager()` 决定"跳 admin.html / 跳 index_home.html / 原地渲染"。
+- 新：`index.html` 删光 `_HOME_ENTRY_USERS`/`_MANAGER_ROLE`/`_isManager`/`_goAdmin`/`_goHomeEntry`，
+  `_load()` 直接 `layout.openApplication(null, "portal.Portal", {"portalId":"index"})` —— **无分支、无跳转**。
+- 新：权限闸门搬到 `admin.html` 内（§3.1c），**只有需要保护的那一个入口承担守卫职责**。
+  这样 `index.html` 永远不会因为角色判错而把管理员关在门外。
+
+**★ 关键认知：「图1 的主页面」不是一个 HTML 文件，而是三层配置合成的。**
+用户常误记"定制文件就在 x_desktop 中"——**x_desktop 下没有任何一版 HTML 能渲染出图1**。
+图1 = 以下三层叠加：
+
+1. **开关层**：`config/portal.json` 的 `indexPage = {enable:true, portal:"<内容门户id>", page:""}`
+2. **门户层**：内容门户（本项目 `62cc80f7`，name=主页内容，alias=**homepage**）→ `firstPage` 指向某页面
+3. **版式层**：个人数据 `custom/v10_homepage_layout`（13 列 3 区、13 个组件）
+
+```bash
+# 查/改开关层（无需重启，实时生效）
+GET/PUT /x_program_center/jaxrs/config/portal        # data.indexPage
+# 查门户层
+GET /x_portal_assemble_designer/jaxrs/portal/{id}    # 看 name/alias/firstPage
+# 查版式层（用本人 token）
+GET /x_organization_assemble_personal/jaxrs/custom/v10_homepage_layout
+```
+
+**★★ 「首页退化成图2」的头号原因 = `indexPage.enable` 被关（false）**。
+此时门户、页面、版式数据**全部完好**，只是开关关了 → 落到 `portalId:"index"` 的那个壳（图2）。
+**排查顺序：先查 `indexPage` 开关，再查数据。别一上来翻文件。**
+
+#### 机制考证：`?default=false` 是官方开关，也是 index/admin 职责分离的关键
+
+- 文件：`servers/webServer/o2_core/o2/xDesktop/Default.js`（**注意不在 `x_desktop/js/`**）
+- `:131` `this.noDefault = (uri.getData("default")||"").toString().toLowerCase()==="false"`
+- `:151` `load()` → `if (!this.noDefault) this.loadDefaultPage();`
+- `:343` `loadDefaultPage()` → 若 `layout.config.indexPage.enable && .portal` 成立，
+  就**把内容门户当作首页 tab 打开**（于是顶掉九宫格）；否则 `appId="Homepage"` 走九宫格。
+
+**⇒ 结论：`indexPage.enable=true` 是全局开关，会同时影响 `admin.html`。**
+开了它，`admin.html` 也会被顶成门户首页 —— 与"admin 应是九宫格"的约定冲突。
+
+**解法：让 `admin.html` 恒以 `?default=false` 运行**（跳过 `loadDefaultPage`，直接落九宫格）：
+
+```html
+<!-- 放在 x.min.js 之前！ -->
+<script>
+(function(){
+  try {
+    if (String(window.location.search||"").indexOf("default=") === -1) {
+      var u = window.location.href;
+      window.history.replaceState(null, "", u + (u.indexOf("?")>-1 ? "&" : "?") + "default=false");
+    }
+  } catch(e){}
+})();
+</script>
+```
+
+> ★★ **陷阱（实测无效的写法）**：`window.layout.noDefault = true` **不管用**。
+> 因为 `initData()` 每次实例化都**无条件重算** `noDefault`（Default.js:131），把你的赋值覆盖掉。
+> **唯一可行路径 = 在 `x.min.js` 执行前把参数写进 URL。**
+
+#### 3.1c 管理员守卫：`admin.html` 的权限闸门（写在 HTML 内，轮询等 session 就绪）
+
+**会话来源与判据（多源取并集，别只读一处）**：
+```js
+var s = (window.layout && layout.session) || {};
+var u = s.user || {}, ud = s.userDetail || {};
+// ① tokenType（管理员登录 token 的 tokenType === "manager"）——最可靠
+if (u.tokenType === "manager" || s.tokenType === "manager") return true;
+// ② 角色列表（roleList 常落在 userDetail 而非 user）
+[].concat(u.roleList||[], ud.roleList||[]).some(r => String(r).includes("Manager@ManagerSystemRole@R"));
+// ③ 用户名兜底
+["admin","xadmin"].indexOf(String(u.unique||u.name||"").toLowerCase()) > -1;
+```
+
+**★ 三态返回，不能用布尔**：`session` 是异步填充的，过早判断会**把管理员误弹出去**。
+```js
+function isManager(){
+  var s = (window.layout && layout.session) || {};
+  var u = s.user || {};
+  if (!u.unique && !u.name && !s.tokenType && !u.tokenType) return null;  // ← 未就绪，继续等
+  /* …判据… */
+  return true | false;   // true=管理员；false=确定非管理员 → replace("index.html")
+}
+// 轮询：null 继续等，false 立刻弹走，true 结束轮询；超时 MAX_WAIT 兜底放行（宁可放行不可误杀）
+```
+
+**纪律**：超时**放行**而非拦截 —— 守卫的本意是"挡普通用户"，不是"锁死管理员"。
+把超时做成拦截 = 网络慢时管理员进不去自己的后台，比不守卫更糟。
+
+#### 3.1d ★★ 残留 tab 真根因：**服务端持久化 layout 的 `apps`**（不是缓存、不是 HTML）
+
+**症状**：admin.html 打开后顶部挂着一条旧 tab，标题是改名前的品牌词（如「翱途（O2OA）办公系统」），
+虽然页面上其它位置的品牌都改对了。用户截图里"镶嵌在里面的旧品牌"就是它。
+
+**根因链条**：
+```
+Default.js:441 loadStatus()
+  → 读 layout.userLayout.apps（持久化在服务端）
+  → 对每一条 .createTaskItem() 重建 tab
+```
+- `layout.userLayout` 存在 **`GET/PUT /x_organization_assemble_personal/jaxrs/custom/layout`**（个人定制数据）。
+- `?default=false` **只跳过 `loadDefaultPage()`**，对 `loadStatus()` 重建历史 tab **无能为力**。
+- **换浏览器/无痕窗口不复现** ← 因为它不在页面里，在**该用户的账号数据**里。
+  ★ 诊断时若用全新 context 探测"DOM 里有没有旧品牌"会得到 `false`，从而**误判为缓存问题**（本会话踩过）。
+
+**查**：
+```bash
+python tools/o2_desktop_layout_audit.py --audit            # 打印各用户 currentApp/apps
+# 或直接看 admin 的 layout 里 apps 是否含 portal.Portal<改名前的门户id>
+```
+**清**：
+```bash
+python tools/o2_desktop_layout_audit.py --clean-apps       # 移除 apps 中 portal.Portal* 残留 + currentApp 归位空串
+```
+**双保险**：`admin.html` 里再加一段前端兜底（页面加载后关掉所有非首页 tab）——
+因为**存量用户的 layout 各有各的残留**，脚本只能清已知账号。
+
+#### 3.1e ★★ 九宫格的两个"隐形"事实：logo 由 CSS 渲染、图标住在「开始菜单」弹层
+
+**① 九宫格的 logo/水印不是 HTML 里的 `<img>`，是 CSS `background-image`。**
+
+| CSS 类 | 图片 | 尺寸/位置 |
+|---|---|---|
+| `.logo_o2_40` | `…/<skin>/icons/logo_o2_40.png` | 40×40，左下角「开始」按钮 |
+| `.logobg` | `…/<skin>/icons/pic_logo_sy.png` | 500×300，内容区水印 |
+
+- CSS 文件：`servers/webServer/o2_core/o2/xDesktop/$Default/<skin>/style-skin.css`
+- 壳文件：`$Default/blue/layout-pc.html`（`class="layout_menu_start_button logo_o2_40"` / `class="layout_content_apps logobg"`）
+- **⇒ 只改 `<title>` 或 HTML 里的文字，九宫格上的 logo 纹丝不动。必须替换 PNG。**
+- 本项目替换 4 张（见 `Dockerfile`）：
+  `logo_o2_40.png` / `pic_logo_sy.png` / `logobg.png` / `logobg1.png` → 协会品牌图。
+- 生成脚本：`tools/o2_make_brand_assets.py`（从 367×165 原图按**列**切出标识方块，再按需缩放/做水印）。
+  ★ **水印陷阱**：原图标识内部是**白色不透明填充**，若按 alpha 统一着色会糊成实心圆 →
+  必须保留原始黑白对比，**只整体降 alpha**（`putalpha(src_a.point(lambda v: int(v*0.35)))`）。
+- ★ 只替换了 **blue 皮肤**；用户在开始菜单换皮肤会回到官方 logo（已在 Dockerfile 注释说明）。
+
+**② 九宫格图标住在「开始菜单」弹层里，tab 全关则主区域空白。**
+
+- 只把 tab 关掉 → 桌面区域**空空如也**（不是九宫格！本会话踩过：截到空白桌面）。
+- 必须显式展开：**`layout.desktop.showStartMenu()`**（`Default.js:799`，公开方法）。
+- 前端兜底逻辑（放在 §3.1d 那段 close-tabs 之后）：
+  ```js
+  var d = window.layout && layout.desktop;
+  if (d && typeof d.showStartMenu === "function") d.showStartMenu();
   ```
-  COPY deploy/host/x_desktop/index.html      ${O2OA_HOME}/servers/webServer/x_desktop/index.html
-  COPY deploy/host/x_desktop/index_home.html ${O2OA_HOME}/servers/webServer/x_desktop/index_home.html
-  COPY deploy/host/x_desktop/admin.html      ${O2OA_HOME}/servers/webServer/x_desktop/admin.html
-  ```
-- ★ **bind mount 单文件覆盖对 O2OA 无效**：实测挂载了覆盖层、线上仍返回官方版 index.html。
-  所以**必须 COPY 烤镜像**。
-- **正确改法**：
-  ```bash
-  # ① 只改 git 真源三份，不要在容器里改
-  # ② 重建镜像（这一步才能让定制进 webServer）
-  docker compose build o2oa && docker compose up -d
-  ```
-  **应急**（不推荐，重建即丢）：`docker cp` 进容器 `/opt/o2server/servers/webServer/x_desktop/` + `docker restart o2oa-server`。
+- 轮询条件：等 `layout.desktop.apps` **非空**后延迟 ~350ms 再关 tab + 展开；
+  若 `apps` 一直为空但 `showStartMenu` 已存在（>3s），**直接展开**（没有历史 tab 的用户走这条）。
+
+#### 验证工具（本 skill 附带，装在 `tools/`）
+
+```bash
+# 主页面（index.html）：期望 13 组件 + 80 项左导航 + index-content 1 层 + pageerror 0
+python tools/o2_verify_homepage.py mengyijie
+# 九宫格（admin.html）：期望 URL 自动带 ?default=false + widgetTitle 0 + 正文为九宫格菜单
+python tools/o2_verify_admin_desktop.py admin
+
+# ★ 2026-09-28 新增（入口职责分离验证组）
+python tools/o2_verify_entry_split.py          # admin/mengyijie 双入口齐备：index=13组件+80导航；admin=tabs0+无旧品牌+品牌图 md5 一致
+python tools/o2_verify_admin_guard.py          # 普通用户(luoshuhan)访问 admin.html 被弹回 index.html 且渲染多栏仪表盘
+python tools/o2_verify_admin_grid.py           # admin.html 打开即自动展开九宫格（.layout_start_item 计数）
+python tools/o2_desktop_layout_audit.py --audit      # 查各用户 layout 的 apps 残留
+python tools/o2_desktop_layout_audit.py --clean-apps # 清 apps 里的 portal.Portal* 残留
+```
+
+---
+
+### 3.2 ★★★ 生效纪律：**webroot 命名卷 > 镜像层**（2026-09-28 重大修正，推翻此前"COPY 烤镜像即可"的结论）
+
+**两条路径，层级不同，务必分清：**
+
+| 路径 | 层级 | 说明 |
+|---|---|---|
+| `/opt/o2server/servers/webServer/x_desktop/*.html` | **镜像层** | `Dockerfile COPY` 烤进来的位置 |
+| `/opt/o2server/webroot/x_desktop/*.html` | **命名卷** `o2oa_o2oa-webroot` | O2OA 的「用户自定义资源目录」 |
+
+**★★ 关键机制：`webroot` 是命名卷，O2OA 启动时把它并入静态资源，且优先级高于镜像层。
+卷内一旦存在同名文件，就会把镜像层的定制文件整个盖住。**
+
+**真实事故（2026-09-28）**：`webroot/x_desktop/index.html` 里躺着 09-23 的旧版
+（空 `<title></title>`、只有两分流、缺 `_HOME_ENTRY_USERS`/`index_home.html`），
+把 09-26 烤入镜像的**三分流新版**完全覆盖 →
+用户"**重启电脑后首页变回去了**"。
+
+**为什么极难发现**：
+- 看镜像层 `servers/webServer/x_desktop/index.html` → **是新的、正确的** ✅（被骗）
+- 看 HTTP 返回 → 取决于卷与镜像的合并结果
+- **必须单独去看卷层** `/opt/o2server/webroot/x_desktop/` 才能找到真凶
+
+**正确改法（三步都要）**：
+```bash
+# ① 改 git 真源（deploy/host/x_desktop/ 三份）—— 唯一真源
+# ② 同步进 webroot 卷（★关键，否则重启被打回旧版）
+python tools/o2oa_sync_webroot_volume.py          # 幂等 + md5 校验
+python tools/o2oa_sync_webroot_volume.py --check  # 只校验
+# ③ 校验 HTTP 实际返回
+curl -s http://localhost:9090/x_desktop/index.html | md5sum
+```
+> `Dockerfile COPY` 仍然要做（保镜像层正确），但**只做 COPY 不够** ——
+> 卷里有旧同名文件时，COPY 出来的新版永远不生效。**两处都要，缺一不可。**
+> 反向亦然：只改卷不改真源 → 下次重建/换机就丢，且无法回溯。
+
+**诊断口诀（三层都要看）**：
+```bash
+# 镜像层
+MSYS_NO_PATHCONV=1 docker exec o2oa-server md5sum /opt/o2server/servers/webServer/x_desktop/index.html
+# 卷层  ★最容易漏、最可能是真凶
+MSYS_NO_PATHCONV=1 docker exec o2oa-server md5sum /opt/o2server/webroot/x_desktop/index.html
+# 真源
+md5sum deploy/host/x_desktop/index.html
+# HTTP 实际
+curl -s http://localhost:9090/x_desktop/index.html | md5sum
+```
+三者不一致 → 按「卷优先」判定实际生效版本。**卷里有文件就信卷。**
+
+> ★ **本机 QEMU 陷阱（2026-09-28 实测）**：`docker exec` 会随机报
+> `OCI runtime exec failed: ... setns process: ... /proc/self/fd/6: no such file or directory`，
+> 此时**读不到文件 ≠ 文件不存在**。直接判"卷内缺失"会把人带沟里（曾误认为修复被容器重启抹掉）。
+> **回退通道**：用临时容器挂同一卷读取 ——
+> ```bash
+> docker run --rm -v o2oa_o2oa-webroot:/wr --entrypoint sh alpine:latest -c "md5sum /wr/x_desktop/index.html"
+> ```
+> `tools/o2oa_sync_webroot_volume.py` 已内置双通道探测，优先用它。
+
 
 ### 3.3 ★ 坑：`res/config/config.json` **不可**静态 COPY
 
@@ -124,21 +350,45 @@ O2OA 登录后落到 `x_desktop/index.html`，本项目已定制成**按身份�
 - **静态 COPY 会劫持这条链路** → 系统配置与登录页标题/页脚不一致
   （2026-09-26 实证后**已从 Dockerfile 移除**）。留在 `deploy/host/x_desktop/res/config/` 仅作参考快照。
 - 要改标题/页脚 → 改**系统配置**，不是改这个文件。
+- ★★ **同理，`indexPage` 也不能改这个文件** —— 它是服务端按 `config/portal.json` 生成的**产物**。
+  改 `indexPage` 的唯一正确入口：
+  ```bash
+  PUT /x_program_center/jaxrs/config/portal     # body = 裸对象，改 data.indexPage
+  ```
+  PUT 后 **无需重启**，`/x_desktop/res/config/config.json` 会实时刷新（实测 3 秒内）。
+  ```bash
+  # 复核（应看到 enable:true + portal:<内容门户id>）
+  curl -s http://localhost:9090/x_desktop/res/config/config.json | python -m json.tool | grep -A4 indexPage
+  ```
+  > 事故原型：反复改 `config.json` 文件、反复 `docker cp`，全都不生效 ——
+  > 因为它是**每次启动重新生成的**，且 `Dockerfile` 明确不 COPY 它。
+  > 真源在数据库侧的 `config/portal.json`。
 
 ### 3.4 诊断与恢复
 
-**先证明"线上到底返回了哪份文件"**：
+**先证明"线上到底返回了哪份文件"——必须三层齐看（漏一层就会误判）**：
 ```bash
-# 容器内文件 vs git 真源 逐份比对
-docker exec o2oa-server md5sum /opt/o2server/servers/webServer/x_desktop/{index,index_home,admin}.html
-md5sum deploy/host/x_desktop/{index,index_home,admin}.html
-# 再看 HTTP 实际返回（别只看文件）
-curl -s http://localhost:9090/x_desktop/index.html | grep -n "<title>\|_HOME_ENTRY_USERS\|location.replace"
+# ① 镜像层（Dockerfile COPY 的目标）
+MSYS_NO_PATHCONV=1 docker exec o2oa-server md5sum /opt/o2server/servers/webServer/x_desktop/index.html
+# ② 卷层 ★★★ 最关键、最容易漏 —— 卷里有同名文件就以卷为准
+MSYS_NO_PATHCONV=1 docker exec o2oa-server ls -la /opt/o2server/webroot/x_desktop/
+MSYS_NO_PATHCONV=1 docker exec o2oa-server md5sum /opt/o2server/webroot/x_desktop/index.html
+# ③ git 真源
+md5sum deploy/host/x_desktop/index.html
+# ④ HTTP 实际返回
+curl -s http://localhost:9090/x_desktop/index.html | md5sum
 ```
-**恢复**：把真源三份 `git checkout -- deploy/host/x_desktop/`（或从备份取）→ `docker compose build o2oa && up -d`
-→ 再用上面的 md5/curl 双验。
-> 若是"整页白屏/语法错"，也可用浏览器控制台报错行号定位是哪份文件被改坏；
-> 若"渲染正常但点不动"，**立刻回到 §2 A 类**，别在文件上耗。
+一键对比（推荐）：
+```bash
+python tools/o2oa_sync_webroot_volume.py --check
+```
+**恢复**：`git checkout -- deploy/host/x_desktop/`（确保真源正确）
+→ `python tools/o2oa_sync_webroot_volume.py`（同步进卷）
+→ `curl` 复验 md5 → `docker restart o2oa-server` 后再验一次（确认扛得住重启）。
+
+> ★ **"重启后变回去了"= 卷覆盖的典型症状**，不要往数据层查。
+> 反向症状（改了没生效、重启才生效）也常是卷/缓存所致。
+
 
 ## 4. C 类：logo / 图标替换与回退
 
@@ -238,8 +488,31 @@ python tools/scan_brand_words.py 翱途 纵横 杭综      # CLEAN / HIT 逐词�
 - ✗ 用设计器 API 保存页面/表单来"顺手改个标题"。
 - ✗ 只比 `xdata`/`xname` 就断言"数据完好"（漏 `xproperties`）。
 - ✗ 报"点了没反应"就去改 `index.html`（多半是 §2 A 类，白改）。
+- ✗ **只做 `Dockerfile COPY` 就以为定制生效** —— webroot 卷里有同名旧文件时会被完全盖住（§3.2）。
+- ✗ **"重启后变回去了"却去查数据库** —— 十有八九是 webroot 卷覆盖（§3.4）。
 - ✗ 在容器里改 `x_desktop/*.html` 当成持久修复（bind mount 无效、重建即丢；真源是 git）。
+- ✗ 只改卷不改 git 真源（换机/重建就丢，无法回溯）。
 - ✗ 把 `res/config/config.json` 静态 COPY 进镜像（劫持动态生成链路）。
+- ✗ **改 `indexPage` 时去动 `res/config/config.json` 文件** —— 它是启动时生成的产物，改它永远无效；
+  正确入口是 `PUT /x_program_center/jaxrs/config/portal`（§3.3）。
+- ✗ **用户说"定制首页文件丢了"，就去 x_desktop 翻 HTML** —— 图1 从来不是 HTML，是三层配置（§3.1b）。
+- ✗ **用 `window.layout.noDefault = true` 想让 admin.html 跳过门户首页** ——
+  `initData()` 会无条件重算并覆盖它（Default.js:131）。必须用 `history.replaceState` 写 URL 参数（§3.1b）。
+- ✗ 开了 `indexPage.enable=true` 就以为 admin.html 不受影响 —— 它是全局开关，会顶掉九宫格（§3.1b）。
+- ✗ 用 `docker cp` 改 `servers/webServer/x_desktop/*.html` 就当修好 —— 只改可写层，HTTP 可能仍返回旧版（实测）；
+  必须 `docker compose build o2oa && up -d`（本项目该目录是镜像层，非卷）。
+- ✗ **用"前端按角色 `location.href` 分流"实现入口分离** —— 白屏闪烁、判据易错，且被卷旧版覆盖后
+  "分流逻辑整个消失"却看不出来。正确做法：各入口自持职责 + 只有 admin.html 做守卫（§3.1b）。
+- ✗ **在 index.html 里判断"是不是管理员"再决定是否外跳** —— 判错就把管理员关在门外；守卫只该保护 admin.html。
+- ✗ **管理员守卫用布尔返回、session 未就绪就下结论** —— 必须三态（null=再等 / false=弹走 / true=放行），
+  且超时**放行**不拦截（§3.1c）。
+- ✗ **看到 admin 页面残留旧品牌 tab，就去查缓存 / 改 HTML** —— 真因是该用户服务端 layout 的 `apps`
+  （`…/jaxrs/custom/layout`），换无痕窗口不复现即为铁证；用 `o2_desktop_layout_audit.py --clean-apps`（§3.1d）。
+- ✗ **用全新 playwright context 探测"DOM 里有没有旧品牌"** 来判残留 —— 无持久 layout 故必然为 false，会误判成"缓存问题"。
+- ✗ **只改 admin.html 的 `<title>`/HTML 文字，就以为九宫格 logo 改了** —— logo 是 CSS `background-image`，
+  须替换 `$Default/<skin>/icons/` 下 `logo_o2_40.png`、`pic_logo_sy.png` 等 PNG（§3.1e）。
+- ✗ **只关掉历史 tab 就以为得到九宫格** —— tab 全关后主区空白，必须调 `layout.desktop.showStartMenu()` 展开（§3.1e）。
+- ✗ **水印生成时按 alpha 统一着色** —— 原图标识内部为白色不透明，会糊成实心圆；应保留黑白对比、只整体降 alpha。
 - ✗ 用 `GROUP_CONCAT` 拼扫描 SQL、用 md5 比"无差异"。
 - ✗ 改完不重启就下结论。
 - ✗ 未获用户确认就动关联字段（`xshortUrlCode` 等）。
@@ -247,7 +520,16 @@ python tools/scan_brand_words.py 翱途 纵横 杭综      # CLEAN / HIT 逐词�
 
 ## 8. 证据出处
 
-`D:\O2OA\ai-stack-hardening\docs\knowledge-base.md` 第 13~19 章（含源码行号、SQL、实测数据）；
+`D:\O2OA\ai-stack-hardening\docs\knowledge-base.md` 第 13~20 章（含源码行号、SQL、实测数据）；
 `docs\knowledge_base\portal_brand_guard.md`（同一总纲的 KB 版，已入 RAG 库）。
-工具：`tools/scan_brand_words.py`、`tools/rename_gongwen_brand.py`、`tools/fix_wenzhong_orgname.py`。
-文件真源：`deploy/host/x_desktop/`（三份）+ `Dockerfile` 第 150~162 行。
+工具：`tools/scan_brand_words.py`、`tools/rename_gongwen_brand.py`、`tools/fix_wenzhong_orgname.py`、
+`tools/o2oa_sync_webroot_volume.py`（卷同步）、`tools/o2_verify_homepage.py`（主页面验证）、
+`tools/o2_verify_admin_desktop.py`（九宫格验证）、`tools/o2_verify_entry_split.py`（入口分离）、
+`tools/o2_verify_admin_guard.py`（守卫）、`tools/o2_verify_admin_grid.py`（九宫格展开）、
+`tools/o2_desktop_layout_audit.py`（layout 残留审计/清理）、`tools/o2_make_brand_assets.py`（品牌图生成）。
+文件真源：`deploy/host/x_desktop/`（index.html / admin.html / index_home.html 三份）+ `Dockerfile` 第 222~249 行（含 4 条品牌图 COPY）。
+机制源码：`servers/webServer/o2_core/o2/xDesktop/Default.js`
+（`:131` noDefault / `:151` load / `:343` loadDefaultPage / **`:441` loadStatus 重建 tab** /
+**:799` showStartMenu 展开九宫格**）；
+`$Default/<skin>/style-skin.css`（`.logo_o2_40` / `.logobg` 的 `background-image`）；
+`x_desktop/js/x.min.js`（boot：`getUserLayout` → `new MWF.xDesktop.{Layout|Default}` → `.load()`，无公开钩子故须轮询）。
