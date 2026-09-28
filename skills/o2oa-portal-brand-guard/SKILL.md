@@ -159,12 +159,13 @@ GET /x_organization_assemble_personal/jaxrs/custom/v10_homepage_layout
 **⇒ 结论：`indexPage.enable=true` 是全局开关，会同时影响 `admin.html`。**
 开了它，`admin.html` 也会被顶成门户首页 —— 与"admin 应是九宫格"的约定冲突。
 
-**解法：让 `admin.html` 恒以 `?default=false` 运行**（跳过 `loadDefaultPage`，直接落九宫格）：
+**解法：让 `admin.html` 恒以 `?default=false` 运行**（跳过 `loadDefaultPage`），**但地址栏不可见该参数**：
 
 ```html
-<!-- 放在 x.min.js 之前！ -->
+<!-- ① 放在 x.min.js 之前：同步写入参数，让 initData() 读到 -->
 <script>
 (function(){
+  window.__adminHtmlStripDefault = true;              // 交给 ② 清 URL
   try {
     if (String(window.location.search||"").indexOf("default=") === -1) {
       var u = window.location.href;
@@ -174,12 +175,82 @@ GET /x_organization_assemble_personal/jaxrs/custom/v10_homepage_layout
 })();
 </script>
 ```
+```js
+/* ② boot 完成后（layout.desktop 就绪）再抹掉 —— SPA 不会因此重载（已实测） */
+function stripDefaultParam(){
+  if (!window.__adminHtmlStripDefault) return;
+  var u = window.location.href;
+  if (u.indexOf("default=") === -1) return;
+  var clean = (u.indexOf("?default=false") > -1)
+      ? u.replace("?default=false", "")
+      : u.replace("&default=false", "").replace("default=false&", "");
+  window.history.replaceState(null, "", clean);
+}
+```
+
+> ★★ **用户明确要求「地址栏不能出现 `?default=false`」**（2026-09-28）。
+> 单纯 `replaceState` 写进 URL 会**把参数露给用户** —— 必须「先写→boot 后抹」两步走。
+> 时机是关键：**过早抹**会让 `initData()` 重算 `noDefault=false`（退回仪表盘）；
+> **过晚抹**用户会看到参数闪一下。实测 boot 后 `replaceState` 换 URL **不触发 SPA 重载**，渲染不受影响。
+> 备选思路（未采用）：官方 `?app=<appName>` 参数（Default.js:136-143）会清空 `status.apps` 并
+> 强制 `forceCurrentApp`，也能达到"干净打开"，但同样会在地址栏留参数。
 
 > ★★ **陷阱（实测无效的写法）**：`window.layout.noDefault = true` **不管用**。
 > 因为 `initData()` 每次实例化都**无条件重算** `noDefault`（Default.js:131），把你的赋值覆盖掉。
 > **唯一可行路径 = 在 `x.min.js` 执行前把参数写进 URL。**
 
-#### 3.1c 管理员守卫：`admin.html` 的权限闸门（写在 HTML 内，轮询等 session 就绪）
+#### 3.1d ★★ index.html 左上角 logo 的真身：门户页面内嵌 HTML 引用的 **PTL_FILE**
+
+**症状**：index.html（多栏仪表盘）左上角显示「翱途 O2OA」白字 logo，而 admin.html（九宫格）已换协会图。
+**为什么两个入口 logo 不同源**：
+
+| 入口 | logo 载体 | 位置 |
+|---|---|---|
+| **admin.html**（九宫格壳） | CSS `background-image`（`.logo_o2_40`） | `$Default/<skin>/icons/logo_o2_40.png`（镜像层，§3.1f） |
+| **index.html**（门户页面） | **门户页面内嵌 HTML 里的 `<img mwftype="image">`** | **`PTL_FILE.xdata`（数据库 base64）** |
+
+**定位链路（实测）**：
+```js
+// 浏览器 DOM 里的真实 src：
+// /x_portal_assemble_surface/jaxrs/file/0b084672-…/portal/0d565ae3-…/content
+var e = document.querySelector('.index-logo-img'); e.src;
+```
+```sql
+-- ① 找引用该文件的页面
+SELECT xid, xname, xportal FROM X.PTL_PAGE
+ WHERE xdata LIKE '%<fileId>%';
+-- ② 找文件本体
+SELECT xid, xname, xlength, CHAR_LENGTH(xdata) FROM X.PTL_FILE WHERE xid='<fileId>';
+--    0b084672-…/ logo.png / 14376 / 19168（base64 字符数）
+```
+
+**替换图（白色版！顶栏是蓝底）**：
+```bash
+# 生成白色版（黑底素材在蓝顶栏上看不见）
+python tools/o2_make_brand_assets.py --top-white       # 或见下"白色化"要点
+# 写回 PTL_FILE（★ base64 用 @b64 分段 CONCAT，避免单条 SQL 过长；走 stdin 而非 -e）
+#   UPDATE PTL_FILE SET xdata=@b64, xlength=<新字节数> WHERE xid='<fileId>';
+```
+- ★ **白色化要点**：原素材是黑字透明底；顶栏是蓝底 → 用**亮度当 alpha 掩膜**、颜色统一置白：
+  ```python
+  lum = int(0.299*r + 0.587*g + 0.114*b)
+  op[x,y] = (255,255,255, int(a * (255-lum) / 255))   # 越黑 → alpha 越高
+  ```
+- ★★ **回写后 HTTP 仍返回旧图 → 文件级缓存，必须 `docker restart o2oa-server`**（§4 C 类铁律，本次再次验证：
+  不重启 HTTP md5 = 旧图 14376B；重启后 = 新图 6320B，与本地一致）。
+
+#### 3.1e ★★★ 入口 logo 载体总表（四个位置都要改，缺一处就"还有翱途"）
+
+| # | 载体 | 真源 | 生效方式 |
+|---|---|---|---|
+| 1 | 九宫格左下角「开始」按钮 | `$Default/blue/icons/logo_o2_40.png` | 烤镜像 (§3.1f) |
+| 2 | 九宫格内容区水印 | `$Default/blue/icons/pic_logo_sy.png`（+logobg/logobg1） | 烤镜像 (§3.1f) |
+| 3 | **index.html 左上角 logo** | **`PTL_FILE.xdata`**（门户页面内嵌 `<img>`） | SQL 回写 + **重启** (§3.1d) |
+| 4 | 浏览器 tab 标题 | ① 入口 HTML 的 `<title>`；② **门户页面 `PTL_PAGE.xname`**（打开后覆盖，§5.2） | 烤镜像 / SQL |
+
+> ★ 用户说"logo 还没改"时，先问是**哪个入口、哪个位置** —— 四个载体互不相干，改一个不影响其它。
+
+#### 3.1f ★★ 九宫格的两个"隐形"事实：logo 由 CSS 渲染、图标住在「开始菜单」弹层
 
 **会话来源与判据（多源取并集，别只读一处）**：
 ```js
@@ -208,7 +279,7 @@ function isManager(){
 **纪律**：超时**放行**而非拦截 —— 守卫的本意是"挡普通用户"，不是"锁死管理员"。
 把超时做成拦截 = 网络慢时管理员进不去自己的后台，比不守卫更糟。
 
-#### 3.1d ★★ 残留 tab 真根因：**服务端持久化 layout 的 `apps`**（不是缓存、不是 HTML）
+#### 3.1g ★★ 残留 tab 真根因：**服务端持久化 layout 的 `apps`**（不是缓存、不是 HTML）
 
 **症状**：admin.html 打开后顶部挂着一条旧 tab，标题是改名前的品牌词（如「翱途（O2OA）办公系统」），
 虽然页面上其它位置的品牌都改对了。用户截图里"镶嵌在里面的旧品牌"就是它。
@@ -503,6 +574,12 @@ python tools/scan_brand_words.py 翱途 纵横 杭综      # CLEAN / HIT 逐词�
   必须 `docker compose build o2oa && up -d`（本项目该目录是镜像层，非卷）。
 - ✗ **用"前端按角色 `location.href` 分流"实现入口分离** —— 白屏闪烁、判据易错，且被卷旧版覆盖后
   "分流逻辑整个消失"却看不出来。正确做法：各入口自持职责 + 只有 admin.html 做守卫（§3.1b）。
+- ✗ **把 `?default=false` 直接 `replaceState` 留在地址栏** —— 用户明确要求不可见；
+  必须「`x.min.js` 前写入 → boot 完成后抹掉」两步走（§3.1b）。★ 抹的时机是关键，过早会退回仪表盘。
+- ✗ **以为改了 admin.html 的九宫格 logo，index.html 的 logo 也会跟着变** ——
+  两者不同源：admin 是 CSS `background-image`（PNG），index 是门户页面内嵌 `<img>` 指向 `PTL_FILE`（§3.1d/§3.1e）。
+- ✗ **给 index.html 顶部 logo 换成黑色版素材** —— 顶栏是蓝底，黑字看不见；须做白色版（§3.1d 白色化）。
+- ✗ **改完 `PTL_FILE.xdata` 不重启就断言"没生效"** —— 文件级缓存，必须 `docker restart o2oa-server`（§3.1d）。
 - ✗ **在 index.html 里判断"是不是管理员"再决定是否外跳** —— 判错就把管理员关在门外；守卫只该保护 admin.html。
 - ✗ **管理员守卫用布尔返回、session 未就绪就下结论** —— 必须三态（null=再等 / false=弹走 / true=放行），
   且超时**放行**不拦截（§3.1c）。
