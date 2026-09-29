@@ -81,11 +81,38 @@ WHERE xoccurTime > NOW() - INTERVAL 24 HOUR AND xexceptionClass IN ('<类1>','<�
 
 ## 4. 已知残留根因（本实例）
 
+### 4.1 已停用的一次性爆发（2026-09-26，未再复发）
+
 CTE_AGENT 的 `6c948659` 通用内容管理数据迁移 / `b7e2d13e` 通用流程数据迁移
 （cron `11 * * * * ?`，**xenable=0 已停用**）：demo 迁移后 `transferFlow` /
 `transferDocument` 自建表不存在，一轮跑出各 602 条
 `ExceptionEntityNotExist` + `ExceptionAgentExecute`，可占当日日志 98%。
-重现即确认这两行 `xenable` 仍为 0，无需其他处理。
+**2026-09-29 复查：`xenable` 仍 0、`xlastStartTime` 仍停在 2026-09-26 16:52:33 →
+确认未再触发。若再出现同类爆发，不要默认归因于它，先查 `xlastStartTime` 是否推进。**
+
+### 4.2 ★★ 现网持续复发（2026-09-29 定位）
+
+`ExceptionEntityNotExist` 单日 789 条，**持续性**而非一次性：
+
+- 两条 Work ID `3bb242e8` / `f218fb1c` 自 09-28 16:15 起**每 5~10 分钟**复现至今晨 06:25。
+- 来源：`AttachmentAction /attachment/list`（116+64）与
+  `DataAction /data/work/{id}`（81+77+28…），person = 孟弋洁@mengyijie / admin。
+- **根因是客户端残留，不是服务端故障**：Work 已被删除（疑与 09-21 拆应用有关），
+  而浏览器/门户页面**未刷新，仍在轮询已失效的 Work ID**。
+- 处置：**刷新或关闭该页面即止**，不要去改服务端或查 agent。
+
+### 4.3 误报类（看到别慌）
+
+- `…authentication.jaxrs.authentication.BaseAction` 数百条 = **WARN**
+  `user: XXX use superPermission.`，管理员正常提权，**非错误**。
+  注意它在 `CTE_WARNLOG` 按 **`xloggerName`** 分组（`CTE_WARNLOG` **无 `xperson` 列**，
+  `CTE_PROMPTERRORLOG` 才有）。
+- 文件类 `ExceptionFileNotExisted` / `ExceptionAttachmentNotExist` 成对出现且
+  `MAX(xoccurTime)` 停在单一时刻 ⇒ 一次性，已自愈。
+
+## 4.4 ★ 时区
+本实例 MySQL `SELECT NOW()` **已与主机（GMT+8）一致**，无需 +8 换算；
+但**每轮仍应先跑一次 `SELECT NOW()` 对齐**，别沿用旧结论。
 
 ## 5. ★ docker exec 调试三条纪律
 
