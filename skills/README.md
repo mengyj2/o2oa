@@ -2,7 +2,7 @@
 
 > 位置：`~/.workbuddy/skills/`（= `C:\Users\meng_\.workbuddy\skills\`），跨项目可用。
 > 本文件**不是 skill**（根目录 README，不参与加载），只作导航与边界说明。
-> 最后整理：2026-09-27（含 Clawith 相关技能下线，见 §7；新增 `o2oa-mcp-tool-hardening`、`o2oa-driver-repo-clean`、`o2oa-external-skill-import`）。共 23 个。
+> 最后整理：2026-09-30（新增 `o2oa-runtime-drift-hardening`、`o2oa-onlyoffice-attachment-preview`、`o2oa-onlyoffice-editor-features`）。共 27 个。
 > **镜像**：本目录已同步进两个 O2OA 仓（`D:\O2OA\skills\`、`D:\o2oaccia\skills\`），
 > 同步用 `D:\O2OA\tools\sync_skills_to_repos.sh`（随每日双仓同步自动跑）。
 
@@ -38,6 +38,8 @@
 | `o2oa-ai-stack-no-popup-hardening` | AI 栈看门狗反复弹控制台窗 + 9090 看似卡死；含持续化与知识库落库 |
 | `o2oa-mcp-tool-hardening` | ★ 9 个 MCP 工具（会议/日程/HR/薪资/邮件/待办/流程）报 500、静默不落库、卡片回吐 `${xxx}`、查询越权返回全量；核心是 invoke `bodyMap` 未替换占位符 |
 | `o2oa-local-ai-assistant`（兼） | 推理模型「界面空白」= `reasoning_content` 陷阱（见 §4） |
+| `o2oa-onlyoffice-attachment-preview` | ★ 附件「在线打开」走下载：三层根因（控件 `isPreviewAtt/dblclick/officeTool` → 前端 `x_component_OnlyOfficeEditor` 缺失 → **表单 HTTP 强缓存 cacheTag=CRC32(id+updateTime)**）。含 OnlyOffice 服务端/JWT/容器互通就位清单 |
+| `o2oa-onlyoffice-editor-features` | ★ 编辑器**自身菜单/页签**的语义与离线边界：「打开文件所在位置」= `customization.goback`（O2OA 由 `gobackUrl` 统一给定 → 跳主页属**设计**，非存储故障）；文件确在 rclone 存储器的验证法（`externalStorageSources.json` WebDAV→`o2oa-storage:5000`）；视图/插件/AI 三页签**浏览器级实测结论** + AI 页签本地化（内置 LM Studio / 自定义提供方）；含免登录 headless 探测法 |
 
 ## 3. development —— 写组件 / 门户 / 表单 / 服务
 

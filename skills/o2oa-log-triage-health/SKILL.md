@@ -103,10 +103,22 @@ CTE_AGENT 的 `6c948659` 通用内容管理数据迁移 / `b7e2d13e` 通用流�
 
 ### 4.3 误报类（看到别慌）
 
-- `…authentication.jaxrs.authentication.BaseAction` 数百条 = **WARN**
+- `…authentication.jaxrs.authentication.BaseAction` 数百~上千条 = **WARN**
   `user: XXX use superPermission.`，管理员正常提权，**非错误**。
   注意它在 `CTE_WARNLOG` 按 **`xloggerName`** 分组（`CTE_WARNLOG` **无 `xperson` 列**，
   `CTE_PROMPTERRORLOG` 才有）。
+  2026-09-30 实测 1251 条：5 名管理员**全天每个小时均匀分布**（20:00 峰值 437）
+  ⇒ 破千也**不是爆发性故障**，按 §2 判"持续"后再看内容即可定性。
+- ★★ **两类 TOP 只在 `CTE_WARNLOG` 命中，在 PROMPT/UNEXPECTED 里 LIKE 恒 0 行**：
+  `BaseAction` 与 **`jpush...ActionSendMessage`**。后者 = WARN
+  `极光推送设备为空，<用户>`（2026-09-30 实测 687 条：李芳 208 / 管理员 203 / 孟弋洁 184），
+  **断云后无移动端注册设备，属正常**，勿当成推送服务故障。
+  ⇒ 钻取时若 PROMPT+UNEXPECTED 都查不到某个类，**先查 `CTE_WARNLOG`** 再下"已消失"的结论。
+- `java.io.FileNotFoundException` 的 message 是 **webdav URL**
+  （`webdav4://o2oadrive:***@o2oa-storage:5000/drive/...`），落在 **UNEXPECTED** 表。
+  判"存储是不是挂了"先 `docker ps` 看 `o2oa-storage` + `docker exec o2oa-server getent hosts o2oa-storage`
+  ——2026-09-30 实测**容器存活、DNS 可解析**，181 条集中在 01:22:44 一次性
+  ⇒ 结论是"文件/路径不存在"（附件已删），**不是存储服务故障**。
 - 文件类 `ExceptionFileNotExisted` / `ExceptionAttachmentNotExist` 成对出现且
   `MAX(xoccurTime)` 停在单一时刻 ⇒ 一次性，已自愈。
 

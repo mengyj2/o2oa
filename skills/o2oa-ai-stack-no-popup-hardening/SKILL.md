@@ -1,6 +1,6 @@
 ---
 name: o2oa-ai-stack-no-popup-hardening
-description: 诊断并根治 O2OA AI 栈（gateway/ocr/embed 看门狗）反复弹出 PowerShell / python 控制台窗口、且 localhost:9090 看似卡死的问题。覆盖：venv 启动器丢失无窗标志、urllib 探活被系统代理劫持误判 DOWN、看门狗单例锁导致旧进程占坑、GBK 输出触发 UnicodeDecodeError。并覆盖「看门狗持续化 / 打包成分支」与「把排障知识写入本地 O2OA 知识库（CMS publish/html）」。当用户说「AI 栈弹窗」「gateway 一直重启」「9090 卡死」「看门狗循环」「保存到 O2OA 知识库」「打包成分支」时加载。
+description: 诊断并根治 O2OA AI 栈问题。★2026-09-30 起 AI 栈已容器化（ai-gateway/ai-ocr/ai-plan），宿主看门狗作废——本技能优先覆盖「容器化割接 + 四个静默失效根因（硬编码 BASE_DIR、embed_models 漂移、kv 缓存陈旧、token 空串放行）」，并保留看门狗时代的弹窗/9090 卡死排查（历史/回滚用）。当用户说「AI 栈弹窗」「gateway 一直重启」「9090 卡死」「看门狗循环」「割接容器」「capabilities 显示 127.0.0.1」「embedding 失效」时加载。
 agent_created: true
 category: diagnostics
 
@@ -8,7 +8,49 @@ category: diagnostics
 
 # O2OA AI 栈看门狗弹窗 / 9090 卡死 根治
 
-## 现象
+## ★★★ 2026-09-30 重大变更：AI 栈已容器化，看门狗形态【作废】
+
+**AI 栈已割接到 docker-compose 三容器，宿主看门狗不再使用。**
+若问题出现在容器化之后，先看本节；本文档下半部分的看门狗内容仅供**历史排查/回滚**参考。
+
+| 组件 | 容器 | 地址 |
+|---|---|---|
+| 网关 | `o2oa-ai-gateway` | 172.22.0.60:18790（宿主 `0.0.0.0:18790`） |
+| OCR | `o2oa-ai-ocr` | 172.22.0.61:8091 |
+| 计划 | `o2oa-ai-plan` | 172.22.0.62:18792 |
+| embed | —（已取消 8089） | 改走宿主 LM Studio `host.docker.internal:1234` |
+
+### 割接必须处理的四件事（漏一个就"静默失效"）
+1. **先 kill 看门狗本体**（`watchdog.pid` 记录者），再 kill 组件——否则看门狗 30s 内自愈补回。
+2. **禁登录自启** `%APPDATA%\...\Startup\O2OA_AI_stack_autostart.vbs`（登录会重拉看门狗抢端口）。
+3. **清端口双绑**：`netstat -ano | grep :18790` 若两个 PID（一个 docker 代理、一个旧 python）→ 清后者。
+4. **验 `/gateway/capabilities`**：`base` 必须是 `host.docker.internal`/`ai-ocr`，**不是 `127.0.0.1`**。
+
+### ★★ 容器化头号杀手：硬编码宿主路径
+`o2_agent_gateway.py` 曾写 `BASE_DIR = Path(r"D:\O2OA\gateway")` → 容器内路径不存在 →
+`CFG_PATH.exists()=False` → **静默回退 `DEFAULT_CFG`**（`127.0.0.1:1234` 容器内不通）→ LLM/embed 全断，
+且 `/app/gateway/config.json` 从未被加载。已改为 `Path(__file__).resolve().parent`（+ `O2OA_GW_BASE` 覆盖 + 宿主兜底）。
+**凡是容器化后"配置改了不起作用"，先查这类硬编码绝对路径。**
+
+### 另两个静默失效点
+- `embed_models` 必须与 `embed_base` 成对改：走 LM Studio 时模型名要换成
+  `text-embedding-qwen3-embedding-0.6b` / `text-embedding-bge-m3` 等真实名（**没有 `qwen3-embed`**）。
+- `emb_model()` 的 kv 缓存须校验是否还在白名单内，否则换后端后仍用旧名 →
+  生成器 `tools/gen_gateway_container_config.py` 已加规则 + 网关已加白名单校验。
+
+### 割接验证命令
+```bash
+export MSYS_NO_PATHCONV=1   # 否则 taskkill /PID 被 MSYS 路径转换毁掉
+curl -s --max-time 20 http://127.0.0.1:18790/gateway/health                 # 宿主
+docker exec o2oa-ai-gateway python -c \
+  "import httpx;print(httpx.get('http://127.0.0.1:18790/gateway/capabilities',headers={'Authorization':'Bearer local-o2-agent-2026'},trust_env=False).text)"
+```
+判据：chat/embed `up:true` 且 base=`host.docker.internal:1234`；ocr `ok:true` 且 base=`ai-ocr:8091`。
+复盘全文见仓库 `docs/knowledge_base/ai_stack_container_cutover_20260930.md`（提交 `5db6cb2`）。
+
+---
+
+## 现象（看门狗时代，历史）
 - 桌面不停弹出 `python.exe` 或 `powershell.exe` 控制台窗口（每次一个）。
 - `localhost:9090` 在浏览器里卡死/超时，但服务其实活着。
 - `gateway\watchdog.log` 出现 `gateway:18790 DOWN -> 重新拉起` 每 30~40s 一轮。
