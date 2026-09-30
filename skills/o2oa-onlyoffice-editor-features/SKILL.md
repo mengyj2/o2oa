@@ -1,6 +1,6 @@
 ---
 name: o2oa-onlyoffice-editor-features
-description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""插件管理器打不开""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器）；⑤不依赖登录的 headless 页签探测法；⑥「文档列表」真实来源（只有 edit 落表 + 接口仅管理员，故"别人的进了我的没进"）；⑦★自建「我的在线文档」组件（`x_component_MyOnlineDocs`）的实测接口、打开方式与入口注册。
+description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""AI 页签怎么指向本地网关""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看""在线文档列表点不开下级目录""在线文档里混进了网盘文件""在线文档要跟流程状态绑定只读"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器 + ★路线 B 已落地：网关 `/v1` OpenAI 兼容门面 + 宽松 CORS + 自定义 provider 的 addon/URL 拼接契约）；⑤不依赖登录的 headless 页签探测法；⑥「文档列表」真实来源（只有 edit 落表 + 接口仅管理员，故"别人的进了我的没进"）；⑦★自建「我的在线文档」组件（`x_component_MyOnlineDocs`）的实测接口、打开方式与入口注册；⑧★三条产品规则（流程状态只读 / 模块·流程·单据三级目录 / 只收流程文档不当网盘）与其两个"静默失效"坑（树展开键发散、`.min.js`+`VERSION` 未同步）与"不当网盘"的反证方法。
 agent_created: true
 category: troubleshooting
 ---
@@ -197,22 +197,38 @@ openrouter.js / groq.js / mistral.js / together.ai.js / google-gemini.js / xAI.j
 需提供 model 名、endpoint URL、headers）；`scripts/engine/providers/preinstall-example.json`
 给出 `providers/models/actions` 的预置范式。
 
-**调用路径**：插件 iframe（浏览器侧）→ `provider.url + "/chat/completions"`。
-⇒ **模型端点必须"访问者浏览器可达" + 允许跨域**（插件 origin = `http://<host>:8800`）。
+**调用路径**：插件 iframe（浏览器侧直连）→ `AI._getEndpointUrl()`（`engine/engine.js:341`）
+= `provider.url`（去尾斜杠）+（`addon` 非空且 url 尾部没有它时 `"/"+addon`）+ 相对端点
+（`"/chat/completions"` / `"/models"`）。
+★ **addon 只对"已注册的提供方名"存在**：`internal/lmstudio.js` 是 `super(..., "v1")`；
+而**自定义提供方**（新名字）在 `base.js:AI.createProviderInstance()` 里回落到 `new AI.Provider(name,url,key)`
+⇒ addon=**空串** ⇒ 最终 URL = 界面填的 URL + `/chat/completions`。
+⇒ **用自定义提供方时 URL 必须自带 `/v1`**。
+请求头 `provider.js:159`：`Content-Type: application/json`，仅当 key 非空才带 `Authorization: Bearer`。
+请求体 `provider.js:201`：`{model, messages}`，流式时 `engine.js:814` 加 `stream:true`。
+⇒ **模型端点必须"访问者浏览器可达" + 允许跨域**（插件 origin = O2OA `:9090` 或 DS `:8800`）。
 
 本机端点实测：
 
 | 端点 | 监听 | LAN 浏览器可达 | OpenAI 兼容 |
 |---|---|---|---|
 | LM Studio `:1234` | `127.0.0.1`（仅回环） | ❌ | ✅ `/v1/models` 200 |
-| O2OA AI 网关 `:18790` | `0.0.0.0` | ✅ | ❌ `/v1/*` 404（只有 `/gateway/*` 自有路由） |
+| O2OA AI 网关 `:18790`（**改造前**） | `0.0.0.0` | ✅ | ❌ `/v1/*` 404（只有 `/gateway/*` 自有路由） |
+| O2OA AI 网关 `:18790`（**2026-09-30 起**） | `0.0.0.0` | ✅ | ✅ `/v1/models`、`/v1/chat/completions`（含宽松 CORS） |
 
 **两条路线：**
-- **路线 A（零改动最快）**：LM Studio 开 *Serve on Local Network*（绑 `0.0.0.0:1234`）
+- **路线 A（零改动最快，不推荐长期用）**：LM Studio 开 *Serve on Local Network*（绑 `0.0.0.0:1234`）
   → AI 页签 `设置` 选内置 **LM Studio**，URL 填 `http://<宿主LAN IP>:1234`。
-- **路线 B（仓库级持久化，推荐）**：给 `o2_agent_gateway.py` 加 **OpenAI 兼容门面**
-  （`/v1/models`、`/v1/chat/completions` + 宽松 CORS）→ 自定义提供方指向 `http://<LAN IP>:18790/v1`。
-  符合"全本地化 + 必须落仓库代码（Dockerfile 烤入）"，且浏览器与容器双向可达。
+  缺点：配置只活在 LM Studio 本地设置里，换机/重建不带走。
+- **路线 B（★已落地，推荐）**：`gateway/o2_agent_gateway.py` 内已加 **OpenAI 兼容门面**
+  （`GET /v1/models`、`POST /v1/chat/completions` + `CORSMiddleware(allow_origins=["*"], allow_credentials=False)`），
+  落仓库源码、`gateway/Dockerfile` 构建期 `COPY gateway/` 烤镜像。
+  客户端接法：编辑器 → AI 页签 → 设置 → 「+ 添加模型」→ **Provider URL 填 `http://<LAN IP>:18790/v1`**、key 留空
+  → Model 下拉自动从 `/v1/models` 拉取（网关 `chat_model` 已置顶）。
+  ★ 改完必须 `docker compose build ai-gateway && docker compose up -d ai-gateway ai-ocr ai-plan`（三服务共用镜像）。
+  ★ 自定义提供方文件格式硬约束：`AI.addCustomProvider` 把内容包成 `(function(){ … return new Provider(); })()` 再 eval
+  ⇒ 文件**只能顶层声明 `class Provider extends AI.Provider`**，不能自套 IIFE、不要自行注册
+  （仓库内有现成件 `deploy/host/onlyoffice/ai_provider_o2_gateway.js`）。
 
 **顺带 404**：AI 插件只带 `translations/helpers/zh-CN.json`，而编辑器 `lang=zh` 解析为 `zh-ZH`
 → `.../helpers/zh-ZH.json` 404（部分中文辅助文案回落英文）。非功能性阻塞；修需在 DS 镜像补
@@ -343,3 +359,49 @@ SELECT xid,xname,xperson,xjob,xsite,xlength,xcreateTime FROM X.PP_C_ATTACHMENT W
 - 量级控制：`PAGE_SIZE=200` + 附件请求并发 6（9 人规模下 1–2 秒出结果）。
 - 入口注册踩的坑（字典 `data` 必须传对象、分组折叠要先 click）见
   技能 `o2oa-custom-desktop-component` 的铁律 4B 与「验证必须走真实路径」。
+
+### 7.7 三条产品规则（2026-09-30 追加）与两个"静默失效"坑
+
+用户明确的三条约束，已固化进组件（`mydocs/mydocs.js` 顶部注释亦写明）：
+
+1. **与流程扭转状态绑定**：单据提交流转出我的手 ⇒ 文档**只读**、不提供编辑入口。
+   判据与服务端**完全同源**：`WorkControlBuilder.computeAllowSave() = canManage() || hasTaskWithWork()`
+   ⇒ 本组件取 `editable = 该 job 上有我的待办`（`task/list/my` 命中即 `todo`）。
+   ★ **不能用附件接口返回的 `control.allowEdit`** —— 它来自表单控件的静态 ACL，
+   `BaseAction.edit()` 在 `editIdentityList/editUnitList` 为空时**恒 true**，与流程状态无关。
+   ★ 还做了**双重保险**：`openDoc(row, mode)` 里 `if (!row.editable) mode = "view"`。
+2. **目录化**：左侧「模块(应用) > 流程 > 来源单据」三级，便于回溯定位（数据来自 work/task 的
+   `applicationName` / `processName` / `title`）。
+3. **只收录流程文档、不当网盘**：数据源全部是流程平台 REST，**不触碰** `x_file/x_pan/x_cms/x_onlyofficefile`。
+
+#### 坑 A（★ 真 bug，静默失效、零报错）：树展开态的键两处各拼各的
+
+```js
+// 点击处理器（错）                     // renderTree 读取（对）
+lv + ":" + (data-app || "") + ":" + key   "app:" + app.name + ":"
+```
+一级模块节点**没有 `data-app` 属性** ⇒ 写入 `app::用印申请`、读取 `app:用印申请:` ⇒ 永远读不到 ⇒
+**一级点不开、二三级永远渲染不出来**（控制台无报错，只有回归脚本能抓）。
+修法：抽出唯一函数 `Viewer.expandKey(lv, appName, key)`，**写入与读取都调它**。
+> 教训：任何"写入键/读取键"分离的状态，都要过一次同一个工厂函数；否则必然发散。
+
+#### 坑 B（★ 改了等于没改）：`.min.js` 副本与 `VERSION` 未同步
+
+`Main.min.js` 是旧副本（缺 `__lastViewer`），`VERSION` 也没随功能改动递增
+⇒ ① 回归脚本断言用的实例钩子取不到；② 浏览器可能命中旧 `mydocs.js` 缓存。
+纪律：**改 `Main.js` / `mydocs.js` 后必须同步 `*.min.js` 并递增 `VERSION`**（本实例做法：
+`cp Main.js Main.min.js`、`VERSION="20260930d"`，因为框架只需 `Main(.min).js` 二者之一存在且内容一致）。
+> 回归脚本据此加了独立断言 `Main.js 暴露 __lastViewer（真机断言钩子）` —— 把"钩子丢了"变成显式失败而不是崩溃。
+
+#### 规则 3 的验证要"反向核对"才成立（★ 方法论）
+
+只说"没调用文件库接口"是**弱证据**。要证明"不当网盘"，必须做**反证**：
+
+1. 枚举**企业网盘真实文件名**（`x_file_assemble_control` 的 `folder2/list/top`
+   + `attachment2/list/folder/{id}`；注意 Drive 用的是 **folder2/attachment2** 这组新接口，不是 `folder/attachment`）。
+2. 与在线文档列表求交，断言交集为空。
+★ 关键：网盘里放了 `.txt`（**正落在组件的扩展名白名单内**）⇒ "没出现"证明的是**数据源隔离**，
+而非"扩展名恰好不匹配"。另加运行时**网络取证**（`page.on('request')` 统计 `/jaxrs` 调用直方图，
+本实例 `{"/x_processplatform_assemble_surface":107}`、越界 0）。
+
+回归脚本：`tools/o2_mydocs_lock_verify.js`（①②③ 共 15 项断言，实测 15/15 PASS，控制台错误 0）。
