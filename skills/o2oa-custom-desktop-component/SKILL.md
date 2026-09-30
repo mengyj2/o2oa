@@ -159,8 +159,24 @@ GET {SURFACE}/x_portal_assemble_surface/jaxrs/dict/appmenus/portal/index/data
 
 # 写（surface PUT 恒 405！必须走 designer 整对象覆盖）
 PUT {DESIGNER}/x_portal_assemble_designer/jaxrs/dict/{dictId}
-#   body = 上一步读到的那个 data 对象本身（含 data.appNavis / id / application / name / alias）
+#   ★★ body 形如 {id, name, alias, application, data}，逐条都是坑：
+#     · dictId / application 都必给，而 **surface 的 /data 端点拿不到它们**
+#       （它只返回 data 内容本身：{"appNavis":[...]}）⇒ 回 DB 查：
+#       SELECT xid, xname, xapplication FROM GEN_DICT WHERE xalias='appmenus' AND xproject='portal';
+#       application = xapplication = 门户 id（本实例 0d565ae3-…）。
+#       缺 application ⇒ 直接 500「标识为: 的 Portal 对象不存在」。
+#     · ★★ data 必须是【对象】，绝不能是 JSON 字符串（见下方头号坑）。
 ```
+
+> **★★ 头号坑：`data` 传字符串会把门户首页菜单整体写死。**
+> 若按 `{"data": json.dumps({"appNavis":[...]})}` 传（即字符串），O2OA 会**原样存成字符串**，
+> 门户前端 `JSON.parse` 失败 ⇒ **首页左侧菜单整体不渲染**（2026-09-30 实测：81 项 → 0 项，
+> 页面只剩顶栏骨架）。此时字典内容本身是对的、只是类型错了，极易误判成"门户被改坏了"。
+>
+> **诊断法**：把 `data` 读回来看类型 —— `dict` 正常；`str` 就是被写坏。
+> **修复法**：重新 PUT，`"data": <对象本身>`（不要 dumps）。改完**刷新即恢复，无需重启**。
+> 同源 bug 已存在于本项目的 `deploy/o2_deploy.py apply_dict()`（三处：dictId 来源、
+> application 为空、data 传字符串），2026-09-30 已修。
 
 新增条目的字段（`app` = **`x_component_` 后面的目录名**，不是 CPT_COMPONENT 的 xname）：
 
@@ -180,8 +196,30 @@ PUT {DESIGNER}/x_portal_assemble_designer/jaxrs/dict/{dictId}
 #### 验证必须走真实路径
 
 `☰ 开始菜单` 里的条目从 `CPT_COMPONENT` 来，**门户菜单**从字典来 ——
-所以只验证一个会给出假 PASS。真机回归要**打开 `portal.html?id=<portalId>` →
-展开目标分组 → 断言新条目在列 → 点它 → 断言组件真的渲染出来**。
+所以只验证一个会给出假 PASS。
+
+**本实例（10.0.2 定制首页 `x_desktop/index.html`）的真实 DOM 与点击姿势**（2026-09-30 实证）：
+
+| 层 | 选择器 | 说明 |
+|---|---|---|
+| 左侧分组 | `.index-menu-category` | 11 个，竖排 |
+| 分组子容器 | `.index-navi-children` | ★ 默认 `display:none`（折叠） |
+| 菜单条目 | `.index-menu-item` | 81 个**全部在 DOM 里**，折叠时 `getBoundingClientRect()` = `0×0` |
+
+- ★★ 折叠状态下条目的 `dispatchEvent('click')` 与 `mouse.move/hover` **全部无效** ——
+  **必须先 `category.click()` 展开**（`display` 变 block、条目得到真实尺寸），
+  再用真实鼠标 `page.mouse.click(x, y)` 点条目。
+- ★ 条目文本用 `===` 匹配会失败（`textContent` 常夹子元素空白）⇒ 用 `indexOf(lbl) > -1`。
+- 命中判据：`menuItem` 数量应 +1；展开后条目 `w>0 && y>0` 才可点。
+- `CPT_COMPONENT` 那条同样要真机确认（☰ `.layout_menu_start_button` → `.layout_start_item_text`）。
+
+**★ 两个会给出假结论的测试环境陷阱**：
+
+| 陷阱 | 表现 | 正解 |
+|---|---|---|
+| `x-token` cookie 注入**偶发失效** | 直接落到登录页（`input[name=credential]` 出现），此时所有 DOM 断言都是 0，会被误判成"菜单/组件被改坏" | **多轮重试**（最多 5 轮 × 每轮 16 次轮询 `window.layout.session.user.name`），登录页出现即换新 token 重来 |
+| 用 `app.html?app=X` 单应用页测 `layout.openApplication` | `layout` 存在、`openApplication` 可调用、**但新窗口永远开不出来**（`iframe` 数 0、`.appContent` 不增加） | 必须走 `x_desktop/index.html` **完整桌面**；单应用页只适合验"组件本体能否渲染" |
+
 （`ActionCreate` 会强制 `setType("custom")`）。
 
 ---

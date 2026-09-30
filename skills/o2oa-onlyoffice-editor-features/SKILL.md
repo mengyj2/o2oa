@@ -1,6 +1,6 @@
 ---
 name: o2oa-onlyoffice-editor-features
-description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""插件管理器打不开""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器）；⑤不依赖登录的 headless 页签探测法。
+description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""插件管理器打不开""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器）；⑤不依赖登录的 headless 页签探测法；⑥「文档列表」真实来源（只有 edit 落表 + 接口仅管理员，故"别人的进了我的没进"）；⑦★自建「我的在线文档」组件（`x_component_MyOnlineDocs`）的实测接口、打开方式与入口注册。
 agent_created: true
 category: troubleshooting
 ---
@@ -306,3 +306,26 @@ SELECT xid,xname,xperson,xjob,xsite,xlength,xcreateTime FROM X.PP_C_ATTACHMENT W
 > ★ 与 §1.5 的 goback 决策**可合并**：自建"我的在线文档"页上线后把 `gobackUrl` 指过去
 > ⇒ 点「打开文件所在位置」= 到自己用过的文件列表（这才贴近用户对按钮的真实期待）。
 > ⚠️ 流程平台**没有**"按人列附件"的接口（全是 `attachment/list/work/{workId}`），路线 1 必须**按 work 汇总**（分页 + 去重）。
+
+### 7.6 ★ 路线 1 已落地：`x_component_MyOnlineDocs`（「我的在线文档」）
+
+2026-09-30 交付。真源 `deploy/runtime/webroot/x_component_MyOnlineDocs/`（构建期 `webroot.seed` 收录，
+清卷重建会自动补种）；回归脚本 `tools/o2_mydocs_ui_verify.js`。
+
+**实测可用的 4 个接口**（`PP = x_processplatform_assemble_surface`）：
+
+| 用途 | 调用 | 备注 |
+|---|---|---|
+| 我的待办 | `GET  {PP}/jaxrs/task/list/my/paging/{p}/size/{s}` | ★ 是 **GET**；POST 会 405 |
+| 我的已办 | `POST {PP}/jaxrs/taskcompleted/list/my/filter/{p}/size/{s}` body `{}` | 返回数组（非分页对象） |
+| 我参与/发起 | `POST {PP}/jaxrs/work/list/my/paging/{p}/size/{s}` body `{}` | 每项 `id` 即 workId |
+| 单据附件 | `GET  {PP}/jaxrs/attachment/list/workorworkcompleted/{workId}` | 返回 `id/name/extension/length/person/activityName/control.allowEdit` |
+
+- `my` 前缀是**服务端强制当前用户**语义（不传 person）⇒ 天然"只看自己看得见的"，
+  普通用户与管理员行为一致，**不需要也不应该**自己传 person。
+- 打开：`layout.openApplication(null,"OnlyOfficeEditor",{documentId:<attId>, mode:"view"|"edit",
+  jars:"x_processplatform_assemble_surface", appId:"MyOnlineDocs_"+id})`
+  —— 与表单内「附件→在线预览」逐字一致（`x_component_process_Xform/$all.js:27290`）。
+- 量级控制：`PAGE_SIZE=200` + 附件请求并发 6（9 人规模下 1–2 秒出结果）。
+- 入口注册踩的坑（字典 `data` 必须传对象、分组折叠要先 click）见
+  技能 `o2oa-custom-desktop-component` 的铁律 4B 与「验证必须走真实路径」。
