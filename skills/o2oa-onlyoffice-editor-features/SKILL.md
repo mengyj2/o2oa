@@ -1,6 +1,6 @@
 ---
 name: o2oa-onlyoffice-editor-features
-description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""AI 页签怎么指向本地网关""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看""在线文档列表点不开下级目录""在线文档里混进了网盘文件""在线文档要跟流程状态绑定只读"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器 + ★路线 B 已落地：网关 `/v1` OpenAI 兼容门面 + 宽松 CORS + 自定义 provider 的 addon/URL 拼接契约）；⑤不依赖登录的 headless 页签探测法；⑥「文档列表」真实来源（只有 edit 落表 + 接口仅管理员，故"别人的进了我的没进"）；⑦★自建「我的在线文档」组件（`x_component_MyOnlineDocs`）的实测接口、打开方式与入口注册；⑧★三条产品规则（流程状态只读 / 模块·流程·单据三级目录 / 只收流程文档不当网盘）与其两个"静默失效"坑（树展开键发散、`.min.js`+`VERSION` 未同步）与"不当网盘"的反证方法。
+description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""AI 配好了吗怎么还不能用""AI 页签点开是空的""AI 页签怎么指向本地网关""AI 插件怎么预置/开箱可用""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看""在线文档列表点不开下级目录""在线文档里混进了网盘文件""在线文档要跟流程状态绑定只读"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器 + ★路线 B 已落地：网关 `/v1` OpenAI 兼容门面 + 宽松 CORS + 自定义 provider 的 addon/URL 拼接契约）；⑤不依赖登录的 headless 页签探测法；⑥「文档列表」真实来源（只有 edit 落表 + 接口仅管理员，故"别人的进了我的没进"）；⑦★自建「我的在线文档」组件（`x_component_MyOnlineDocs`）的实测接口、打开方式与入口注册；⑧★三条产品规则（流程状态只读 / 模块·流程·单据三级目录 / 只收流程文档不当网盘）与其两个"静默失效"坑（树展开键发散、`.min.js`+`VERSION` 未同步）与"不当网盘"的反证方法；⑨★★AI 页签「开箱可用」的预置注入：配置只在浏览器 localStorage 两键、官方 aiSettings 通道为何在本版插件被 eventsMap 短路、插件目录不在镜像内（启动期由 pluginsmanager 现装 ⇒ 构建期烤补丁不可能）、薄镜像+启动包装方案、`.js`/`.gz` gzip_static 硬坑、以及"插件帧内真实对话"才算通过的验证法 + DS 无封网从 CDN 装插件的合规提醒。
 agent_created: true
 category: troubleshooting
 ---
@@ -405,3 +405,78 @@ lv + ":" + (data-app || "") + ":" + key   "app:" + app.name + ":"
 本实例 `{"/x_processplatform_assemble_surface":107}`、越界 0）。
 
 回归脚本：`tools/o2_mydocs_lock_verify.js`（①②③ 共 15 项断言，实测 15/15 PASS，控制台错误 0）。
+
+---
+
+## 8. ★ AI 页签"开箱可用"：预置注入（2026-09-30 落地，11/11 真机 PASS）
+
+### 8.1 先纠正一个常见误判
+
+「AI 配好了吗？为什么还不能用？」——**网关通 ≠ 能用**。插件配置是**浏览器端状态**：
+
+| 键（浏览器 localStorage，DS 域） | 内容 |
+|---|---|
+| `onlyoffice_ai_plugin_storage_key` | 提供方（url/key）+ 模型清单，带 `version`（当前 `AI.Storage.Version = 4`） |
+| `onlyoffice_ai_actions_key` | 动作→模型绑定（Chat / Summarization / Translation / TextAnalyze / …） |
+
+用户在设置里配的东西**只在那台电脑那个浏览器**。所以"服务端预置"才是正解。
+（动作合并**只覆盖 `model` 字段**：`if (AI.Actions[i] && obj[i].model) AI.Actions[i].model = obj[i].model;`
+⇒ 预置 actions 只需 `{"Chat":{"model":"<id>"}}`。）
+
+### 8.2 三条被推翻的直觉（都有源码级证据，别再走一遍）
+
+1. **URL 填 `:18790` 就够** → 错。`engine.js:341 AI._getEndpointUrl()` = `url`+（addon 非空则 `"/"+addon`）+ 相对端点；
+   **自定义提供方 addon 为空**（`base.js createProviderInstance` 回落 `new AI.Provider`）⇒ **URL 必须自带 `/v1`**。
+2. **用官方 `aiSettings` 服务端下发** → 本版插件不通。DS `default.json` 顶层确有
+   `aiSettings{actions,models,providers,version,timeout,allowedCorsOrigins,proxy}`，链路是
+   docservice(`getPluginSettingsForInterface`) → `Asc.plugin.info.aiPluginSettings` → `code.js:717`。
+   但 SDK 的注入条件是 `if (this.api.aiPluginSettings && eventMap["onAIPluginSettings"])`，
+   **插件 `config.json` 的 variations 没有 `eventsMap`**（`grep -c` = 0，`.gz` 同）⇒ 恒假。
+   另：`serverSettings` 一旦生效会走 `serverSettings.proxy`（`engine.js:146/338`）并**隐藏设置按钮**，直连场景更差。
+3. **补丁烤进镜像（Dockerfile RUN）** → **物理上不可能**。实测官方镜像
+   `sdkjs-plugins/` 只有 `marketplace v1 pluginBase.js plugin-list-default.json plugins.css`；
+   `{GUID}` 插件目录是容器启动时由 `documentserver-pluginsmanager.sh`
+   （官方 entrypoint **807-808 行**，`--update=plugin-list-default.json`，清单里 11 个插件名）现装的。
+   → 构建阶段那个文件**不存在**（实测 `目标文件不存在`）。
+
+### 8.3 可行方案：薄镜像 + 启动包装（等插件落盘再注入）
+
+```
+onlyoffice/Dockerfile                  # FROM official；只 COPY 3 个小文件；ENTRYPOINT 换包装脚本
+deploy/host/onlyoffice/o2_ds_entrypoint.sh   # 起官方 entrypoint → 后台等插件稳定 → 注入 → 补 zh-ZH → wait PID1
+tools/o2_patch_ds_ai_plugin.py               # 幂等注入器：BEGIN/END 标记就地替换 + 同步重生成 .gz + --wait SEC
+deploy/host/onlyoffice/ai-plugin/preset.json # 单点真源（提供方名/URL/默认模型/模型清单/绑定动作）
+```
+
+注入语义 = **播种**：`if (!localStorage.getItem(K)) localStorage.setItem(K, …)` —— 空库才写，
+**用户自己配过的不被覆盖**；`AI.serverSettings` 保持为空 ⇒ 浏览器直连（CORS 已放）+ 设置按钮保留。
+因为每次启动都跑（幂等），`docker restart` 与 `compose up -d` 重建容器都覆盖得到。
+
+### 8.4 两个硬坑（★ 都会造成"改了等于没改、且无报错"）
+
+- **`.js` 必须与 `.gz` 同步**：DS 的 nginx 对 `sdkjs-plugins` 走 **gzip_static**，目录里有
+  `local_storage.js.gz`；只改 `.js`，浏览器继续吃旧包。⇒ 写完必重生成 `.gz`，且 `.gz` mtime 要晚于源文件。
+- **锚点不存在必须报错退出**，不能"什么都没做还返回 0"。锚点：`var AI = exports.AI;`（唯一命中）。
+
+### 8.5 验证要"插件帧内真实对话"才算数
+
+`tools/o2_ai_plugin_verify.js`（11 项断言，实测 11/11 PASS）：登录 → 我的在线文档 → 预览第一行
+→ 等 `frameEditor` → 点 **AI** 页签 → 在**插件自己的 iframe** 内断言 provider/models/actions
+→ 再用**插件自己的代码路径**（`AI.Storage.getProvider` → `AI._getEndpointUrl` → `fetch`）发一次请求：
+实测 `POST http://<LAN>:18790/v1/chat/completions` → 200、`content="通过"`。
+★ 只测"服务端 curl 通了"不算通过 —— 必须是真实 origin + 真实 CORS + 真实插件逻辑。
+
+### 8.6 顺手修掉的常驻 404
+
+编辑器 `lang=zh` 时插件请求 `translations/helpers/zh-ZH.json`，官方只带 `zh-CN.json`
+（实测 `zh-CN` 200 / `zh-ZH` 404）⇒ 控制台常驻 404、部分中文辅助文案回落英文。
+用 `zh-CN` 复制出 `zh-ZH`（`translations/` 与 `translations/helpers/` 两处 + `.gz`）后 4xx 归零。
+
+### 8.7 ★ 合规提醒：DS 容器没封网、启动期从 CDN 装插件
+
+- 插件目录不在镜像内、且于容器启动后 ~96s 出现（实测 `StartedAt=10:28:34` / 插件目录 `mtime=10:30:10`），
+  镜像内也无 43MB 级本地包源 ⇒ **启动期从网络安装 11 个插件（约 43MB）**；
+- 该容器内**没有 iptables**（O2OA 主容器有 entrypoint 自愈的 egress 规则，DS 没有）。
+
+收敛必须**两步一起做**：先把插件目录持久化（导出到卷/镜像 + `PLUGINS_ENABLED=false`）**再**封网；
+只封网不做持久化 ⇒ 重建容器后插件装不上，**AI 页签会整个消失**。
