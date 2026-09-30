@@ -1,6 +1,6 @@
 ---
 name: o2oa-onlyoffice-editor-features
-description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""AI 配好了吗怎么还不能用""AI 页签点开是空的""AI 页签怎么指向本地网关""AI 插件怎么预置/开箱可用""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看""在线文档列表点不开下级目录""在线文档里混进了网盘文件""在线文档要跟流程状态绑定只读"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器 + ★路线 B 已落地：网关 `/v1` OpenAI 兼容门面 + 宽松 CORS + 自定义 provider 的 addon/URL 拼接契约）；⑤不依赖登录的 headless 页签探测法；⑥「文档列表」真实来源（只有 edit 落表 + 接口仅管理员，故"别人的进了我的没进"）；⑦★自建「我的在线文档」组件（`x_component_MyOnlineDocs`）的实测接口、打开方式与入口注册；⑧★三条产品规则（流程状态只读 / 模块·流程·单据三级目录 / 只收流程文档不当网盘）与其两个"静默失效"坑（树展开键发散、`.min.js`+`VERSION` 未同步）与"不当网盘"的反证方法；⑨★★AI 页签「开箱可用」的预置注入：配置只在浏览器 localStorage 两键、官方 aiSettings 通道为何在本版插件被 eventsMap 短路、插件目录不在镜像内（启动期由 pluginsmanager 现装 ⇒ 构建期烤补丁不可能）、薄镜像+启动包装方案、`.js`/`.gz` gzip_static 硬坑、以及"插件帧内真实对话"才算通过的验证法 + DS 无封网从 CDN 装插件的合规提醒。
+description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""AI 配好了吗怎么还不能用""AI 页签点开是空的""AI 页签怎么指向本地网关""AI 插件怎么预置/开箱可用""AI 页签里聊天机器人点了没反应""预览里 AI 打不开但编辑能打开""AI 配置是对的为什么窗口不出来""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看""在线文档列表点不开下级目录""在线文档里混进了网盘文件""在线文档要跟流程状态绑定只读"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器 + ★路线 B 已落地：网关 `/v1` OpenAI 兼容门面 + 宽松 CORS + 自定义 provider 的 addon/URL 拼接契约）；⑤不依赖登录的 headless 页签探测法；⑥「文档列表」真实来源（只有 edit 落表 + 接口仅管理员，故"别人的进了我的没进"）；⑦★自建「我的在线文档」组件（`x_component_MyOnlineDocs`）的实测接口、打开方式与入口注册；⑧★三条产品规则（流程状态只读 / 模块·流程·单据三级目录 / 只收流程文档不当网盘）与其两个"静默失效"坑（树展开键发散、`.min.js`+`VERSION` 未同步）与"不当网盘"的反证方法；⑨★★AI 页签「开箱可用」的预置注入：配置只在浏览器 localStorage 两键、官方 aiSettings 通道为何在本版插件被 eventsMap 短路、插件目录不在镜像内（启动期由 pluginsmanager 现装 ⇒ 构建期烤补丁不可能）、薄镜像+启动包装方案、`.js`/`.gz` gzip_static 硬坑、以及"插件帧内真实对话"才算通过的验证法 + DS 无封网从 CDN 装插件的合规提醒；⑩★★「配置全对、点了却没反应」的真根因与修法：DS 编辑器 `Plugins.js:1267` 的 `visible` 判据要求 `variation.isViewer`，官方插件没给 ⇒ **只读预览下窗口被静默丢弃**；修法 = 注入器第二处补丁给 `register.js` 补 `isViewer/isDisplayedInViewer`（幂等 + 同步 `.gz`）；含预览下**只认独立弹窗、panelRight 停靠会被忽略**的形态差异，以及五层逐级排查表与 `tools/o2_ai_chat_e2e.js` 取证脚本。
 agent_created: true
 category: troubleshooting
 ---
@@ -423,7 +423,7 @@ lv + ":" + (data-app || "") + ":" + key   "app:" + app.name + ":"
 （动作合并**只覆盖 `model` 字段**：`if (AI.Actions[i] && obj[i].model) AI.Actions[i].model = obj[i].model;`
 ⇒ 预置 actions 只需 `{"Chat":{"model":"<id>"}}`。）
 
-### 8.2 三条被推翻的直觉（都有源码级证据，别再走一遍）
+### 8.2 四条被推翻的直觉（都有源码级证据，别再走一遍）
 
 1. **URL 填 `:18790` 就够** → 错。`engine.js:341 AI._getEndpointUrl()` = `url`+（addon 非空则 `"/"+addon`）+ 相对端点；
    **自定义提供方 addon 为空**（`base.js createProviderInstance` 回落 `new AI.Provider`）⇒ **URL 必须自带 `/v1`**。
@@ -438,6 +438,8 @@ lv + ":" + (data-app || "") + ":" + key   "app:" + app.name + ":"
    `{GUID}` 插件目录是容器启动时由 `documentserver-pluginsmanager.sh`
    （官方 entrypoint **807-808 行**，`--update=plugin-list-default.json`，清单里 11 个插件名）现装的。
    → 构建阶段那个文件**不存在**（实测 `目标文件不存在`）。
+4. **预置对了、插件帧内 fetch 也 200，窗口就一定会开** → 错。**只读预览下会被 DS 编辑部静默丢弃**，
+   见 §8.8（用户反馈"点了没反应"的真根因，实测帧数恒 4、零报错）。
 
 ### 8.3 可行方案：薄镜像 + 启动包装（等插件落盘再注入）
 
@@ -480,3 +482,64 @@ deploy/host/onlyoffice/ai-plugin/preset.json # 单点真源（提供方名/URL/�
 
 收敛必须**两步一起做**：先把插件目录持久化（导出到卷/镜像 + `PLUGINS_ENABLED=false`）**再**封网；
 只封网不做持久化 ⇒ 重建容器后插件装不上，**AI 页签会整个消失**。
+
+### 8.8 ★★ 点了「聊天机器人」没反应：只读预览被 DS 自己的判据挡掉（2026-09-30 实证）
+
+**症状**：预置 11/11 PASS、插件帧内 `POST …:18790/v1/chat/completions` 也 200，
+但用户从「我的在线文档 → **预览**」进去点 AI → 聊天机器人：**什么也不发生**（无窗口、无报错、帧数不变）。
+
+**排查次序**（逐层往下，别跳步）——每层都有可复跑的判据：
+
+| 层 | 怎么验 | 结果 |
+|---|---|---|
+| 预置 | 插件帧内 `AI.Storage.getModelById(AI.Actions[AI.ActionType.Chat].model)` | `resolved=true` |
+| 插件早退分支 | 打桩 `AI.Request.create` → 插件 `register.js:62 if (!Request.create(Chat)) return;` | `ok`，**没早退** |
+| 开窗调用 | 打桩 `Asc.PluginWindow.prototype.show` | 被调用，`type=window url=chat.html` |
+| 消息发送 | 打桩 `Asc.plugin.executeMethod` | **`ShowWindow` 已发出** |
+| 编辑器接收 | 读 `web-apps/apps/common/main/lib/controller/Plugins.js:1267` | ★ **`visible=false` ⇒ 静默不建窗** |
+
+**真根因（DS 编辑器侧，不是插件侧）**：
+
+```js
+// web-apps/apps/common/main/lib/controller/Plugins.js:1267
+var visible = (this.appOptions.isEdit || this.appOptions.canSubmitForms
+               || variation.isViewer && (variation.isDisplayedInViewer !== false))
+              && _.contains(variation.EditorsSupport, this.editor) && !isSystem;
+if (visible && isPanel)            this.onPluginPanelShow(...);
+else if (visible && !variation.isInsideMode) this.onPluginWindowShow(...);
+```
+
+官方插件 `register.js` 的 `chatWindowShow()` 里 `variation` **没有 `isViewer`**
+⇒ 只读预览（`mode=view`，`isEdit=false`）下三项取或全假 ⇒ **窗口根本不建，且不报错**。
+
+**修法（纯加法、幂等，已并入同一个注入器）**：在 `register.js` 的锚点 `url : "chat.html",` 后插
+
+```js
+/* O2OA-AI-VIEWER-BEGIN */
+      isViewer : true,
+      isDisplayedInViewer : true,
+/* O2OA-AI-VIEWER-END */
+```
+
+`tools/o2_patch_ds_ai_plugin.py` 的 `patch_register()` 会自动处理（`register.js` 与 `local_storage.js`
+同在 `scripts/engine/`，由 `--file` 推导 ⇒ entrypoint 那条命令不用改），**同样同步重生成 `.gz`**，
+锚点不唯一/不存在即报错退出。重建容器后核对（两处都应为 1）：
+
+```bash
+G='{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}'
+docker exec o2oa-onlyoffice sh -c "cd …/sdkjs-plugins/$G/scripts/engine && \
+  echo preset=\$(grep -c O2OA-AI-PRESET-BEGIN local_storage.js) viewer=\$(grep -c O2OA-AI-VIEWER-BEGIN register.js)"
+```
+
+**两条边界（实测，别再踩）**：
+
+- **形态差异**：只读预览下 DS **只认独立弹窗**（`type=window`）；把
+  `onlyoffice_ai_chat_placement` 设成 `panelRight`（停靠右栏）在预览里会被 `onPluginPanelShow`
+  **静默忽略**。编辑模式下两种形态都可用。
+- `isViewer` 只解锁"聊天"；只读文档里**插回内容**（`InsertAsHTML` / `ReplaceTextSmart`）仍会被只读保护拒绝
+  —— 预期行为，不是缺陷。
+
+**取证脚本**：`tools/o2_ai_chat_e2e.js`（`O2_ACT=view|edit`）——真机走完整 UI，
+判据 = 聊天窗帧(chat.html)出现 + `#chat` 内 >30 字回答 + `pageerror` 为空，并落截图。
+实测：预览（浮动窗）与编辑（右栏停靠）**两态都通过**，证据见
+`docs/knowledge_base/assets/ai_plugin_20260930/`（含修复前"无窗口"对照图）。
