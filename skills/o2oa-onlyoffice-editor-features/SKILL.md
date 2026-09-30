@@ -98,19 +98,31 @@ appHeader.setCanBack(appOptions.canBack, ...);
 
 ⇒ **`goback.url` 为空串、或 `goback` 不是对象 → 按钮隐藏**（同理 Toolbar 左上角返回按钮也隐藏）。
 
-### 1.5 修法四选一（2026-09-30 修正版）
+### 1.5 修法四选一（★2026-09-30 已采纳 B 并落地）
 
 | 方案 | 做法 | 成本 | 评价 |
 |---|---|---|---|
 | A 保持现状 | 不动（`gobackUrl` = 门户首页**绝对** URL） | 0 | 与官方一致；但必须写死绝对地址 ⇒ 多入口（IP/域名/端口）必有一个跳错 |
-| B 改指向 | `gobackUrl` → `http://<host>:9090/x_desktop/app.html?app=Drive`（网盘）/ `app=CloudDocument` | 低 | 一键见效；**仍是全局固定 URL，不会定位到该文件**；跳出 OA 到裸存储有权限/合规风险 |
+| **B 改指向（★本实例已采纳）** | `gobackUrl` → `http://<host>:9090/x_desktop/app.html?app=MyOnlineDocs`（自建「我的在线文档」组件，见 §7） | 低 | 语义贴近"我用过的文件"、一键见效；**仍是全局固定 URL、不会定位到该文件**；★勿指向 `:5000` 裸 WebDAV（越权 + 合规） |
 | C 隐藏按钮 | `gobackUrl` = `""` | **极低** | ★**纯配置，无需改 jar**（判据见 §1.4）；上轮"须改 jar"的判断**已被推翻** |
 | D 真"打开文件所在目录" | 改 jar：`FileModel` 按文件动态生成 goback | 高 | 唯一能兑现原始诉求；需 Route B 构建期 + 文件→存储目录映射 |
 
-改任意一项都必须**双写**：
-① 真源 `deploy/host/onlyoffice/onlyofficeFileSettings.json`（build 期 seed）
-② 官方 `POST /x_onlyofficefile_assemble_control/jaxrs/onlyofficeconfig/save` 写运行态（免重启 + refresh）
-否则重建镜像/新机首启被还原。
+**打开行为（DS 未压缩源码实证）**：`documenteditor/main/app/controller/Main.js:1006-1018` `goBack()` 中
+`goback.blank` 未定义（O2OA 只下发 url）⇒ 走 `window.open(href, "_blank")` —— **新标签打开**、不顶掉编辑器；
+仅当 `blank===false` 才 `parent.location.href = href`。⇒ 两条硬约束：
+1. URL **必须是绝对地址**（新标签重新解析；相对路径会按 DS 域 `:8800` 解析 → 404）；
+2. 新标签要带得上登录态 ⇒ **访问地址的域必须与 `gobackUrl` 一致**（用 IP 访问就填同一 IP；
+   本机用 `localhost` 测会因 cookie 域不符落登录页 —— 回归脚本 `O2_BASE` 因此默认 LAN IP）。
+
+**落地三处（缺一即"改了等于没改"）**：
+① 真源 `deploy/host/onlyoffice/onlyofficeFileSettings.json` → Dockerfile COPY 为 `onlyoffice.seed.json`；
+② entrypoint `onlyoffice-selfheal` **按【种子为准】比对关键字段**（converter / tempstorage / api / preloader /
+   downLoadUrl / secret / **gobackUrl**），任一漂移即整包回写。★2026-09-30 升级：旧版只比 `downLoadUrl`，
+   ⇒ "只改 seed、重建容器不生效"（正是要杜绝的"改了等于没改"）；
+③ 即时生效（免重启）：`POST /x_onlyofficefile_assemble_control/jaxrs/onlyofficeconfig/save`。
+
+验证：`GET {SVC}/onlyofficeconfig/get` 逐字段比对；端到端见 `tools/o2_mydocs_ui_verify.js` **第 6 步**
+（进编辑器 → 点 `#btn-text-from-file` → 点 `.btn-goback` → 断言新标签 URL 含 `app=MyOnlineDocs` 且渲染出列表）。
 
 > `gobackUrl` 的使用点唯一：`FileModel.java:69`（fileModel 注入）；另 `ActionGetConfig.java:46` 把它回给前端配置页，实际未用于渲染。
 
@@ -226,7 +238,8 @@ openrouter.js / groq.js / mistral.js / together.ai.js / google-gemini.js / xAI.j
 
 ## 6. 高频坑速查
 
-- `goback` ≠ 文件目录；`gobackUrl` 是全局"回退地址"。改它必须**双写** seed + `onlyofficeconfig/save`。
+- `goback` ≠ 文件目录；`gobackUrl` 是全局"回退地址"（★本实例已指向 `app.html?app=MyOnlineDocs`）。
+  改它只需改 git 真源 seed —— entrypoint selfheal 会按种子收敛运行态（§1.5）；手工热改 `onlyofficeconfig/save` 即时生效。
 - **配置生效与否看入口**：表单内嵌控件（`process_Xform/OnlyOffice.js`）整覆盖 customization ⇒ goback 被抹、无关配置；只有独立编辑器（`OnlyOfficeEditor` / `CloudDocumentEditor`）吃配置。
 - **隐藏按钮 ≠ 改 jar**：`gobackUrl=""` 即 `canBack=false` ⇒ 按钮隐藏（DS `Main.js:493` 判据）。
 - `externalStorageSources.json` 的 `enable` 为 true 且各域均 webdav ⇒ 存储已走 rclone；别把它和"预览走下载"混为一谈。
@@ -303,7 +316,8 @@ SELECT xid,xname,xperson,xjob,xsite,xlength,xcreateTime FROM X.PP_C_ATTACHMENT W
 | 2 改 jar 加接口 | `x_onlyofficefile` 增 `paging/mine`：放开非管理员但**强制** `creator=effectivePerson`；并把落表条件从 `MODE_EDIT` 放宽到 view（加 `xstatus` 区分 viewed/edited） | 中高 | 语义最准（真"用过"），走 Route B 构建期 |
 | 3 零改动折中 | `gobackUrl` 指向 O2OA 网盘/文件应用中自己的空间 | 极低 | 是"文件库"不是"使用记录"，语义打折 |
 
-> ★ 与 §1.5 的 goback 决策**可合并**：自建"我的在线文档"页上线后把 `gobackUrl` 指过去
+> ★ **已与 §1.5 合并落地**：`gobackUrl` 现指向 `http://<host>:9090/x_desktop/app.html?app=MyOnlineDocs`，
+> 点「打开文件所在位置」= 新标签打开"自己参与单据里的在线文档列表"。
 > ⇒ 点「打开文件所在位置」= 到自己用过的文件列表（这才贴近用户对按钮的真实期待）。
 > ⚠️ 流程平台**没有**"按人列附件"的接口（全是 `attachment/list/work/{workId}`），路线 1 必须**按 work 汇总**（分页 + 去重）。
 
