@@ -1,6 +1,6 @@
 ---
 name: o2oa-runtime-drift-hardening
-description: 诊断并消除 O2OA（Docker 自托管）「改动只进了容器命名卷、仓库与镜像里没有」的临时补漏——审计 o2oa-webroot / o2oa-custom / o2oa-config 三卷与镜像层、git 仓库的差异，把运行时人工安装的 war 与 web 组件固化为**构建期 seed**（清单驱动）。当用户说"改进必须落到仓库代码""不能只进容器""需要持久化""杜绝临时补漏""重建镜像后功能丢了""docker volume rm 之后服务全没了""换机器部署缺组件/war"，或要求核查「镜像层 vs 卷 vs 仓库」时调用。含：绕开 docker exec 失效的挂卷盘点法、zip↔卷 md5 来源闭合、seed 机制（custom.seed/webroot.seed）、.dockerignore 导致的 GB 级 build context 陷阱。
+description: 诊断并消除 O2OA（Docker 自托管）「改动只进了容器命名卷、仓库与镜像里没有」的临时补漏——审计 o2oa-webroot / o2oa-custom / o2oa-config 三卷与镜像层、git 仓库的差异，把运行时人工安装的 war 与 web 组件固化为**构建期 seed**（清单驱动）。当用户说"改进必须落到仓库代码""不能只进容器""需要持久化""杜绝临时补漏""重建镜像后功能丢了""改了文件/build 了却没生效""线上还是旧版""页面改了不生效""docker volume rm 之后服务全没了""换机器部署缺组件/war"，或要求核查「镜像层 vs 卷 vs 容器 vs 仓库」时调用。含：绕开 docker exec 失效的挂卷盘点法、**容器可写层遮蔽镜像层（docker diff 诊断 + --force-recreate 治本）**、zip↔卷 md5 来源闭合、seed 机制（custom.seed/webroot.seed）、.dockerignore 导致的 GB 级 build context 陷阱。
 agent_created: true
 category: troubleshooting
 ---
@@ -53,6 +53,60 @@ O2OA 的**服务（war）与自定义组件（`x_component_*`）有两条安装�
 
 **别忘了这一条**：官方 `o2server-10.0.2-linux-x64.zip` **根本没有 `webroot/` 目录**，
 所以 webroot 卷里的一切都是后加的，不存在"官方自带"的解释。
+
+### 1.5 ★★★ 容器可写层遮蔽镜像层 —— 「`build` 了却没生效」的头号原因（2026-09-30 实证）
+
+与 §0/§1 的"命名卷漂移"是**两个不同的遮蔽层**，别混：
+
+| 遮蔽层 | 特征 | 触发 |
+|---|---|---|
+| **命名卷** | 卷挂载点整体盖住镜像目录（`webroot`/`custom`/`config`） | 设计如此 |
+| **容器可写层** | **单个文件**在容器里被写过（历史 `docker cp`/`docker exec`）→ 该文件**永久遮蔽**镜像层同名文件 | 人工写入残留 |
+
+**症状**（本案例）：改 `servers/webServer/x_desktop/admin.html` → `docker compose build o2oa` → 用户访问仍是**旧版**
+（带早已废弃的 `oo_router_guard` 守卫、地址栏留 `?default=false`、"主页先冒出来点一下才稳定"）。
+**为什么**：`docker compose build` **只更新镜像层**；容器没重建 ⇒ 可写层那份旧文件继续生效。
+`docker compose up -d` 若配置未变，**不会**重建容器。
+
+**决定性一条命令**：
+```bash
+docker diff <container>          # C=被改写(遮蔽)  A=新增  D=删除
+# 本案例：
+#   C .../servers/webServer/x_desktop/admin.html      ← 元凶
+#   C .../servers/webServer/x_desktop/index_home.html
+#   A .../servers/webServer/x_desktop/route_check.html（实验残留中转页）
+#   D .../servers/webServer/x_component_Drive / _PdfViewer（webroot 卷里有，无害）
+```
+> 注意：`servers/webServer/**` **不在**任何命名卷里（六卷是 config/local/logs/webroot/custom/dynamic）
+> ⇒ 它的遮蔽**只可能**来自容器可写层，与 §0 的卷漂移是两回事。
+
+**三处 md5 对照（缺一不可）**：
+```bash
+md5sum deploy/host/x_desktop/admin.html                          # ① 本地/git 真源
+docker run --rm --entrypoint sh <image> -c 'md5sum <path>'       # ② 镜像层（不挂卷）
+docker exec <container> sh -c 'md5sum <path>'                    # ③ 容器内（含可写层）
+```
+①==② 而 ①≠③ ⇒ 命中本节。本案例 ①=②=`987dec015e`（13573B），③=`32fcfabaf502`（17827B，多 91 行旧守卫）。
+
+**修复（两档）**：
+- **① 立刻可用（治标）**：把镜像层版本覆盖回容器 + 重启
+  ```bash
+  docker run --rm --entrypoint sh <image> -c 'cat <path>' > /tmp/x
+  docker cp /tmp/x <container>:<path>
+  docker restart <container>          # 双保险：清 webServer 文件缓存
+  ```
+  ★ `docker cp` 覆盖已存在文件**即时生效**，不必重建镜像。
+- **② 彻底归零（治本）**：`docker compose up -d --force-recreate o2oa`
+  —— **命名卷 100% 保留**，只丢可写层。
+  ★ 动手前先 `docker diff <container> | grep -v '/work/' | grep -v '/tmp/' | grep -v '/logs/'`，
+  确认剩余改动都是"可再生"的（卷挂载点目录 / 字体缓存 / 运行时自动生成的根 `index.html` / `work/` 编译产物）。
+  本案例非运行时改动仅 **60 项**，全部可再生 ⇒ 可安全重建。
+
+**部署纪律（防复发）**：
+> 改 `servers/webServer/**` 下**任何**静态文件后，必须 `docker compose up -d --force-recreate o2oa`
+> （或 `docker rm -f o2oa-server && docker compose up -d o2oa`），**不能只 `build`**。
+> 部署后跑一次体检：`python tools/o2_container_drift_check.py`
+> （比对 9 个关键入口/品牌文件的【镜像层 vs 容器】md5，发现遮蔽即以退出码 1 报错）。
 
 ## 2. 来源闭合：用 md5 证明「zip 解包 == 卷内内容」
 

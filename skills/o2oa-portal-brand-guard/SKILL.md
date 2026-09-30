@@ -547,7 +547,8 @@ python tools/scan_brand_words.py 翱途 纵横 杭综      # CLEAN / HIT 逐词�
 ③ 诊断（对应 SQL / API 自测 / md5+curl 比对）
 ④ 最小改动：
      数据层 → SQL REPLACE（设计数据只动名字字段）
-     文件层 → 只改 deploy/host/x_desktop/ 三份 + docker compose build o2oa && up -d
+     文件层 → 只改 deploy/host/x_desktop/ 三份 → docker compose build o2oa
+              → docker compose up -d --force-recreate o2oa   ← ★ 只 build 不够！见 §7
 ⑤ docker restart o2oa-server（数据层改动必做；清 flag 缓存，不做这步必误判）
 ⑥ 双验：MySQL 全库复扫 + HTTP 取回值（文件层再加 md5 比对）
 ⑦ 真机验证（普通用户视角、关 F12、Ctrl+F5 强刷）
@@ -570,8 +571,14 @@ python tools/scan_brand_words.py 翱途 纵横 杭综      # CLEAN / HIT 逐词�
 - ✗ **用 `window.layout.noDefault = true` 想让 admin.html 跳过门户首页** ——
   `initData()` 会无条件重算并覆盖它（Default.js:131）。必须用 `history.replaceState` 写 URL 参数（§3.1b）。
 - ✗ 开了 `indexPage.enable=true` 就以为 admin.html 不受影响 —— 它是全局开关，会顶掉九宫格（§3.1b）。
-- ✗ 用 `docker cp` 改 `servers/webServer/x_desktop/*.html` 就当修好 —— 只改可写层，HTTP 可能仍返回旧版（实测）；
-  必须 `docker compose build o2oa && up -d`（本项目该目录是镜像层，非卷）。
+- ✗ 用 `docker cp` 改 `servers/webServer/x_desktop/*.html` 就当修好 —— 只改可写层，HTTP 可能仍返回旧版（实测）。
+- ✗★ **改完只跑 `docker compose build o2oa && up -d` 就以为生效** —— **不够**！`build` 只更新**镜像层**；
+  容器若未重建，**可写层**里历史 `docker cp` / `docker exec` 留下的旧文件会**继续遮蔽**新文件。
+  （2026-09-30 实证：admin.html 镜像层=`987dec015e` 新版、容器内=`32fcfabaf502` 带废弃 `oo_router_guard` 的旧版；
+  用户反馈"重建镜像也没用 —— 还是跳 `?default=false`、主页先冒出来点一下才稳定"。）
+  ⇒ 必须 `--force-recreate`（或 `docker rm -f o2oa-server && up -d`）；
+  诊断第一命令 `docker diff o2oa-server`；体检 `python tools/o2_container_drift_check.py`。
+  详见技能 `o2oa-runtime-drift-hardening` §1.5。
 - ✗ **用"前端按角色 `location.href` 分流"实现入口分离** —— 白屏闪烁、判据易错，且被卷旧版覆盖后
   "分流逻辑整个消失"却看不出来。正确做法：各入口自持职责 + 只有 admin.html 做守卫（§3.1b）。
 - ✗ **把 `?default=false` 直接 `replaceState` 留在地址栏** —— 用户明确要求不可见；
