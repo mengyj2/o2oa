@@ -1,6 +1,6 @@
 ---
 name: o2oa-onlyoffice-editor-features
-description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""插件管理器打不开"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器）；⑤不依赖登录的 headless 页签探测法。
+description: 讲清 O2OA（社区版 / Docker 自托管，10.0.2 实证）里 OnlyOffice 编辑器**自身菜单与页签**的语义、以及离线部署下的能力边界。当用户说"打开文件所在位置点了跳到主页/主页面""打开文件所在位置不对""应该存储到存储器""rclone 有没有起作用""文件存哪了""视图/插件/AI 页签用不了""编辑器里的插件点了没反应""AI 助手点不动/没有模型""插件管理器打不开""OnlyOffice 文档列表里为什么没有我的文件""别人的附件进了列表我的没进""能不能只看自己用过的 OnlyOffice 文件""文档列表只有管理员能看"时调用。含：①「打开文件所在位置」= OnlyOffice customization.goback（官方定义 + O2OA 源码证据），URL 由 onlyofficeFileSettings.json 的 gobackUrl 统一下发 → 跳主页属设计而非故障；★两条前端路径（表单内嵌控件整覆盖 customization ⇒ 配置无效；独立编辑器吃配置）+ 按钮显隐判据 canBack（⇒ 隐藏按钮只需 gobackUrl 置空，不必改 jar）；②文件确实落在 rclone 存储器（externalStorageSources.json 全 WebDAV → o2oa-storage:5000 → SMB → NAS）及其验证手法；③三页签浏览器级实测结论（视图=本地可用；插件/AI=云功能，离线不可用）；④AI 页签本地化路径（内置 lmstudio/ollama/customProviders 适配器）；⑤不依赖登录的 headless 页签探测法。
 agent_created: true
 category: troubleshooting
 ---
@@ -233,3 +233,76 @@ openrouter.js / groq.js / mistral.js / together.ai.js / google-gemini.js / xAI.j
 - 页签"用不了"先跑 §5 探测：**页签能开 ≠ 功能能用**；云插件离线必然不可用。
 - AI 插件的模型调用在**浏览器侧**发出 → 端点必须 LAN 可达 + CORS；仅绑 127.0.0.1 的 LM Studio 对别的机器无效。
 - DS 容器 `lang=zh` → locale `zh-ZH`；插件只带 `zh-CN` 时会 404（表现：部分文案英文）。
+
+---
+
+## 7. 「文档列表」的真实来源（★为什么别人的附件"没进去"、能不能只看自己的）
+
+**一句话**：`ONLYOFFICE_FILE` 不是"谁用过 OnlyOffice"的账本，而是**"以编辑模式打开过的 O2O 附件"的副本索引**，
+且**只对管理员开放**。
+
+### 7.1 写入条件：只有 `edit` 落表（★根本原因）
+
+```java
+// x_onlyofficefile_assemble_control → BaseAction.getO2File()
+OnlyOfficeFile record = emc.find(fileId, OnlyOfficeFile.class);
+if (record == null) {
+    record.setId(fileId); record.setRelevanceId(fileId); record.setCategory(appId);
+    record.setDocId(woO2File.getJob()); record.setCreator(woO2File.getOwnerId());
+    record.setFileVersion("1"); record.setStatus("normal"); record.setFileName(name); ...
+    if (FileModel.MODE_EDIT.equals(mode)) {      // ★★ 只读预览(view) 不落表！
+        record.saveContent(gfMapping, fileByte, name);
+        emc.persist(record, CheckPersistType.all);
+    }
+}
+```
+⇒ `ActionFileEdit`（**附件在线预览**，mode=view）**不产生记录**；
+⇒ `ActionCreateForO2`（表单 **OnlyOffice 控件**，第 86 行固定传 `FileModel.MODE_EDIT`）**一定产生记录**。
+
+### 7.2 记录与附件的对应关系
+
+- `ONLYOFFICE_FILE.xid` == **附件 id**（`setId(fileId)`，一一对应，可直接 join 判断）
+- `xcategory` = appToken（流程 = `x_processplatform_assemble_surface`；模板 = `template`）
+- `xdocId` = **流程 job id**；`xcreator` = **附件 owner**（≠ 实际打开的人）
+- 表兄弟：`ONLYOFFICE_FILE_VERSION`（版本/差异）、`ONLYOFFICE_CALLBACK`
+- ⚠️ `ONLYOFFICE_RECORD`（含 `readList`/`writeList`）是**历史遗留空表**，jar 源码 **0 引用**，别当数据源
+
+### 7.3 列表接口只给管理员（所以"只看自己的"原生不可能）
+
+```java
+// ActionPaging.java:34
+if(effectivePerson.isNotManager()){ throw new ExceptionAccessDenied(effectivePerson); }
+```
+且 Wi 里**只有显式传 `creator` 才过滤**，没有"默认当前用户"⇒ 该界面是管理员台账，不是个人视角。
+
+### 7.4 排查 SQL（本地实测可用）
+
+```sql
+-- 谁进了列表
+SELECT xid,xfileName,xcategory,xcreator,xdocId,xcreateTime FROM X.ONLYOFFICE_FILE;
+-- 某附件是否进了列表（记录 id == 附件 id）
+SELECT COUNT(*) FROM X.ONLYOFFICE_FILE WHERE xid='<附件id>';
+-- 该附件在流程侧的真相（site=attachment 表示是附件控件上传的）
+SELECT xid,xname,xperson,xjob,xsite,xlength,xcreateTime FROM X.PP_C_ATTACHMENT WHERE xid='<附件id>';
+```
+
+**实测对照（2026-09-30，同一个「用印申请单」流程，xprocessName 相同）**
+
+| 单子 | 附件 | 是否在 ONLYOFFICE_FILE |
+|---|---|---|
+| 李静（10:26 启动） | `dc9a4929…` 214KB | ✅ 在（曾以 **edit** 打开过） |
+| 卢宏萍（11:27 启动，谦宜贺信.doc） | `cb3d0fa7…` 14KB | ❌ 不在（只 **view** 预览 / 未打开） |
+
+⇒ "同样的流程、别人的进了我的没进" = **打开模式不同（edit vs view）**，不是故障、也不是存储问题。
+
+### 7.5 想做"只显示自己用过的 OnlyOffice 文件"（原生做不到，三条路线）
+
+| 路线 | 做法 | 成本 | 说明 |
+|---|---|---|---|
+| **1 自建列表（推荐）** | 门户页/桌面组件：取"我经手的流程"（`WorkAction`/`WorkCompletedAction` 分页，**普通用户 token 可用**）→ 逐单 `attachment/list/workorworkcompleted/{id}` → 过滤 doc/xls/ppt 系扩展名 → 点击直进 OnlyOffice 预览 | 中 | 绕开 `x_onlyofficefile` 权限；**预览过的也算**；100% 本地、可落仓库 + Dockerfile 烘焙 |
+| 2 改 jar 加接口 | `x_onlyofficefile` 增 `paging/mine`：放开非管理员但**强制** `creator=effectivePerson`；并把落表条件从 `MODE_EDIT` 放宽到 view（加 `xstatus` 区分 viewed/edited） | 中高 | 语义最准（真"用过"），走 Route B 构建期 |
+| 3 零改动折中 | `gobackUrl` 指向 O2OA 网盘/文件应用中自己的空间 | 极低 | 是"文件库"不是"使用记录"，语义打折 |
+
+> ★ 与 §1.5 的 goback 决策**可合并**：自建"我的在线文档"页上线后把 `gobackUrl` 指过去
+> ⇒ 点「打开文件所在位置」= 到自己用过的文件列表（这才贴近用户对按钮的真实期待）。
+> ⚠️ 流程平台**没有**"按人列附件"的接口（全是 `attachment/list/work/{workId}`），路线 1 必须**按 work 汇总**（分页 + 去重）。
