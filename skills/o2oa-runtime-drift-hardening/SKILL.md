@@ -213,10 +213,46 @@ docker run --rm --entrypoint /bin/sh -v o2verify_cu:/c <image> -c 'ls -1 /c/*.wa
 docker rm -f o2verify && docker volume rm o2verify_wr o2verify_cu
 ```
 
+### 6.1 ★ 配置文件型漂移：自愈判据必须"全字段比对"（onlyofficeFileSettings 实证）
+
+**症状**：改了 seed 里**某一个值**（如 `onlyofficeFileSettings.json` 的 `gobackUrl`），
+重建镜像 + `--force-recreate` 容器，运行态**纹丝不动** —— "改了等于没改"。
+
+**根因**：entrypoint selfheal 写成了**单字段守卫**：
+
+```python
+if WANT in cur:        # cur = 运行态 downLoadUrl
+    sys.exit(0)        # 该字段一旦正确 → 整体跳过 ⇒ seed 的其它改动永不生效
+```
+
+**正确姿势**：读入 seed 成 `cfg`，按【种子为准】比对**关键字段集合**，任一漂移即整包回写：
+
+```python
+KEYS = ("docserviceConverter","docserviceTempstorage","docserviceApi",
+        "docservicePreloader","downLoadUrl","secret","gobackUrl")
+drift = [(k, cur.get(k), cfg.get(k)) for k in KEYS
+         if (cur.get(k) or "") != (cfg.get(k) or "")]
+if not drift: sys.exit(0)          # 幂等：全一致才跳过
+for k, a, w in drift: print("漂移 %s: %r -> %r" % (k, a, w))
+call("POST", SVC + "/save", cfg)   # 打印明细后再整包回写
+```
+
+**语义声明（必须写进脚本注释）**：策略从"尊重人工改动"变为
+**"运行态向 git 真源收敛"** —— 这些字段的手工热改重启后会被 seed 拉回；
+要长期生效就改 git 真源。
+
+**验证（硬证据，别只看接口返回）**：故意把运行态改回旧值 → `--force-recreate` →
+`docker logs` 必须打印 `漂移 <字段>: 运行态=… -> 种子=…` + `saveConfig -> 200`。
+
+**通用性**：任何"seed + 启动时应用"的结构（配置文件 / 系统参数 / 字典）都适用；
+`KEYS` 就是这份配置的**真源契约字段清单**。
+
 ## 7. 收尾清单
 
 1. 新增/删除应用市场插件后，**必须同步更新 `deploy/plugins.manifest`** —— 否则新插件又变成"只在卷里"。
 2. 对插件原文件的本地修改，一律写进**覆盖层目录**（本案例 `deploy/runtime/webroot/`），不要直接改卷。
 3. `config` 卷多数文件由 O2OA 运行时生成（`general.json`/`cms.json`/`manifest.json`…），
    **没有 git 真源**，换机只能靠备份恢复（`tools/backup_o2oa_chain.bat`）—— 别指望 seed 机制。
+   ★例外：**少数手写配置有真源**，如 `onlyofficeFileSettings.json` ← `deploy/host/onlyoffice/`，
+   配套 entrypoint selfheal 全字段收敛（见 §6.1）—— 这类要按"有真源"对待。
 4. 提交时**显式列文件**（禁 `git add -A`）；`backups/` 已在 `.gitignore`。
