@@ -50,12 +50,13 @@ public class PdfElectronicInvoiceTools {
             PDFTextStripperByArea detailStripper = new PDFTextStripperByArea();
             detailStripper.setSortByPosition(true);
 
-            setupRegions(stripper, detailStripper, positionListMap, pageWidth);
-
-            stripper.extractRegions(firstPage);
-            detailStripper.extractRegions(firstPage);
-
-            extractDetails(invoice, detailStripper.getTextForRegion("detail"), !positionListMap.get("规格型号").isEmpty());
+            boolean regionsSet = setupRegions(stripper, detailStripper, positionListMap, pageWidth);
+            if (regionsSet) {
+                stripper.extractRegions(firstPage);
+                detailStripper.extractRegions(firstPage);
+                extractDetails(invoice, detailStripper.getTextForRegion("detail"),
+                        !positionListMap.get("规格型号").isEmpty());
+            }
         }
 
         return invoice;
@@ -153,12 +154,11 @@ public class PdfElectronicInvoiceTools {
         }
     }
 
-    private static void setupRegions(PDFTextStripperByArea stripper,
+    private static boolean setupRegions(PDFTextStripperByArea stripper,
             PDFTextStripperByArea detailStripper, Map<String, List<Position>> positionListMap,
             int pageWidth) {
-        Position taxRate = positionListMap.get("税率").get(0);
-//        Position totalAmount = positionListMap.get("价税合计").get(0);
-        Position amount = positionListMap.get("合计").get(0);
+        Position taxRate = firstPosition(positionListMap, "税率");
+        Position amount = firstPosition(positionListMap, "合计");
         Position model = null;
         if (!positionListMap.get("规格型号").isEmpty()) {
             model = positionListMap.get("规格型号").get(0);
@@ -166,16 +166,30 @@ public class PdfElectronicInvoiceTools {
             model = positionListMap.get("车牌号").get(0);
             model.setX(model.getX() - 15);
         } else {
-            model = positionListMap.get("单价").get(0);
+            model = firstPosition(positionListMap, "单价");
         }
-
+        // 关键锚点（税率/合计/型号）缺失时无法计算明细区坐标：跳过坐标法，仅保留正则已提取的抬头与金额字段
+        if (taxRate == null || amount == null || model == null) {
+            return false;
+        }
         int x = Math.round(model.getX()) - 13;
         int y = Math.round(taxRate.getY()) + 5;
         int h = Math.round(amount.getY()) - Math.round(taxRate.getY()) - 25;
-
+        if (h <= 0) {
+            return false;
+        }
         detailStripper.addRegion("detail", new Rectangle(0, y, pageWidth, h));
         stripper.addRegion("detailName", new Rectangle(0, y, x, h));
         stripper.addRegion("detailPrice", new Rectangle(x, y, pageWidth, h));
+        return true;
+    }
+
+    private static Position firstPosition(Map<String, List<Position>> positionListMap, String key) {
+        List<Position> list = positionListMap.get(key);
+        if (list != null && !list.isEmpty()) {
+            return list.get(0);
+        }
+        return null;
     }
 
     private static void extractDetails(Invoice invoice, String detailText, boolean hasModel) {

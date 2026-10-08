@@ -45,14 +45,14 @@ public class PdfRegularInvoiceTools {
         stripper.setSortByPosition(true);
         PDFTextStripperByArea detailStripper = new PDFTextStripperByArea();
         detailStripper.setSortByPosition(true);
-        setRegion(positionListMap, stripper, detailStripper, pageWidth);
-        stripper.extractRegions(firstPage);
-        detailStripper.extractRegions(firstPage);
+        boolean regionsSet = setRegion(positionListMap, stripper, detailStripper, pageWidth);
+        if (regionsSet) {
+            stripper.extractRegions(firstPage);
+            detailStripper.extractRegions(firstPage);
+            processBuyerAndSeller(stripper, invoice);
+            processDetailList(detailStripper, invoice);
+        }
         doc.close();
-
-        processBuyerAndSeller(stripper, invoice);
-
-        processDetailList(detailStripper, invoice);
     }
 
     private static void extractInvoiceTitle(Invoice invoice, String allText) {
@@ -137,18 +137,20 @@ public class PdfRegularInvoiceTools {
         }
     }
 
-    private static void setRegion(Map<String, List<Position>> positionListMap,
+    private static boolean setRegion(Map<String, List<Position>> positionListMap,
             PDFTextStripperByArea stripper, PDFTextStripperByArea detailStripper, int pageWidth) {
         Position machineNumber;
         if (!positionListMap.get("机器编号").isEmpty()) {
             machineNumber = positionListMap.get("机器编号").get(0);
-        } else {
+        } else if (!positionListMap.get("开票日期").isEmpty()) {
             machineNumber = positionListMap.get("开票日期").get(0);
             machineNumber.setY(machineNumber.getY() + 30);
+        } else {
+            return false;
         }
-        Position taxRate = positionListMap.get("税率").get(0);
-        Position totalAmount = positionListMap.get("价税合计").get(0);
-        Position amount = positionListMap.get("合计").get(0);
+        Position taxRate = firstPosition(positionListMap, "税率");
+        Position totalAmount = firstPosition(positionListMap, "价税合计");
+        Position amount = firstPosition(positionListMap, "合计");
         Position model = null;
         if (!positionListMap.get("规格型号").isEmpty()) {
             model = positionListMap.get("规格型号").get(0);
@@ -156,13 +158,17 @@ public class PdfRegularInvoiceTools {
             model = positionListMap.get("车牌号").get(0);
             model.setX(model.getX() - 15);
         } else {
-            model = positionListMap.get("单价").get(0);
+            model = firstPosition(positionListMap, "单价");
+        }
+        // 关键锚点（机器编号/税率/价税合计/合计/型号）缺失时无法定位区域：跳过坐标法，保留正则已提取字段
+        if (taxRate == null || totalAmount == null || amount == null || model == null) {
+            return false;
         }
 
         List<Position> account = positionListMap.get("开户行及账号");
         Position buyer;
         Position seller;
-        if (account.size() < 2) {
+        if (account == null || account.size() < 2) {
             buyer = new Position(51, 122);
             seller = new Position(51, 341);
         } else {
@@ -191,6 +197,15 @@ public class PdfRegularInvoiceTools {
         setDetailRegions(detailStripper, stripper, model, taxRate, amount, pageWidth);
         setPasswordRegion(stripper, maqX, machineNumber, taxRate, pageWidth);
         setBuyerSellerRegions(stripper, buyer, seller, machineNumber, totalAmount, maqX);
+        return true;
+    }
+
+    private static Position firstPosition(Map<String, List<Position>> positionListMap, String key) {
+        List<Position> list = positionListMap.get(key);
+        if (list != null && !list.isEmpty()) {
+            return list.get(0);
+        }
+        return null;
     }
 
     private static void setDetailRegions(PDFTextStripperByArea detailStripper,
