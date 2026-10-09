@@ -533,9 +533,9 @@ docker exec o2oa-onlyoffice sh -c "cd …/sdkjs-plugins/$G/scripts/engine && \
 
 **两条边界（实测，别再踩）**：
 
-- **形态差异**：只读预览下 DS **只认独立弹窗**（`type=window`）；把
-  `onlyoffice_ai_chat_placement` 设成 `panelRight`（停靠右栏）在预览里会被 `onPluginPanelShow`
-  **静默忽略**。编辑模式下两种形态都可用。
+- **形态差异**：只读预览下 DS **只认独立弹窗**（`type=window`）；`panelRight`（停靠右栏）
+  在预览里**不只是被忽略——是直接崩溃**（见 §8.9 坑 A）。编辑模式下两种形态都可用，
+  但"两栏"统一走 §8.9 的 DOCK 块方案。
 - `isViewer` 只解锁"聊天"；只读文档里**插回内容**（`InsertAsHTML` / `ReplaceTextSmart`）仍会被只读保护拒绝
   —— 预期行为，不是缺陷。
 
@@ -543,3 +543,60 @@ docker exec o2oa-onlyoffice sh -c "cd …/sdkjs-plugins/$G/scripts/engine && \
 判据 = 聊天窗帧(chat.html)出现 + `#chat` 内 >30 字回答 + `pageerror` 为空，并落截图。
 实测：预览（浮动窗）与编辑（右栏停靠）**两态都通过**，证据见
 `docs/knowledge_base/assets/ai_plugin_20260930/`（含修复前"无窗口"对照图）。
+
+### 8.9 ★★★ 补坑二：「两栏布局 + 工具空转 Maximum iterations」（2026-09-30 深夜实证）
+
+用户要"聊天界面在右边空白区、与文档形成两栏"，顺带暴露两个更深的坑。
+
+#### 坑 A：panelRight 在 view 模式是【崩溃】，不是"被忽略"
+
+playwright 取证（`tools/o2_ai_panel_probe.js`）：
+
+```
+onPluginPanelShow → RightMenu.addNewPlugin → SideMenu.insertButton
+  → this.btnMoreContainer.before($button)
+  → TypeError: Cannot read properties of undefined (reading 'before')   (SideMenu.js:96)
+```
+
+view 模式下右侧栏 `RightMenu` 的 view 分支 `render()` 不被调用 ⇒ `btnMoreContainer` 恒 undefined
+⇒ **panel 插不进 DOM，聊天窗彻底不出现、零报错**。原生 panelRight 在 view 模式物理不可用。
+⇒ `preset.json` 定 `chatPlacement: "window"`，注入器带 v1.1→v1.2 迁移
+（老用户 localStorage 里的 `panelRight` 自动回退）。
+
+#### 两栏落法 = DOCK 块（window 形态 + CSS 钉右）
+
+不靠 DS 面板机制。注入器在 `register.js` 末尾（锚 `window.chatWindowShow = chatWindowShow;`）注入
+`O2OA-AI-DOCK-BEGIN/END` 块：在插件帧里把样式注入**父文档（编辑器帧）**——
+`iframe[src*="chat.html"]` 钉到 `right:0; width:420px; height:100%`、`#editor_sdk{margin-right:420px}`、
+空壳 `.asc-window` 藏掉，`MutationObserver` 动态停靠/还原。view/edit 通用
+（实测几何 `x=1140 w=420 h=923 / 视口 1560×923`）。
+
+#### 坑 B：writeMacro 恒返回空 ⇒ 工具空转至 "Maximum iterations reached"
+
+取证链（`tools/o2_ai_macro_unit.js` 隔离 C/D）：
+
+- 命令上下文里：`typeof eval === "function"` 但 `eval("2+2") === undefined` 且不抛错；
+  `Function` 不是构造函数；**Api 完全可用**。
+- 插件帧里：`new Function` 可用，造出的 runner 交给 `Asc.Editor.callCommand` 正常执行、能返回值。
+
+**根因：DS 9.4 编辑命令上下文封死动态求值**，官方 writeMacro 是 `eval(Asc.scope.macroCode)`
+（helpers.js word/cell/slide 三处相同）⇒ 恒 undefined ⇒ 模型拿不到文档 ⇒ 空转 10 轮。
+与 §0 的 `[functionCalling` 泄漏（协议层，capabilities 缺 Tools 位）**相互独立、两层都要修**。
+
+修法（注入器第 5 处补丁，×3 处）：整块换成「插件帧 `new Function` 预编译 runner →
+`callCommand(runner)`」；末表达式→`return (…)` 的语义变换（模型显式 `return` 亦兼容）；
+无返回值时回给模型一句可行动提示（"末表达式必须是取值表达式，不要以 var/forEach/if 收尾"），
+模型据此自我纠正，不再盲目重试。
+
+**护栏教训（差点闯祸）**：helpers.js 有 **39 个** `func.call = async function(params) {`（每工具一个）。
+"已注入"正则若只锚 `func.call`，非贪婪 `.*?` 会从第一个工具一路吞到 END 标记，把中间 35 个工具
+全删掉（实测 296315→25981 字节，`node --check` 还能过——括号恰好平衡）。铁律：
+**已注入正则必须锚 BEGIN 标记紧跟块开头** + 写前三护栏（func.call 数 1:1 / 标记数=3 / 无残留 eval 式）。
+
+**排除记录**：`callCommand` 返回值**没有尺寸上限**（50 万字符实测完好回传）——
+"读全文为空"不是传输问题，是无返回值形态问题。
+
+**容器内核验（重建镜像后启动期自动注入，全绿）**：
+`PRESET=1 / isViewer=1 / DOCK=1 / MACRO=3 / func.call=39 / 残留 eval 式=0`，`--check` 全过。
+e2e：`O2_ACT=view|edit node tools/o2_ai_chat_e2e.js` —— 两态 8/8 PASS，
+落定判据 = 最新消息非工具块（`$chat.prepend` ⇒ 新消息在上）+ 文本稳定 + 9 秒二次确认。

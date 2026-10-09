@@ -38,6 +38,83 @@ category: diagnostics
 - `emb_model()` 的 kv 缓存须校验是否还在白名单内，否则换后端后仍用旧名 →
   生成器 `tools/gen_gateway_container_config.py` 已加规则 + 网关已加白名单校验。
 
+### ★★★ 容器化后「服务全挂」假警报 + MCP 侧真故障（2026-09-30 实测）
+
+**症状**：Docker Desktop 里容器全绿，但 O2OA 助手回答
+「服务健康检测：O2OA 主服务(9090) DOWN / AI 网关(18790) DOWN / 向量(8089) DOWN / OCR(8091) DOWN」，
+同一轮里却又能"在组织架构中确认存在某人"——只是"员工档案查询连续 3 次调用失败，报错 Connection refused"。
+
+**根因 A（假警报，4/4 全错）**：`gateway/o2oa_tools_mcp.py::o2_service_health` 硬编码
+探测 `127.0.0.1:{9090,18790,8089,8091}` 的**根路径 `/`**。本 MCP 子进程由 `ai-gateway`
+容器拉起 ⇒ 容器内 `127.0.0.1` 就是网关自己：
+- `9090`、`8091` 容器内无监听（O2OA 在 `o2oa-server`、OCR 在 `ai-ocr`）→ Connection refused
+- `8089` 早已下线（embed 改走宿主 LM Studio 1234）→ 恒 DOWN（探针过时）
+- `18790` 虽在监听，但根路径无路由返回 **404**；生成回答期间单 worker 忙还会**超时**
+⇒ 与"容器有没有在跑"完全无关。
+
+**根因 B（真故障，且被 A 掩盖）**：`gateway/config.container.json` 里
+`mcp_servers[o2oa].env.O2OA_BASE = http://127.0.0.1:9090`，
+而 `mcp_client.py:96` 是 `full_env = dict(os.environ); full_env.update(env)` —— **配置里的 env 覆盖容器级 env**，
+于是 compose 里正确的 `O2OA_BASE=http://o2oa-server:9090` 被顶掉。
+⇒ `o2oa_tools_mcp.py` 的**全部** REST 工具（人员/HR 档案/组织/待办/数据字典/错误日志）Connection refused；
+而网关**内置**工具走 `CFG.o2oa_base`（正确）⇒ 出现「组织架构查得到、员工档案查不到」的割裂现象，
+极易被误判成"权限问题 / HR 服务挂机"。
+
+**修法（已落地）**：
+1. `o2_service_health` 重写：地址**一律取 config.json**（`o2oa_base` / `ocr_base` / `bionic_base` / `listen_port`），
+   探活改为**纯 TCP 连通性**（内核 backlog 应答，不受单 worker 阻塞影响），删掉已下线的 8089/8092，输出注明"TCP OK ≠ 接口可用"。
+2. `_cfg_local()` 按 `O2OA_GW_CONFIG` → 本目录 → `../gateway/` → `/app/gateway` 顺序找 config（只认 `__file__` 同目录会把拷出去的副本读成"未配置"）。
+3. `tools/gen_gateway_container_config.py` 增加 **mcp env 端口映射**
+   （`127.0.0.1:9090→o2oa-server` / `:8091→ai-ocr` / `:1234,8089,8092→host.docker.internal`），防止下次重生成又回退。
+4. `config.container.json` 的 `O2OA_BASE` 改为 `http://o2oa-server:9090`。
+   **生效需 `docker compose build ai-gateway && up -d`（或 `docker cp` 后重启该容器）**。
+
+**一行定案（容器内对比地址）**：
+```bash
+export MSYS_NO_PATHCONV=1
+docker exec o2oa-ai-gateway python -c "
+import socket
+for h,p in [('127.0.0.1',9090),('o2oa-server',9090),('ai-ocr',8091),('host.docker.internal',1234)]:
+    s=socket.socket(); s.settimeout(3)
+    try: s.connect((h,p)); print(h,p,'OK')
+    except Exception as e: print(h,p,'FAIL',type(e).__name__)
+    finally: s.close()"
+```
+预期：`127.0.0.1 9090 FAIL ConnectionRefusedError`、其余全 OK。这就是「容器在跑但工具说挂了」的铁证。
+
+**教训**：**"容器在运行" ≠ "容器内能按你写的地址访问到别的服务"。**
+容器化后所有 `127.0.0.1` 都要重审一遍——不只 config 顶层 base，
+还包括 `mcp_servers[].env`、工具源码里的硬编码（生成器最容易漏这两处）。
+
+### ★★ 同现场第二层 bug：地址修通后，工具解析立刻崩（2026-09-30）
+
+把 `O2OA_BASE` 改对后，`o2_login_status` 立即 `login_ok=True`，但 `o2_person_query` 仍报
+`TOOL_ERROR: 'list' object has no attribute 'get'` —— **只修网络层等于没修**。
+
+- 原因：`person/list/like` 返回 `{"data":[...]}`（数组），旧代码写
+  `people = (d.get("data") or {}).get("data") or (d.get("data") or [])` → 对 list 调 `.get` 直接抛异常。
+  同款写法还出现在 `o2_task_my`。
+- 修法：`o2oa_tools_mcp.py` 新增 `_rows(d)`，统一兼容
+  `{"data":[...]}` / `{"data":{"data":[...],"count":n}}` / 裸列表，供 `o2_org_unit_top`/`o2_task_my`/`o2_person_query` 使用；
+  `o2_person_query` 顺带输出 手机/邮箱/工号（模型问"某人手机号"时才有内容可答）。
+- 复测（容器内**按网关真实方式**调 `StdioMCPClient`，别只调脚本）：
+  ```bash
+  export MSYS_NO_PATHCONV=1
+  docker exec o2oa-ai-gateway python -c "
+  import sys,json; sys.path.insert(0,'/app/gateway')
+  from mcp_client import StdioMCPClient
+  cfg=json.load(open('/app/gateway/config.json',encoding='utf-8'))
+  spec=[s for s in cfg['mcp_servers'] if s['name']=='o2oa'][0]
+  c=StdioMCPClient('o2oa',spec['command'],spec.get('args'),spec.get('env'),spec.get('timeout',30)); c.initialize()
+  print(c.call_tool('o2_person_query',{'key':'罗'})); c.close()"
+  ```
+- ★ **改完必须端到端重跑工具链**：网络故障会掩盖解析类 bug，"改了、能连了"≠"能答了"。
+
+### ★ 重启后网关 15~30 秒才对外响应（2026-09-30 实测）
+`docker restart o2oa-ai-gateway` 后，TCP 已能连上 18790，但 `GET /gateway/health` 会
+**无响应超时**（事件循环被启动期任务占住），约 15~30 秒后才恢复 200。
+期间若用探针判活会误报"网关挂了"。容器日志可见 4 行 `[mcp] ... loaded N tools` 即已加载完成。
+
 ### 割接验证命令
 ```bash
 export MSYS_NO_PATHCONV=1   # 否则 taskkill /PID 被 MSYS 路径转换毁掉
