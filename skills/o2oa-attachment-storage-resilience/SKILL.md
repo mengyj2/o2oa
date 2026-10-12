@@ -1,173 +1,154 @@
 ---
 name: o2oa-attachment-storage-resilience
-description: 诊断并根治 O2OA（Docker 自托管，10.0.2 实证）附件存储层的「聊聊图片/附件传不过来、收不到、破图、点开无法预览、上传后记录回滚」，以及「存储后端 NAS 抖动/离线、重装换机后附件丢失」。核心是 rclone WebDAV(dufs) 存储层：写后读竞态（--vfs-cache-mode writes→full）、NAS SMB i/o timeout 降级、degraded 暂存补传、启动阻塞、缓存/数据持久化与恢复、rclone 版本钉死。当用户说"图片传不过来""附件收不到/破图""传了对方没有""重装/升级后附件没了""存储后端不可达""聊聊发图失败""dufs 上传丢失"时调用。
+description: 诊断并根治 O2OA（Docker 自托管，10.0.2 实证）附件/聊聊图片「传不过来、收不到、破图、点开无法预览、上传后记录回滚」，以及「存储后端 NAS 抖动/离线、重装换机后附件丢失」。核心是 rclone WebDAV 存储层 + 应用层元数据：本地权威架构（WebDAV 永远 serve 本地目录 + NAS 异步镜像）、写后读竞态、NAS SMB STATUS_INSUFFICIENT_RESOURCES 抖动、IM 图片元数据记录缺失（MSG_IM_MESSAGE_FILE 无 image 记录）、rclone obscure 非确定性缓存漂移、前端 img onerror 重试、持久化与重装恢复、rclone 版本钉死。当用户说"图片传不过来""附件收不到/破图""传了对方没有""看不了图片""重装/升级后附件没了""存储后端不可达""聊聊发图失败""dufs 上传丢失"时调用。
 agent_created: true
 category: troubleshooting
 ---
 
-# O2OA 附件存储层韧性（写后读竞态 / NAS 抖动 / 持久化）
+# O2OA 附件存储层韧性（本地权威架构 / 元数据 / 前端重试 / 持久化）
 
-> 实证环境：O2OA 10.0.2 社区版 / Docker（`o2oa-server`）+ **rclone WebDAV 存储容器 `o2oa-storage`**
-> 后端 = NAS SMB（`192.168.1.2:445`，即用户口中的「.2」）+ 本地 50G 热缓存 + 本地 degraded 暂存。
-> 首个案例：2026-10-12「李静在聊聊中传图片传不过来、不能预览」，追根到 dufs 写后读竞态。
+> 实证环境：O2OA 10.0.2 社区版 / Docker（`o2oa-server`）+ **rclone WebDAV 存储容器 `o2oa-storage`**。
+> 后端 = NAS SMB（`192.168.1.2`，即用户口中的「.2」）**仅作镜像/冷备**；在线服务由**本地权威目录**承载。
+> 首个案例：2026-10-12「李静在聊聊中传图片传不过来、不能预览」，v1.0 误判为"仅写后读竞态"，v2.0 深挖出**四层叠加根因**。
 
 ## 0. 架构事实（先对齐心智模型，别猜）
 
-O2OA 附件 = **「先落库、后异步写文件」**：DB 先写记录 → 经 **dufs/rclone WebDAV** 落文件 →
-再**立即回读校验字节数**（commit）→ 校验失败则**回滚 DB 记录**（此时消息里只剩孤儿 `fileId`）。
+O2OA 附件 = **「先落库、后异步写文件」**：DB 先写 `IMMsgFile` 记录 → 经 **dufs/rclone WebDAV** 落文件 →
+再**立即回读校验字节数**（commit）→ 校验失败则**回滚 DB 记录**（消息里只剩孤儿 `fileId`）。
 
-存储容器拓扑（`docker-compose.yml` 的 `storage` 服务）：
+**读侧强依赖 DB 记录**：`ActionFileDownload.execute()` 先 `emc.find(id, IMMsgFile.class)`，
+`null == file → throw ExceptionFileNotExist`。**文件在存储里 ≠ 能打开** —— 元数据缺失会伪装成"文件不存在"。
+
+存储容器拓扑（现架构 = **本地权威 + NAS 异步镜像**，`docker-compose.yml` 的 `storage` 服务）：
 
 ```
-O2OA ──WebDAV(http://o2oa-storage:5000)──▶ rclone serve webdav
-                                              ├─ 后端: :smb,host=$NAS_HOST,...:$NAS_SHARE/o2oa-minio   （.2 = 权威冷存储）
-                                              ├─ 本地热缓存: --vfs-cache-mode full --vfs-cache-max-size 50G  → ./dufs-cache (bind mount)
-                                              └─ 降级暂存:   NAS 掉线时切 /degraded → ./dufs-degraded (bind mount)
+O2OA ──WebDAV(http://o2oa-storage:5000)──▶ rclone serve webdav "$DATA"
+                                              $DATA = /data  ← bind ./dufs-data（本地权威，重启/升级不丢）
+                              启动后后台：rclone copy NAS ─▶ $DATA   （回源/补齐历史）
+                                        rclone copy $DATA ─▶ NAS   （上行镜像，失败仅重试）
+                              NAS = :smb,host=192.168.1.2,...:$NAS_SHARE/o2oa-minio  （仅镜像/冷备）
 ```
 
-**用户心智模型 = 实现**：「先在本地（50G 缓存）落地，再异步传到 .2」—— 这正是 `--vfs-cache-mode full`
-的行为（写先落本地缓存、后台异步上传 NAS）。**别**把它讲成"直写 NAS"，也别"修"成 writes 模式。
+> ★ **为什么"本地权威"**：NAS SMB 服务端会间歇返回 `STATUS_INSUFFICIENT_RESOURCES`，旧的
+> 「NORMAL/DEGRADED 双模式 guard」因此每 30s 横跳、每次切换重启 WebDAV、且两模式 serve 的目录不同
+> （`/cache` vs `/degraded`）→ 在 NORMAL 写的图切到 DEGRADED 就 404。改为 WebDAV**永远** serve 本地固定目录 +
+> NAS 只在后台参与 ⇒ **NAS 抖动不再影响在线服务**，也顺带消除写后读竞态与 `obscure` 缓存漂移。
+> 与用户心智模型一致：「先在本地落地，再异步传到 .2」—— 只是把"本地"从易漂移的 VFS 缓存换成了**固定权威目录**。
 
-> ⚠️ `./dufs-cache`、`./dufs-degraded` 在 `.gitignore` 里（运行数据不入库），但它们是 **bind mount**，
-> 容器重建/镜像升级**不丢**；只有"整机重装 + 清目录"才丢 → 靠备份兜底（见 §5）。
+> ⚠️ `./dufs-data`（及历史 `./dufs-cache`、`./dufs-degraded`）在 `.gitignore` 里（运行数据不入库），
+> 但它们是 **bind mount**，容器重建/镜像升级**不丢**；只有"整机重装 + 清目录"才丢 → 靠备份兜底（见 §6）。
 
-## 1. 30 秒判定：症状 → 根因
+## 1. 四层根因速查（叠加，缺一不治）
 
-| 症状 | 首要怀疑 | 判据 |
-|---|---|---|
-| 对方**收不到**图 / 消息只剩一个打不开的附件 | ① 写后读竞态（§2） | `docker logs o2oa-storage` 有 `vfs cache: failed to upload` / `commit error` |
-| 上传**瞬间**破图，刷新/过几秒又好了 | 异步写时序（§4 尾注） | 刷新即恢复 = 正常，非故障 |
-| 以前好过、**某次之后**就不行了 | 是否被"改回去"了 | `docker inspect o2oa-storage` 的 Cmd 是否仍含 `--vfs-cache-mode full`（§2.3） |
-| 所有附件都读不出、连热缓存的也读不出 | 存储后端整体不可达 | 见 §3 降级模式；`ping 192.168.1.2` 通但 SMB 超时是**常态** |
-| **重装/换机后**附件全没了 | 缓存未备份 / NAS 未同步 | 见 §5 |
+| 层 | 根因 | 表现 | 判据 |
+|----|------|------|------|
+| ① 存储写后读 | `--vfs-cache-mode writes` 下读绕过本地缓存直读 NAS → 撞"已建未 flush"窗口 | 上传后 0 延迟读=200/len=0 → `commit error` → 记录回滚 | 日志 `commit error`；0 延迟下载 = 200 但 len=0 |
+| ② **模式抖动**（架构级） | NAS SMB 服务端间歇 `STATUS_INSUFFICIENT_RESOURCES`（建会话需 ~6 次重试，探测只给 1 次）→ 误判掉线 → 双模式每 30s 横跳 | 每次切换重启 WebDAV（端口不可用窗口）；两模式目录不同 → 图 404 | `docker logs o2oa-storage` 反复 `mode=NORMAL`/`mode=DEGRADED`；`rclone lsd` 1/6 vs `--low-level-retries 15` 6/6 |
+| ③ **元数据缺失** | 历史图片 `MSG_IM_MESSAGE_FILE` **零条 `image`**（只有 file） | 应用层下载 500/404、缩略图必破 | `select count(*) from MSG_IM_MESSAGE_FILE where xtype='image'` = 0 |
+| ④ 缓存漂移 | `rclone obscure` **非确定性**（同密码三次三密文）→ remote 哈希目录每次重启变 | 重启后读不到旧缓存 | `rclone obscure x` ×3 比对 |
 
-**决定性一圈取证**（一次跑完）：
+**30 秒取证（一次跑完）**：
 
 ```bash
-# 1) 运行中的存储参数（竞态修复是否还在）
-docker inspect o2oa-storage --format '{{json .Config.Cmd}}' | tr ',' '\n' | grep -E 'vfs-cache-mode|dir-cache-time|vfs-write-back'
-# 2) 当前模式 + 上传报错
-docker logs o2oa-storage --tail 40 2>&1 | grep -iE 'guard|mode=|failed to upload|i/o timeout'
-# 3) NAS SMB 是否在超时（通 ping ≠ 通 SMB）
-docker logs o2oa-storage --tail 200 2>&1 | grep -c '445: i/o timeout'
-# 4) 缓存 / 降级目录占用
-du -sh dufs-cache dufs-degraded
+# 1) 是否本地权威架构（正确=含 LOCAL-AUTHORITY / serve webdav "$DATA"；出现 mode=DEGRADED 即旧架构回退）
+docker inspect o2oa-storage --format '{{json .Config.Cmd}}' | tr ',' '\n' | grep -E 'LOCAL-AUTHORITY|serve webdav|mode=DEGRADED|vfs-cache-mode'
+# 2) 日志：模式抖动 + 上传报错
+docker logs o2oa-storage --tail 60 2>&1 | grep -iE 'LOCAL-AUTHORITY|mode=|failed to upload|i/o timeout|Insufficient'
+# 3) 图片元数据是否落库（0 = 根因③）
+docker exec o2oa-mysql sh -c "mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\" -N --default-character-set=utf8mb4 -e \"select xtype,count(*) from MSG_IM_MESSAGE_FILE group by xtype\" X"
+# 4) NAS SMB 成功率（通 ping ≠ 通 SMB）
+ docker exec o2oa-storage sh -c 'OB=$(rclone obscure "$NAS_PASSWORD"); R=":smb,host=$NAS_HOST,user=$NAS_USER,pass=$OB:$NAS_SHARE/o2oa-minio"; for i in 1 2 3 4 5 6; do rclone lsd "$R" --contimeout 5s --timeout 8s --retries 1 >/dev/null 2>&1 && echo OK || echo FAIL; done'
 ```
 
-## 2. ★★ 写后读竞态 —— 「图片传不过来」的头号根因（2026-10-12 根治）
+## 2. 症状 → 根因路由
 
-### 2.1 机理
+| 症状 | 首要怀疑 |
+|---|---|
+| 对方**收不到**图 / 消息只剩打不开的附件 | ① 写后读竞态 或 ③ 元数据缺失 |
+| **点开看不了 / 缩略图破图**，但消息在 | ③ 元数据缺失（先查 `MSG_IM_MESSAGE_FILE`） |
+| 所有附件都读不出、连本地也读不出 | ② 模式抖动（旧架构）/ 存储容器不健康 |
+| 上传**瞬间**破图，刷新/过几秒好 | 异步写时序（§5 尾注）；若频繁则用 §4 前端重试消除 |
+| **重装/换机后**附件全没了 | 缓存未备份 / NAS 未同步（§6） |
 
-`--vfs-cache-mode writes`（旧配置）下，**读请求绕过本地缓存、直读 NAS(SMB)**；
-而 SMB 写入存在 **「文件已创建、内容尚未 flush」** 的窗口。O2OA 上传后**立即回读校验**正好撞上：
+## 3. 存储层修复：本地权威 + NAS 异步镜像（★ 现架构）
 
-```
-PUT  → SMB 建文件（0 字节）…  内容仍在 flush
-GET(立即) ← 直读 SMB → 读到 0 字节   ← 竞态窗口
-O2OA: 0 字节 → commit error → DB 回滚 → 文件永久丢失（消息只剩孤儿 fileId）
-```
-
-### 2.2 修法（`full` 模式）
-
-`--vfs-cache-mode writes` → **`full`**：读也命中本地缓存 ⇒ 写后立即可读，竞态消失。
-同时 `--dir-cache-time 15s → 1s`（缩短目录列举可见性延迟）。
+`docker-compose.yml` `storage` 服务（要点，完整见仓库）：
 
 ```yaml
-# docker-compose.yml  storage 服务 NORMAL 分支
-rclone serve webdav "$$REMOTE" --addr :5000 \
-  --vfs-cache-mode full --vfs-cache-max-size $$HOT_CACHE_SIZE \
-  --vfs-write-back 5s \
-  --vfs-cache-max-age 2160h --dir-cache-time 1s --cache-dir /cache &
+  storage:
+    image: rclone/rclone:1.75.2          # ★ 钉死版本（禁 :latest）
+    volumes:
+      - ./dufs-data:/data                # 本地权威目录（bind mount）
+      # 历史兼容：./dufs-degraded:/degraded（旧降级暂存，首启并入 /data）
+    command:
+      - |
+        DATA=/data
+        echo "[storage] LOCAL-AUTHORITY mode: WebDAV serves $DATA"
+        rclone serve webdav "$DATA" --addr :5000 --user o2oadrive --pass "$DUFS_PASSWORD" & SRV=$!
+        # 后台（★ 必须在起服务之后，勿阻塞启动）：
+        #   回源：rclone copy "$REMOTE" "$DATA" --ignore-existing
+        #   合并历史 degraded：rclone copy /degraded "$DATA" --ignore-existing
+        #   上行：rclone copy "$DATA" "$REMOTE" --ignore-existing   (失败重试，不影响服务)
 ```
 
-### 2.3 防静默回退（★ 必做）
+- 生效：`docker compose up -d --no-deps --force-recreate --pull never storage` → **2~3 秒就绪**。
+- 回滚包：`backups/compose-local-authority-20261012/`。
 
-改完**必须**能被门禁抓住，否则换机/误改即复发：
+**防静默回退（★ 必做）**：`tools/o2_container_drift_check.py` **C 组**已改为「本地权威契约」——
+断言运行容器含 `LOCAL-AUTHORITY` / `serve webdav "$DATA"` / 上下行 `rclone copy`，并**回归守卫**旧的
+`--vfs-cache-mode writes` 与 `mode=DEGRADED` 不得复活。FAIL 即退出码 1。
 
-```bash
-# 运行容器必须含 full + dir-cache-time 1s；compose 镜像必须钉死（非 :latest）
-python tools/o2_container_drift_check.py --compose D:/O2OA/docker-compose.yml
-#   → [存储层竞态修复契约] 若 FAIL 退出码 1
-docker compose up -d --no-deps --force-recreate storage   # 应用修复
-```
+## 4. 元数据修复 + 前端重试
 
-**实测（可原样重跑）**：写后 0 延迟 GET，6/6 字节一致（修复后）；修复前 0 延迟下载 = HTTP 200 但 `len=0`。
+### 4.1 补建缺失的 IM 图片记录（`tools/o2_fix_im_image_records.py`）
 
-```bash
-PW=$(grep '^DUFS_PASSWORD=' /d/O2OA/.env | cut -d= -f2-)
-head -c 30000 /dev/urandom > /tmp/a.bin
-curl -s -u o2oadrive:$PW -T /tmp/a.bin http://127.0.0.1:5000/__t/f.bin -o /dev/null
-curl -s -u o2oadrive:$PW http://127.0.0.1:5000/__t/f.bin -o /tmp/b.bin
-cmp /tmp/a.bin /tmp/b.bin && echo OK   # 必须一致（修复前 b.bin 为 0 字节）
-```
+- 源 = `MSG_IM_MESSAGE` 中 body 含 `"type":"image"` 的消息（body 自带 `{fileId,fileName,fileExtension}`）；
+- 逐条比对 `MSG_IM_MESSAGE_FILE`，缺则按模板（`xstorage=dufs-im`）INSERT；**只补记录、不动文件**；
+- 幂等、默认 dry-run，`--apply` 落库；执行前 `mysqldump` 备份该表。
+- 实测：11 条图片消息 → 补 **10** 条、1 条无对应文件（确丢）；补后应用层读历史图 **全部 200 + 字节精确匹配、无需重启**。
+- 读侧接口：缩略图 `/x_message_assemble_communicate/jaxrs/im/msg/download/{id}/image/width/{w}/height/{h}`；原图 `…/download/{id}`。
 
-## 3. NAS SMB i/o timeout = 常态，不是故障
+### 4.2 前端 `img onerror` 自动重试（`patch/imgretry/patch_img_retry.py`）
 
-`ping 192.168.1.2` 通，但 `445: i/o timeout` 频繁 —— **TCP 可达 ≠ SMB 服务可用**（海康 NAS 定时休眠/网络闪断）。
-存储容器的"降级守卫"为此设计：
+构建期把通用重试器追加进 **`o2_core/o2.js`（PC）/ `o2_core/o2.min.js`（移动端 `appIM.html`）**：
+`document` 捕获阶段 `error` 监听 + 同源路径白名单（`/jaxrs/im/msg/download/`、UniversalPreview）
++ 每元素最多 3 次退避重试 + `_o2r` 破缓存。标记 `O2-IMG-RETRY`。
+**e2e 判据**：`window.__o2ImgRetryInstalled===true`；真实图 `naturalWidth>0` 不重试；404 的 IM 图重试并加 `_o2r`；非 IM 路径不重试。
 
-- NAS 在线 → **NORMAL**（SMB 后端 + 50G 热缓存）
-- NAS 掉线 → 自动切 **DEGRADED**（`rclone serve webdav /degraded`，读写落本地 `./dufs-degraded`，**网盘不报错**）
-- NAS 恢复 → **rclone copy /degraded → NAS** 补传，再切回 NORMAL
+## 5. NAS SMB 不稳 = 温床（现在已与在线服务解耦）
 
-> **纪律**：不要把 SMB 超时当"存储坏了"去重启存储。**只要 full 缓存模式在，写进本地缓存的文件就不会丢**
-> （后台会重试上传）。真正要治的是 NAS 侧网络/SMB 服务（建议排查：SMB 版本协商、休眠策略、网线/交换机）。
+`ping 192.168.1.2` 通但 `:smb` 报 `STATUS_INSUFFICIENT_RESOURCES` / `i/o timeout` —— **TCP 可达 ≠ SMB 服务可用**。
+本地权威架构下 NAS **只做后台镜像**，其抖动**不再影响在线读写**；仍建议排查 NAS 侧（SMB 版本协商、会话/句柄泄漏、休眠策略、网络）。
 
-## 4. ★ 启动阻塞缺陷：degraded 补传必须放服务启动【之后】后台跑（2026-10-12 修）
+> 尾注：O2OA 上传是"异步写 + 前端立即渲染"，刚发出的一瞬可能短暂破图，刷新即好；
+> §4.2 的 `img onerror` 重试即为此。
 
-**坑**：原 entrypoint 先 `rclone copy /degraded → NAS` **再** 起 WebDAV 服务。
-NAS 抖动时该 copy 连续 i/o timeout **数十秒**（实测 ~30s）→ 期间 **5000 端口未监听 → 附件全不可用**。
-
-**修**：先起服务（秒起），补传放**后台**：
-
-```sh
-rclone serve webdav "$$REMOTE" ... & SRV=$$!
-if [ -n "$$(ls -A /degraded 2>/dev/null)" ]; then
-  ( rclone copy /degraded "$$REMOTE" --ignore-existing --contimeout 10s --timeout 30s \
-      || echo "[guard] upload failed, retry next round" ) &
-fi
-```
-
-**验证**：重建容器后端口 5000 就绪时间 —— 修前 ~30s，**修后 ~3s**。
-
-> 尾注（正常现象）：刚上传的一瞬可能短暂破图 —— O2OA 侧"异步写 + 立即读"自有毫秒级时序，
-> 刷新即好，非存储故障。可选加固：前端 `img onerror` 自动重试。
-
-## 5. 持久化：升级 / 重装不丢数据与程序（★ 用户核心诉求）
+## 6. 持久化：升级 / 重装不丢数据与程序（★ 用户核心诉求）
 
 | 关注点 | 载体 | 重装是否丢 | 兜底 |
 |---|---|---|---|
-| 附件文件（冷） | NAS `192.168.1.2` | 否 | 权威源；rclone 持续上传 |
-| 附件文件（热/降级） | `./dufs-cache` `./dufs-degraded`（bind mount） | 换机丢（未入库） | `backup_o2oa_chain.bat` 备份 **degraded**；cache 可再生 |
+| 附件文件（权威） | `./dufs-data`（bind mount） | 换机丢 | `backup_o2oa_chain.bat` 备份；NAS 为二级镜像 |
+| 附件文件（冷备） | NAS `192.168.1.2` | 否 | 持续镜像 |
 | 附件记录 | MySQL（命名卷 `mysql-data`） | 否 | 全量 `mysqldump` |
 | 存储层配置 | `docker-compose.yml`（git 真源） | 否 | 入仓 + 备份 + 漂移门禁 |
 | 程序/镜像 | git 仓 + `docker save` 镜像 tar | 否 | bundle + `_images/` |
 
-**恢复脚本（顺序）**：
-```bash
-bash  tools/push_o2oa_driver_clean.sh --dry-run           # 先确认仓库/配置一致
-bash  tools/o2_container_drift_check.py                   # 确认镜像层含全部固化资产
-"$GIT_BASH" -c "cd /d/O2OA && bash tools/backup_o2oa_state.sh"   # 备份（含 compose/degraded/镜像 tar）
-```
+**rclone 版本钉死**：`image: rclone/rclone:1.75.2`（**禁用 `:latest`**）。升级前须在测试环境复验写后立即可读性。
 
-**rclone 版本钉死**：`image: rclone/rclone:1.75.2`（**禁用 `:latest`**）。
-存储是附件唯一持久化入口，`:latest` 会在重装 `pull` 时拉到新版 → VFS 语义/重试策略可能变 → 难以回溯。
-升级前须先在测试环境复验 `--vfs-cache-mode full` 的写后立即可读性。
-
-## 6. 固化纪律（六件套）
+## 7. 固化纪律（六件套）
 
 存储层任何修复**必须**走完：
-① 知识库化 `docs/knowledge_base/*.md` → `python tools/ingest_knowledge_base_docs.py`
+① 知识库化 `docs/knowledge_base/im_image_storage_write_race_20261012.md` → `python tools/ingest_knowledge_base_docs.py`
 ② 技能化（本 skill）→ `bash tools/sync_skills_to_repos.sh`（镜像两仓）
 ③ 档案 `tools/o2_docs_audit.py --all` 刷 `docs/DOC-STATUS.md`
 ④ 推 `o2oa-driver`（`tools/push_o2oa_driver_clean.sh`）
 ⑤ 备份 `tools/backup_o2oa_chain.bat`
-⑥ 改 `docker-compose.yml` **即真源**（无镜像可烘焙）→ 入仓 + 备份 + 门禁断言。
-   改后务必 `docker compose up -d --no-deps --force-recreate --pull never storage` 使运行时==声明。
+⑥ 改 `docker-compose.yml`/前端补丁 **即真源** → 入仓 + 备份 + 门禁断言 + `docker compose up -d --no-deps --force-recreate --pull never <svc>` 使运行时==声明。
 
-## 7. 相关 skill
+## 8. 相关 skill
 
-- `o2oa-runtime-drift-hardening` —— 「改动只进容器/卷、没进镜像/仓库」的通用漂移审计（本 skill 的 §2.3 门禁由它承载）。
+- `o2oa-runtime-drift-hardening` —— 「改动只进容器/卷、没进镜像/仓库」的通用漂移审计。
 - `o2oa-onlyoffice-attachment-preview` —— 附件**在线预览**走下载（前端/控件/缓存层）。
 - `o2oa-onlyoffice-editor-features` —— 验证文件确在 rclone 存储器的 headless 探测法。
 - `o2oa-log-triage-health` —— 附件相关报错在问题日志里的排查入口。
+- `o2oa-process-duty-governance` —— 审批人按组织职务指派（含本文提到的图片链路排查无关，但组织解析同源）。
