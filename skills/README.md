@@ -2,7 +2,7 @@
 
 > 位置：`~/.workbuddy/skills/`（= `C:\Users\meng_\.workbuddy\skills\`），跨项目可用。
 > 本文件**不是 skill**（根目录 README，不参与加载），只作导航与边界说明。
-> 最后整理：2026-09-30（新增 `o2oa-runtime-drift-hardening`、`o2oa-onlyoffice-attachment-preview`、`o2oa-onlyoffice-editor-features`）。共 27 个。
+> 最后整理：2026-10-12（新增 `o2oa-process-duty-governance`）。共 **29** 个（27 个 `o2oa-*` + `lmstudio-backend-install` + `docker-container-egress-lockdown`）。
 > **镜像**：本目录已同步进两个 O2OA 仓（`D:\O2OA\skills\`、`D:\o2oaccia\skills\`），
 > 同步用 `D:\O2OA\tools\sync_skills_to_repos.sh`（随每日双仓同步自动跑）。
 
@@ -27,8 +27,9 @@
 | `o2oa-reveal-fix` | 首页「公文管理 Reveal 对象已存在」+ 登录 `randomWithWeight count=0` 双根因闭环 | — |
 | `o2oa-market-offline-install` | 断云环境离线安装应用市场 zip 包（setup.json+xapp），含冲突判断与卸载限制 | 非市场包（自研 xapp）→ `o2oa-app-io` |
 | `o2oa-driver-repo-clean` | ★ 驱动仓清洗管道（D:/O2OA → 私有仓 `o2oa-driver`）：代码被洗成 `***REMOVED***`、镜像落后源仓、fetch 静默失败、校验假绿、替换表过宽/漏项 | 纯 git 历史改写工具 → 无 |
+| `o2oa-process-duty-governance` | ★ 流程审批节点治理：硬编码人名 → **按组织职务指派**或**表单数据路径取人**；含三范式边界、秘书长兜底不卡单、六静默坑、全量审计与 E2E 验收、企业化六件套 | 只读盘点流程 → `o2oa-app-io` |
 
-## 2. diagnostics —— 排障 / 根因定位（不改状态）
+## 2. diagnostics / governance —— 排障、根因定位、文档与知识治理
 
 | skill | 一句话定位 |
 |---|---|
@@ -39,6 +40,7 @@
 | `o2oa-mcp-tool-hardening` | ★ 9 个 MCP 工具（会议/日程/HR/薪资/邮件/待办/流程）报 500、静默不落库、卡片回吐 `${xxx}`、查询越权返回全量；核心是 invoke `bodyMap` 未替换占位符 |
 | `o2oa-local-ai-assistant`（兼） | 推理模型「界面空白」= `reasoning_content` 陷阱（见 §4） |
 | `o2oa-onlyoffice-attachment-preview` | ★ 附件「在线打开」走下载：三层根因（控件 `isPreviewAtt/dblclick/officeTool` → 前端 `x_component_OnlyOfficeEditor` 缺失 → **表单 HTTP 强缓存 cacheTag=CRC32(id+updateTime)**）。含 OnlyOffice 服务端/JWT/容器互通就位清单 |
+| `o2oa-docs-governance` | ★ 过程文档治理：修订说明块规范（四态）+ 有效性台账 `DOC-STATUS.md` + `o2_docs_audit.py --check` 门禁；治「文档过期了没人知道」「AI 照旧文档答错」 |
 | `o2oa-onlyoffice-editor-features` | ★ 编辑器**自身菜单/页签**的语义与离线边界：「打开文件所在位置」= `customization.goback`（O2OA 由 `gobackUrl` 统一给定 → 跳主页属**设计**，非存储故障）；文件确在 rclone 存储器的验证法（`externalStorageSources.json` WebDAV→`o2oa-storage:5000`）；视图/插件/AI 三页签**浏览器级实测结论** + AI 页签本地化（内置 LM Studio / 自定义提供方）；含免登录 headless 探测法 |
 
 ## 3. development —— 写组件 / 门户 / 表单 / 服务
@@ -48,6 +50,7 @@
 | `o2oa-custom-desktop-component` | 从零自研 `x_component_XXX` 并挂到菜单真正打开；排查「点开一片空白」 |
 | `o2oa-portal-page-format` | `page.data` 正确格式、自定义 HTML 真渲染、门户读**自建表真实数据**、多栏 Tab 与跳转 |
 | `o2oa-local-sms-mail-service` | 纯 Python 平替 `x_sms_assemble_control`，让短信验证码/忘记密码在本地可用 |
+| `o2oa-plan-decomposition` | 个人工作台·工作计划按「组织→部门→个人」双层分解：部门职责映射、无负责人/执行人兜底上收、待分配预警、完成率加权回写 |
 
 ## 4. integration —— 对接外部服务 / 本地 AI 栈
 
