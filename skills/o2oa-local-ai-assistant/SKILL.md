@@ -23,6 +23,7 @@ category: integration
 | 官方 `llama-server.exe` 跑不起来（退出码 `-1058471934` / `0xC0E90002`） | 官方 release 包的 DLL 打包缺陷，换 DLL 集 | §11 |
 | RAG 报 `System message must be at the beginning` | 多加了第二条 system，Qwen3.5 模板不允许 | §12 |
 | 升级 / 容器重建后 AI 失效 | netlock 白名单 + AI 配置 + 补丁丢失 | §13 |
+| **AI助手→模型设置 里「修改模型」保存后右上角弹红条 `request json error`** | 网关 `/ai-gateway-endpoint/get/{name}` 按 **name** 查不到却回 `{"type":"success"}`（无 data）→ O2OA `resp.getData()` 得 null → `ActionUpdateModel.java:88` `copyTo` NPE → 500 `message:" "` → 前端 `json.message.trim() \|\| "request json error"` 回退成字面量 | §16 |
 
 ---
 
@@ -650,3 +651,121 @@ python tools/o2_gw_endpoint_model_test.py     # 内置两个 endpoint 对比
 3. **模型名对不对**：`GET :1234/v1/models` 列出**全部已下载**模型（不只已加载），
    同族可能有 `qwen3.8-27b` 与 `qwen/qwen3.8-27b` 两个 ID，别配错。
 
+
+---
+
+## 16. ★ 保存模型报 `request json error`——`/ai-gateway-endpoint/get` 的 name/id 口径错位
+
+### 症状
+`AI助手 → 模型设置 → 修改模型 → 确定`，右上角弹红条 **`request json error`**，
+**没有任何其它信息**；服务端日志见：
+
+```
+ERROR com.x.ai.assemble.control.jaxrs.config.ConfigAction - ... exception:java.lang.NullPointerException
+java.lang.NullPointerException: null
+  at com.x.ai.assemble.control.jaxrs.config.ActionUpdateModel.saveToO2Ai(ActionUpdateModel.java:88)
+  at com.x.ai.assemble.control.jaxrs.config.ActionUpdateModel.execute(ActionUpdateModel.java:73)
+  at com.x.ai.assemble.control.jaxrs.config.ConfigAction.updateModel(ConfigAction.java:131)
+```
+HTTP **500**，响应体 `{"type":"error","message":" "}`（message 是一个空格）。
+
+### 根因（两层串起来才成灾）
+1. **O2OA 侧**（`describe/sources/.../jaxrs/config/ActionUpdateModel.java`）：
+   ```java
+   String url = aiConfig.getO2AiBaseUrl() + "/ai-gateway-endpoint/get/"
+                + UrlEncoded.encodeString(name);      // ★ 用【模型 name】，不是 id
+   ActionResponse resp = ConnectionAction.get(url, heads);
+   if (Type.success.equals(resp.getType())) {
+       Wi wi = resp.getData(Wi.class);              // ← 若网关回了 success 但没有 data，这里就是 null
+       aiModel.copyTo(wi, ListTools.toList(JpaObject.FieldsUnmodify));   // ← line 88 NPE
+       ... update
+   } else {
+       ... create                                   // ★ 契约：非 success ⇒ 走 create
+   }
+   ```
+   契约很明确：**GET 命中 → success+data → update；GET 未命中 → 非 success → create**。
+2. **网关侧**（`gateway/o2_agent_gateway.py` 的 `crud_routes`）：
+   ```python
+   async def get_one(flag: str):
+       row = c.execute("SELECT v FROM kv WHERE k=?", (f"{store_key}:{flag}",)).fetchone()
+       return ok(json.loads(row[0]) if row else None)     # ← 未命中回 {"type":"success"}，无 data
+   ```
+   而 `create()` 落库键是 `kv["endpoint:{O2OA 的 uuid}"]`（body 里带 id）。
+   → **存的是 id、查的是 name，永远查不到** → 永远回 `success` 无 data → 对端必 NPE。
+
+   注意 O2OA 自己也不一致：`ActionUpdateMcp` 用 **`mcp.getId()`** 查（所以 MCP 保存一直是好的），
+   `ActionUpdateModel` / `ActionDeleteModel` 用 **name** 查（所以模型侧必炸）。
+   `ActionUpdateConfig.syncModel` 也调 `updateModel.saveToO2Ai(name, m)`，但它先
+   `POST /ai-gateway-endpoint/list/paging/1/size/1`，**count>0 就直接 return**，所以配置页通常侥幸不炸。
+
+### 前端为什么显示成 `request json error`（而不是后端那句话）
+`_x_desktop_js_base_portal.js` 的 `_doError`：
+```js
+var json = JSON.decode(xhr.responseText);
+if (json) { errorText = json.message.trim() || "request json error"; }
+else      { errorText = "request json error: " + xhr.responseText; }
+MWF.xDesktop.notice("error", {x:"right", y:"top"}, errorText);
+```
+后端 message 是 `" "` → `.trim()` 得 `""` → falsy → 回退成字面量 `request json error`。
+**看到这五个字，就等于后端抛了一个 message 为空/空格的异常。**
+
+### 修法（改网关，不是改 O2OA）
+`crud_routes.get_one` 三改：
+```python
+async def get_one(flag: str):
+    with db() as c:
+        row = c.execute("SELECT v FROM kv WHERE k=?", (f"{store_key}:{flag}",)).fetchone()
+        if row:                                  # ① 先按 id 精确命中（兼容 MCP 的 id 口径）
+            return ok(json.loads(row[0]))
+        for (v,) in c.execute("SELECT v FROM kv WHERE k LIKE ? ORDER BY k",
+                              (f"{store_key}:%",)).fetchall():   # ② 再按 name 兜底命中
+            try:
+                d = json.loads(v)
+            except Exception:
+                continue
+            if isinstance(d, dict) and d.get("name") == flag:
+                return ok(d)
+    # ③ 仍未命中：必须回非 success，让 O2OA 走 create —— 绝不能回 success+null
+    return JSONResponse({"type": "error", "message": "not exist: " + str(flag)}, status_code=200)
+```
+顺带修 `delete_one`：`ActionDeleteModel.deleteToO2Ai` 提交的是
+**`{"idList":[<id>]}`**（不是 `body.id`），原先解析不到 → 400 → 被 O2OA 的
+`try/catch → logger.warn` **静默吞掉**，网关端点表留孤儿。现按
+`路径参数 → body.idList[0] → body.id` 依次取。
+
+> ⚠️ 状态码用 **200 + `{"type":"error"}`**，不要用 404：O2OA 的 `ConnectionAction`
+> 判的是 **body 里的 `type`**，不是 HTTP 码；给 404 反而可能抛传输层异常。
+
+### 固化（改完必须做，否则下次重建镜像就回退）
+网关代码是 `COPY gateway/ /app/gateway/` **烘进镜像**的，改完要：
+```bash
+# 1) 先"灌库"：data.db 也烘在镜像里，重建会把容器里的新数据冲掉 → 先在线备份回 build context
+docker exec o2oa-ai-gateway python -c "
+import sqlite3; s=sqlite3.connect('/app/gateway/data.db'); d=sqlite3.connect('/tmp/db_snap.db')
+s.backup(d); d.close(); s.close()"
+MSYS_NO_PATHCONV=1 docker cp o2oa-ai-gateway:/tmp/db_snap.db gateway/data.db
+# 2) 重建 + 强制重建容器（ai-gateway / ai-ocr / ai-plan 共用一个镜像）
+docker compose build --pull=false ai-gateway
+docker compose up -d --no-deps --force-recreate ai-gateway ai-ocr ai-plan
+```
+> MSYS/Git-Bash 下 `docker cp`/`exec` 的容器路径必须 `MSYS_NO_PATHCONV=1`，
+> 否则 `/app/...` 被转成 `C:/Program Files/...` 报 "No such file or directory"。
+
+### 验收（决定性）
+```bash
+# 1) 网关：按 name 命中应有 data；不存在的名字应回 type=error（不再是无 data 的 success）
+curl -s -H "Authorization: Bearer <token>" "http://<gw>/ai-gateway-endpoint/get/<模型name>"
+# 2) 端到端：两个模型各改一次都要 HTTP 200
+curl -s -X POST -H "x-token: <t>" -H "Content-Type: application/json" \
+  --data-binary '{...AiModel...}' \
+  "http://127.0.0.1:9090/x_ai_assemble_control/jaxrs/config/update/model/<id>" -w "\n[%{http_code}]\n"
+# 3) 网关端点表应自动补正（缺失的模型走 create 自愈）
+docker exec o2oa-ai-gateway python -c "
+import sqlite3;c=sqlite3.connect('/app/gateway/data.db')
+print([k for (k,) in c.execute(\"select k from kv where k like 'endpoint:%'\")])"
+```
+
+### ★ 附带认知
+`ActionUpdateModel.execute` 的 `emc.commit()`（落库）**在 `saveToO2Ai()` 之前**：
+所以**模型其实是存进库了的**，只是响应阶段炸成 500 —— 用户看到「报错」，实际改动已生效。
+排障时别被"报错=没保存"误导，先回查 `X.AI_MODEL`。
