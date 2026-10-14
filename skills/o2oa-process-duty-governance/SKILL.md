@@ -1,6 +1,6 @@
 ---
 name: o2oa-process-duty-governance
-description: 治理 O2OA 流程审批人——把硬编码人名改成「按组织职务指派」或「按表单数据路径取人」，并做全量审计与验收。当用户说"审批人写死了人名""换人要改流程""一提交全部门都收到待办""某节点静默派给发起人""按所选项目自动派负责人""领导节点该派谁""流程结构被改坏要复原""谁该审这个节点""点选流程后没反应""选完身份就返回了""发起后表单没打开""流程需要修改成 XX 审批"时调用。含三范式选择边界、组织 API 契约（秘书长兜底不卡单）、数据路径值必须身份DN、六个会静默出错的坑、草稿发起(defaultStartMode)根治"选身份后返回"、批量改名要连带改路由显示名 + 叶子级 diff 断言变更面、审计与 E2E 验收法、以及企业化运维（推仓库/镜像/备份/知识库化）。
+description: 治理 O2OA 流程审批人——把硬编码人名改成「按组织职务指派」或「按表单数据路径取人」，并做全量审计与验收。当用户说"审批人写死了人名""换人要改流程""一提交全部门都收到待办""某节点静默派给发起人""按所选项目自动派负责人""领导节点该派谁""流程结构被改坏要复原""谁该审这个节点""点选流程后没反应""选完身份就返回了""发起后表单没打开""流程需要修改成 XX 审批""某人的身份在流程里选不到""流程里没有我的身份""新加的身份选不了""某人无法启动流程"时调用。含三范式选择边界、身份可达性（startableIdentityList 白名单：启动选身份=本人全部身份∩白名单）治理与身份体检门禁、组织 API 契约（秘书长兜底不卡单）、数据路径值必须身份DN、六个会静默出错的坑、草稿发起(defaultStartMode)根治"选身份后返回"、批量改名要连带改路由显示名 + 叶子级 diff 断言变更面、审计与 E2E 验收法、以及企业化运维（推仓库/镜像/备份/知识库化）。
 agent_created: true
 category: operations
 ---
@@ -133,3 +133,34 @@ python o2oa优化/o2oa_audit/b5_project_chain.py --apply   # 施工任务单：�
 `xactivity` = **首节点 id**、`xcreatorIdentity` = **点击人本人** 的在办件。有 ⇒ 就是它（比翻日志/抓包快）。
 清理这些误点残留件时，用**白名单 id**（不要用条件批量删），并以**发起人身份**删（admin 删为静默 no-op）。
 - 脚本：`o2oa优化/o2oa_audit/proc_fix_htxq_restore.py`、`e2e_htxq.py`。
+
+## 10. 身份可达性：启动流程「选身份」为什么少了几个（★ 组织身份治理）
+
+**症状**：某人有分会 / 专委会 / 联盟 / 公司等第二身份，但启动流程时「选择身份」里根本不出现（"无法选择"）。
+
+**根因**：启动选身份的接口 `GET /x_processplatform_assemble_surface/jaxrs/process/list/available/identity/process/{flag}`
+（`ActionListAvailableIdentityWithProcess.java`）返回的是 **本人全部身份 ∩ `process.startableIdentityList`**；
+`startableIdentityList` **非空**时，名单外的身份被**静默丢弃**（四个 `startable*` 全空 = 不限制 = O2OA 官方默认）。
+
+- 典型成因：白名单当初只写了每人**一个主身份**，后加的身份 / 新单位身份全部落在名单外。
+- 两个更极端的后果：**某人全部身份都不在名单 ⇒ 完全无法启动任何流程**；**某人没有任何身份 ⇒ 同上**。
+
+**治理（零硬编码）**：`o2oa优化/o2oa_audit/fix_startable_identity.py`
+动态从组织推导 canonical（全部在职人员的全部身份，排除服务号）→ 对每个流程 `startableIdentityList` 做**并集**；
+干跑 / `--apply` / 整份存档 `_archive/startable_fix_<ts>/` / 回读断言**唯一差异字段 = startableIdentityList**
+（★ 必须忽略服务端自动刷新的 `updateTime`，否则几十个流程会全部误报"有差异"）。
+
+**补建身份**：`o2oa优化/o2oa_audit/ensure_identity.py` →
+`POST /x_organization_assemble_control/jaxrs/identity` body `{name, unique, person(DN), unit(DN), major}`
+（`unique` 留空 = `单位unique_人员unique`；首身份自动 `major=true`）。
+★ 创建后**立即**回读 `identity/list/person/{personUnique}` 可能因缓存时序返回 0，稍后复查即正常。
+
+**门禁**：`o2oa优化/o2oa_audit/audit_identity_health.py`（退出码 0/1）体检四项：无身份人员 /
+从未进任何白名单的身份 / 白名单重复·悬空 / 在职人员完全无法启动任何流程。
+
+**运维铁律**：**新增人员或新增身份之后，必须重跑 `fix_startable_identity.py --apply`**，否则新身份重演"选不到"。
+（若想彻底免维护，可把白名单清空 = 平台默认"不限制"；保留白名单只为排除服务号。）
+
+- 只读速查：`GET …/x_organization_assemble_control/jaxrs/identity/list/person/{personUnique}`（按姓名/单位无效）；
+  express 模块无该接口。人员 / 单位全量：`GET …/x_organization_assemble_express/jaxrs/person|unit/list/all/object`。
+- 知识库稿 `docs/knowledge_base/o2oa_identity_startable_chain_20261014.md`（2026-10-14 实证）。
