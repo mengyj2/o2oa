@@ -398,6 +398,32 @@ button:focus-visible {
     overflow: hidden;
 }
 
+/* ---------------------------------------------------------------------------
+ * 会话列表未读红数字（2026-10-15 源码级实现）
+ * 位置：会话项「对话人 / 群名」下方的第二条 .body-line，紧跟在 .msg 之后。
+ * 数值口径：后端 /jaxrs/im/conversation/list/my 已返回的 unreadNumber
+ *          （1 条=1、2 条=2；>99 由组件显示为 "99+"；=0 时组件不渲染本节点）。
+ * 因此这里只管样式，不需要前端自算未读。
+ * ------------------------------------------------------------------------- */
+.im-conv-item .body-line .im-conv-unread {
+    display: inline-block;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    line-height: 1.25rem;
+    padding: 0 0.4rem;
+    margin-left: 0.4rem;
+    margin-right: 0.625rem;
+    border-radius: 0.625rem;
+    background-color: #f5222d;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+}
+
 /** im-chat  **/
 .im-chat-row {
     display: flex;
@@ -417,43 +443,147 @@ button:focus-visible {
     position: relative;
 }
 
+/* ---------------------------------------------------------------------------
+ * 附件上传队列（2026-10-15 源码级重写）
+ * 目标：对齐微信的「看得见进度、看得见结果、能取消 / 重试」。
+ *   · 浅色卡片浮在聊天区顶部，最大宽 420px，不整条遮住会话内容；
+ *   · 三态配色：上传中 = 主题色，已完成 = 绿，失败 = 红；
+ *   · 行内同时给出百分比文字与进度槽；失败时额外显示原因 + 「重试」。
+ * 旧实现只有一条 30px 的半透明黑底进度条、无百分比、无状态、失败即消失，
+ * 用户因此分不清成功还是失败（见 store.js 中同名注释）。
+ * ------------------------------------------------------------------------- */
 .im-chat-progress {
     position: absolute;
-    top: 4.28rem;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding-bottom: 5px;
+    top: 4.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px;
+    max-width: calc(100% - 2rem);
+    max-height: 50%;
+    overflow-y: auto;
+    background-color: var(--oo-im-color-bg-primary, #fff);
+    border: 1px solid var(--oo-im-color-bg-divider, #e8eaee);
+    border-radius: var(--oo-default-radius, 6px);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+    padding: 0.5rem 0.75rem;
+    box-sizing: border-box;
     z-index: 9;
 }
 
-.im-chat-progress-bar-container {
-    width: 100%;
-    height: 30px;
-    margin-top: 5px;
-    overflow: hidden;
-    position: relative;
+.im-chat-progress .im-upload-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--oo-im-color-bg-divider, #f0f1f3);
 }
 
-.im-chat-progress-bar-label {
-    font-size: var(--oo-font-size-small);
-    color: white;
+.im-chat-progress .im-upload-item:last-child {
+    border-bottom: none;
+}
+
+.im-chat-progress .im-upload-icon {
+    flex: 0 0 auto;
+    width: 1.6rem;
+    height: 1.6rem;
+    line-height: 1.6rem;
     text-align: center;
-    position: absolute;
-    line-height: 30px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    border-radius: 50%;
+    color: #fff;
+    background-color: var(--oo-color-main);
+    font-size: var(--oo-font-size-small);
 }
 
-.im-chat-progress-bar {
-    position: absolute;
-    left: 0;
-    top: 0;
+.im-chat-progress .im-upload-item.im-upload-done .im-upload-icon {
+    background-color: #52c41a;
+}
+
+.im-chat-progress .im-upload-item.im-upload-error .im-upload-icon {
+    background-color: #f5222d;
+}
+
+.im-chat-progress .im-upload-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.im-chat-progress .im-upload-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.im-chat-progress .im-upload-name {
+    flex: 1;
+    min-width: 0;
+    color: var(--oo-color-text);
+    font-size: var(--oo-font-size-small);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.im-chat-progress .im-upload-percent {
+    flex: 0 0 auto;
+    color: var(--oo-color-text3);
+    font-size: var(--oo-font-size-small);
+}
+
+.im-chat-progress .im-upload-item.im-upload-error .im-upload-percent {
+    color: #f5222d;
+}
+
+.im-chat-progress .im-upload-track {
+    height: 4px;
+    margin-top: 0.3rem;
+    border-radius: 2px;
+    overflow: hidden;
+    background-color: var(--oo-im-color-bg-chat, rgba(0, 0, 0, 0.08));
+}
+
+.im-chat-progress .im-upload-bar {
     height: 100%;
-    background-color: var(--oo-color-main); /* 半透明进度条颜色 */
-    transition: width 0.3s ease;
+    border-radius: 2px;
+    background-color: var(--oo-color-main);
+    transition: width 0.25s ease;
+}
+
+.im-chat-progress .im-upload-item.im-upload-done .im-upload-bar {
+    background-color: #52c41a;
+}
+
+.im-chat-progress .im-upload-item.im-upload-error .im-upload-bar {
+    background-color: #f5222d;
+}
+
+.im-chat-progress .im-upload-tip {
+    margin-top: 0.2rem;
+    color: #f5222d;
+    font-size: var(--oo-font-size-small);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.im-chat-progress .im-upload-actions {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.im-chat-progress .im-upload-act {
+    cursor: pointer;
+    color: var(--oo-color-main);
+    font-size: var(--oo-font-size-small);
+}
+
+.im-chat-progress .im-upload-act:hover {
+    text-decoration: underline;
 }
 
 /* 头部区域 样式 */

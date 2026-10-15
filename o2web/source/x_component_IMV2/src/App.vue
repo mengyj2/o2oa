@@ -8,7 +8,8 @@ import MsgHistoryPage from "./pages/MsgHistoryPage.vue";
 import ImConfigPage from "./pages/ImConfigPage.vue";
 import MyCollectionPage from "./pages/MyCollectionPage.vue";
 import {EventName} from "./utils/eventBus.js";
-import {getBaiduMapUrl, getImFileDownloadUrl, imAction} from "./utils/actions.js";
+import {getBaiduMapUrl, getImFileDownloadUrl, imAction, imConversationRead} from "./utils/actions.js";
+import {editOffice, isOfficeEditable} from "./utils/imTool.js";
 import {imConfig, imGlobalOptions, windowState} from './store.js';
 
 // 获取主应用实例（确保在主应用挂载后调用）
@@ -29,6 +30,7 @@ const resizeListener = ()=> windowStateInstance.updateWindowWidth()
 
 onMounted(() => {
   window.addEventListener("resize", resizeListener)
+  window.addEventListener("focus", onWindowFocus)
   resizeListener() // 初始化值
   // 根据 options 处理一些特殊情况 比如打开某一个会话
   console.debug('APP =====>  onMounted  options', options)
@@ -79,6 +81,11 @@ onMounted(() => {
 })
 onUnmounted(() => {
   window.removeEventListener("resize", resizeListener)
+  window.removeEventListener("focus", onWindowFocus)
+  if (_readTimer) {
+    clearTimeout(_readTimer)
+    _readTimer = null
+  }
   // eventBus.unsubscribe(EventName.openConversation)
   eventBus.unsubscribe(EventName.openChooseConversation)
   eventBus.unsubscribe(EventName.openMsg)
@@ -114,6 +121,7 @@ const openConversationForOutside = (conversation) => {
     if (conversation.personList && conversation.personList.contains(layout.session.user.distinguishedName)) {
       currentConversation.value = conversation
       eventBus.publish( EventName.initOpenedConversation, conversation)
+      markConversationRead(conversation.id, true)
     } else {
       console.error('当前用户不能打开这个会话', conversation)
     }
@@ -123,6 +131,10 @@ const openConversationForOutside = (conversation) => {
 const openConversation = (conversation) => {
   console.debug("openConversation", conversation)
   currentConversation.value = conversation
+  // ★ 打开即已读（乐观清零 + 上报后端）
+  if (conversation && conversation.id) {
+    markConversationRead(conversation.id, true)
+  }
 }
 // 修改聊天信息对象
 const updateOrDeleteConversation = ( conv ) => {
@@ -136,11 +148,79 @@ provide('im-app', {
   updateOrDeleteConversation
 });
 
+/**
+ * ★ 会话已读同步（2026-10-15 源码级，根治「消息全读了，未读标记刷新不及时」）
+ *
+ * 旧实现的三个缺陷（均在本文件/补丁层）：
+ *   ① 同一会话【15 秒】内只上报一次 ⇒ 停留会话中收到的新消息要等 15s 才可能被标已读；
+ *   ② 只 publish(refreshMyConversation) 等接口回包，【无本地乐观清零】⇒ 回包前角标仍是旧值；
+ *   ③ wsAddMsg 只追加消息、【不触发已读上报】⇒「我正看着的会话」也被计为未读。
+ *
+ * 新实现三段式：
+ *   ① 本地乐观清零（角标立即消失，零等待）
+ *   ② 上报后端 conversationRead（写 lastReadTime，服务端真值）
+ *   ③ 服务端为准合并刷新（去抖 400ms，避免连点抖动）
+ * 触发点：打开会话 / 正在会话中收到新消息 / 窗口重新聚焦。
+ */
+let _readAt = {};
+let _readTimer = null;
+const markConversationRead = (conversationId, force) => {
+  if (!conversationId) {
+    return;
+  }
+  const now = Date.now();
+  // 去抖：同一会话 1.2s 内不重复上报（旧实现 15s 过长，正是"读完迟迟不消失"的直接原因）
+  if (!force && _readAt[conversationId] && (now - _readAt[conversationId]) < 1200) {
+    return;
+  }
+  _readAt[conversationId] = now;
+  // ① 本地乐观清零
+  eventBus.publish(EventName.conversationReadLocal, conversationId);
+  refreshTopBadge(conversationId);
+  // ② 上报后端
+  imConversationRead(conversationId).then(() => {
+    // ③ 以服务端为准（合并多次触发）
+    if (_readTimer) {
+      clearTimeout(_readTimer);
+    }
+    _readTimer = setTimeout(() => {
+      _readTimer = null;
+      eventBus.publish(EventName.refreshMyConversation, 'read');
+      refreshTopBadge(conversationId);
+    }, 400);
+  }).catch((e) => {
+    console.debug('标记已读失败', conversationId, e);
+  });
+};
+// 顶栏「聊聊」未读角标由 x_desktop/js/o2im_topbadge.js 维护（桌面框架层），此处两路联动刷新：
+//   ① window.__o2ImTopBadgeRefresh —— 早期约定，兼容仍在用；
+//   ② 标准 DOM 事件 o2-im-read —— 解耦通道，桌面层脚本/Badge 只要监听即可，无需耦合 IMV2 内部符号。
+const refreshTopBadge = (conversationId) => {
+  try {
+    if (window.__o2ImTopBadgeRefresh) {
+      window.__o2ImTopBadgeRefresh();
+    }
+  } catch (e) { /* ignore */ }
+  try {
+    window.dispatchEvent(new CustomEvent('o2-im-read', {detail: {conversationId: conversationId}}));
+  } catch (e) { /* ignore */ }
+};
+// 窗口重新聚焦 ⇒ 补一次已读（用户切走又切回，期间可能来了新消息）
+const onWindowFocus = () => {
+  if (currentConversation.value && currentConversation.value.id) {
+    markConversationRead(currentConversation.value.id, true);
+  }
+};
+
 // websocket 创建消息
 const imWsCreateMessage = (msg) => {
   console.debug('websocket 消息 创建=====> ', msg)
   eventBus.publish( EventName.wsAddMsg, msg )
   eventBus.publish( EventName.refreshMyConversation ) // 刷新列表
+  // ★ 正在查看的会话来了新消息 ⇒ 立即标记已读，避免角标"在眼皮底下"继续增长
+  if (msg && currentConversation.value && msg.conversationId === currentConversation.value.id) {
+    markConversationRead(msg.conversationId, true)
+  }
 }
 // websocket 撤回消息
 const imWsRevokeMessage = (msg) => {
@@ -170,6 +250,44 @@ const loadImConfig = async () => {
   const config = await imAction('getImConfig')
   imConfigInstance.setImConfig(config)
 }
+/**
+ * ★ 文件消息打开（2026-10-15 源码级实现）
+ *
+ * 官方旧行为：office 类型 → OnlyOffice【只读预览】(mode:"view")；其它 → 直接触发下载。
+ * 本实现：
+ *   · 可编辑 office（doc/docx/xls/xlsx/ppt/pptx/csv/txt…）→ editOffice()
+ *       —— 下载附件二进制 → POST /x_onlyofficefile_assemble_control/jaxrs/onlyoffice/upload
+ *          → 以【可编辑】模式打开；编辑器按 syncDrive 选项在保存/关闭时回存「个人网盘」。
+ *   · 其它类型（图片/PDF/音视频/文本/未知）→ 通用预览 UniversalPreview，兜底 window.open。
+ *   ★ 能力本体在 src/utils/imTool.js（源码模块，随构建进入 main.js），
+ *     不再依赖构建期注入的 $Main/default/o2im.js。
+ */
+const openFileMsg = (body) => {
+  const ext = (body.fileExtension || "").toLowerCase();
+  const url = getImFileDownloadUrl(body.fileId);
+  const name = body.fileName || "file";
+  if (isOfficeEditable(ext)) {
+    editOffice({url: url, name: name, ext: ext, size: body.fileSize, fromIM: body.fileId});
+    return;
+  }
+  const cfg = {
+    url: url, name: name, ext: ext, size: body.fileSize,
+    token: (window.layout && layout.session ? layout.session.token : "")
+  };
+  if (window.o2 && window.o2.o2Preview) {
+    window.o2.o2Preview.open(cfg);
+    return;
+  }
+  window.o2.load("/x_component_UniversalPreview/preview.js", () => {
+    if (window.o2.o2Preview) {
+      window.o2.o2Preview.open(cfg);
+    } else {
+      // 兜底：预览组件不可用时不至于点了没反应
+      window.open(url);
+    }
+  });
+}
+
 // 打开消息
 const openMsg = (msg) => {
   const body = JSON.parse(msg.body)
@@ -187,28 +305,7 @@ const openMsg = (msg) => {
       o2.api.form.openDocument(body.docId);
     }
   } else if (body.type === "file") {
-    // 有安装 onlyOffice
-    if (layout.serviceAddressList["x_onlyofficefile_assemble_control"]
-        && imConfigInstance.enableOnlyOfficePreview && body.fileExtension
-        && (body.fileExtension.toLowerCase() === "docx" || body.fileExtension.toLowerCase() === "doc"
-            || body.fileExtension.toLowerCase() === "xls" || body.fileExtension.toLowerCase() === "xlsx"
-            || body.fileExtension.toLowerCase() === "ppt" || body.fileExtension.toLowerCase() === "pptx"
-            || body.fileExtension.toLowerCase() === "pdf" || body.fileExtension.toLowerCase() === "csv"
-            || body.fileExtension.toLowerCase() === "txt")) {
-      const options = {
-        "mode":"view",
-        "jars" : "x_message_assemble_communicate",
-        "fileName" : encodeURIComponent(body.fileName),
-        "url" : encodeURIComponent(o2.filterUrl(`${getImFileDownloadUrl(body.fileId)}?${o2.tokenName}=${layout.session.token}`)),
-        "appId":  "OnlyOfficeEditor" + body.fileId
-      }
-      layout.openApplication(null, "OnlyOfficeEditor", options);
-      return;
-    } else if (body.fileExtension && (body.fileExtension.toLowerCase() === "mp4" || body.fileExtension.toLowerCase() === "avi" || body.fileExtension.toLowerCase() === "ogg")) {
-      console.log('视频文件无需下载！')
-      return;
-    }
-    window.open(getImFileDownloadUrl(body.fileId));
+    openFileMsg(body);
   } else if (body.type === "location") {
     const url = getBaiduMapUrl(body.latitude, body.longitude, body.address, body.addressDetail);
     window.open(url);

@@ -44,4 +44,8 @@ export class EventName {
     static changeIMConfig = 'changeIMConfig'
     static wsAddMsg = 'wsAddMsg'
     static wsRevokeMsg = 'wsRevokeMsg'
+    // ★ 2026-10-15 源码级：本地乐观清零点（打开会话/收到当前会话新消息即刻清零未读）
+    static conversationReadLocal = 'conversationReadLocal'
+    // ★ 2026-10-15 源码级：服务端刷新后的会话列表事件，携带最新会话数组
+    static conversationUnread = 'conversationUnread'
 }

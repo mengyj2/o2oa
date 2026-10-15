@@ -20,6 +20,8 @@ onMounted(() => {
     eventBus.subscribe(EventName.initOpenedConversation, initOpenedConversationEventFun)
     eventBus.subscribe(EventName.refreshMyConversation, refreshMyConversationEventFun)
     eventBus.subscribe(EventName.addConversationToList, addConversationToListEventFun)
+    // ★ 本地乐观清零（打开会话即刻生效，不等后端回包）
+    eventBus.subscribe(EventName.conversationReadLocal, conversationReadLocalEventFun)
   }
 })
 onUnmounted(() => {
@@ -28,6 +30,7 @@ onUnmounted(() => {
     eventBus.unsubscribe(EventName.initOpenedConversation)
     eventBus.unsubscribe(EventName.refreshMyConversation)
     eventBus.unsubscribe(EventName.addConversationToList)
+    eventBus.unsubscribe(EventName.conversationReadLocal)
   }
 })
 
@@ -37,9 +40,29 @@ const initOpenedConversationEventFun = (conv) => {
     clickConversation(conv)
   }
 }
-const refreshMyConversationEventFun = () => {
-  console.debug("refreshMyConversation")
-  loadMyConversation(true)
+const refreshMyConversationEventFun = (reason) => {
+  console.debug("refreshMyConversation", reason)
+  loadMyConversation(true, reason)
+}
+/**
+ * ★ 本地乐观清零（2026-10-15 源码级，根治「消息全读了，未读标记刷新不及时」）
+ *
+ * 背景：未读角标数来自后端 /jaxrs/im/conversation/list/my 的 unreadNumber，
+ *   unreadNumber 又由 IMConversationExt.lastReadTime 算出。官方前端【从不调用】
+ *   PUT /jaxrs/im/conversation/{id}/read（ActionConversationRead），所以它只增不减。
+ *   App.vue 现在负责上报该接口，并在上报【之前】先发本事件 ⇒ 角标零等待消失。
+ * 本处理：命中会话立即置 0，并记时间戳用于「读后防抖」（见 loadMyConversation）。
+ */
+const _localReadAt = {}
+const conversationReadLocalEventFun = (conversationId) => {
+  if (!conversationId) {
+    return
+  }
+  _localReadAt[conversationId] = Date.now()
+  const item = myConversationList.value.find((m) => m.id === conversationId)
+  if (item) {
+    item.unreadNumber = 0
+  }
 }
 const addConversationToListEventFun = (data) => {
   console.debug("addConversationToList")
@@ -63,9 +86,23 @@ const searchConversationResultList = ref([])
 
 // function
 
-const loadMyConversation = async (isCheckNull) => {
+const loadMyConversation = async (isCheckNull, reason) => {
   const list = await imAction('myConversationList')
   if (list) {
+    /**
+     * ★ 读后防抖：reason === 'read' 说明本次刷新是「刚刚标记已读」触发的。
+     *   若后端此时尚未把 lastReadTime 回写完（时序竞态），直接把服务端值铺回去
+     *   会让刚清零的角标「闪一下又出现」。窗口内以本地记录为准强制置 0。
+     *   非 'read' 刷新（如 WS 新消息）一律信服务端 —— 新消息必须照常显示未读。
+     */
+    if (reason === 'read') {
+      const now = Date.now()
+      list.forEach((item) => {
+        if (item && item.id && _localReadAt[item.id] && (now - _localReadAt[item.id]) < 5000) {
+          item.unreadNumber = 0
+        }
+      })
+    }
     myConversationList.value = list
     if (!chooseMode) {
       // 被踢出群之类的特殊情况
@@ -85,6 +122,18 @@ const loadMyConversation = async (isCheckNull) => {
       }
     }
   }
+}
+
+/**
+ * 未读角标文案：0/负值/空 ⇒ 空串（模板据此隐藏），>99 ⇒ "99+"。
+ * 口径直接取后端 unreadNumber（1 条=1、2 条=2），不做前端自算，避免与后端不一致。
+ */
+const unreadText = (n) => {
+  const v = Number(n) || 0
+  if (v <= 0) {
+    return ''
+  }
+  return v > 99 ? '99+' : String(v)
 }
 
 const inputSearch = (e) => {
@@ -195,6 +244,9 @@ const clickConversation = (conversation) => {
             <div class="msg">
               {{ conversationLastMessage(item) }}
             </div>
+            <!-- ★ 未读红数字（对话人/群名下方，数值取后端 unreadNumber；为 0 时整块不渲染） -->
+            <span v-if="unreadText(item.unreadNumber) !== ''"
+                  class="im-conv-unread">{{ unreadText(item.unreadNumber) }}</span>
           </div>
         </div>
       </div>
@@ -216,6 +268,9 @@ const clickConversation = (conversation) => {
             <div class="msg">
               {{ conversationLastMessage(item) }}
             </div>
+            <!-- ★ 未读红数字（对话人/群名下方，数值取后端 unreadNumber；为 0 时整块不渲染） -->
+            <span v-if="unreadText(item.unreadNumber) !== ''"
+                  class="im-conv-unread">{{ unreadText(item.unreadNumber) }}</span>
           </div>
         </div>
       </div>

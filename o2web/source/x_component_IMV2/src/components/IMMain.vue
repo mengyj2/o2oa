@@ -12,6 +12,7 @@ import {
 } from '../utils/common.js';
 import { marked } from "../utils/marked.esm.js";
 import {imAction} from '../utils/actions.js';
+import {pickDrive, toast, fmtSize} from '../utils/imTool.js';
 import ChatMsg from './ChatMsg.vue';
 import ChatInfo from './ChatInfo.vue';
 import EmojiPicker from './EmojiPicker.vue';
@@ -357,55 +358,78 @@ const clickSendFile = () => {
     }
   });
 };
+/**
+ * ★ 从「我的网盘」选文件发送（2026-10-15 源码级实现）
+ * 旧做法是构建期往压缩后的 main.js 里插入一个 __o2DrivePickIM 全局函数 +
+ * 由 Python 补丁拼 HTML 锚点；现在直接调用源码模块的 pickDrive()，
+ * 选中的 File 与手动选择文件走【完全同一条】发送链路（_sendFileMsg）。
+ */
+const clickPickDrive = () => {
+  if (!conversation.value || !conversation.value.id) {
+    toast('请先打开一个聊天会话再选文件', true);
+    return;
+  }
+  pickDrive({
+    onPick: (file) => {
+      if (file) {
+        _sendFileMsg(file);
+      }
+    }
+  });
+};
+/**
+ * ★ 上传结果统一收口（对齐微信：看得见进度、看得见结果、刷新及时、不重发）
+ *
+ * 旧实现的缺陷（用户反馈「上传附件没有进度和完成提醒，刷新也不及时，
+ * 导致上传好几次」）：上传完成后【不提示、不刷新、不在本地落位消息】，
+ * 发送者完全看不出是否发成功，于是反复点击。
+ */
+const _handleUploadResult = (res, convId, fileName) => {
+  if (!res || !res.ok) {
+    if (res && res.duplicate) {
+      // 重复提交不是错误，只做一次轻提示（这正是「上传好几次」要拦掉的场景）
+      toast(res.error || '该文件正在上传中，请稍候…', false);
+    } else {
+      toast('「' + fileName + '」发送失败：' + ((res && res.error) || '未知错误'), true);
+    }
+    return;
+  }
+  // 成功：本地立即落位消息（不等 WS 回包），随后刷新会话列表（排序/摘要/未读）
+  if (res.message && conversation.value && conversation.value.id === convId) {
+    if (msgList.value.findIndex((e) => e.id === res.message.id) < 0) {
+      msgList.value.push(res.message);
+      scrollToBottom();
+    }
+  }
+  eventBus.publish(EventName.refreshMyConversation, 'sendMsg');
+  toast('「' + fileName + '」已发送');
+};
 const _sendFileMsg = async (file) => {
-  await uploadFileListInstance.addUploadFileAndSendMessage(file, conversation.value.id)
-  // const formData = new FormData();
-  // formData.append('file', file);
-  // formData.append('fileName', file.name);
-  // const fileExt = file.name.substring(file.name.lastIndexOf('.'));
-  // // 图片消息
-  // let type;
-  // if (fileExt.toLowerCase() === '.webp' && canUseWebP()) {
-  //     type = 'image';
-  // } else if (
-  //     fileExt.toLowerCase() === '.bmp' ||
-  //     fileExt.toLowerCase() === '.jpeg' ||
-  //     fileExt.toLowerCase() === '.png' ||
-  //     fileExt.toLowerCase() === '.jpg'
-  // ) {
-  //     type = 'image';
-  // } else {
-  //     // 文件消息
-  //     type = 'file';
-  // }
-  // //上传文件
-  // const res = await imUploadFile(conversation.value.id, type, formData, file);
-  // console.debug(res);
-  // if (res) {
-  //     const fileId = res.id;
-  //     const fileExtension = res.fileExtension;
-  //     const fileName = res.fileName;
-  //     const body = {
-  //         body: type === 'image' ? lp.msgTypeImage : lp.file,
-  //         type: type,
-  //         fileId: fileId,
-  //         fileExtension: fileExtension,
-  //         fileName: fileName,
-  //     };
-  //     const message = {
-  //         id: `${uuid()}`,
-  //         conversationId: conversation.value.id,
-  //         body: JSON.stringify(body),
-  //         createPerson: layout.session.user.distinguishedName,
-  //         createTime: ymdhms(new Date()),
-  //         sendStatus: 1,
-  //     };
-  //     // 添加到界面上
-  //     msgList.value.push(message);
-  //     await _sendMsgOnline(message);
-  //     eventBus.publish(EventName.refreshMyConversation, 'sendMsg');
-  //     scrollToBottom();
-  // }
+  if (!conversation.value || !conversation.value.id) {
+    toast('请先打开一个聊天会话再发送文件', true);
+    return;
+  }
+  const convId = conversation.value.id;
+  const res = await uploadFileListInstance.addUploadFileAndSendMessage(file, convId);
+  _handleUploadResult(res, convId, file.name);
+};
+// ---- 上传队列 UI 辅助 ----
+const uploadPercentText = (file) => {
+  if (file.status === 'done') {
+    return '已完成';
+  }
+  if (file.status === 'error') {
+    return '失败';
+  }
+  const p = Number(file.progress);
+  return (isNaN(p) ? 0 : Math.max(0, Math.min(100, Math.round(p)))) + '%';
+};
+const uploadRemoveItem = (file) => {
+  uploadFileListInstance.removeUploadFile(file.id);
+};
+const uploadRetryItem = async (file) => {
+  const res = await uploadFileListInstance.retryUpload(file.id);
+  _handleUploadResult(res, file.conversationId, file.name);
 };
 // 删除引用消息
 const deleteQuoteMessage = () => {
@@ -735,12 +759,31 @@ const showImChat = () => {
 <template>
   <div class="im-chat-row">
     <div class="im-chat" v-if=" showImChat() ">
-      <!-- 进度条 -->
+      <!-- 进度条：上传中 / 已完成 / 失败 三态可视化（对齐微信的「看得见进度与结果」） -->
       <div class="im-chat-progress" v-if="uploadFileListInstance.uploadFileList.length > 0">
         <div v-for="file in uploadFileListInstance.uploadFileList" :key="file.id"
-             class="im-chat-progress-bar-container">
-          <div class="im-chat-progress-bar" :style=" `width: ${file.progress}%;` "></div>
-          <div class="im-chat-progress-bar-label">{{ file.name }}</div>
+             class="im-upload-item" :class="'im-upload-' + (file.status || 'uploading')">
+          <div class="im-upload-icon">
+            <i :class="file.status === 'error'
+                        ? 'ooicon-error'
+                        : (file.status === 'done' ? 'ooicon-checkmark' : 'ooicon-upload')"></i>
+          </div>
+          <div class="im-upload-main">
+            <div class="im-upload-line">
+              <span class="im-upload-name" :title="file.name">{{ file.name }}</span>
+              <span class="im-upload-percent">{{ uploadPercentText(file) }}</span>
+            </div>
+            <div class="im-upload-track">
+              <div class="im-upload-bar" :style=" `width: ${file.progress}%;` "></div>
+            </div>
+            <div class="im-upload-tip" v-if="file.status === 'error'">{{ file.error || '上传失败' }}</div>
+          </div>
+          <div class="im-upload-actions">
+            <span v-if="file.status === 'error'" class="im-upload-act" @click="uploadRetryItem(file)">重试</span>
+            <span class="im-upload-act" @click="uploadRemoveItem(file)">
+              {{ file.status === 'uploading' ? '取消' : '移除' }}
+            </span>
+          </div>
         </div>
       </div>
       <div class="im-chat-header" v-if="!hideSide">
@@ -805,6 +848,10 @@ const showImChat = () => {
             </div>
             <div class="icon-btn" @click="clickSendFile">
               <i class="ooicon-folder-open icon"></i>
+            </div>
+            <!-- ★ 网盘取件：从「我的网盘」选文件发送（与手动选择文件同一条发送链路） -->
+            <div class="icon-btn" title="从我的网盘选择文件" @click="clickPickDrive">
+              <i class="ooicon-drive icon"></i>
             </div>
           </div>
           <div class="im-chat-footer-input-text">

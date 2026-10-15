@@ -113,13 +113,60 @@ function orgExpressUnitAction(method, ...args) {
 }
 
 /**
- * 聊聊 API
+ * ★ 身份DN(@I) → 人员DN(@P) 归一【2026-10-15 源码级，原为构建期注入】
+ *
+ * 背景：IM 会话可见性按【人员DN(@P)】匹配当前人，但上游（流程协同 chatToPerson、
+ *       getProcessReviewByJobId 等）传入的可能是【身份DN(@I)】。
+ * ★ 本实例身份 unique 段【带单位前缀】：
+ *     身份 孟弋洁@51100000500009247D_mengyijie@I
+ *     人员 孟弋洁@mengyijie@P
+ *   二者 unique 段不同，仅改尾字符无效 ⇒ 必须取 unique 段【最后一段】(人员unique) 重新拼接。
+ * 不归一的后果：收件人匹配不到自己的 @P ⇒ 整个会话对他不可见 ⇒
+ *   「对方发来的消息/文件我完全没收到」（消息实际在服务端）。
+ * @param {string} dn
+ * @returns {string}
+ */
+function normalizeImPersonDn(dn) {
+    try {
+        if (typeof dn !== 'string' || dn.slice(-2) !== '@I') {
+            return dn;
+        }
+        const p = dn.split('@');
+        if (p.length !== 3) {
+            return dn;
+        }
+        return p[0] + '@' + p[1].split('_').pop() + '@P';
+    } catch (e) {
+        return dn;
+    }
+}
+
+/**
+ * 聊聊 API（统一出口）
+ * ★ 在出口处对 create 的成员列表做 @I→@P 归一，覆盖全部调用方（含流程协同）。
  * @param {*} method
  * @param  {...any} args
  * @returns
  */
 function imAction(method, ...args) {
+    if (method === 'create' && args[0] && Array.isArray(args[0].personList)) {
+        args[0].personList = args[0].personList.map(normalizeImPersonDn);
+    }
     return doAction('x_message_assemble_communicate', 'ImAction', method, args);
+}
+
+/**
+ * 标记会话已读（后端 ActionConversationRead → PUT /jaxrs/im/conversation/{id}/read）。
+ * ★ 官方前端【从不调用】本接口 ⇒ IMConversationExt.lastReadTime 不更新 ⇒
+ *   会话列表/顶栏的 unreadNumber 只增不减、角标永不清零。
+ * @param {string} conversationId
+ * @returns {Promise}
+ */
+function imConversationRead(conversationId) {
+    if (!conversationId) {
+        return Promise.resolve();
+    }
+    return imAction('conversationRead', conversationId);
 }
 
 /**
@@ -286,6 +333,8 @@ export {
     personAction,
     personalAction,
     imAction,
+    imConversationRead,
+    normalizeImPersonDn,
     imUploadFile,
     getAvatarUrl,
     getImFileUrlWithWH,
