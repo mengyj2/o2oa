@@ -21,11 +21,15 @@ function getMenuJson(){
             // 落库：组织类写官方 config/collect.json（持久卷）；图形类走 DeployAction
             //      部署到持久 webroot（持久卷），可通过 Http 访问。
             // 文案直接内联中文（本部署为中文单语，避免动 108KB 的 lp 语言包）。
+            // 图标必须用 public/$Main/default/style.css 中 o2SystemConfig 字模已定义的
+            // 字形（o2icon-user=\e92c）；曾误用 "color"（字模无此字形）导致组无图标、
+            // 与其它顶层组（config/servers/security/mobile）观感不一致，已修正。
             'title': '用户定制',
-            "icon": "color",
+            "icon": "user",
             "expand": true,
             'children': [
-                {'title': '品牌标识', 'component': 'SysCustomBrand', 'icon': 'color', "expand": true}
+                // o2icon-icon=\e920（品牌/标识语义）。
+                {'title': '品牌标识', 'component': 'SysCustomBrand', 'icon': 'icon', "expand": true}
             ]
         },
         {
