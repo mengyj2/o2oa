@@ -35,7 +35,8 @@
 	"height" : "36px",
 	"margin" : "22px 18px 22px 30px",
 	"float": "left",
-	"background": "url("+MWF.defaultPath+"/xDesktop/$Authentication/default/icon/o2_logo.png) no-repeat center center"
+	"background": "url(/custom_brand/logo.png) no-repeat center center",
+	"background-size": "contain"
   },
   "formTopTextNode" : {
 	//"font-family" : "PingFang-SC-Medium",
