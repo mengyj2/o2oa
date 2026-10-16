@@ -105,10 +105,12 @@ async function saveConfigData(name, data, force) {
         // config = (configs[name]) ? configs[name] : (await loadConfig(name));
         Object.assign(config, data);
     }
-    o2.Actions.load('x_program_center').ConfigAction.save({
+    // ★ 加固：await 落库 + 失败抛错（原先火忘式调用，服务器失败也会显示"已保存"，错误被吞）
+    await o2.Actions.load('x_program_center').ConfigAction.save({
         fileName: `${name}.json`,
         fileContent: JSON.stringify(config, null, "\t")
     });
+    if (!force) configs[name] = config; // 同步内存缓存，避免下次读回填旧值
 }
 
 async function loadComponents() {
