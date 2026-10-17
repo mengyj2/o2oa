@@ -70,6 +70,48 @@
             </div>
           </div>
         </el-tab-pane>
+
+        <!-- ============ ③ 顶栏蓝底适配（白底卡片 + 白色文字，合成 logo_topbar.png） ============ -->
+        <el-tab-pane :label="L.tabTopbar" lazy>
+          <div class="systemconfig_item_title">{{ L.topbarSection }}</div>
+          <div class="systemconfig_item_info" v-html="L.topbarSectionInfo"></div>
+
+          <div class="brand_switch_row">
+            <span class="brand_switch_label">{{ L.topbarWhite }}</span>
+            <label class="brand_switch">
+              <input type="checkbox" v-model="topbar.white"/>
+              <span class="brand_switch_track"><span class="brand_switch_thumb"></span></span>
+            </label>
+            <span class="brand_switch_tip">{{ topbar.white ? L.on : L.off }}</span>
+          </div>
+
+          <BaseInput :label-style="labelStyle" :input-style="inputStyle"
+                     :label="L.topbarText" v-model:value="topbar.text" :placeholder="form.title"/>
+
+          <div class="brand_row">
+            <div class="brand_row_head">
+              <span class="brand_row_label">{{ L.topbarSource }}</span>
+              <span class="brand_row_path">/custom_brand/logo_topbar.png</span>
+            </div>
+            <div class="brand_row_body">
+              <div class="brand_preview brand_preview_topbar">
+                <img v-if="topbar.preview" :src="topbar.preview" alt=""/>
+                <span v-else class="brand_preview_empty">{{ L.noImage }}</span>
+              </div>
+              <div class="brand_row_ops">
+                <input type="file" accept="image/*" style="display:none"
+                       ref="topbarFileInput" @change="onPickTopbarSrc"/>
+                <button @click="$refs.topbarFileInput.click()">{{ L.selectFile }}</button>
+                <button class="mainColor_bg" :disabled="topbar.generating"
+                        @click="buildAndDeployTopbar">
+                  {{ topbar.generating ? L.generating : L.buildDeploy }}
+                </button>
+                <div class="brand_row_hint">{{ L.topbarHint }}</div>
+                <div class="brand_msg" :class="{brand_msg_err: !!topbar.error}">{{ topbar.msg }}</div>
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -79,6 +121,7 @@
 import {reactive, ref, onMounted} from 'vue';
 import {o2, layout, component} from '@o2oa/component';
 import {getConfigData, saveConfigData, deployWebResource} from '@/util/acrions';
+import {fetchLogoImage, fileToImage, generateTopbarWhite, passthroughBlob} from '@/util/topbarLogo';
 import BaseInput from '@/components/item/BaseInput.vue';
 
 /* 本部署为中文单语；文案内联，避免改动 108KB 的 lp 语言包（保持零侵入）。 */
@@ -100,7 +143,18 @@ const L = {
   uploading: '部署中…',
   noImage: '（未部署）',
   deployOk: '部署成功',
-  deployFail: '部署失败，请查看浏览器控制台'
+  deployFail: '部署失败，请查看浏览器控制台',
+  tabTopbar: '顶栏蓝底适配',
+  topbarSection: '顶栏 Logo 蓝底适配',
+  topbarSectionInfo: '门户顶栏为蓝底，原 Logo 中的黑字在其上几乎不可读。开启后，系统会从品牌 Logo 中切出左侧徽标、垫一张白色圆角卡片，并以<b>白色粗体</b>渲染右侧组织名称，合成 <b>logo_topbar.png</b> 供顶栏引用（顶栏已永久指向该文件）。<br/>关闭则把原 Logo 透传部署，恢复原始观感。',
+  topbarWhite: '启用顶栏白底适配',
+  topbarText: '顶栏白色文字（组织名称）',
+  topbarSource: '顶栏 Logo 源',
+  topbarHint: '未单独选图时，将从当前 /custom_brand/logo.png 合成；选中图则优先用所选图。在「品牌图形」上传新 Logo 且本开关开启时，会同步自动生成顶栏版。',
+  buildDeploy: '生成并部署顶栏 Logo',
+  generating: '生成中…',
+  on: '已启用',
+  off: '已关闭'
 };
 
 const labelStyle = {fontWeight: 'bold', fontSize: '16px', minWidth: '150px'};
@@ -119,6 +173,9 @@ async function loadOrg() {
       form.title = data.title || '';
       form.footer = data.footer || '';
       form.name = data.name || '';
+      // 顶栏白底适配偏好
+      if (typeof data.topbarLogoWhite !== 'undefined') topbar.white = !!data.topbarLogoWhite;
+      topbar.text = data.topbarLogoText || '';
     }
   } catch (e) {
     orgError.value = true;
@@ -152,6 +209,71 @@ const fileInputs = {};
 const setFileInput = (key, el) => { if (el) fileInputs[key] = el; };
 const pickFile = (key) => { const el = fileInputs[key]; if (el) el.click(); };
 
+/* ---------------- 顶栏蓝底适配 ---------------- */
+const topbar = reactive({
+  white: false,
+  text: '',
+  srcFile: null,
+  preview: '',
+  generating: false,
+  msg: '',
+  error: false
+});
+
+function onPickTopbarSrc(e) {
+  const files = e.target.files;
+  if (!files || !files.length) return;
+  topbar.srcFile = files[0];
+  topbar.msg = '';
+  topbar.error = false;
+  const reader = new FileReader();
+  reader.onload = () => { topbar.preview = reader.result; };
+  reader.readAsDataURL(topbar.srcFile);
+}
+
+/** 把合成/透传得到的 Blob 部署为 /custom_brand/logo_topbar.png */
+function deployTopbarBlob(blob) {
+  const fixed = new File([blob], 'logo_topbar.png', { type: 'image/png' });
+  return new Promise((resolve, reject) => {
+    deployWebResource({
+      file: [fixed],
+      overwrite: 'true',
+      path: '/custom_brand',
+      title: 'brand-topbar',
+      version: (layout && layout.config && layout.config.version) || '1.0',
+      remark: '用户定制 · 顶栏蓝底适配'
+    }, resolve, reject);
+  });
+}
+
+/** 生成并部署顶栏 Logo；white=生成白底卡片+白字，否则透传原图 */
+async function buildAndDeployTopbar() {
+  topbar.generating = true;
+  topbar.msg = '';
+  topbar.error = false;
+  try {
+    const img = topbar.srcFile ? await fileToImage(topbar.srcFile) : await fetchLogoImage();
+    const blob = topbar.white
+      ? await generateTopbarWhite(img, topbar.text || form.title)
+      : await passthroughBlob(img);
+    topbar.preview = URL.createObjectURL(blob);
+    await deployTopbarBlob(blob);
+    // 把偏好写入 collect.json（即时回填，避免下次读旧值）
+    await saveConfigData('collect', {
+      title: form.title, footer: form.footer, name: form.name,
+      topbarLogoWhite: topbar.white, topbarLogoText: topbar.text
+    }, true);
+    topbar.msg = '已生成并部署 logo_topbar.png' + (topbar.white ? '（白底卡片 + 白色文字）' : '（透传原图）')
+      + '。刷新门户即可看到顶栏变化。';
+    component.notice('顶栏 Logo 已部署', 'success');
+  } catch (e) {
+    topbar.error = true;
+    topbar.msg = '生成/部署失败：' + e;
+  } finally {
+    topbar.generating = false;
+  }
+}
+
 const graphics = reactive([
   {
     key: 'logo',
@@ -184,6 +306,18 @@ function onPick(g, e) {
 
 function onPreviewError(g) { g.preview = ''; }
 
+/** 主 Logo 上传后自动联动生成顶栏版（best-effort，失败只提示不阻断主流程） */
+async function autoBuildTopbar(file) {
+  try {
+    const img = await fileToImage(file);
+    const blob = await generateTopbarWhite(img, topbar.text || form.title);
+    await deployTopbarBlob(blob);
+    if (!topbar.preview) topbar.preview = URL.createObjectURL(blob);
+  } catch (e) {
+    console.warn('顶栏自动联动生成失败（不影响主 Logo 部署）:', e);
+  }
+}
+
 /** 把选中的图片以固定文件名部署到 webroot。 */
 function uploadGraphic(g) {
   if (!g.file) return;
@@ -204,6 +338,10 @@ function uploadGraphic(g) {
       g.uploading = false;
       g.msg = L.deployOk + '：' + g.path + '/' + g.fileName;
       component.notice(g.label + ' ' + L.deployOk, 'success');
+      // 主 Logo 部署成功且顶栏白底适配开启 → 用同一张图自动生成顶栏版
+      if (g.key === 'logo' && topbar.white && g.file) {
+        autoBuildTopbar(g.file);
+      }
     }, () => {
       g.uploading = false;
       g.error = true;
@@ -306,5 +444,64 @@ onMounted(loadOrg);
   margin-top: 10px;
   font-size: 12px;
   color: #909399;
+}
+
+/* 顶栏蓝底适配页 */
+.brand_switch_row {
+  display: flex;
+  align-items: center;
+  padding: 16px 30px 6px;
+}
+.brand_switch_label {
+  font-weight: bold;
+  font-size: 16px;
+  min-width: 150px;
+}
+.brand_switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+  cursor: pointer;
+}
+.brand_switch input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.brand_switch_track {
+  position: absolute;
+  inset: 0;
+  background: #c0c4cc;
+  border-radius: 100px;
+  transition: background 0.2s;
+}
+.brand_switch_thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+.brand_switch input:checked + .brand_switch_track {
+  background: var(--mainColor, #409eff);
+}
+.brand_switch input:checked + .brand_switch_track .brand_switch_thumb {
+  left: 24px;
+}
+.brand_switch_tip {
+  margin-left: 12px;
+  font-size: 13px;
+  color: #909399;
+}
+.brand_preview_topbar {
+  background: rgb(46, 130, 247);
 }
 </style>
