@@ -196,3 +196,15 @@ for (const t of ["信息","客户","联系人","分布"]) { await page.locator(`
    里的 `false`；min 版建议由非 min 版重新压缩。
 3. **告知用户降级范围**：明确说明"哪些功能不可用、哪些完全正常"，
    不要含糊说"修好了"。
+
+## 附：配套知识库（O2OA 本地 AI · kb_read 精读入口）
+
+本技能的**完整实战案例与接口清单**已灌入 O2OA 本地知识库（`gateway/data.db`）。
+需要原文佐证、具体参数或接口路径时，先 `kb_search` 再 `kb_read`：
+
+| 内容 | docId |
+|---|---|
+| 自建应用第三方 AK 失效 8 文件闭环修复（CRM 百度地图实证案例） | `o2kb::troubleshooting::crm_baidu_ak_expired` |
+| O2OA 高频 REST 接口速查与环境坑（docker/localhost/token） | `o2kb::reference::o2oa_api_catalog` |
+
+> 技能正文只给框架与坑；**具体 AK、接口 URL、curl 自检命令以知识库为准**，勿凭记忆。

@@ -505,3 +505,16 @@ const n = await page.evaluate(() => Object.values(layout.desktop.apps)
 > 踩坑记录：曾用 `openApplication` 实现导航，E2E 里"点 Tab 无变化"，但
 > `querySelectorAll(".op-tbl")` 统计到的表格数却一路 4→6→8→10→12 ——
 > 这正是"多页签并存"的特征，一看计数递增就该怀疑开新页签而非切页。
+
+## 附：配套知识库（O2OA 本地 AI · kb_read 精读入口）
+
+本技能**正文较长**（>15KB，超出 `skills_run` 单次上下文建议上限），
+完整正文与源码实证已灌入 O2OA 本地知识库，需要细节时用 `kb_search` / `kb_read`：
+
+| 内容 | docId |
+|---|---|
+| 本技能完整正文（含全部源码实证与代码块） | `o2kb::ext::o2oa-portal-page-format::full` |
+| O2OA 数据层联通方法论（视图/自建表/门户真渲染） | `o2kb::methodology::o2oa_data_layer_wiring` |
+| O2OA 高频 REST 接口速查与环境坑 | `o2kb::reference::o2oa_api_catalog` |
+
+> 判定顺序：先按本文 §5 一键诊断清单定位层级 → 需要原文佐证再 `kb_read` 上表 docId。
