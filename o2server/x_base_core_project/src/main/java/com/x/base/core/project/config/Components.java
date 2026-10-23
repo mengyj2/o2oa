@@ -39,12 +39,18 @@ public class Components extends ConfigObject {
     public static final String NAME_FTSEARCH = "ftsearch";
     public static final String NAME_IM = "IMV2";
     public static final String NAME_AI = "AI";
+    // ★ 定制（CNCCIA）：系统设置组件。官方 10.0.2 无此组件，系我方按云端 demo
+    //   式样补进「系统管理」分组；不加入 SYSTEM_NAME_NAMES 白名单时，
+    //   InitComponents 的 OR 语义查询会把它当"非白名单 system 组件"删除且不补回
+    //   （2026-10-23 实证：每次重启必丢）。加白名单后 removes 不再含它，
+    //   缺失时还能按种子重建（adds 双保险）。
+    public static final String NAME_SYSTEMSETTING = "SysSetting";
 
     public static final List<String> SYSTEM_NAME_NAMES = ListTools.toList(NAME_SYSTEMCONFIG, NAME_ORG, NAME_CMSMANAGER,
             NAME_APPLICATIONEXPLORER, NAME_PORTALEXPLORER, NAME_DATAEXPLORER, NAME_SERVICEMANAGER, NAME_APPSTORE,
             NAME_APPCENTER, NAME_LOGVIEWER, NAME_PROFILE, NAME_BAM, NAME_CMS, NAME_WORKCENTER, NAME_HOMEPAGE,
             NAME_HOTARTICLE, NAME_MEETING, NAME_ATTENDANCE, NAME_FORUM, NAME_MINDER, NAME_CALENDAR,
-            NAME_FTSEARCH, NAME_IM, NAME_AI);
+            NAME_FTSEARCH, NAME_IM, NAME_AI, NAME_SYSTEMSETTING);
 
     public static final String APPICON_PNG = "appicon.png";
 
@@ -104,6 +110,9 @@ public class Components extends ConfigObject {
                 return new Component(NAME_IM, NAME_IM, "聊聊", APPICON_PNG, 26, Component.TYPE_SYSTEM);
             case NAME_AI:
                 return new Component(NAME_AI, NAME_AI, "AI助手", APPICON_PNG, 27, Component.TYPE_SYSTEM);
+            case NAME_SYSTEMSETTING:
+                return new Component(NAME_SYSTEMSETTING, NAME_SYSTEMSETTING, "系统设置", APPICON_PNG, 28,
+                        Component.TYPE_SYSTEM);
             default:
                 return null;
         }
@@ -134,6 +143,7 @@ public class Components extends ConfigObject {
         this.systems.add(systemComponent(NAME_FTSEARCH));
         this.systems.add(systemComponent(NAME_IM));
         this.systems.add(systemComponent(NAME_AI));
+        this.systems.add(systemComponent(NAME_SYSTEMSETTING));
     }
 
     public static Components defaultInstance() {
