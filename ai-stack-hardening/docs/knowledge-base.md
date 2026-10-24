@@ -160,3 +160,9 @@ Write-Host "已重启修复版看门狗（无窗口 + TCP 探活）。约 30 秒
 ## 8. 关联专题文档
 
 - [2026-10-24] [CMS 移动端 v10 表单编辑器崩溃修复（「新建供应商闪一下」真身）](kb-cms-mobile-datatable-v10-fix-20261024.md) —— checkDatatableClass 引用未打包的 DatatableV10 抛 TypeError；源码+4产物+构建期三处同改，双注入对照探针 PASS。
+
+---
+
+## 9. 关联专题文档（续）
+
+- [2026-10-24] [财务门户 view.js 无参打开崩溃修复（reading 'application' 真身）](kb-finance-viewjs-parameters-fix-20261024.md) —— 财务管理 portal view.js setWorkCount 裸读 this.page.parameters.parameters.application；includeScripts 5 脚本拼接成单 eval 脚本致栈帧难读；仪器探针（包裹 PageEnvironment + Browser.exec）定位 653 行；源 xapp + DB 同步 + 重启清缓存，双探针 PASS。

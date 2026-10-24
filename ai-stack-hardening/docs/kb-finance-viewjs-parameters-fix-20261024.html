@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>财务门户 view.js 无参打开崩溃修复（reading 'application' 真身）</title>
+<style>
+  body{font-family:-apple-system,"Microsoft YaHei",Segoe UI,sans-serif;line-height:1.7;max-width:960px;margin:24px auto;padding:0 20px;color:#1f2329;}
+  h1{font-size:24px;border-bottom:3px solid #2b6cb0;padding-bottom:8px;}
+  h2{font-size:19px;margin-top:28px;color:#2b6cb0;border-left:4px solid #2b6cb0;padding-left:10px;}
+  h3{font-size:16px;color:#333;margin-top:18px;}
+  code,.code{background:#f4f5f7;padding:2px 6px;border-radius:4px;font-family:Consolas,Menlo,monospace;font-size:13px;}
+  pre{background:#1e1e2e;color:#e6e6e6;padding:14px 16px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5;}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid #d0d7de;padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:#eef2f7;}
+  blockquote{background:#fff8e6;border-left:4px solid #ffc53d;margin:12px 0;padding:10px 14px;color:#614700;}
+  .tag{display:inline-block;background:#2b6cb0;color:#fff;border-radius:4px;padding:1px 7px;font-size:12px;margin-right:4px;}
+  .ok{color:#0a7d2c;font-weight:600;}
+  .bad{color:#c0392b;font-weight:600;}
+</style>
+</head>
+<body>
+<h1>财务门户 view.js 无参打开崩溃修复（reading 'application' 真身）</h1>
+<p><span class="tag">doc-rev</span> v1.0 · 2026-10-24 · <span class="tag">适用</span> 本地 Docker 自托管 O2OA 10.0.2（feature/o2oa-ai-stack）· <span class="tag">关联</span> 秘书长要求④后半；驱动仓提交 <code>d6a3100</code></p>
+
+<h2>0. 一句话结论</h2>
+<blockquote>财务页（付款申请，财务管理 portal 97e0d459）在 <b>App 或无参直开</b>时，门户脚本 view.js 的 <code>setWorkCount()</code> 读 <code>this.page.parameters.parameters.application</code>——parameters 未传入时 <code>.parameters</code> 为 <code>undefined</code>，抛 <code>TypeError: Cannot read properties of undefined (reading 'application')</code>，<code>postLoad</code> 链中断，页面只剩「未找到数据」残页。已按「源文件改 + DB 同步」修复并双探针验证（无参/带参均 <span class="ok">ERRORS 0</span>）。</blockquote>
+
+<h2>1. 根因（探针实证）</h2>
+<table>
+<tr><th>#</th><th>环节</th><th>事实</th><th>证据</th></tr>
+<tr><td>1</td><td>触发条件</td><td>App <code>openAppNaviLeaf</code> 忽略 portalOptions；任何无 <code>&amp;parameters=</code> 的直开 → <code>this.page.parameters.parameters</code> undefined</td><td>栈 + 无参复现必崩</td></tr>
+<tr><td>2</td><td>崩点</td><td>财务管理 portal 的 <b>view.js</b>（ba109bfc）<code>setWorkCount()</code> 裸读 <code>this.page.parameters.parameters.application</code></td><td>xapp scriptList[0].text + DB xtext</td></tr>
+<tr><td>3</td><td>为何难定位</td><td>栈帧全在 <code>&lt;anonymous&gt;:653</code>——宏脚本经 <code>Browser.exec</code> eval 执行；页面 includeScripts 的 5 个脚本<b>按序拼接成一个 eval 脚本</b>，view.js 排最后，其第 37 行=串联后 653 行</td><td>仪器探针记录 eval 原文</td></tr>
+<tr><td>4</td><td>影响面</td><td>错误在 postLoad 回调，后续加载链全断 → 残页；全库 <code>parameters.parameters</code> 无保护读<b>仅此一处</b>（费控/固定资产/办公用品/用车的同名脚本无此模式）</td><td>全库 LIKE 扫描</td></tr>
+</table>
+
+<h3>仪器探针（可复现，C:/temp/e2e_fin_trace.js）</h3>
+<pre>addInitScript 轮询包裹：
+  1) MWF.xScript.PageEnvironment.prototype 全部方法（try/catch 记方法名）
+  2) Browser.exec（记录所有 eval 脚本原文）
+移动 UA + cookie 注入登录 → portalmobile.html?id=&lt;portal&gt;&amp;page=&lt;page&gt;
+→ eval 脚本 #15（24274 字符/676 行）第 653 行 = "application":this.page.parameters.parameters.application,</pre>
+
+<h2>2. 修复（源文件 + DB 同步，未走 designer API）</h2>
+<pre>// [cnccia-patch 2026-10-24] App openAppNaviLeaf 未传 portalOptions 或无参直开页面时
+// this.page.parameters.parameters 为 undefined，旧写法抛
+// Cannot read properties of undefined (reading 'application')，postLoad 链中断、财务页只剩残页。
+// 解构兜底；application 默认 finance（与 reimburseConfig 域标识一致）。
+const pageParameters = (this.page.parameters &amp;&amp; this.page.parameters.parameters) || {};
+const parameter = {
+    "application": pageParameters.application || "finance",
+    "processList": pageParameters.processList
+};</pre>
+<p>产物 <code>patches/财务-viewjs-parameters兜底/</code>：<code>patch_fin_viewjs.py</code>（xapp 外科补丁，锚点唯一断言+自动备份）+ <code>update_viewjs.sql</code>（DB 单字段同步）。</p>
+<blockquote><b>O2 xapp 的 JSON 转义是非标准约定</b>：<code>\"</code> <code>\\</code> <code>\n</code> <code>\r</code> <code>\u0026</code>(&amp;) <code>\u0027</code>(') <code>\u003c</code>(&lt;) <code>\u003d</code>(=) <code>\u003e</code>(&gt;)，文本行尾 CRLF。踩坑：Python 里 <code>'\\r\n'</code> 少写一个反斜杠会让 <code>\n</code> 仍是换行符 → 锚点永不命中；正确写法 <code>'\\r\\n'</code>。</blockquote>
+<blockquote><b>服务端脚本缓存</b>：改完 <code>PTL_SCRIPT.xtext</code> 后页面 API 的 <code>relatedScriptMap</code> 仍返回旧文本，<b>重启 o2oa-server 后才生效</b>——改门户脚本后必须重启验证。</blockquote>
+
+<h2>3. 验证矩阵</h2>
+<table>
+<tr><th>探针</th><th>场景</th><th>结果</th></tr>
+<tr><td>e2e_fin_error.js（修复前）</td><td>无参打开财务页</td><td class="bad">必崩 reading 'application'，栈 653:55/673:10 一字不差</td></tr>
+<tr><td>e2e_fin_error.js（修复后）</td><td>无参打开财务页</td><td class="ok">ERRORS 0，加载链完整</td></tr>
+<tr><td>e2e_fin_withpar.js（正向对照）</td><td>带 parameters={application:"finance",processList:[...]} 打开</td><td class="ok">ERRORS 0，且 common-task/execute 请求正常发出（修复前构造 parameter 即崩、请求发不出）</td></tr>
+<tr><td>API 层</td><td>mobile 页接口 relatedScriptMap</td><td class="ok">重启后返回 1267 字符修复版</td></tr>
+</table>
+<p>「未找到数据」= 查询返回空的正常表现（无测试数据），归造数据任务解决，非缺陷。</p>
+
+<h2>4. 遗留</h2>
+<ul>
+<li><b>App 侧 openAppNaviLeaf 忽略 portalOptions</b>（Kotlin）：JS 兜底已保证不崩，但 App 应补传 parameters 才能让待办数量等按门户过滤——列 cnccia.12 候选。</li>
+<li>纪律说明：源（xapp）在仓、designer API 禁用、整包重导有 relatedScriptMap 重算风险，故采用「源文件改 + 单字段 SQL 同步 + 重启清缓存」，提交信息已完整披露。</li>
+</ul>
+</body>
+</html>
