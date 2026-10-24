@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>CMS 移动端 v10 表单编辑器崩溃修复（「新建供应商闪一下」真身）</title>
+<style>
+  body{font-family:-apple-system,"Microsoft YaHei",Segoe UI,sans-serif;line-height:1.7;max-width:960px;margin:24px auto;padding:0 20px;color:#1f2329;}
+  h1{font-size:24px;border-bottom:3px solid #2b6cb0;padding-bottom:8px;}
+  h2{font-size:19px;margin-top:28px;color:#2b6cb0;border-left:4px solid #2b6cb0;padding-left:10px;}
+  h3{font-size:16px;color:#333;margin-top:18px;}
+  code,.code{background:#f4f5f7;padding:2px 6px;border-radius:4px;font-family:Consolas,Menlo,monospace;font-size:13px;}
+  pre{background:#1e1e2e;color:#e6e6e6;padding:14px 16px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5;}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid #d0d7de;padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:#eef2f7;}
+  blockquote{background:#fff8e6;border-left:4px solid #ffc53d;margin:12px 0;padding:10px 14px;color:#614700;}
+  .tag{display:inline-block;background:#2b6cb0;color:#fff;border-radius:4px;padding:1px 7px;font-size:12px;margin-right:4px;}
+  .ok{color:#0a7d2c;font-weight:600;}
+  .bad{color:#c0392b;font-weight:600;}
+</style>
+</head>
+<body>
+<h1>CMS 移动端 v10 表单编辑器崩溃修复（「新建供应商闪一下」真身）</h1>
+<p><span class="tag">doc-rev</span> v1.0 · 2026-10-24 · <span class="tag">适用</span> 本地 Docker 自托管 O2OA 10.0.2（feature/o2oa-ai-stack / cnccia-custom）· <span class="tag">关联</span> 供应商链路 #47 根因段；与「财务页 reading 'application'」#49 是<b>不同</b> bug</p>
+
+<h2>0. 一句话结论</h2>
+<blockquote>「新建供应商闪一下变未找到数据」的真身不是数据/权限问题：<b>文档已创建成功（POST 200）</b>，但跳转移动端编辑器时 <code>cms_Xform/Form.js::checkDatatableClass</code> 引用 <code>$all</code> 打包清单里不存在的 <code>MWF.xApplication.process.Xform.DatatableV10</code>（undefined），<code>MWF.CMSDatatable.implement(...)</code> 抛 <code>TypeError: Cannot read properties of undefined (reading 'implement')</code>，编辑器永停 loading。<b>上游原样 bug</b>（git diff 无差异），全部 v10 表单移动端编辑全崩。</blockquote>
+
+<h2>1. 根因链（五环）</h2>
+<table>
+<tr><th>#</th><th>环节</th><th>事实</th><th>证据</th></tr>
+<tr><td>1</td><td>打包清单缺件</td><td>gulpfile <code>build_concat_cms_xform</code> src 清单不含 <code>process_Xform/DatatableV10.js</code> 与 <code>cms_Xform/Datatable.js</code></td><td>gulpfile L610-703 + grep <code>cms/$all.js</code> 无 V10 定义</td></tr>
+<tr><td>2</td><td>运行态缺类</td><td>移动端编辑器链 = o2.min.js → base_document → o2m.api → cmsDocMobile + cms/$all(.min).js，<b>不含</b> process Datatable 链</td><td>页面 script 清单 + 探针 <code>preDutV10="undefined"</code></td></tr>
+<tr><td>3</td><td>代码裸引</td><td>checkDatatableClass 在 mobile &amp;&amp; formStyleType==='v10' 时直接赋值后 .implement</td><td>源码 L289-296</td></tr>
+<tr><td>4</td><td>崩溃</td><td>undefined.implement 抛 TypeError，load() 中断，永停 loading</td><td>浏览器栈 checkDatatableClass → load → base_document.min.js</td></tr>
+<tr><td>5</td><td>上游原样</td><td>与 upstream/master 逐字一致，非本项目引入</td><td>git diff 无差异</td></tr>
+</table>
+<p><b>为什么 PC 不崩</b>：桌面链会加载 process.Xform 全套（含 DatatableV10）；移动端链不加载。<b>为什么「闪一下」</b>：文档 POST 200 → 跳编辑器崩 → 回列表空 category 显示「未找到数据」，三现象叠加。</p>
+
+<h2>2. 修复（源码 + 产物 + 构建期三处同改）</h2>
+<h3>2.1 源码（真源仓）</h3>
+<pre>MWF.xDesktop.requireApp("cms.Xform", "Datatable", null, false);   // 同步补链
+if( MWF.xApplication.process.Xform.DatatableV10 ){
+    MWF.xApplication.cms.Xform.Datatable = MWF.CMSDatatable = MWF.xApplication.process.Xform.DatatableV10;
+    if( MWF.CMSDatatableFeature ) MWF.CMSDatatable.implement(MWF.CMSDatatableFeature);
+    MWF.xApplication.cms.Xform.Datatable$Title = MWF.CMSDatatable$Title = MWF.xApplication.process.Xform.DatatablePC$Title;
+    MWF.xApplication.cms.Xform.Datatable$Data = MWF.CMSDatatable$Data = MWF.xApplication.process.Xform.DatatablePC$Data;
+}</pre>
+<p><b>补链原理</b>：<code>cms_Xform/Datatable.js</code> 首行同步 require <code>process.Xform/Datatable</code> → 带上 <code>$Module/DatatablePC/DatatableMobile/DatatableV10</code> 全链并定义 <code>MWF.CMSDatatableFeature</code>，一次同步 require 同时补足「类」与「Feature」。</p>
+<h3>2.2 产物（4 文件，双路径字节一致）</h3>
+<ul>
+<li><code>Form.js / Form.min.js / $all.js / $all.min.js</code></li>
+<li>路径 A（真源仓）：<code>tools/patch_cms_xform.py</code>；路径 B（驱动仓构建期）：<code>patch/cmsxform/patch_cms_xform_datatable.py</code>（幂等，标记 <code>O2-CMS-DATATABLE-V10</code>）</li>
+<li>两路径产物 4/4 diff=0；⚠️ <code>$all</code> 内两处同名函数，另一处是 <b>process 版</b>（赋 APPDatatable，功能正常），只能改 CMS 版</li>
+</ul>
+<h3>2.3 构建期烤入（驱动仓）</h3>
+<ul>
+<li><code>patch/web/x_component_cms_Xform/</code> 放 4 补丁文件（沿用 10-10 preview 的 COPY+RUN 机制）</li>
+<li>Dockerfile 追加 datatable RUN（兜底重建、幂等）；真源仓 Dockerfile 同步 4 行 COPY（<code>$all</code> 按 <code>\$Layout</code> 教训转义）</li>
+</ul>
+
+<h2>3. 验证矩阵（全部实跑）</h2>
+<table>
+<tr><th>层</th><th>方法</th><th>结果</th></tr>
+<tr><td>产物语法</td><td>node --check ×4</td><td class="ok">4/4 OK</td></tr>
+<tr><td>双路径一致</td><td>diff A vs B</td><td class="ok">4/4 逐字节相同</td></tr>
+<tr><td>镜像层</td><td>docker run md5sum vs 仓库</td><td class="ok">4/4 相同</td></tr>
+<tr><td>部署态</td><td>docker cp 运行容器 md5</td><td class="ok">4/4 相同</td></tr>
+<tr><td>HTTP 层</td><td>curl $all.min.js md5</td><td class="ok">与补丁版相同，守卫在位</td></tr>
+<tr><td>浏览器函数级</td><td>双注入对照探针</td><td class="ok">PASS（三连实证）</td></tr>
+</table>
+<pre>A 补丁版（移动端真实链）: preDutV10=undefined → called=true, sameClass=true,
+                          featureImplemented=true, postDutV10=function, 零 pageerror
+B 官方旧版（同环境对照）: <span class="bad">TypeError: Cannot read properties of undefined (reading 'implement')</span>
+判定: PASS — 环境真实复现，修复有效，官方版同环境必崩（根因唯一）
+（B 组错误与线上崩溃栈一字不差）</pre>
+
+<h2>4. 复现指南</h2>
+<pre>cd /c/temp &amp;&amp; NODE_PATH='C:\Users\meng_\.workbuddy\binaries\node\workspace\node_modules' \
+  'C:\Users\meng_\.workbuddy\binaries\node\versions\22.22.2-6\node.exe' e2e_datatable_verify.js</pre>
+<p>注：playwright 用本机 1243 headless shell（executablePath 写死）；页面用真实 <code>cmsdocmobilewithaction.html</code>（无参打开）；两组唯一变量=注入的 $all 版本。</p>
+
+<h2>5. 遗留与注意</h2>
+<ol>
+<li><b>登录端到端未跑</b>：API 登录凭据检索被沙箱敏感审批拦截。待用户提供 mengyijie 密码或授权路径后补「登录→新建→编辑器渲染」全链路截图。</li>
+<li><code>$all.min.js</code> 的 preview 补丁在 min 版上<b>设计性跳过</b>（官方 min 本含 previewUniversal 定义，脚本幂等）；未压缩版正常打入。系 10-10 既有行为，非本次回归。</li>
+<li>供应商列表数据在补丁后经正常新建流程产生；Task #48 造数据随后执行。</li>
+<li>升级 O2OA 时先核对上游是否已修此函数，已修则删本项目补丁防变包袱。</li>
+</ol>
+</body>
+</html>

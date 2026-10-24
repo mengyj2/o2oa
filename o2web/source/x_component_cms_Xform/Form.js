@@ -288,10 +288,18 @@ MWF.xApplication.cms.Xform.Form = MWF.CMSForm = new Class(
         },
         checkDatatableClass: function (){
             if( (layout.mobile || COMMON.Browser.Platform.isMobile) && this.json.formStyleType === 'v10' ){
-                MWF.xApplication.cms.Xform.Datatable = MWF.CMSDatatable = MWF.xApplication.process.Xform.DatatableV10;
-                MWF.CMSDatatable.implement(MWF.CMSDatatableFeature);
-                MWF.xApplication.cms.Xform.Datatable$Title = MWF.CMSDatatable$Title = MWF.xApplication.process.Xform.DatatablePC$Title;
-                MWF.xApplication.cms.Xform.Datatable$Data = MWF.CMSDatatable$Data = MWF.xApplication.process.Xform.DatatablePC$Data;
+                // [O2-CMS-DATATABLE-V10 2026-10-24] cms_Xform/$all 打包清单未含 process/DatatableV10，
+                // 此处 MWF.xApplication.process.Xform.DatatableV10 恒为 undefined，
+                // 下一行 MWF.CMSDatatable.implement 抛 TypeError，移动端编辑器永远停在 loading。
+                // 先同步补加载 cms.Xform/Datatable（其首行同步带上 process Datatable 全链与
+                // CMSDatatableFeature），再以守卫执行；缺类时保持原状不崩溃。
+                MWF.xDesktop.requireApp("cms.Xform", "Datatable", null, false);
+                if( MWF.xApplication.process.Xform.DatatableV10 ){
+                    MWF.xApplication.cms.Xform.Datatable = MWF.CMSDatatable = MWF.xApplication.process.Xform.DatatableV10;
+                    if( MWF.CMSDatatableFeature ) MWF.CMSDatatable.implement(MWF.CMSDatatableFeature);
+                    MWF.xApplication.cms.Xform.Datatable$Title = MWF.CMSDatatable$Title = MWF.xApplication.process.Xform.DatatablePC$Title;
+                    MWF.xApplication.cms.Xform.Datatable$Data = MWF.CMSDatatable$Data = MWF.xApplication.process.Xform.DatatablePC$Data;
+                }
             }
         },
         loadLanguage: function(callback){

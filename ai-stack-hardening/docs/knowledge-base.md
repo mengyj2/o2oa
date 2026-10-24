@@ -154,3 +154,9 @@ Write-Host "已重启修复版看门狗（无窗口 + TCP 探活）。约 30 秒
 - [ ] `curl http://localhost:18790/gateway/health` 持续 200（无论代理开关）。
 - [ ] `curl http://localhost:9090/` 返回 200（浏览器侧需把 localhost 加入代理 bypass）。
 - [ ] 重启网关双击 `restart_ai_gateway.bat` 无窗口；开机由 VBS 自动无窗自愈。
+
+---
+
+## 8. 关联专题文档
+
+- [2026-10-24] [CMS 移动端 v10 表单编辑器崩溃修复（「新建供应商闪一下」真身）](kb-cms-mobile-datatable-v10-fix-20261024.md) —— checkDatatableClass 引用未打包的 DatatableV10 抛 TypeError；源码+4产物+构建期三处同改，双注入对照探针 PASS。

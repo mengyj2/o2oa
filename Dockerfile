@@ -134,6 +134,20 @@ COPY patch/web/Main.min.js ${O2OA_HOME}/servers/webServer/x_component_AI/Main.mi
 #   重建后务必验证：docker exec o2oa-server cat ".../xDesktop/\$Layout/applications.json" 应有 16 条。
 COPY patch/web/applications.json "${O2OA_HOME}/servers/webServer/o2_core/o2/xDesktop/\$Layout/applications.json"
 
+# ★ 2026-10-24 修复移动端 CMS v10 表单编辑器崩溃（「新建供应商闪一下变未找到数据」真身）：
+#   cms_Xform/$all(打包清单)未含 process/DatatableV10，cms Form.checkDatatableClass 直接引用
+#   MWF.xApplication.process.Xform.DatatableV10 → undefined → MWF.CMSDatatable.implement
+#   抛 TypeError → 移动端文档编辑器永远停在 loading（所有 v10 表单全崩，非个例）。
+#   修法（源码同步改 o2web/source/x_component_cms_Xform/Form.js）：
+#   ① 先同步 requireApp("cms.Xform","Datatable")（其首行同步带上 process Datatable 全链+
+#      CMSDatatableFeature）；② 以 if(DatatableV10) 守卫赋值，缺类时保持原状不崩溃。
+#   生成方式：tools/patch_cms_xform.py 对官方原件做外科替换（$all 两文件勿动 process 版同名函数）。
+#   ★ `$all` 是字面量文件名，源与目标路径的 $ 都必须转义为 \$all（同上方 $Layout 教训）。
+COPY patch/web/x_component_cms_Xform/Form.js ${O2OA_HOME}/servers/webServer/x_component_cms_Xform/Form.js
+COPY patch/web/x_component_cms_Xform/Form.min.js ${O2OA_HOME}/servers/webServer/x_component_cms_Xform/Form.min.js
+COPY patch/web/x_component_cms_Xform/\$all.js ${O2OA_HOME}/servers/webServer/x_component_cms_Xform/\$all.js
+COPY patch/web/x_component_cms_Xform/\$all.min.js ${O2OA_HOME}/servers/webServer/x_component_cms_Xform/\$all.min.js
+
 # ★ 2026-09-22 自研「企业网盘」组件 x_component_Drive（UI 层复刻，数据层复用 x_file_assemble_control）
 #   目录内 $Main 为字面量子目录；源与目标路径本身均不含 $，故无需转义。
 #   已迁移至代码级仓库 deploy/runtime/webroot/x_component_Drive（与运行态容器卷字节一致）。
