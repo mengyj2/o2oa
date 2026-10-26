@@ -21,9 +21,8 @@ public class ActionGetConfig extends BaseAction {
 
 	ActionResult<Wo> execute(EffectivePerson effectivePerson) throws Exception{
 		logger.debug(effectivePerson.getDistinguishedName());
-		if (effectivePerson.isNotManager()) {
-			throw new ExceptionAccessDenied(effectivePerson.getDistinguishedName());
-		}
+		// ★ 2026-10-27 放开只读：基础配置是普通用户进入「AI 助手 → 系统设置」的入场数据，
+		//   且 Wo 已排除 apiKey 等密钥字段。写操作（ActionUpdateConfig）仍保留管理员门禁。
 		ActionResult<Wo> result = new ActionResult<>();
 		AiConfig config = Business.getConfig();
 		Wo wo = Wo.copier.copy(config);

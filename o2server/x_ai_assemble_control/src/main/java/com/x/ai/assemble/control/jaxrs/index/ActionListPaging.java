@@ -30,9 +30,9 @@ class ActionListPaging extends BaseAction {
             throws Exception {
         logger.debug(effectivePerson.getDistinguishedName());
         ActionResult<List<Wo>> result = new ActionResult<>();
-        if (effectivePerson.isNotManager()) {
-            throw new ExceptionAccessDenied(effectivePerson.getDistinguishedName());
-        }
+        // ★ 2026-10-27 放开只读：知识库索引列表只返回文档标题/来源，普通用户已可通过
+        //   知识库问答检索到同样内容，不构成新增信息暴露。
+        //   写操作（index/ActionSync 重建索引）仍保留管理员门禁。
         Wi wi = this.convertToWrapIn(jsonElement, Wi.class);
         AiConfig aiConfig = Business.getConfig();
         if (BooleanUtils.isNotTrue(aiConfig.getO2AiEnable())

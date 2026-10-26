@@ -23,9 +23,8 @@ class ActionGetMcp extends BaseAction {
 
 	ActionResult<Wo> execute(EffectivePerson effectivePerson, String id) throws Exception {
 
-		if (effectivePerson.isNotManager()) {
-			throw new ExceptionAccessDenied(effectivePerson.getDistinguishedName());
-		}
+		// ★ 2026-10-27 放开只读：MCP 工具详情（模板/css/脚本）不含凭据，
+		//   前端渲染 AI 回答里的工具卡片需要它。写操作（Create/Update/DeleteMcp）仍门禁。
 		AiConfig aiConfig = Business.getConfig();
 		if (BooleanUtils.isNotTrue(aiConfig.getO2AiEnable())
 				|| StringUtils.isBlank(aiConfig.getO2AiToken()) && StringUtils.isBlank(

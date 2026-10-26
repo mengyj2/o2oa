@@ -17,9 +17,8 @@ class ActionGetModel extends BaseAction {
 	ActionResult<Wo> execute(EffectivePerson effectivePerson, String id) throws Exception {
 
 		try (EntityManagerContainer emc = EntityManagerContainerFactory.instance().create()) {
-			if (effectivePerson.isNotManager()) {
-				throw new ExceptionAccessDenied(effectivePerson.getDistinguishedName());
-			}
+			// ★ 2026-10-27 放开只读：模型详情的 Wo 已排除 apiKey，普通用户可读。
+			//   写操作（Create/Update/DeleteModel）仍保留管理员门禁。
 			ActionResult<Wo> result = new ActionResult<>();
 			AiModel aiModel = emc.find(id, AiModel.class);
 			if(aiModel == null){

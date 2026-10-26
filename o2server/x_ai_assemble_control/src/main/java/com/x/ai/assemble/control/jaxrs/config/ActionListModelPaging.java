@@ -24,9 +24,9 @@ class ActionListModelPaging extends BaseAction {
     ActionResult<List<Wo>> execute(EffectivePerson effectivePerson, Integer page, Integer size)
             throws Exception {
         logger.debug(effectivePerson.getDistinguishedName());
-        if (effectivePerson.isNotManager()) {
-            throw new ExceptionAccessDenied(effectivePerson.getDistinguishedName());
-        }
+        // ★ 2026-10-27 放开只读：模型下拉/模型列表是「AI 助手 → 系统设置」的入场数据。
+        //   Wo.copier 已排除 AiModel.apiKey_FIELDNAME，普通用户拿不到任何密钥。
+        //   写操作（Create/Update/DeleteModel）仍保留管理员门禁。
         ActionResult<List<Wo>> result = new ActionResult<>();
         page = this.adjustPage(page);
         size = this.adjustSize(size);

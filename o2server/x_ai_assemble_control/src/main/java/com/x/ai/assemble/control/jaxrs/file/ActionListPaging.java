@@ -35,10 +35,9 @@ class ActionListPaging extends BaseAction {
 			ActionResult<List<Wo>> result = new ActionResult<>();
 			Wi wi = this.convertToWrapIn(jsonElement, Wi.class);
 
-			if(effectivePerson.isNotManager()){
-				throw new ExceptionAccessDenied(effectivePerson);
-			}
-
+			// ★ 2026-10-27：取消「非管理员一律拒绝」，改为**按 creator 收窄**——
+			//   普通用户只看自己上传的 AI 附件，管理员仍看全量。
+			//   （直接全量放开会把所有人上传过的附件清单暴露给任意登录者。）
 			Integer adjustPage = this.adjustPage(page);
 			Integer adjustPageSize = this.adjustSize(size);
 
@@ -47,6 +46,9 @@ class ActionListPaging extends BaseAction {
 			CriteriaQuery<File> cq = cb.createQuery(File.class);
 			Root<File> root = cq.from(File.class);
 			Predicate p = cb.conjunction();
+			if (effectivePerson.isNotManager()) {
+				p = cb.and(p, cb.equal(root.get(File_.creator), effectivePerson.getDistinguishedName()));
+			}
 			if(StringUtils.isNotBlank(wi.getFileId())){
 				p = cb.and(p, cb.equal(root.get(File_.fileId), wi.getFileId()));
 			}
