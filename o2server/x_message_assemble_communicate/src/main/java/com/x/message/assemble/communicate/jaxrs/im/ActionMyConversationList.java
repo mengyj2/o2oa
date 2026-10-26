@@ -66,12 +66,24 @@ public class ActionMyConversationList extends BaseAction {
 					woMsg = WoMsg.copier.copy(lastMsg);
 					wo.setLastMessage(woMsg);
 				}
-				// 群聊不管有没有聊天消息都展现。
+				// 群聊一律展现。
 				if (wo.getType() != null && wo.getType().equals(CONVERSATION_TYPE_GROUP)) {
 					return true;
 				}
-				// 单聊没有聊天消息就不展现
-				return (woMsg != null);
+				// 单聊：有聊天消息则展现；尚无消息但创建时间在最近 7 天内的也展现，
+				// 解决「新建单聊在发出首条消息前不进列表、浏览器刷新/WS 重连后从列表消失」的问题
+				//（2026-10-26 实证：当日新建的空单聊在 list/my 中永不返回，前端只能靠会话内补救，
+				//   一旦刷新整页即丢失）。超过 7 天仍无消息的空单聊按原设计隐藏，避免历史空会话堆积。
+				if (woMsg != null) {
+					return true;
+				}
+				if (wo.getType() != null && wo.getType().equals(CONVERSATION_TYPE_SINGLE)) {
+					Date ct = wo.getCreateTime();
+					if (ct != null && (System.currentTimeMillis() - ct.getTime()) < 7L * 24 * 60 * 60 * 1000) {
+						return true;
+					}
+				}
+				return false;
 			}).filter(Objects::nonNull).sorted((a, b)-> {
 				if (a.getLastMessage() == null && b.getLastMessage() == null) {
 					return 0;
