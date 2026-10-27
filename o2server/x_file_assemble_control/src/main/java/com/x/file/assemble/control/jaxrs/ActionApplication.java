@@ -14,6 +14,7 @@ import com.x.file.assemble.control.jaxrs.file.FileAction;
 import com.x.file.assemble.control.jaxrs.file.FileAnonymousAction;
 import com.x.file.assemble.control.jaxrs.folder.FolderAction;
 import com.x.file.assemble.control.jaxrs.folder2.Folder2Action;
+import com.x.file.assemble.control.jaxrs.orgdrive.OrgDriveAction;
 import com.x.file.assemble.control.jaxrs.recycle.RecycleAction;
 import com.x.file.assemble.control.jaxrs.share.ShareAction;
 
@@ -25,6 +26,7 @@ public class ActionApplication extends AbstractActionApplication {
 		classes.add(Attachment2Action.class);
 		classes.add(FolderAction.class);
 		classes.add(Folder2Action.class);
+		classes.add(OrgDriveAction.class);
 		classes.add(ComplexAction.class);
 		classes.add(ShareAction.class);
 		classes.add(RecycleAction.class);
