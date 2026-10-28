@@ -261,6 +261,9 @@ openrouter.js / groq.js / mistral.js / together.ai.js / google-gemini.js / xAI.j
 - `externalStorageSources.json` 的 `enable` 为 true 且各域均 webdav ⇒ 存储已走 rclone；别把它和"预览走下载"混为一谈。
 - 页签"用不了"先跑 §5 探测：**页签能开 ≠ 功能能用**；云插件离线必然不可用。
 - AI 插件的模型调用在**浏览器侧**发出 → 端点必须 LAN 可达 + CORS；仅绑 127.0.0.1 的 LM Studio 对别的机器无效。
+- **AI 空转 / `Maximum iterations reached` / `terminated`：先查「有没有人注入"必须先读文档"」再怪模型**
+  ——判定顺序 ①注入 ②宏拿不到内容 ③模型强弱（模型只是放大器）。取证三招与两层修复见 §8.10。
+- **改完插件补丁必须 `Ctrl+F5` 硬刷新**：`.js`+`.gz` 双份，浏览器缓存旧 `.gz` ⇒ "改了等于没改、且无报错"。
 - DS 容器 `lang=zh` → locale `zh-ZH`；插件只带 `zh-CN` 时会 404（表现：部分文案英文）。
 
 ---
@@ -600,3 +603,228 @@ view 模式下右侧栏 `RightMenu` 的 view 分支 `render()` 不被调用 ⇒ 
 `PRESET=1 / isViewer=1 / DOCK=1 / MACRO=3 / func.call=39 / 残留 eval 式=0`，`--check` 全过。
 e2e：`O2_ACT=view|edit node tools/o2_ai_chat_e2e.js` —— 两态 8/8 PASS，
 落定判据 = 最新消息非工具块（`$chat.prepend` ⇒ 新消息在上）+ 文本稳定 + 9 秒二次确认。
+
+---
+
+### 8.10 ★★★ 「AI 没原来好用」三重叠加：宏修好 ≠ 不空转，**网关注入是第二根扳机**（2026-10-29 实证）
+
+用户报「OnlyOffice 的 AI 感觉没原来好用了」+ 截图 `Maximum iterations reached` / 弹窗 `terminated` /
+`错误: [provider] 请进行法务审计`。**用户当场点破：他前期也用 9B、用着还行** —— 这句话直接否掉了
+"换大模型"的方向，是本次正确定因的关键。
+
+#### 铁律：空转/报错的排查顺序（★别一上来就换模型）
+
+| 序 | 查什么 | 判据 |
+|---|---|---|
+| ① | **有没有人给 chat 请求注入了"必须先读文档"类指令**（网关/代理侧 system 注入） | 见下面 `n_msgs` 与"注入人设"两招 |
+| ② | `writeMacro` 是否真拿到内容（§8.9 坑 B：命令上下文封死 eval⇒恒 undefined） | `tools/o2_ai_macro_unit.js` |
+| ③ | 模型强弱 | **只是放大器，不是扳机**——9B 在无注入时一直好用 |
+
+#### 取证三招（全部零侵入，可复现）
+
+1. **`n_msgs` 看轮次**：网关对每次 `/v1/chat/completions` 记 `o2office facade: ... n_msgs=N`。
+   每轮工具调用 **+2**（assistant 工具调用 + tool 结果），涨到 **20 = 10 轮 = 正好打满上限**：
+   ```
+   01:00:19 n_msgs=8 → =10 → =12 → =14 → =16 → =18 → =20        （9B，注入在位，打满）
+   30B 同场景只到 n_msgs=6（3 轮收敛）                            （换模型"看着好一点"的假象）
+   注入撤除前的普通对话 n_msgs=2                                   （不读文档直接答 = "原来好用"）
+   ```
+2. **"注入人设"裸测**：`curl` 直接打网关问「你好」，若回答自称"我是 XXX 内置的 AI 助手"⇒
+   **注入已生效**（正常应答"有什么可以帮你的吗"）。这一招 5 秒分辨"网关坏了"还是"网关在替你说话"。
+3. **归责**：网关日志 `grep -a 'Maximum|upstream|terminated'` 若为 **0** ⇒ 该错是**插件侧**抛的
+   （`register.js` 的 `MAX_LOOP_ITERATIONS`），不是网关业务错；`terminated` 全库无此串 ⇒ 是浏览器
+   `fetch` 流被中断的 `TypeError`，不是文案。
+
+#### 根因：无差别强制工具循环
+
+2026-10-28 的 `70e3b3a` 在网关加了 `_inject_o2office_doc_prompt()`，对**所有** `/v1/chat/completions`
+写死"涉及文档必须先调 writeMacro 读文档再答，绝不声称无法访问文档"。后果：
+
+> 用户一问"请进行法务审计"这种关乎正文的问题 → 弱模型被逼去读文档 → 对宏返回**不确定就反复重读**
+> → 打满 10 轮 → 抛 `Maximum iterations` / 流中断 `terminated`。**且回答是幻觉**（"已创建优化后的协议"，
+> 文档实际没改）。
+
+**教训（写死）**：弱模型上「强制工具循环」必翻车 —— **注入是扳机，模型只是放大器**。
+同理，撤注入是**有益**的但不能反推"注入无用"：A/B 实证带注入时模型写出正确宏
+（`Api.GetDocument()+GetElementsCount()`），屏蔽注入时它写 `document.body.innerText`（宏环境根本不存在）。
+
+#### 修复一（网关层）：撤除注入 `a560dbd`
+
+`git diff` = **42 行全删 0 增**（纯回退）。生效链路：改代码 → 重建镜像 → 重建容器（网关代码**只随镜像部署**）：
+
+```bash
+export PATH="/c/Program Files/Docker/Docker/resources/bin:$PATH"
+docker pull python:3.11-slim                                   # 先拉通基础镜像，绕开死加速器（见下）
+docker buildx build --load --platform linux/amd64 -t o2oa-aigateway:1.0.0 -f gateway/Dockerfile .
+MSYS_NO_PATHCONV=1 docker run --rm --entrypoint sh o2oa-aigateway:1.0.0 \
+  -c "grep -c _inject_o2office_doc_prompt /app/gateway/o2_agent_gateway.py || echo NONE(0)"   # 期望 0
+docker-compose up -d --no-deps ai-gateway                      # 不用 --force-recreate（o2oa-server 端口竞态）
+```
+验证：问「你好」→ 回答**不再带"OnlyOffice 内置 AI 助手"人设**。
+
+#### 修复二（插件层）：循环护栏 `patch_loop_guard`（`7646ae3`，注入器第 6 处补丁）
+
+**先确认官方值**：`MAX_LOOP_ITERATIONS : 10` 在**官方** `ai-plugin-3.2.3` 的 `scripts/engine/register.js:115`，
+**不是定制加的**，别去"归零它"。
+
+原逻辑最坑：第 10 轮若还在调工具，**直接 `onChatReply('Maximum iterations reached...')` 抛英文死错、
+一个字的答案都不给**。护栏改为**优雅降级**：
+
+```js
+// 打满上限 → 去掉工具再请求一次 → 基于已收集上下文直接作答；仍失败给中文提示
+if (iteration >= AgentState.MAX_LOOP_ITERATIONS) {
+    var _rd = <原 requestData>;
+    delete _rd.tools;                          // ★关掉工具，逼模型落笔
+    chatRequestAgent(_rd) ...                  // 失败兜底："已达工具调用轮次上限，请把问题拆小"
+}
+```
+- **上限保持官方 10 不动**：异常循环快速止损、不让人干等；护栏保证"即使止损也一定给结论"。
+- 幂等（`O2OA-AI-LOOP-GUARD` BEGIN/END 标记）+ 正则锚点兜底 + **单处失配只 Skip 不全量失效**。
+- 改前必须先 `node --check`：在 scratch 插件上跑补丁再校验三文件（`local_storage/register/helpers`），
+  并核 `护栏标记=2 / 原英文死错=0 / 上限=10`（§8.9 那条"39 个 func.call 被吞"的教训同理）。
+
+**部署（关键：不碰 DS 版本）**——`onlyoffice/Dockerfile` 的 `DS_BASE` 可指向**现有生产镜像**叠一层：
+
+```bash
+docker tag o2oa-onlyoffice:9.4.0-o2 o2oa-onlyoffice:rollback-20261029        # 先留回滚标签
+docker build --platform linux/arm64 -f onlyoffice/Dockerfile \
+  --build-arg DS_BASE=o2oa-onlyoffice:rollback-20261029 -t o2oa-onlyoffice:9.4.0-o2 .   # 4 秒增量 COPY
+docker-compose up -d --no-deps onlyoffice                                    # 启动期注入补丁
+docker logs o2oa-onlyoffice 2>&1 | grep -a AI_PATCH_RESULT                   # 期望 =PASS
+```
+核验（容器内实测）：`护栏标记=2 / Maximum iterations...=0 / MAX_LOOP_ITERATIONS : 10 / 中文降级逻辑在位`。
+**改完必须 `Ctrl+F5` 硬刷新**：插件是 `.js` + `.gz` 双份，不硬刷浏览器仍用旧 `.gz`（表现=改了等于没改）。
+
+#### 部署环境四坑（本次新踩，均无报错、纯卡死）
+
+| 坑 | 现象 | 解 |
+|---|---|---|
+| `docker` 不在 PATH | `docker ps` 输出**空**（不是报错）⇒ 误判"连不上守护进程" | `export PATH="/c/Program Files/Docker/Docker/resources/bin:$PATH"`（否则 `docker-credential-desktop` 也找不到） |
+| `docker compose` 插件未装 | `docker: 'compose' is not a docker command` | 用独立 `docker-compose` |
+| 死加速器 `hub-mirror.c.163.com` | buildx 解析 `python:3.11-slim` 元数据失败、`--pull=false` **也无效** | 先带 PATH `docker pull python:3.11-slim` 拉通，再 build |
+| MSYS 路径篡改 | `docker exec o2oa-ai-gateway grep ... /app/...` 报找不到 `C:/Program Files/...` | `MSYS_NO_PATHCONV=1`（但 **`mvn` 绝不可加**，会报 `plexus...Launcher`） |
+
+#### 若还想"AI 能看文档"：只能做**温和版**
+
+**绝不无差别强制**。正确形态 = **条件触发（仅当用户明确问正文/条款/选中内容）+ 单次读 + 失败即止**
+（一次读不到就直说"读不到正文，请描述一下问题"，不再重试）。任何"打开即强制读"的设计在弱模型上都会复现本次翻车。
+
+### 8.11 ★★★ 弹窗 `Failed to load model "xxx". Error: Operation canceled`：**不是模型坏，是 RAG 的 embedding 抢了 LLM 的装载槽**（2026-10-29 实证）
+
+与 §8.10 是**两个不同故障**，别混：§8.10 是"打满 10 轮抛英文死错"，本节是"模型根本加载不上来"。
+用户原话「容易出这个问题，请处理」，截图为编辑器中央弹窗 + 右侧聊天停在 `[provider]`。
+
+#### 一句话根因
+
+网关的 `embed_base` 与 `bionic_base` **同指 LM Studio :1234**；RAG 检索的 `/v1/embeddings`
+会 **JIT 加载** embedding 模型（实测所有 `text-embedding-*` 长期 `not-loaded`），这次"装载"
+把正在加载的 LLM 顶出内存 —— **LLM 装载被 cancel**，排队中的 chat 请求一起死。
+
+#### 取证：唯一可信来源是 LM Studio 服务端日志（★ 网关日志里看不到根因）
+
+位置 `~/.lmstudio/apps/bionic/server-logs/YYYY-MM/<date>.N.log`（`verbose: true` 已开，含完整流水）。
+**三步固定序列**，`Failed to load` 后 1 秒内必跟 embedding 装载：
+
+```
+- Caused By: Error: Model was unloaded while the request was still in queue.
+[01:12:10][ERROR] Failed to load model "agentscope-ai_copaw-flash-9b". Error: Operation canceled.
+[01:12:11][DEBUG][INFO] [PaniniRagEngine] Loading model into embedding engine...
+[01:12:11][DEBUG][INFO] [LlamaEmbeddingEngine] Loading model from path: ...Qwen3-Embedding-0.6B-Q8_0.gguf
+```
+
+```bash
+cd ~/.lmstudio/apps/bionic/server-logs/2026-10/
+grep -ahc "Loading model into embedding engine" *.log          # 当日 embedding 装载次数（实测 13）
+grep -ah "Failed to load model" *.log | grep -c copaw          # 当日 LLM 装载失败次数（实测 9）
+grep -ah -B4 -A6 'Failed to load model' *.log | tail -40        # 看配对关系（这是定因的关键动作）
+```
+**当日 13 次 embedding 装载 / 9 次 LLM 装载失败 ≈ 半数请求打空** —— "容易出"的量化解释。
+
+#### 为什么"以前没事、现在容易出"
+
+不是模型问题，是**每次对话都在跑 RAG**：一次 chat 触发十几次 `/v1/embeddings`
+（日志 `Received request to embed multiple` 连刷），每次都可能与 LLM 装载撞车。
+2026-10 把 embed 从独立 8089 统一到 LM Studio 1234（`o2oa_tools_mcp.py` 注释"8089 已下线"）
+是这层的引入点：**统一省了运维，但把 embedding 和 LLM 塞进了同一个模型槽**。
+
+#### 三层修复
+
+**① 网关重试（代码级兜底，核心）** —— `49176f7`
+识别 `operation canceled` / `failed to load model` / `model is unloaded` /
+`model was unloaded while the request was still in queue` / `rpc error` →
+短退避重试 `(0, 2, 6)` 秒。**三处都要改，漏一处就留一条死路**：
+
+| 位置 | 说明 |
+|---|---|
+| `POST /v1/chat/completions` 非流式 | **OnlyOffice 插件实际走这条**（用户弹窗就是它透出的） |
+| `POST /v1/chat/completions` 流式 | 上游加载失败时 HTTP 非 200、**一帧 SSE 都不发**，故未产出前重试安全 |
+| `stream_openai()`（主链路） | O2OA AI 助手走这条 |
+
+铁律：**只在"尚未产出任何内容"时重试**，否则会变成"半截回答再重来"。
+反向约束：**确定性错误不许重试**（`Invalid model identifier` 必须只请求 1 次，
+否则模型名写错会从 1 秒拖成 8 秒）。
+
+**② embedding 常驻（降触发率）**
+```bash
+~/.lmstudio/bin/lms.exe load text-embedding-qwen3-embedding-0.6b --ttl 604800 --gpu max
+# --ttl 最小 1（传 0 报 out of range）；604800=7天，实测 609MB，与 9B 共存不互相驱逐
+```
+RAG 检索不再产生"装载"动作 ⇒ 撞车概率大降。**LM Studio 重启即失效**（JIT 是运行时状态），
+故由 `tools/o2oa_ai_stack_watchdog.ps1` 的 **F 段**巡检补回（读 `/api/v0/models` 的 `state`，
+非 `loaded` 就 `lms load`，幂等零开销）。⚠️ 该看门狗本就该常驻，本次发现它**已停摆 17 小时**
+（判据：`gateway/watchdog_host_status.json` 的 `ts` 不再更新）——巡检类改动不启动守护等于没改。
+
+**③ 长期方案：embedding 独立成 :8089（★ 2026-10-29 已落地 `55a5661`）**
+
+`tools/start_embed_server.bat` 用 `llama_service_launcher.py` 承载一个独立 llama-server：
+
+```bat
+llama-server.exe -m <Qwen3-Embedding-0.6B-Q8_0.gguf> --embedding --pooling last ^
+  --alias qwen3-embed -ngl 999 -c 2048 --host 127.0.0.1 --port 8089
+```
+
+四个必须同时满足的点（漏一个就静默失效）：
+
+| 点 | 说明 |
+|---|---|
+| **`--alias qwen3-embed` 必须等于 `embed_models` 白名单值** | 网关 `emb_model()` 只认白名单里的名字；alias 对不上会判"无可用 embedding 模型" |
+| `embed_base` 指 `host.docker.internal:8089` | 容器访问宿主端口；`config.container.json` 是 **COPY 进镜像**的，改完必须重建镜像 |
+| **必须调用 `embed()` 的回落** | 独立进程会因宿主重启/未挂看门狗而缺席——那时 RAG 全挂比原问题更糟。已加：主后端失败 → 退回 LM Studio + 60s 熔断 |
+| **进程必须由看门狗/登录项托管** | ★ launcher 文档与本次实测双重确认：放进「会返回的交互作业」里，父命令一结束 Job object 就把 llama-server 杀掉，`DETACHED` 也救不了。现象=日志停在 `loading model`、端口随后消失 |
+
+验证顺序（不要跳）：
+1. 前台跑 llama-server 确认 `--embedding` 参数：`/health` 变 200 后 `/v1/embeddings` 应返回 **1024 维**
+2. 起服务后看网关日志出现 `embed model selected: qwen3-embed`（= 白名单探测通过，已写 kv）
+3. 故意停掉 8089，确认日志出现 `embed 主后端(http://host.docker.internal:8089) 失败 → 回落 ...（功能未中断）`
+4. 探针 `o2_gw_load_conflict_retry_test.py` 的 T8（回落）/ T9（熔断）必须绿
+
+看门狗的 `Get-PortLauncher` 已加 `8089 -> tools\start_embed_server.bat`，端口从 `embed_base`
+自动提取（`Get-HostPorts` 数据驱动），所以**只要看门狗在跑就自动拉起并守护**。
+⚠️ 注意 F 段语义必须与分槽一致：**不要再把 embedding 拉回 LM Studio**（那只会白占显存），
+F 段已改为"LM Studio 里仍残留加载 → 记一条提示"。这类"改造后旧自愈逻辑反向作恶"的坑，
+改架构时要专门回头检查一遍。
+
+#### 验证手法（不许只靠"看着好了"）
+
+1. **回归探针** `tools/o2_gw_load_conflict_retry_test.py`（22 项，**真桩 HTTP** 而非 mock 返回值）：
+   把网关源码复制到临时目录 + 一份 `config.json`（★ 缺 config.json 会触发 L66 回退到
+   `D:\O2OA\gateway` **真实库**，必须防）→ 起本地 HTTP 桩按脚本吐
+   500 冲突 / 400 真实错 / 200 正常 / SSE → 断言请求次数与最终状态。
+   必看三条：冲突×2→第 3 次成功；冲突持续→**恰好 3 次**不无限重试；
+   `Invalid model identifier`→**只 1 次**。
+2. **真机复现**（最有说服力）：`lms unload` 掉 9B 和 embedding → 后台先发 chat 让它进入"加载中"
+   → 1.2 秒后打 8 个并发 `/v1/embeddings` → 观察网关日志出现
+   `上游模型装载竞争（第 1 次）… 退避重试` 且最终 `200`。实测 12.32s、回答正确。
+3. **发布后确认容器内是新代码**（不要凭"我改了"）： 
+   `docker exec o2oa-ai-gateway grep -c _is_load_conflict /app/gateway/o2_agent_gateway.py` → `4`。
+
+#### 归类速查（三张"AI 不好用"的脸，别再互相误诊）
+
+| 弹窗/现象 | 归因 | 去哪看 |
+|---|---|---|
+| `Maximum iterations reached` / `terminated` | 工具循环打满（注入扳机） | §8.10，网关 `n_msgs` |
+| `Failed to load model ... Operation canceled` | **装载竞争（本节）** | LM Studio `server-logs`，embedding 装载配对 |
+| `错误: [provider] ...` | 上游非 200 被透传 | 网关 `upstream chat <code>` 行 |
+
+**教训**：`Operation canceled` 这种 .NET 风味的文案**不是** O2OA/网关写的，一眼就该往"推理后端"找，
+而不是去 grep 自家代码（首次全库 grep 0 命中，本身就是指向后端的信号）。
